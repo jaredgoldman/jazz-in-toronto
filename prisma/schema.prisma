@@ -2,50 +2,64 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
-    previewFeatures = ["jsonProtocol"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["jsonProtocol"]
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Admin {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    email     String   @unique
-    password  String
-    name      String?
-    role      String   @default("ADMIN")
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String   @unique
+  password  String
+  name      String?
+  role      String   @default("ADMIN")
 }
 
 model Band {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    name      String
-    genre     String?
-    events    Event[]
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  name            String
+  genre           String?
+  photoPath       String?
+  instagramHandle String?
+  featured        Boolean  @default(false)
+  website         String?
+  events          Event[]
 }
 
 model Venue {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    name      String
-    address   String
-    events    Event[]
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  name            String
+  address         String
+  photoPath       String?
+  featured        Boolean  @default(false)
+  instagramHandle String?
+  website         String?
+  events          Event[]
 }
 
 model Event {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    name      String
-    date      DateTime
-    band      Band
-    venue     Venue
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  name            String
+  startDate       DateTime
+  endDate         DateTime
+  band            Band     @relation(fields: [bandId], references: [id])
+  photoPath       String?
+  featured        Boolean  @default(false)
+  instagramHandle String?
+  website         String?
+  venue           Venue    @relation(fields: [venueId], references: [id])
+  bandId          String
+  venueId         String
 }
-

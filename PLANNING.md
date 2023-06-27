@@ -23,7 +23,8 @@
 - users should be able to visit the site and see daily listings of jazz shows going at least 1 month into the future
 - users should be able to see a detailed time and location of the gig
 - users should be able to see a recurring gigs
-- users should be to see all venues in town with an interactive map featuring pins of each venue
+- users should be to see all venues in town with an interactive map featuring pins of each venue - each venue should have a picture
+- users should be able to see featured bands, venues and events on the home page
 
 #### admins
 
@@ -32,6 +33,7 @@
 - the system should run a cron job to update listings by crawling several local websites and grabbing their listings
 - admins should be able to update content on the website using an easy UI
 - admins should be able to add recurring gigs to site
+- admins should be able to make bands, events and venues featured
 
 ### non-functional
 
@@ -50,5 +52,14 @@
 - Schema - see `prisma/schema.prisma`
 
 ## Capacity estimation and constraints
+
+- How many monthly visitors the site
+- How many gigs monthly
+- How many bands in town
+- How many venues in town; 32
+- How much memory will each entry take up
+  - Band
+  - Venue
+  - Event
 
 ## High-level components
