@@ -45,6 +45,7 @@ model Venue {
   instagramHandle String?
   website         String?
   events          Event[]
+  active          Boolean  @default(true)
 }
 
 model Event {
