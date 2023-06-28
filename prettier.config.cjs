@@ -3,6 +3,7 @@ const config = {
     plugins: [require.resolve("prettier-plugin-tailwindcss")],
     singleQuote: false,
     tabWidth: 4,
+    semi: false,
 };
 
 module.exports = config;

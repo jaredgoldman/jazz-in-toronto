@@ -3,7 +3,7 @@ import {
     createTRPCRouter,
     publicProcedure,
     protectedProcedure,
-} from "components/server/api/trpc";
+} from "~/server/api/trpc";
 
 export const eventRouter = createTRPCRouter({
     create: publicProcedure

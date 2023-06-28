@@ -40,6 +40,7 @@ model Venue {
   updatedAt       DateTime @updatedAt
   name            String
   address         String
+  city            String
   photoPath       String?
   featured        Boolean  @default(false)
   instagramHandle String?
