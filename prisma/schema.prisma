@@ -64,4 +64,5 @@ model Event {
   venue           Venue    @relation(fields: [venueId], references: [id])
   bandId          String
   venueId         String
+  cancelled       Boolean  @default(false)
 }
