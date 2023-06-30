@@ -5,24 +5,25 @@ import {
     protectedProcedure,
 } from "~/server/api/trpc"
 
-const venueSchema = z.object({
-    id: z.string().cuid().optional(),
-    name: z.string(),
-    address: z.string(),
-    city: z.string(),
-    photoPath: z.string().optional(),
-    featured: z.boolean().optional(),
-    instagramHandle: z.string().optional(),
-    website: z.string().optional(),
-    active: z.boolean().optional(),
-})
-
 export const venueRouter = createTRPCRouter({
-    create: publicProcedure.input(venueSchema).query(({ ctx, input }) => {
-        return ctx.prisma.venue.create({
-            data: input,
-        })
-    }),
+    create: publicProcedure
+        .input(
+            z.object({
+                name: z.string(),
+                address: z.string(),
+                city: z.string(),
+                photoPath: z.string().optional(),
+                featured: z.boolean().optional(),
+                instagramHandle: z.string().optional(),
+                website: z.string().optional(),
+                active: z.boolean().optional(),
+            })
+        )
+        .query(({ ctx, input }) => {
+            return ctx.prisma.venue.create({
+                data: input,
+            })
+        }),
 
     get: publicProcedure
         .input(z.object({ id: z.string().cuid() }))
@@ -32,13 +33,27 @@ export const venueRouter = createTRPCRouter({
             })
         }),
 
-    update: protectedProcedure.input(venueSchema).query(({ ctx, input }) => {
-        const { id, ...venueData } = input
-        return ctx.prisma.venue.update({
-            where: { id: input.id },
-            data: venueData,
-        })
-    }),
+    update: protectedProcedure
+        .input(
+            z.object({
+                id: z.string().cuid(),
+                name: z.string().optional(),
+                address: z.string().optional(),
+                city: z.string().optional(),
+                photoPath: z.string().optional(),
+                featured: z.boolean().optional(),
+                instagramHandle: z.string().optional(),
+                website: z.string().optional(),
+                active: z.boolean().optional(),
+            })
+        )
+        .query(({ ctx, input }) => {
+            const { id, ...venueData } = input
+            return ctx.prisma.venue.update({
+                where: { id: input.id },
+                data: venueData,
+            })
+        }),
 
     delete: protectedProcedure
         .input(z.object({ id: z.string().cuid() }))

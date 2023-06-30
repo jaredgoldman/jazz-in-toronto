@@ -26,10 +26,10 @@ beforeAll(async () => {
     venue = await prisma.venue.create({ data: testVenueData })
     band = await prisma.band.create({ data: testBandData })
     admin = await prisma.admin.create({
-        data: { email: "test@test.com", password: "password" },
+        data: { email: "eventtest@test.com", password: "password" },
     })
     testEventData = {
-        name: "test event",
+        name: "event test event",
         startDate: new Date(Date.now()).toISOString(),
         endDate: new Date(Date.now() + 1000 * 60 * 60 * 2).toISOString(),
         bandId: band.id,
