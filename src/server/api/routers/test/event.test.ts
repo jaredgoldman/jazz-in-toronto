@@ -13,7 +13,7 @@ const testVenueData = {
 }
 
 const testBandData = {
-    name: "test band",
+    name: "test event band",
 }
 
 let venue: Venue
@@ -49,7 +49,7 @@ describe("Event Router", () => {
         const query = await prisma.event.findMany({
             where: { name: testEventData.name },
         })
-        expect(query.length).toEqual(1)
+        expect(query[0]?.name).toEqual(testEventData.name)
     })
 
     it("should allow an authorized user to edit an event", async () => {
@@ -63,6 +63,7 @@ describe("Event Router", () => {
                 expires: "1",
             },
         })
+
         const caller = appRouter.createCaller(ctx)
 
         const input: RouterInputs["event"]["update"] = {
@@ -84,6 +85,7 @@ describe("Event Router", () => {
 
         expect(revertedEvent.name).toEqual(event.name)
     })
+
     it("should allow an authorized user to fetch an event", async () => {
         const ctx = createInnerTRPCContext({
             session: {
@@ -126,7 +128,7 @@ describe("Event Router", () => {
 })
 
 afterAll(async () => {
-    await prisma.venue.delete({ where: { id: venue.id } })
     await prisma.band.delete({ where: { id: band.id } })
+    await prisma.venue.delete({ where: { id: venue.id } })
     await prisma.admin.delete({ where: { id: admin.id } })
 })

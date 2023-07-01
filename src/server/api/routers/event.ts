@@ -52,6 +52,7 @@ export const eventRouter = createTRPCRouter({
                 website: z.string().optional(),
                 bandId: z.string().cuid().optional(),
                 venueId: z.string().cuid().optional(),
+                cancelled: z.boolean().optional(),
             })
         )
         .query(({ ctx, input }) => {

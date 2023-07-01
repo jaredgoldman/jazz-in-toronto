@@ -2,6 +2,7 @@ import { eventRouter } from "./routers/event"
 import { createTRPCRouter } from "~/server/api/trpc"
 import { venueRouter } from "./routers/venue"
 import { adminRouter } from "./routers/admin"
+import { bandRouter } from "./routers/band"
 
 /**
  * This is the primary router for your server.
@@ -12,6 +13,7 @@ export const appRouter = createTRPCRouter({
     event: eventRouter,
     venue: venueRouter,
     admin: adminRouter,
+    band: bandRouter,
 })
 
 // export type definition of API

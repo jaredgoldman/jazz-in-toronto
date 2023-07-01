@@ -4,9 +4,8 @@ import { appRouter } from "~/server/api/root"
 import { createInnerTRPCContext } from "~/server/api/trpc"
 import { adminRoles } from "~/types/enums"
 import { prisma } from "~/server/db"
-import { Admin, Band, Event, Venue } from "@prisma/client"
+import { Admin } from "@prisma/client"
 import { TRPCError } from "@trpc/server"
-import { w } from "vitest/dist/types-2b1c412e"
 
 const adminData = {
     email: "testadmin@test.com",

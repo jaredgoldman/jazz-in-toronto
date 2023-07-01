@@ -10,7 +10,8 @@
         "start": "next start",
         "test": "vitest",
         "studio": "prisma studio",
-        "db:push": "prisma db push"
+        "db:push": "prisma db push",
+        "format": "prisma format"
     },
     "dependencies": {
         "@next-auth/prisma-adapter": "^1.0.5",

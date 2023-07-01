@@ -31,6 +31,10 @@ export const bandRouter = createTRPCRouter({
             })
         }),
 
+    getAll: publicProcedure.query(({ ctx }) => {
+        return ctx.prisma.band.findMany()
+    }),
+
     update: protectedProcedure
         .input(
             z.object({

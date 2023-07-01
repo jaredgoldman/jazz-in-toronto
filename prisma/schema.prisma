@@ -25,13 +25,14 @@ model Band {
   id              String   @id @default(cuid())
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  name            String
+  name            String   @unique
   genre           String?
   photoPath       String?
   instagramHandle String?
   featured        Boolean  @default(false)
   website         String?
   events          Event[]
+  active          Boolean  @default(true)
 }
 
 model Venue {
