@@ -131,4 +131,4 @@ afterAll(async () => {
     await prisma.band.delete({ where: { id: band.id } })
     await prisma.venue.delete({ where: { id: venue.id } })
     await prisma.admin.delete({ where: { id: admin.id } })
-})
+}, 100)
