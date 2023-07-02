@@ -1,25 +1,25 @@
 import Link from "next/link"
 
-export default function Header() {
+export default function Header(): JSX.Element {
     return (
-        <header>
+        <header className="w-full flex-col items-center text-center">
             <h1>JAZZINTORONTO</h1>
             <h2>
                 Connections Toronto's Jazz Musicians, Audiences, Venues and
                 Presenters
             </h2>
-            <nav>
-                <ul>
-                    <li>
+            <nav className="flex justify-center ">
+                <ul className="flex ">
+                    <li className="p-2">
                         <Link href="/home">Home</Link>
                     </li>
-                    <li>
+                    <li className="p-2">
                         <Link href="/listings">Listings</Link>
                     </li>
-                    <li>
+                    <li className="p-2">
                         <Link href="/venues">Venues</Link>
                     </li>
-                    <li>
+                    <li className="p-2">
                         <Link href="/about">About Us</Link>
                     </li>
                 </ul>

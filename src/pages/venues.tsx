@@ -1,6 +1,6 @@
 import RootLayout from "~/layouts/RootLayout"
 
-export default function Home() {
+export default function Venues(): JSX.Element {
     return (
         <RootLayout>
             <main></main>
