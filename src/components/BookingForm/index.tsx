@@ -1,6 +1,7 @@
 import { Venue } from "@prisma/client"
 import { Form, Formik, Field, ErrorMessage } from "formik"
 import DatePickerField from "./DatePicker"
+import { api } from "~/utils/api"
 
 export interface Values {
     name: string
@@ -16,7 +17,9 @@ export interface Values {
 interface Props {
     venues: Venue[]
 }
-export default function BookingForm({ venues }: Props): JSX.Element {
+export default function BookingForm(): JSX.Element {
+    const { data, isLoading } = api.band.getAll.useQuery()
+    console.log("query data: ", data)
     return (
         <div>
             <h1 className="mb-5">Book your gig here!</h1>
@@ -60,10 +63,18 @@ export default function BookingForm({ venues }: Props): JSX.Element {
                         />
                         <ErrorMessage name="bandName" component="div" />
                         <label>Start Date</label>
-                        <Field component={DatePickerField} name="startDate" />
+                        <Field
+                            component={DatePickerField}
+                            name="startDate"
+                            className="mb-5 border-2 border-black"
+                        />
                         <ErrorMessage name="startDate" component="div" />
                         <label>End Date</label>
-                        <Field component={DatePickerField} name="endDate" />
+                        <Field
+                            component={DatePickerField}
+                            name="endDate"
+                            className="mb-5 border-2 border-black"
+                        />
                         <ErrorMessage name="endDate" component="div" />
                         <div>
                             <button type="submit" disabled={isSubmitting}>
