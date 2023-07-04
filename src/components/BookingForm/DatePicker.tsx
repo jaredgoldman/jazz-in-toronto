@@ -17,7 +17,7 @@ export default function DatePickerField({
     return (
         <ReactDatePicker
             selected={startDate}
-            onChange={(date: Date) => setStartDate(date)}
+            onChange={(date: Date) => setStartDate(new Date(date))}
             showTimeSelect
         />
     )

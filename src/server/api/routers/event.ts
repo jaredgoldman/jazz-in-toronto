@@ -10,8 +10,8 @@ export const eventRouter = createTRPCRouter({
         .input(
             z.object({
                 name: z.string(),
-                startDate: z.string(),
-                endDate: z.string(),
+                startDate: z.date(),
+                endDate: z.date(),
                 photoPath: z.string().optional(),
                 featured: z.boolean().optional(),
                 instagramHandle: z.string().optional(),
@@ -20,7 +20,7 @@ export const eventRouter = createTRPCRouter({
                 venueId: z.string().cuid(),
             })
         )
-        .query(({ ctx, input }) => {
+        .mutation(({ ctx, input }) => {
             const { bandId, venueId, ...eventData } = input
             return ctx.prisma.event.create({
                 data: {
@@ -44,8 +44,8 @@ export const eventRouter = createTRPCRouter({
             z.object({
                 id: z.string().cuid(),
                 name: z.string().optional(),
-                startDate: z.string().optional(),
-                endDate: z.string().optional(),
+                startDate: z.date().optional(),
+                endDate: z.date().optional(),
                 photoPath: z.string().optional(),
                 featured: z.boolean().optional(),
                 instagramHandle: z.string().optional(),
@@ -55,7 +55,7 @@ export const eventRouter = createTRPCRouter({
                 cancelled: z.boolean().optional(),
             })
         )
-        .query(({ ctx, input }) => {
+        .mutation(({ ctx, input }) => {
             const { id, ...eventData } = input
             return ctx.prisma.event.update({
                 where: { id: input.id },
@@ -65,7 +65,7 @@ export const eventRouter = createTRPCRouter({
 
     delete: protectedProcedure
         .input(z.object({ id: z.string().cuid() }))
-        .query(({ ctx, input }) => {
+        .mutation(({ ctx, input }) => {
             return ctx.prisma.event.delete({
                 where: { id: input.id },
             })

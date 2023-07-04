@@ -17,7 +17,7 @@ export const bandRouter = createTRPCRouter({
                 website: z.string().optional(),
             })
         )
-        .query(({ ctx, input }) => {
+        .mutation(({ ctx, input }) => {
             return ctx.prisma.band.create({
                 data: input,
             })
@@ -47,7 +47,7 @@ export const bandRouter = createTRPCRouter({
                 website: z.string().optional(),
             })
         )
-        .query(({ ctx, input }) => {
+        .mutation(({ ctx, input }) => {
             const { id, ...bandData } = input
             return ctx.prisma.band.update({
                 where: { id: input.id },
@@ -57,7 +57,7 @@ export const bandRouter = createTRPCRouter({
 
     delete: protectedProcedure
         .input(z.object({ id: z.string().cuid() }))
-        .query(({ ctx, input }) => {
+        .mutation(({ ctx, input }) => {
             return ctx.prisma.band.delete({
                 where: { id: input.id },
             })

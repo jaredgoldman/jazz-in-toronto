@@ -2,7 +2,6 @@ import { z } from "zod"
 import { adminRoles } from "~/types/enums"
 import {
     createTRPCRouter,
-    publicProcedure,
     protectedProcedure,
 } from "~/server/api/trpc"
 import { TRPCError } from "@trpc/server"
@@ -16,7 +15,7 @@ export const adminRouter = createTRPCRouter({
                 password: z.string(),
             })
         )
-        .query(async ({ ctx, input }) => {
+        .mutation(async ({ ctx, input }) => {
             const user = await ctx.prisma.admin.findUnique({
                 where: {
                     id: ctx.session.user.id,
@@ -61,7 +60,7 @@ export const adminRouter = createTRPCRouter({
                 role: z.string().optional(),
             })
         )
-        .query(async ({ ctx, input }) => {
+        .mutation(async ({ ctx, input }) => {
             const user = await ctx.prisma.admin.findUnique({
                 where: {
                     id: ctx.session.user.id,
@@ -87,7 +86,7 @@ export const adminRouter = createTRPCRouter({
 
     delete: protectedProcedure
         .input(z.object({ id: z.string().cuid() }))
-        .query(async ({ ctx, input }) => {
+        .mutation(async ({ ctx, input }) => {
             const user = await ctx.prisma.admin.findUnique({
                 where: {
                     id: ctx.session.user.id,

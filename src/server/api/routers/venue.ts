@@ -19,7 +19,7 @@ export const venueRouter = createTRPCRouter({
                 active: z.boolean().optional(),
             })
         )
-        .query(({ ctx, input }) => {
+        .mutation(({ ctx, input }) => {
             return ctx.prisma.venue.create({
                 data: input,
             })
@@ -32,6 +32,10 @@ export const venueRouter = createTRPCRouter({
                 where: { id: input.id },
             })
         }),
+
+    getAll: publicProcedure.query(({ ctx }) => {
+        return ctx.prisma.venue.findMany()
+    }),
 
     update: protectedProcedure
         .input(
@@ -47,7 +51,7 @@ export const venueRouter = createTRPCRouter({
                 active: z.boolean().optional(),
             })
         )
-        .query(({ ctx, input }) => {
+        .mutation(({ ctx, input }) => {
             const { id, ...venueData } = input
             return ctx.prisma.venue.update({
                 where: { id: input.id },
@@ -57,7 +61,7 @@ export const venueRouter = createTRPCRouter({
 
     delete: protectedProcedure
         .input(z.object({ id: z.string().cuid() }))
-        .query(({ ctx, input }) => {
+        .mutation(({ ctx, input }) => {
             return ctx.prisma.venue.delete({
                 where: { id: input.id },
             })
