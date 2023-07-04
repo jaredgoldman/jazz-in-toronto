@@ -6,14 +6,16 @@
 -   Plan frontend app x
     -   Pages x
     -   Components x
--   Build/test basic backend
-    -   Don't include crawling
-    -   Just create a db with CRUD endpoints
+-   Build/test basic backend x
+    -   Don't include crawling x
+    -   Just create a db with CRUD endpoints x
 -   Build/test frontend
     -   Public section
+        -   public book your gig form
     -   Admin section
 -   Add crawling and instagram modules
 -   Add seperate DB instance for testing
+-   Add CMS w/ graphQL input
 
 ## Requirements
 
