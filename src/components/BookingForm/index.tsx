@@ -28,8 +28,8 @@ export default function BookingForm(): JSX.Element {
             <Formik
                 initialValues={{
                     name: "",
-                    startDate: new Date(Date.now()),
-                    endDate: new Date(Date.now()),
+                    startDate: new Date(),
+                    endDate: new Date(),
                     bandId: "",
                     instagramHandle: "",
                     website: "",
@@ -70,7 +70,7 @@ export default function BookingForm(): JSX.Element {
                         <Field
                             className="mb-5 border-2 border-black"
                             component="select"
-                            name="band"
+                            name="bandId"
                             as="select"
                         >
                             <option value="">Select a band</option>
@@ -85,7 +85,7 @@ export default function BookingForm(): JSX.Element {
                         <Field
                             className="mb-5 border-2 border-black"
                             component="select"
-                            name="venue"
+                            name="venueId"
                             as="select"
                         >
                             <option value="">Select a venue</option>
