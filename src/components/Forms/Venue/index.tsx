@@ -1,10 +1,15 @@
 import { Form, Formik, Field, ErrorMessage } from "formik"
 import { api } from "~/utils/api"
+import PlacesAutocomplete from "../Fields/PlacesAutoComplete"
 
 export interface Values {
     name: string
-    address: string
-    city: string
+    location: {
+        address: string
+        latitude: number
+        longitude: number
+        city: string
+    }
     instagramHandle?: string
     website?: string
 }
@@ -14,12 +19,16 @@ export default function VenueForm(): JSX.Element {
 
     return (
         <div>
-            <h1 className="mb-5">Book your gig here!</h1>
+            <h1 className="mb-5">Add your venue here!</h1>
             <Formik
                 initialValues={{
                     name: "",
-                    address: "",
-                    city: "",
+                    location: {
+                        address: "",
+                        latitude: 0,
+                        longitude: 0,
+                        city: "",
+                    },
                     instagramHandle: "",
                     website: "",
                 }}
@@ -38,7 +47,14 @@ export default function VenueForm(): JSX.Element {
                 // }}
                 onSubmit={async (values) => {
                     try {
-                        venueMutation.mutate(values)
+                        const {
+                            location,
+                            ...rest
+                        } = values
+                        venueMutation.mutate({
+                            ...rest,
+                            ...location
+                        })
                     } catch (error) {
                         // display error
                     }
@@ -59,6 +75,13 @@ export default function VenueForm(): JSX.Element {
                             name="instagramHandle"
                         />
                         <ErrorMessage name="instagramHandle" component="div" />
+                        <label>Location</label>
+                        <Field
+                            className="mb-5 border-2 border-black"
+                            name="location"
+                            component={PlacesAutocomplete<Values>}
+                        />
+                        <ErrorMessage name="location" component="div" />
                         <label>Website</label>
                         <Field
                             className="mb-5 border-2 border-black"

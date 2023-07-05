@@ -48,6 +48,8 @@ model Venue {
   website         String?
   events          Event[]
   active          Boolean  @default(true)
+  latitude        Float
+  longitude       Float
 }
 
 model Event {

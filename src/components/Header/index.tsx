@@ -17,6 +17,9 @@ export default function Header(): JSX.Element {
                         <Link href="/book">Book Your Gig</Link>
                     </li>
                     <li className="p-2">
+                        <Link href="/venue">Add Your Venue</Link>
+                    </li>
+                    <li className="p-2">
                         <Link href="/listings">Listings</Link>
                     </li>
                     <li className="p-2">

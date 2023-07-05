@@ -9,6 +9,8 @@ const testVenueData = {
     name: "venue test venue",
     address: "123 test street",
     city: "test city",
+    longitude: 0,
+    latitude: 0,
 }
 
 let venue: Venue

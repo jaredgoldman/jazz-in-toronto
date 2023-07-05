@@ -10,6 +10,8 @@ const testVenueData = {
     address: "123 test street",
     city: "Toronto",
     website: "test.com",
+    longitude: 0,
+    latitude: 0
 }
 
 const testBandData = {
@@ -30,8 +32,8 @@ beforeAll(async () => {
     })
     testEventData = {
         name: "event test event",
-        startDate: new Date(Date.now()).toISOString(),
-        endDate: new Date(Date.now() + 1000 * 60 * 60 * 2).toISOString(),
+        startDate: new Date(Date.now()),
+        endDate: new Date(Date.now() + 1000 * 60 * 60 * 2),
         bandId: band.id,
         venueId: venue.id,
     }
