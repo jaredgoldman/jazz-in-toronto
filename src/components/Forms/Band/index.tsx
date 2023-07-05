@@ -14,7 +14,7 @@ export default function BandForm(): JSX.Element {
 
     return (
         <div>
-            <h1 className="mb-5">Book your gig here!</h1>
+            <h1 className="mb-5">Add your band to our database!</h1>
             <Formik
                 initialValues={{
                     name: "",
