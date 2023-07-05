@@ -1,20 +1,46 @@
 import usePlacesAutocomplete, {
     getGeocode,
-    getLatLng,
+    getLatLng
 } from "use-places-autocomplete"
 import useOnclickOutside from "react-cool-onclickoutside"
-import { FieldProps } from "formik"
+import { FieldProps, Field, ErrorMessage } from "formik"
 
-export default function PlacesAutocomplete<T>({
+interface PlacesAutoCompleteProps {
+    label: string
+    name: string
+    className?: string
+    fieldClassName?: string
+}
+
+export default function PlacesAutoCompleteField({
+    label,
+    name,
+    className = "flex-col",
+    fieldClassName = "mb-5 border-2 border-black"
+}: PlacesAutoCompleteProps): JSX.Element {
+    return (
+        <div className={className}>
+            <label>{label}</label>
+            <Field
+                className={fieldClassName}
+                name={name}
+                component={PlacesAutocomplete}
+            />
+            <ErrorMessage name={name} component="div" />
+        </div>
+    )
+}
+
+const PlacesAutocomplete = ({
     form,
-    field,
-}: FieldProps<Date, T>): JSX.Element {
+    field
+}: FieldProps<Date, any>): JSX.Element => {
     const {
         ready,
         value,
         suggestions: { status, data },
         setValue,
-        clearSuggestions,
+        clearSuggestions
     } = usePlacesAutocomplete({
         requestOptions: {
             /* Define search scope here */
@@ -23,7 +49,7 @@ export default function PlacesAutocomplete<T>({
             //     radius: 2800 * 1000, // approximately radius to cover the whole Canada
             // },
         },
-        debounce: 300,
+        debounce: 300
     })
     const ref = useOnclickOutside(() => {
         // When user clicks outside of the component, we can dismiss
@@ -52,7 +78,7 @@ export default function PlacesAutocomplete<T>({
                     address: description,
                     latitude: lat,
                     longitude: lng,
-                    city: results[0].address_components[3].long_name,
+                    city: results[0].address_components[3].long_name
                 })
             })
         }
@@ -61,7 +87,7 @@ export default function PlacesAutocomplete<T>({
         data.map((suggestion) => {
             const {
                 place_id,
-                structured_formatting: { main_text, secondary_text },
+                structured_formatting: { main_text, secondary_text }
             } = suggestion
 
             return (

@@ -1,17 +1,12 @@
 import { createContext } from "react"
 import useModal from "../hooks/useModal"
+import { ModalContextProps, ModalForms } from "../types"
 import Modal from "../Modal"
-
-interface ModalContextProps {
-    showModal: boolean
-    handleModal: (content?: string) => void
-    modalContent: string | JSX.Element | null
-}
 
 const initialModalContext: ModalContextProps = {
     showModal: false,
     handleModal: () => {},
-    modalContent: "modal content",
+    modalContent: ModalForms.Band,
 }
 
 const ModalContext = createContext(initialModalContext)

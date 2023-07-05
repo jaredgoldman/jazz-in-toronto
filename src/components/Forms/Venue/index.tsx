@@ -1,6 +1,7 @@
 import { Form, Formik, Field, ErrorMessage } from "formik"
 import { api } from "~/utils/api"
 import PlacesAutocomplete from "../Fields/PlacesAutoComplete"
+import { Input } from "../Fields"
 
 export interface Values {
     name: string
@@ -27,10 +28,10 @@ export default function VenueForm(): JSX.Element {
                         address: "",
                         latitude: 0,
                         longitude: 0,
-                        city: "",
+                        city: ""
                     },
                     instagramHandle: "",
-                    website: "",
+                    website: ""
                 }}
                 // validate={(values) => {
                 // const errors: any = {}
@@ -47,10 +48,7 @@ export default function VenueForm(): JSX.Element {
                 // }}
                 onSubmit={async (values) => {
                     try {
-                        const {
-                            location,
-                            ...rest
-                        } = values
+                        const { location, ...rest } = values
                         venueMutation.mutate({
                             ...rest,
                             ...location
@@ -62,33 +60,10 @@ export default function VenueForm(): JSX.Element {
             >
                 {({ isSubmitting }) => (
                     <Form className="flex w-2/5 flex-col">
-                        <label>Name</label>
-                        <Field
-                            className="mb-5 border-2 border-black"
-                            type="text"
-                            name="name"
-                        />
-                        <label>Instagram</label>
-                        <Field
-                            className="mb-5 border-2 border-black"
-                            type="text"
-                            name="instagramHandle"
-                        />
-                        <ErrorMessage name="instagramHandle" component="div" />
-                        <label>Location</label>
-                        <Field
-                            className="mb-5 border-2 border-black"
-                            name="location"
-                            component={PlacesAutocomplete<Values>}
-                        />
-                        <ErrorMessage name="location" component="div" />
-                        <label>Website</label>
-                        <Field
-                            className="mb-5 border-2 border-black"
-                            type="text"
-                            name="website"
-                        />
-                        <ErrorMessage name="website" component="div" />
+                        <Input name="name" label="Venue Name" />
+                        <PlacesAutocomplete name="location" label="Address" />
+                        <Input name="instagramHandle" label="instagramHandle" />
+                        <Input name="website" label="Venue Website" />
                         <div>
                             <button type="submit" disabled={isSubmitting}>
                                 Submit

@@ -1,8 +1,10 @@
-import { useContext} from "react"
+import { useContext } from "react"
 import { ModalContext } from "~/components/Modal/context/ModalContext"
 import { Form, Formik, Field, ErrorMessage } from "formik"
 import DatePickerField from "../Fields/DatePicker"
 import { api } from "~/utils/api"
+import { ModalForms } from "~/components/Modal/types"
+import { DatePicker, Input, Select } from "../Fields"
 
 export interface Values {
     name: string
@@ -20,6 +22,16 @@ export default function EventForm(): JSX.Element {
     const { data: bandData } = api.band.getAll.useQuery()
     const eventMutation = api.event.create.useMutation()
     const { handleModal } = useContext(ModalContext)
+
+    const mappedVenueData = venueData?.map((venue) => ({
+        label: venue.name,
+        value: venue.id
+    }))
+    const mappedBandData = bandData?.map((band) => ({
+        label: band.name,
+        value: band.id
+    }))
+
     return (
         <div>
             <h1 className="mb-5">Book your gig here!</h1>
@@ -31,7 +43,7 @@ export default function EventForm(): JSX.Element {
                     bandId: "",
                     instagramHandle: "",
                     website: "",
-                    venueId: "",
+                    venueId: ""
                 }}
                 // validate={(values) => {
                 // const errors: any = {}
@@ -48,6 +60,7 @@ export default function EventForm(): JSX.Element {
                 // }}
                 onSubmit={async (values) => {
                     try {
+                        console.log("EVENT SUBMIT VALUES:", values)
                         eventMutation.mutate(values)
                     } catch (error) {
                         // display error
@@ -56,78 +69,28 @@ export default function EventForm(): JSX.Element {
             >
                 {({ isSubmitting }) => (
                     <Form className="flex w-2/5 flex-col">
-                        <label>Name</label>
-                        <Field
-                            className="mb-5 border-2 border-black"
-                            type="text"
-                            name="name"
-                        />
-                        <ErrorMessage name="name" component="div" />
-                        <label>Band</label>
-                        <Field
-                            className="mb-5 border-2 border-black"
-                            component="select"
-                            name="bandId"
-                            as="select"
-                        >
-                            <option value="">Select a band</option>
-                            {bandData?.map((band) => (
-                                <option key={band.id} value={band.id}>
-                                    {band.name}
-                                </option>
-                            ))}
-                        </Field>
-                        <ErrorMessage name="band" component="div" />
-                        <label>Venue</label>
-                        <Field
-                            className="mb-5 border-2 border-black"
-                            component="select"
+                        <Input name="name" label="Event Name" />
+                        <Select
                             name="venueId"
-                            as="select"
-                        >
-                            <option value="">Select a venue</option>
-                            {venueData?.map((venue) => (
-                                <option key={venue.id} value={venue.id}>
-                                    {venue.name}
-                                </option>
-                            ))}
-                        </Field>
-                        <ErrorMessage name="venue" component="div" />
-                        <label>Start Date</label>
-                        <Field
-                            component={DatePickerField<Values>}
-                            name="startDate"
-                            className="mb-5 border-2 border-black"
+                            label="Venue"
+                            options={mappedVenueData}
                         />
-                        <ErrorMessage name="startDate" component="div" />
-                        <label>End Date</label>
-                        <Field
-                            component={DatePickerField<Values>}
-                            name="endDate"
-                            className="mb-5 border-2 border-black"
+                        <Select
+                            name="bandId"
+                            label="Band"
+                            options={mappedBandData}
                         />
-                        <ErrorMessage name="endDate" component="div" />
-                        <label>Instagram Handle</label>
-                        <Field
-                            className="mb-5 border-2 border-black"
-                            type="text"
+                        <DatePicker name="startDate" label="Start Date" />
+                        <DatePicker name="endDate" label="Start Date" />
+                        <Input
                             name="instagramHandle"
+                            label="Instagram Handle"
                         />
-                        <ErrorMessage name="instagramHandle" component="div" />
-                        <label>Website</label>
-                        <Field
-                            className="mb-5 border-2 border-black"
-                            type="text"
-                            name="website"
-                        />
-                        <ErrorMessage name="website" component="div" />
+                        <Input name="website" label="Website" />
                         <div>
                             <button type="submit" disabled={isSubmitting}>
                                 Submit
                             </button>
-                        </div>
-                        <div>
-                            <button onClick={() => handleModal()}>Open Modal</button>
                         </div>
                     </Form>
                 )}

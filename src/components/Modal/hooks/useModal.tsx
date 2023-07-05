@@ -1,12 +1,13 @@
 import { useState } from "react"
+import { ModalContent } from "../types"
 
 export default function useModal() {
     let [showModal, setShowModal] = useState<boolean>(false)
     let [modalContent, setModalContent] = useState<
-        string | JSX.Element | null
+        ModalContent
     >(null)
 
-    let handleModal = (content = "") => {
+    let handleModal = (content: ModalContent = "") => {
         setShowModal(!showModal)
         if (content) {
             setModalContent(content)

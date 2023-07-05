@@ -1,5 +1,6 @@
-import { Form, Formik, Field, ErrorMessage } from "formik"
+import { Form, Formik } from "formik"
 import { api } from "~/utils/api"
+import { Input } from "../Fields"
 
 export interface Values {
     name: string
@@ -11,16 +12,15 @@ export interface Values {
 
 export default function BandForm(): JSX.Element {
     const bandMutation = api.band.create.useMutation()
-
     return (
         <div>
-            <h1 className="mb-5">Add your band to our database!</h1>
+            <h1 className="mb-5">Book your gig here!</h1>
             <Formik
                 initialValues={{
                     name: "",
-                    genre: "",
                     instagramHandle: "",
-                    website: "",
+                    genre: "",
+                    website: ""
                 }}
                 // validate={(values) => {
                 // const errors: any = {}
@@ -45,39 +45,13 @@ export default function BandForm(): JSX.Element {
             >
                 {({ isSubmitting }) => (
                     <Form className="flex w-2/5 flex-col">
-                        <label>Name</label>
-                        <Field
-                            className="mb-5 border-2 border-black"
-                            type="text"
-                            name="name"
-                        />
-                        <ErrorMessage name="name" component="div" />
-                        <label>Genre</label>
-                        <Field
-                            className="mb-5 border-2 border-black"
-                            type="text"
-                            name="genre"
-                        />
-                        <ErrorMessage name="genre" component="div" />
-                        <label>Instagram</label>
-                        <Field
-                            className="mb-5 border-2 border-black"
-                            type="text"
+                        <Input name="name" label="Name" />
+                        <Input name="genre" label="Musical genre" />
+                        <Input
                             name="instagramHandle"
+                            label="Instagram Handle"
                         />
-                        <ErrorMessage name="instagramHandle" component="div" />
-                        <label>Website</label>
-                        <Field
-                            className="mb-5 border-2 border-black"
-                            type="text"
-                            name="website"
-                        />
-                        <ErrorMessage name="website" component="div" />
-                        <div>
-                            <button type="submit" disabled={isSubmitting}>
-                                Submit
-                            </button>
-                        </div>
+                        <Input name="website" label="Name" />
                     </Form>
                 )}
             </Formik>
