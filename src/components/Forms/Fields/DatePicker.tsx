@@ -2,13 +2,12 @@ import { useEffect, useState } from "react"
 import ReactDatePicker from "react-datepicker"
 import { FieldProps } from "formik"
 import "react-datepicker/dist/react-datepicker.css"
-import { Values } from "."
 
-export default function DatePickerField({
+export default function DatePicker<T>({
     form,
     field,
-}: FieldProps<string, Values>): JSX.Element {
-    const [startDate, setStartDate] = useState<Date | null>(new Date())
+}: FieldProps<Date, T>): JSX.Element {
+    const [startDate, setStartDate] = useState<Date | null>(field.value)
 
     useEffect(() => {
         form.setFieldValue(field.name, startDate)

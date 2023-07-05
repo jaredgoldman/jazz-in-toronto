@@ -1,11 +1,9 @@
 import RootLayout from "~/layouts/RootLayout"
-import BookingForm from "~/components/BookingForm"
+import EventForm from "~/components/Forms/Event"
 export default function Book(): JSX.Element {
     return (
         <RootLayout>
-            <main>
-                <BookingForm />
-            </main>
+            <EventForm />
         </RootLayout>
     )
 }

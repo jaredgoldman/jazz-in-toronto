@@ -9,6 +9,7 @@ export const env = createEnv({
     server: {
         DATABASE_URL: z.string().url(),
         NODE_ENV: z.enum(["development", "test", "production"]),
+        GOOGLE_API_KEY: z.string()
         // NEXTAUTH_SECRET:
         //   process.env.NODE_ENV === "production"
         //     ? z.string().min(1)

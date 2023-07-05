@@ -1,6 +1,6 @@
 import { Venue } from "@prisma/client"
 import { Form, Formik, Field, ErrorMessage } from "formik"
-import DatePickerField from "./DatePicker"
+import DatePickerField from "../Fields/DatePicker"
 import { api } from "~/utils/api"
 
 export interface Values {
@@ -14,11 +14,7 @@ export interface Values {
     venueId: string
 }
 
-interface Props {
-    venues: Venue[]
-}
-
-export default function BookingForm(): JSX.Element {
+export default function EventForm(): JSX.Element {
     const { data: venueData } = api.venue.getAll.useQuery()
     const { data: bandData } = api.band.getAll.useQuery()
     const eventMutation = api.event.create.useMutation()
@@ -49,11 +45,10 @@ export default function BookingForm(): JSX.Element {
                 // return errors
                 // }}
                 onSubmit={async (values) => {
-                    console.log(values)
                     try {
                         eventMutation.mutate(values)
                     } catch (error) {
-                        console.log(error)
+                        // display error
                     }
                 }}
             >
@@ -98,14 +93,14 @@ export default function BookingForm(): JSX.Element {
                         <ErrorMessage name="venue" component="div" />
                         <label>Start Date</label>
                         <Field
-                            component={DatePickerField}
+                            component={DatePickerField<Values>}
                             name="startDate"
                             className="mb-5 border-2 border-black"
                         />
                         <ErrorMessage name="startDate" component="div" />
                         <label>End Date</label>
                         <Field
-                            component={DatePickerField}
+                            component={DatePickerField<Values>}
                             name="endDate"
                             className="mb-5 border-2 border-black"
                         />
