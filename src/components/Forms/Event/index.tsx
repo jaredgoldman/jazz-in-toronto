@@ -1,4 +1,5 @@
-import { Venue } from "@prisma/client"
+import { useContext} from "react"
+import { ModalContext } from "~/components/Modal/context/ModalContext"
 import { Form, Formik, Field, ErrorMessage } from "formik"
 import DatePickerField from "../Fields/DatePicker"
 import { api } from "~/utils/api"
@@ -18,6 +19,7 @@ export default function EventForm(): JSX.Element {
     const { data: venueData } = api.venue.getAll.useQuery()
     const { data: bandData } = api.band.getAll.useQuery()
     const eventMutation = api.event.create.useMutation()
+    const { handleModal } = useContext(ModalContext)
     return (
         <div>
             <h1 className="mb-5">Book your gig here!</h1>
@@ -123,6 +125,9 @@ export default function EventForm(): JSX.Element {
                             <button type="submit" disabled={isSubmitting}>
                                 Submit
                             </button>
+                        </div>
+                        <div>
+                            <button onClick={() => handleModal()}>Open Modal</button>
                         </div>
                     </Form>
                 )}
