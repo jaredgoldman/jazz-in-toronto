@@ -11,10 +11,11 @@ const seed = async () => {
         genre: "jazz",
         photoPath: "https://picsum.photos/200/300",
         instagramHandle: `@band${i + 1}`,
-        website: `https://google.com`,
+        website: `https://google.com`
     }))
     await prisma.band.createMany({ data: bands })
     const bandsData = await prisma.band.findMany()
+
     // create 100 venues
     const venues = Array.from({ length: 100 }).map((_, i) => ({
         name: `Venue ${i + 1}`,
@@ -23,28 +24,34 @@ const seed = async () => {
         photoPath: "https://picsum.photos/200/300",
         instagramHandle: `@venue${i + 1}`,
         website: `https://google.com`,
+        latitude: 43.6532,
+        longitude: -79.3832
     }))
+
     await prisma.venue.createMany({ data: venues })
     const venuesData = await prisma.venue.findMany()
+
+    const oneDay = 60 * 60 * 24 * 1000
     // create 100 events
     const events = bandsData.map((band, i) => {
         return {
             name: `Event ${i + 1}`,
-            startDate: new Date(),
-            endDate: new Date(Date.now() + 60 * 60 * 24 * 7),
+            startDate: new Date(Date.now() + i * oneDay),
+            endDate: new Date(Date.now() + i * oneDay + oneDay),
             photoPath: "https://picsum.photos/200/300",
             instagramHandle: `@event${i + 1}`,
             website: `https://google.com`,
             bandId: band.id,
-            venueId: venuesData[i]?.id as Venue["id"],
+            venueId: venuesData[i]?.id as Venue["id"]
         }
     })
+
     await prisma.event.createMany({ data: events })
     await prisma.admin.create({
         data: {
             email: "test@test.com",
-            password: "test",
-        },
+            password: "test"
+        }
     })
 }
 

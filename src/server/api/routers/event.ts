@@ -2,7 +2,7 @@ import { z } from "zod"
 import {
     createTRPCRouter,
     publicProcedure,
-    protectedProcedure,
+    protectedProcedure
 } from "~/server/api/trpc"
 
 export const eventRouter = createTRPCRouter({
@@ -17,7 +17,7 @@ export const eventRouter = createTRPCRouter({
                 instagramHandle: z.string().optional(),
                 website: z.string().optional(),
                 bandId: z.string().cuid(),
-                venueId: z.string().cuid(),
+                venueId: z.string().cuid()
             })
         )
         .mutation(({ ctx, input }) => {
@@ -26,8 +26,8 @@ export const eventRouter = createTRPCRouter({
                 data: {
                     ...eventData,
                     band: { connect: { id: input.bandId } },
-                    venue: { connect: { id: input.venueId } },
-                },
+                    venue: { connect: { id: input.venueId } }
+                }
             })
         }),
 
@@ -35,7 +35,34 @@ export const eventRouter = createTRPCRouter({
         .input(z.object({ id: z.string().cuid() }))
         .query(({ ctx, input }) => {
             return ctx.prisma.event.findUnique({
-                where: { id: input.id },
+                where: { id: input.id }
+            })
+        }),
+
+    getAll: publicProcedure
+        .input(z.object({ id: z.string().cuid() }))
+        .query(({ ctx }) => {
+            return ctx.prisma.event.findMany()
+        }),
+
+    getAllByMonth: publicProcedure
+        .input(z.object({ month: z.number(), year: z.number() }))
+        .query(({ ctx, input }) => {
+            console.log(
+                "GREAT THAN THIS: ",
+                new Date(input.year, input.month - 1, 1).toLocaleDateString()
+            )
+            console.log(
+                "LESS THAN THIS: ",
+                new Date(input.year, input.month, 1).toLocaleDateString()
+            )
+            return ctx.prisma.event.findMany({
+                where: {
+                    startDate: {
+                        gte: new Date(input.year, input.month, 1),
+                        lt: new Date(input.year, input.month + 1, 1)
+                    }
+                }
             })
         }),
 
@@ -52,14 +79,14 @@ export const eventRouter = createTRPCRouter({
                 website: z.string().optional(),
                 bandId: z.string().cuid().optional(),
                 venueId: z.string().cuid().optional(),
-                cancelled: z.boolean().optional(),
+                cancelled: z.boolean().optional()
             })
         )
         .mutation(({ ctx, input }) => {
             const { id, ...eventData } = input
             return ctx.prisma.event.update({
                 where: { id: input.id },
-                data: eventData,
+                data: eventData
             })
         }),
 
@@ -67,7 +94,7 @@ export const eventRouter = createTRPCRouter({
         .input(z.object({ id: z.string().cuid() }))
         .mutation(({ ctx, input }) => {
             return ctx.prisma.event.delete({
-                where: { id: input.id },
+                where: { id: input.id }
             })
-        }),
+        })
 })

@@ -4,7 +4,9 @@ import VenueForm from "~/components/Forms/Venue"
 export default function Book(): JSX.Element {
     return (
         <RootLayout>
-            <VenueForm/>
+            <main className="w-full flex justify-center">
+                <VenueForm />
+            </main>
         </RootLayout>
     )
 }
