@@ -1,7 +1,8 @@
-import { Form, Formik, Field, ErrorMessage } from "formik"
+import { Form, Formik } from "formik"
 import { api } from "~/utils/api"
 import PlacesAutocomplete from "../Fields/PlacesAutoComplete"
 import { Input } from "../Fields"
+import Button from "~/components/Button"
 
 export interface Values {
     name: string
@@ -59,16 +60,14 @@ export default function VenueForm(): JSX.Element {
                 }}
             >
                 {({ isSubmitting }) => (
-                    <Form className="flex w-2/5 flex-col">
+                    <Form className="flex flex-col">
                         <Input name="name" label="Venue Name" />
                         <PlacesAutocomplete name="location" label="Address" />
                         <Input name="instagramHandle" label="instagramHandle" />
                         <Input name="website" label="Venue Website" />
-                        <div>
-                            <button type="submit" disabled={isSubmitting}>
-                                Submit
-                            </button>
-                        </div>
+                        <Button type="submit" disabled={isSubmitting}>
+                            Submit
+                        </Button>
                     </Form>
                 )}
             </Formik>

@@ -10,7 +10,7 @@ interface InputProps {
 export default function Input({
     label,
     name,
-    className = "flex-col",
+    className = "flex flex-col m-2",
     fieldClassName = "mb-5 border-2 border-black"
 }: InputProps): JSX.Element {
     return (

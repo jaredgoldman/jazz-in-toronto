@@ -15,7 +15,7 @@ interface PlacesAutoCompleteProps {
 export default function PlacesAutoCompleteField({
     label,
     name,
-    className = "flex-col",
+    className = "flex-col m-2",
     fieldClassName = "mb-5 border-2 border-black"
 }: PlacesAutoCompleteProps): JSX.Element {
     return (

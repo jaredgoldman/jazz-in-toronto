@@ -6,16 +6,16 @@ import { ModalForms } from "./types"
 
 const modalForms = {
     [ModalForms.Band]: <BandForm />,
-    [ModalForms.Venue]: <VenueForm />,
+    [ModalForms.Venue]: <VenueForm />
 }
 
 export default function Modal(): JSX.Element | null {
     const { showModal, handleModal, modalContent } = useContext(ModalContext)
     if (showModal) {
         return (
-            <div className="absolute left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 transform bg-black text-white">
+            <div className="absolute left-1/2 top-1/2 z-10 w-4/5 -translate-x-1/2 -translate-y-1/2 transform border-2 border-black bg-white p-2">
                 <div onClick={() => handleModal()}>X</div>
-                {modalForms[modalContent]}
+                <div className="flex justify-center w-full">{modalForms[modalContent]}</div>
             </div>
         )
     } else return null

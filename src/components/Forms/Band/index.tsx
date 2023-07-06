@@ -1,6 +1,7 @@
 import { Form, Formik } from "formik"
 import { api } from "~/utils/api"
 import { Input } from "../Fields"
+import Button from "~/components/Button"
 
 export interface Values {
     name: string
@@ -13,8 +14,8 @@ export interface Values {
 export default function BandForm(): JSX.Element {
     const bandMutation = api.band.create.useMutation()
     return (
-        <div>
-            <h1 className="mb-5">Book your gig here!</h1>
+        <div className="w-full">
+            <h1 className="mb-5">Add your band to our database</h1>
             <Formik
                 initialValues={{
                     name: "",
@@ -44,7 +45,7 @@ export default function BandForm(): JSX.Element {
                 }}
             >
                 {({ isSubmitting }) => (
-                    <Form className="flex w-2/5 flex-col">
+                    <Form className="flex flex-col">
                         <Input name="name" label="Name" />
                         <Input name="genre" label="Musical genre" />
                         <Input
@@ -52,6 +53,11 @@ export default function BandForm(): JSX.Element {
                             label="Instagram Handle"
                         />
                         <Input name="website" label="Name" />
+                        <div>
+                            <Button type="submit" disabled={isSubmitting}>
+                                Submit
+                            </Button>
+                        </div>
                     </Form>
                 )}
             </Formik>

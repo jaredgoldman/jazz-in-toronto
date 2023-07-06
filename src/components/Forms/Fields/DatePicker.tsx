@@ -13,7 +13,7 @@ interface DatePickerProps {
 export default function DatePickerField({
     label,
     name,
-    className = "flex-col",
+    className = "flex flex-col m-2",
     fieldClassName = "mb-5 border-2 border-black"
 }: DatePickerProps): JSX.Element {
     return (
