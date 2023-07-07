@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react"
 import { addMonths, getDaysInMonth } from "date-fns"
 import { api } from "~/utils/api"
-import { Event } from "@prisma/client"
 import { DailyEventData } from "../types"
+import { EventWithBand } from "../types"
 
 interface ReturnType {
     changeMonth: (numOfMonths: number) => void
     currentMonthName: string
-    monthlyEvents: any
+    monthlyEvents: DailyEventData
     isLoading: boolean
 }
 
@@ -29,7 +29,7 @@ export default function useCalendar(): ReturnType {
         if (monthlyEventsData?.length) {
             setDailyEvents(mapEventsToDays(daysInMonth, monthlyEventsData))
         }
-    }, [monthlyEventsData, daysInMonth])
+    }, [monthlyEventsData, daysInMonth, selectedDate])
 
     const changeMonth = (numOfMonths: number) => {
         setSelectedDate(addMonths(selectedDate, numOfMonths))
@@ -49,9 +49,9 @@ const months = Array.from({ length: 12 }, (_, i) => {
 
 const mapEventsToDays = (
     daysInMonth: number,
-    monthlyEvents: Event[]
+    monthlyEvents: EventWithBand[]
 ): DailyEventData => {
-    const eventDays: { [key: number]: Event[] | undefined } = {}
+    const eventDays: { [key: number]: EventWithBand[] | undefined } = {}
     // Filter every event into a specific day
     monthlyEvents.forEach((event) => {
         const day = event.startDate.getDate()

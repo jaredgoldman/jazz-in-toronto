@@ -1,18 +1,30 @@
 import { useState } from "react"
-import { ModalContent } from "../types"
+import { ModalContextProps, ModalForms } from "../types"
+import BandForm from "~/components/Forms/Band"
+import VenueForm from "~/components/Forms/Venue"
 
-export default function useModal() {
-    let [showModal, setShowModal] = useState<boolean>(false)
-    let [modalContent, setModalContent] = useState<
-        ModalContent
-    >(null)
+const modalForms = {
+    [ModalForms.Band]: <BandForm />,
+    [ModalForms.Venue]: <VenueForm />
+}
 
-    let handleModal = (content: ModalContent = "") => {
-        setShowModal(!showModal)
+export default function useModal(): ModalContextProps {
+    const [showModal, setShowModal] = useState<boolean>(false)
+    const [modalContent, setModalContent] = useState<JSX.Element | string>("")
+
+    const handleModal = (content: JSX.Element | string  = "") => {
+        setShowModal(true)
         if (content) {
             setModalContent(content)
         }
     }
 
-    return { showModal, handleModal, modalContent }
+    const handleModalForm = (formType: ModalForms) => {
+        setShowModal(true)
+        setModalContent(modalForms[formType])
+    }
+
+    const closeModal = () => setShowModal(false)
+
+    return { showModal, handleModal, modalContent, handleModalForm, closeModal }
 }

@@ -1,21 +1,30 @@
-import { Event } from "@prisma/client"
-
+import { useContext } from "react"
+import { ModalContext } from "~/components/Modal/context/ModalContext"
+import ModalDay from "./ModalDay"
+import { EventWithBand } from "../types"
+import Button from "~/components/Button"
 interface Props {
     dayOfMonth: number
-    dailyEvents: Event[] | []
+    dailyEvents: EventWithBand[] | []
 }
 
 export default function CalendarDay({ dayOfMonth, dailyEvents }: Props) {
+    const { handleModal } = useContext(ModalContext)
+    //
+    const modalDay = (
+        <ModalDay dayOfMonth={dayOfMonth} dailyEvents={dailyEvents} />
+    )
     return (
         <div>
             <div>{nthNumber(dayOfMonth)}</div>
             <div>{`${dailyEvents.length} events`}</div>
+            <Button onClick={() => handleModal(modalDay)}>View</Button>
         </div>
     )
 }
 
 const nthNumber = (number: number) => {
-    if (number > 3 && number < 21) return "th"
+    if (number > 3 && number < 21) return number + "th"
     let ordinal
     switch (number % 10) {
         case 1:

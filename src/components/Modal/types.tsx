@@ -1,7 +1,9 @@
 export interface ModalContextProps {
     showModal: boolean
-    handleModal: (content?: ModalForms) => void
-    modalContent: ModalForms
+    handleModal: (content?: string | JSX.Element) => void
+    handleModalForm: (formType: ModalForms) => void
+    modalContent: string | JSX.Element
+    closeModal: () => void
 }
 
 export enum ModalForms {

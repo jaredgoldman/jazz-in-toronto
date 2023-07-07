@@ -23,7 +23,7 @@ export default function Select({
     className = "m-2 flex flex-col",
     fieldClassName = "flex items-center border-2 border-black"
 }: SelectProps): JSX.Element {
-    const { handleModal } = useContext(ModalContext)
+    const { handleModalForm } = useContext(ModalContext)
     const mappedOptions = optionData.map((option) => {
         return {
             value: option.id,
@@ -47,7 +47,7 @@ export default function Select({
                 </Field>
                 {modalForm && (
                     <Button
-                        onClick={() => handleModal(modalForm)}
+                        onClick={() => handleModalForm(modalForm)}
                     >{`Add new ${modalForm.toLowerCase()}`}</Button>
                 )}
             </div>

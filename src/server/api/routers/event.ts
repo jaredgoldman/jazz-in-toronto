@@ -48,20 +48,16 @@ export const eventRouter = createTRPCRouter({
     getAllByMonth: publicProcedure
         .input(z.object({ month: z.number(), year: z.number() }))
         .query(({ ctx, input }) => {
-            console.log(
-                "GREAT THAN THIS: ",
-                new Date(input.year, input.month - 1, 1).toLocaleDateString()
-            )
-            console.log(
-                "LESS THAN THIS: ",
-                new Date(input.year, input.month, 1).toLocaleDateString()
-            )
             return ctx.prisma.event.findMany({
                 where: {
                     startDate: {
                         gte: new Date(input.year, input.month, 1),
                         lt: new Date(input.year, input.month + 1, 1)
                     }
+                },
+                include: {
+                    band: true,
+                    venue: true
                 }
             })
         }),

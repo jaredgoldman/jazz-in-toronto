@@ -1,7 +1,7 @@
 import Button from "../Button"
 import CalendarDay from "./components/CalendarDay"
 import useCalendar from "./hooks/useCalendar"
-import { Event } from "@prisma/client"
+import { EventWithBand } from "./types"
 
 export default function Calendar(): JSX.Element {
     const { changeMonth, currentMonthName, monthlyEvents, isLoading } =
@@ -10,8 +10,14 @@ export default function Calendar(): JSX.Element {
     const calendarDays = isLoading ? (
         <div>loading...</div>
     ) : (
-        monthlyEvents?.map((dailyEvents: Event[], i: number) => {
-            return <CalendarDay dayOfMonth={i + 1} dailyEvents={dailyEvents} />
+        monthlyEvents?.map((dailyEvents: EventWithBand[], i: number) => {
+            return (
+                <CalendarDay
+                    key={`${currentMonthName}-${i + 1}`}
+                    dayOfMonth={i + 1}
+                    dailyEvents={dailyEvents}
+                />
+            )
         })
     )
 
