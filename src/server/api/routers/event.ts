@@ -39,11 +39,14 @@ export const eventRouter = createTRPCRouter({
             })
         }),
 
-    getAll: publicProcedure
-        .input(z.object({ id: z.string().cuid() }))
-        .query(({ ctx }) => {
-            return ctx.prisma.event.findMany()
-        }),
+    getAll: publicProcedure.query(({ ctx }) => {
+        return ctx.prisma.event.findMany({
+            include: {
+                band: true,
+                venue: true
+            }
+        })
+    }),
 
     getAllByMonth: publicProcedure
         .input(z.object({ month: z.number(), year: z.number() }))

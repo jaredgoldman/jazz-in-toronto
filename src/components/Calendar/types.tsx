@@ -1,10 +1,8 @@
-import { Prisma } from "@prisma/client"
+import { EventWithBandVenue } from "~/types/data"
 
 export type DailyEventData = {
     events: Array<EventWithBandVenue> | []
     date: Date
 }
 
-export type EventWithBandVenue = Prisma.EventGetPayload<{
-    include: { band: true; venue: true }
-}>
+

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { addMonths, getDaysInMonth } from "date-fns"
 import { api } from "~/utils/api"
 import { DailyEventData } from "../types"
-import { EventWithBandVenue } from "../types"
+import { EventWithBandVenue } from "~/types/data"
 
 interface ReturnType {
     changeMonth: (numOfMonths: number) => void

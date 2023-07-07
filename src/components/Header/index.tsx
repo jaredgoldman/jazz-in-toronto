@@ -45,14 +45,14 @@ export default function Header({ headerType }): JSX.Element {
                             <li className="p-2">
                                 <Link href="/admin">Dashboard</Link>
                             </li>
-                             <li className="p-2">
-                                <Link href="/events">Events</Link>
+                            <li className="p-2">
+                                <Link href="/admin/events">Events</Link>
                             </li>
                             <li className="p-2">
-                                <Link href="/bands">Bands</Link>
+                                <Link href="/admin/bands">Bands</Link>
                             </li>
-                          <li className="p-2">
-                                <Link href="/venues">Venues</Link>
+                            <li className="p-2">
+                                <Link href="/admin/venues">Venues</Link>
                             </li>
                         </>
                     )}
