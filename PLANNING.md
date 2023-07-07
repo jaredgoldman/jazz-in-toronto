@@ -10,9 +10,12 @@
     -   Don't include crawling x
     -   Just create a db with CRUD endpoints x
 -   Build/test frontend
-    -   Public section
-        -   public book your gig form
-    -   Admin section
+    -   Public section x
+        -   public book your gig form x
+        -   add band x
+        -   add venue x
+        -   list venue x
+    -   Admin section x
 -   Add crawling and instagram modules
 -   Add seperate DB instance for testing
 -   Add CMS w/ graphQL input

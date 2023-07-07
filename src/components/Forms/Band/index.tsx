@@ -52,7 +52,7 @@ export default function BandForm(): JSX.Element {
                             name="instagramHandle"
                             label="Instagram Handle"
                         />
-                        <Input name="website" label="Name" />
+                        <Input name="website" label="Website" />
                         <div>
                             <Button type="submit" disabled={isSubmitting}>
                                 Submit

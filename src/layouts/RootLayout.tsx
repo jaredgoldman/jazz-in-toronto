@@ -4,6 +4,7 @@ import Footer from "~/components/Footer"
 import {
     ModalProvider,
 } from "~/components/Modal/context/ModalContext"
+import { HeaderType } from "~/components/Header/types"
 
 interface Props {
     children: JSX.Element | string
@@ -18,7 +19,7 @@ export default function RootLayout({ children }: Props): JSX.Element {
             </Head>
             <ModalProvider>
                 <main>
-                    <Header />
+                    <Header headerType={HeaderType.Public}/>
                     {children}
                     <Footer />
                 </main>
