@@ -1,43 +1,24 @@
 import { useContext } from "react"
 import { ModalContext } from "~/components/Modal/context/ModalContext"
 import ModalDay from "./ModalDay"
-import { EventWithBand } from "../types"
+import { DailyEventData } from "../types"
 import Button from "~/components/Button"
+import { nthNumber } from "../utils"
+
 interface Props {
-    dayOfMonth: number
-    dailyEvents: EventWithBand[] | []
+    dailyEvents: DailyEventData
 }
 
-export default function CalendarDay({ dayOfMonth, dailyEvents }: Props) {
+export default function CalendarDay({ dailyEvents }: Props) {
     const { handleModal } = useContext(ModalContext)
-    //
-    const modalDay = (
-        <ModalDay dayOfMonth={dayOfMonth} dailyEvents={dailyEvents} />
-    )
+    const dayOfMonth = dailyEvents.date.getDate()
+
+    const modalDay = <ModalDay dailyEvents={dailyEvents} />
     return (
-        <div>
+        <div className="border-2 border-black m-2 p-1">
             <div>{nthNumber(dayOfMonth)}</div>
-            <div>{`${dailyEvents.length} events`}</div>
+            <div>{`${dailyEvents.events.length} events`}</div>
             <Button onClick={() => handleModal(modalDay)}>View</Button>
         </div>
     )
-}
-
-const nthNumber = (number: number) => {
-    if (number > 3 && number < 21) return number + "th"
-    let ordinal
-    switch (number % 10) {
-        case 1:
-            ordinal = "st"
-            break
-        case 2:
-            ordinal = "nd"
-            break
-        case 3:
-            ordinal = "rd"
-            break
-        default:
-            ordinal = "th"
-    }
-    return number + ordinal
 }
