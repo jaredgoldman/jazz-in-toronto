@@ -1,41 +1,48 @@
 import { SearchOption } from '../hooks/useSearch'
+import ReactDatePicker from 'react-datepicker'
 
 interface Props {
-    onSearch: (searchTerm: string) => void
-    onSelect: (selectedOption: SearchOption) => void
+    onSearch: (
+        searchData: string | Date | null,
+        searchOption: SearchOption
+    ) => void
 }
 
-export default function SearchBar({ onSearch, onSelect }: Props) {
-    const searchOptionArray = Object.values(SearchOption)
-
-    const readableOptions = {
-        [SearchOption.Name]: 'Name',
-        [SearchOption.Date]: 'Date',
-        [SearchOption.Website]: 'Website',
-        [SearchOption.InstagramHandle]: 'Instagram Handle'
-    }
+export default function SearchBar({ onSearch }: Props) {
 
     return (
         <div>
             <h1>Search</h1>
-            <select
-                onChange={(event) =>
-                    onSelect(event.target.value as SearchOption)
-                }
-            >
-                {searchOptionArray.map((option: SearchOption) => {
-                    return (
-                        <option key={option} value={option}>
-                            {readableOptions[option]}
-                        </option>
-                    )
-                })}
-            </select>
+            <label>Date</label>
+            <ReactDatePicker
+                onChange={(date) => onSearch(date, SearchOption.Date)}
+                selected={new Date()}
+            />
+            <label>Name</label>
             <input
                 className="border-2 border-black"
                 type="text"
-                onChange={(event) => onSearch(event.target.value)}
+                onChange={(event) =>
+                    onSearch(event.target.value, SearchOption.Name)
+                }
             />
+            <label>Website</label>
+            <input
+                className="border-2 border-black"
+                type="text"
+                onChange={(event) =>
+                    onSearch(event.target.value, SearchOption.Website)
+                }
+            />
+            <label>Instagram Handle</label>
+            <input
+                className="border-2 border-black"
+                type="text"
+                onChange={(event) =>
+                    onSearch(event.target.value, SearchOption.InstagramHandle)
+                }
+            />
+            )
         </div>
     )
 }
