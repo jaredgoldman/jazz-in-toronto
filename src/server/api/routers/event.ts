@@ -1,9 +1,10 @@
-import { z } from "zod"
+import { z } from 'zod'
 import {
     createTRPCRouter,
     publicProcedure,
     protectedProcedure
-} from "~/server/api/trpc"
+} from '~/server/api/trpc'
+import addDays from 'date-fns/addDays'
 
 export const eventRouter = createTRPCRouter({
     create: publicProcedure
@@ -47,6 +48,23 @@ export const eventRouter = createTRPCRouter({
             }
         })
     }),
+
+    getAllByDay: publicProcedure
+        .input(z.object({ date: z.date() }))
+        .query(({ ctx, input }) => {
+            return ctx.prisma.event.findMany({
+                where: {
+                    startDate: {
+                        gte: new Date(input.date),
+                        lt: new Date(addDays(input.date, 1))
+                    }
+                },
+                include: {
+                    band: true,
+                    venue: true
+                }
+            })
+        }),
 
     getAllByMonth: publicProcedure
         .input(z.object({ month: z.number(), year: z.number() }))

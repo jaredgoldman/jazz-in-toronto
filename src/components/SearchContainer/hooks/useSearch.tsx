@@ -31,18 +31,25 @@ interface SearchData {
     instagramHandle: string
 }
 
-export default function useSearch(items: Item[] | undefined) {
-    const [searchData, setSearchData] = useState<SearchData>(initialSearchData)
+export default function useSearch(
+    items: Item[] | undefined,
+    searchDay?: Date,
+    setSearchDay?: (date: Date) => void
+) {
+    const [searchData, setSearchData] = useState<SearchData>({
+        name: '',
+        date: searchDay || null,
+        website: '',
+        instagramHandle: ''
+    })
 
     const [filteredItems, setFilteredItems] = useState<Item[] | undefined>(
         items
     )
 
     useEffect(() => {
-        console.log(searchData)
         // If we havne't searched yet or if we've cleared the search, return all items
         if (deepEqual(searchData, initialSearchData)) {
-            console.log('NO SEARCH')
             return setFilteredItems(items)
         }
         if (items && searchData) {
@@ -60,16 +67,14 @@ export default function useSearch(items: Item[] | undefined) {
                                 .toLowerCase()
                                 .includes(searchData.name.toLowerCase()))
                     ) {
-                        console.log('NAME')
                         nameMatch = true
                     }
                     if (
                         !searchData.date ||
                         (isEvent(item) &&
                             searchData.date &&
-                            !isSameDay(item.startDate, searchData.date))
+                            isSameDay(item.startDate, searchData.date))
                     ) {
-                        console.log('DATE')
                         dateMatch = true
                     }
                     if (
@@ -80,7 +85,6 @@ export default function useSearch(items: Item[] | undefined) {
                                 .toLowerCase()
                                 .includes(searchData.website.toLowerCase()))
                     ) {
-                        console.log('SITE')
                         websiteMatch = true
                     }
                     if (
@@ -93,15 +97,8 @@ export default function useSearch(items: Item[] | undefined) {
                                     searchData.instagramHandle.toLowerCase()
                                 ))
                     ) {
-                        console.log('INSTA')
                         instagramHandleMatch = true
                     }
-                    console.log({
-                        nameMatch,
-                        dateMatch,
-                        websiteMatch,
-                        instagramHandleMatch
-                    })
                     if (
                         nameMatch &&
                         dateMatch &&
@@ -145,6 +142,7 @@ export default function useSearch(items: Item[] | undefined) {
                 }))
                 break
             case SearchOption.Date:
+                setSearchDay && setSearchDay(searchData as Date)
                 setSearchData((prevValues) => ({
                     ...prevValues,
                     date: searchData as Date

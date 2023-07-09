@@ -6,13 +6,21 @@ import useSearch from './hooks/useSearch'
 interface Props {
     items: Venue[] | Band[] | EventWithBandVenue[] | undefined
     isLoading: boolean
+    searchDay?: Date
+    setSearchDay: (date: Date) => void
 }
 
 export default function SearchContainer({
     items,
-    isLoading
+    isLoading,
+    searchDay,
+    setSearchDay
 }: Props): JSX.Element {
-    const { filteredItems, handleSearch } = useSearch(items)
+    const { filteredItems, handleSearch } = useSearch(
+        items,
+        searchDay,
+        setSearchDay
+    )
 
     const searchedItems =
         isLoading || !filteredItems ? (
