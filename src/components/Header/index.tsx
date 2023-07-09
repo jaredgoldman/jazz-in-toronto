@@ -1,14 +1,14 @@
-import Link from "next/link"
-import { HeaderType } from "./types"
+import Link from 'next/link'
+import { HeaderType } from './types'
 
 interface Props {
     headerType: HeaderType
 }
 
-export default function Header({ headerType }): JSX.Element {
+export default function Header({ headerType }: Props): JSX.Element {
     return (
         <header className="w-full flex-col items-center text-center">
-            <h1>JAZZINTORONTO</h1>
+            <Link href="/">JAZZINTORONTO</Link>
             <h2>
                 Connections Toronto's Jazz Musicians, Audiences, Venues and
                 Presenters
@@ -17,9 +17,6 @@ export default function Header({ headerType }): JSX.Element {
                 <ul className="flex ">
                     {headerType === HeaderType.Public && (
                         <>
-                            <li className="p-2">
-                                <Link href="/home">Home</Link>
-                            </li>
                             <li className="p-2">
                                 <Link href="/book">Book Your Gig</Link>
                             </li>
