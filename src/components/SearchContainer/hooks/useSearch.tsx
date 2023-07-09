@@ -33,12 +33,12 @@ interface SearchData {
 
 export default function useSearch(
     items: Item[] | undefined,
-    searchDay?: Date,
-    setSearchDay?: (date: Date) => void
+    searchDate?: Date,
+    setSearchDate?: (date: Date) => void
 ) {
     const [searchData, setSearchData] = useState<SearchData>({
         name: '',
-        date: searchDay || null,
+        date: searchDate || null,
         website: '',
         instagramHandle: ''
     })
@@ -142,7 +142,8 @@ export default function useSearch(
                 }))
                 break
             case SearchOption.Date:
-                setSearchDay && setSearchDay(searchData as Date)
+                // Handle setting page-level searchDate state here
+                setSearchDate && setSearchDate(searchData as Date)
                 setSearchData((prevValues) => ({
                     ...prevValues,
                     date: searchData as Date

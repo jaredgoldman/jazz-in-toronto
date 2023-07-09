@@ -6,18 +6,22 @@ interface Props {
         searchData: string | Date | null,
         searchOption: SearchOption
     ) => void
+    searchDate?: Date
 }
 
-export default function SearchBar({ onSearch }: Props) {
-
+export default function SearchBar({ onSearch, searchDate }: Props) {
     return (
         <div>
             <h1>Search</h1>
-            <label>Date</label>
-            <ReactDatePicker
-                onChange={(date) => onSearch(date, SearchOption.Date)}
-                selected={new Date()}
-            />
+            {searchDate && (
+                <>
+                    <label>Date</label>
+                    <ReactDatePicker
+                        onChange={(date) => onSearch(date, SearchOption.Date)}
+                        selected={new Date()}
+                    />
+                </>
+            )}
             <label>Name</label>
             <input
                 className="border-2 border-black"
