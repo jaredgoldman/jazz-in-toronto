@@ -1,4 +1,4 @@
-import { SearchOption } from '../hooks/useSearch'
+import { SearchOption } from '../types'
 import ReactDatePicker from 'react-datepicker'
 
 interface Props {

@@ -1,20 +1,14 @@
 import { useEffect, useState } from 'react'
-import { Venue, Band } from '@prisma/client'
-import { EventWithBandVenue } from '~/types/data'
 import { isSameDay } from 'date-fns'
 import { deepEqual } from '~/utils/shared'
-type Item = Venue | Band | EventWithBandVenue
+import { Item, SearchOption } from '../types'
+import { isEvent } from '../utils'
 
-export enum SearchTermType {
-    String = 'String',
-    Date = 'Date'
-}
-
-export enum SearchOption {
-    Name = 'Name',
-    Date = 'Date',
-    Website = 'Website',
-    InstagramHandle = 'InstagramHandle'
+interface SearchData {
+    name: string
+    date: Date | null
+    website: string
+    instagramHandle: string
 }
 
 const initialSearchData = {
@@ -22,13 +16,6 @@ const initialSearchData = {
     date: null,
     website: '',
     instagramHandle: ''
-}
-
-interface SearchData {
-    name: string
-    date: Date | null
-    website: string
-    instagramHandle: string
 }
 
 export default function useSearch(
@@ -113,10 +100,6 @@ export default function useSearch(
             setFilteredItems(filteredItems)
         }
     }, [searchData, items])
-
-    const isEvent = (item: Item): item is EventWithBandVenue => {
-        return (item as EventWithBandVenue).startDate !== undefined
-    }
 
     const handleSearch = (
         searchData: string | Date | null,
