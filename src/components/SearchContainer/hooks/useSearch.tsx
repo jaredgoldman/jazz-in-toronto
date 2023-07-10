@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react'
-import { isSameDay } from '../utils'
 import { deepEqual } from '~/utils/shared'
 import { Item, SearchOption } from '../types'
-import { isEvent } from '../utils'
-import { EventWithBandVenue } from '~/types/data'
 
 interface SearchData {
     name: string
@@ -78,19 +75,13 @@ export default function useSearch(
                     ) {
                         instagramHandleMatch = true
                     }
-                    console.log('SEARCH DATA: ', searchData)
-                    console.log({
-                        nameMatch,
-                        websiteMatch,
-                        instagramHandleMatch
-                    })
+
                     if (nameMatch && websiteMatch && instagramHandleMatch) {
                         return item
                     }
                 })
             }
             const filteredItems = filterItems()
-            console.log('FILTERED ITEMS', filteredItems)
             setFilteredItems(filteredItems)
         }
     }, [searchData, items])

@@ -91,7 +91,7 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                             />
                         )}
                         <DatePicker name="startDate" label="Start Date" />
-                        <DatePicker name="endDate" label="Start Date" />
+                        <DatePicker name="endDate" label="End Date" />
                         <Input
                             name="instagramHandle"
                             label="Instagram Handle"

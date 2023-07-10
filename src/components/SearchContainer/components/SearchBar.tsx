@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { SearchOption } from '../types'
 import ReactDatePicker from 'react-datepicker'
 
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export default function SearchBar({ onSearch, searchDate }: Props) {
+    const [startDate, setStartDate] = useState<Date | null>(searchDate || null)
     return (
         <div className="m-2 flex flex-col">
             <h1>Search</h1>
@@ -19,10 +21,11 @@ export default function SearchBar({ onSearch, searchDate }: Props) {
                         <label>Date</label>
                         <ReactDatePicker
                             className="border-2 border-black p-1"
-                            onChange={(date) =>
+                            onChange={(date) => {
                                 onSearch(date, SearchOption.Date)
-                            }
-                            selected={new Date()}
+                                setStartDate(date)
+                            }}
+                            selected={startDate}
                         />
                     </div>
                 )}
