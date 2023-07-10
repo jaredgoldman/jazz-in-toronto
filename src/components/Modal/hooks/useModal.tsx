@@ -5,12 +5,6 @@ import VenueForm from '~/components/Forms/Venue'
 import EventForm from '~/components/Forms/Event'
 import { Band, EventWithBandVenue, Venue } from '~/types/data'
 
-const modalForms = {
-    [ModalForms.Band]: <BandForm />,
-    [ModalForms.Venue]: <VenueForm />,
-    [ModalForms.Event]: <EventForm />
-}
-
 export default function useModal(): ModalContextProps {
     const [showModal, setShowModal] = useState<boolean>(false)
     const [modalContent, setModalContent] = useState<JSX.Element | string>('')
@@ -26,6 +20,11 @@ export default function useModal(): ModalContextProps {
         formType: ModalForms,
         itemData?: EventWithBandVenue | Band | Venue
     ) => {
+        const modalForms = {
+            [ModalForms.Band]: <BandForm />,
+            [ModalForms.Venue]: <VenueForm />,
+            [ModalForms.Event]: <EventForm />
+        }
         setShowModal(true)
         setModalContent(modalForms[formType])
     }

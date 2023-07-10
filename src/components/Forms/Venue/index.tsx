@@ -6,12 +6,10 @@ import Button from '~/components/Button'
 
 export interface Values {
     name: string
-    location: {
-        address: string
-        latitude: number
-        longitude: number
-        city: string
-    }
+    address: string
+    latitude: number
+    longitude: number
+    city: string
     instagramHandle?: string
     website?: string
 }
@@ -27,7 +25,10 @@ export default function VenueForm({ currentValues }: Props): JSX.Element {
         ? currentValues
         : {
               name: '',
-              location: { address: '', latitude: 0, longitude: 0, city: '' },
+              address: '',
+              latitude: 0,
+              longitude: 0,
+              city: '',
               instagramHandle: '',
               website: ''
           }
@@ -52,11 +53,7 @@ export default function VenueForm({ currentValues }: Props): JSX.Element {
                 // }}
                 onSubmit={async (values) => {
                     try {
-                        const { location, ...rest } = values
-                        venueMutation.mutate({
-                            ...rest,
-                            ...location
-                        })
+                        venueMutation.mutate(values)
                     } catch (error) {
                         // display error
                     }

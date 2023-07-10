@@ -1,9 +1,9 @@
 import usePlacesAutocomplete, {
     getGeocode,
     getLatLng
-} from "use-places-autocomplete"
-import useOnclickOutside from "react-cool-onclickoutside"
-import { FieldProps, Field, ErrorMessage } from "formik"
+} from 'use-places-autocomplete'
+import useOnclickOutside from 'react-cool-onclickoutside'
+import { FieldProps, Field, ErrorMessage } from 'formik'
 
 interface PlacesAutoCompleteProps {
     label: string
@@ -15,8 +15,8 @@ interface PlacesAutoCompleteProps {
 export default function PlacesAutoCompleteField({
     label,
     name,
-    className = "flex-col m-2",
-    fieldClassName = "mb-5 border-2 border-black"
+    className = 'flex-col m-2',
+    fieldClassName = 'mb-5 border-2 border-black'
 }: PlacesAutoCompleteProps): JSX.Element {
     return (
         <div className={className}>
@@ -73,13 +73,13 @@ const PlacesAutocomplete = ({
             // Get latitude and longitude via utility functions
             getGeocode({ address: description }).then((results) => {
                 const { lat, lng } = getLatLng(results[0])
-                console.log("SETTNG VALUES")
-                form.setFieldValue(field.name, {
-                    address: description,
-                    latitude: lat,
-                    longitude: lng,
-                    city: results[0].address_components[3].long_name
-                })
+                form.setFieldValue('address', description)
+                form.setFieldValue('latitude', lat)
+                form.setFieldValue('longitude', lng)
+                form.setFieldValue(
+                    'city',
+                    results[0].address_components[3].long_name
+                )
             })
         }
 
@@ -106,7 +106,7 @@ const PlacesAutocomplete = ({
                 placeholder="Where are you going?"
             />
             {/* We can use the "status" to decide whether we should display the dropdown or not */}
-            {status === "OK" && <ul>{renderSuggestions()}</ul>}
+            {status === 'OK' && <ul>{renderSuggestions()}</ul>}
         </div>
     )
 }
