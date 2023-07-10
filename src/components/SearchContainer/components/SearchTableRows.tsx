@@ -33,6 +33,7 @@ export const EventHeader = (): JSX.Element => {
             <th className="border-b bg-gray-100 px-6 py-3 text-left font-semibold text-gray-700">
                 Cancelled
             </th>
+            <th className="border-b bg-gray-100 px-6 py-3 text-left font-semibold text-gray-700"></th>
         </tr>
     )
 }
@@ -42,7 +43,7 @@ export const EventRow = ({
     handleModalForm
 }: {
     item: EventWithBandVenue
-    handleModalForm: (formType: ModalForms) => void
+    handleModalForm: (formType: ModalForms, item: EventWithBandVenue) => void
 }): JSX.Element => {
     return (
         <tr>
@@ -74,7 +75,7 @@ export const EventRow = ({
                 {item.cancelled}
             </td>
             <td className="border px-4 py-2 text-left text-xs text-gray-800">
-                <Button onClick={() => handleModalForm(ModalForms.Event)}>
+                <Button onClick={() => handleModalForm(ModalForms.Event, item)}>
                     Edit
                 </Button>
             </td>
@@ -103,6 +104,7 @@ export const BandHeader = (): JSX.Element => {
             <th className="border-b bg-gray-100 px-6 py-3 text-left font-semibold text-gray-700">
                 Active
             </th>
+            <th className="border-b bg-gray-100 px-6 py-3 text-left font-semibold text-gray-700"></th>
         </tr>
     )
 }
@@ -112,7 +114,7 @@ export const BandRow = ({
     handleModalForm
 }: {
     item: Band
-    handleModalForm: (formType: ModalForms) => void
+    handleModalForm: (formType: ModalForms, item: Band) => void
 }) => {
     return (
         <tr>
@@ -135,7 +137,7 @@ export const BandRow = ({
                 {item.active}
             </td>
             <td className="border px-4 py-2 text-left text-xs text-gray-800">
-                <Button onClick={() => handleModalForm(ModalForms.Band)}>
+                <Button onClick={() => handleModalForm(ModalForms.Band, item)}>
                     Edit
                 </Button>
             </td>
@@ -167,6 +169,7 @@ export const VenueHeader = (): JSX.Element => {
             <th className="border-b bg-gray-100 px-6 py-3 text-left font-semibold text-gray-700">
                 Active
             </th>
+            <th className="border-b bg-gray-100 px-6 py-3 text-left font-semibold text-gray-700"></th>
         </tr>
     )
 }
@@ -176,7 +179,7 @@ export const VenueRow = ({
     handleModalForm
 }: {
     item: Venue
-    handleModalForm: (formType: ModalForms) => void
+    handleModalForm: (formType: ModalForms, item: Venue) => void
 }) => {
     return (
         <tr>
@@ -184,22 +187,25 @@ export const VenueRow = ({
                 {item.name}
             </td>
             <td className="border px-4 py-2 text-left text-xs text-gray-800">
-                {item.featured}
+                {item.featured ? 'Yes' : 'No'}
             </td>
             <td className="border px-4 py-2 text-left text-xs text-gray-800">
-                {item.address ? item.address : ''}
+                {item.address}
             </td>
             <td className="border px-4 py-2 text-left text-xs text-gray-800">
-                {item.instagramHandle ? item.instagramHandle : ''}
+                {item.city}
             </td>
             <td className="border px-4 py-2 text-left text-xs text-gray-800">
                 {item.website ? item.website : ''}
             </td>
             <td className="border px-4 py-2 text-left text-xs text-gray-800">
-                {item.active}
+                {item.instagramHandle ? item.instagramHandle : ''}
             </td>
             <td className="border px-4 py-2 text-left text-xs text-gray-800">
-                <Button onClick={() => handleModalForm(ModalForms.Venue)}>
+                {item.active ? 'Yes' : 'No'}
+            </td>
+            <td className="border px-4 py-2 text-left text-xs text-gray-800">
+                <Button onClick={() => handleModalForm(ModalForms.Venue, item)}>
                     Edit
                 </Button>
             </td>

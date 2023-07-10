@@ -3,6 +3,7 @@ import { api } from '~/utils/api'
 import PlacesAutocomplete from '../Fields/PlacesAutoComplete'
 import { Input } from '../Fields'
 import Button from '~/components/Button'
+import { Venue } from '@prisma/client'
 
 export interface Values {
     name: string
@@ -15,27 +16,34 @@ export interface Values {
 }
 
 interface Props {
-    currentValues?: Values
+    currentValues?: Venue
 }
 
 export default function VenueForm({ currentValues }: Props): JSX.Element {
     const venueMutation = api.venue.create.useMutation()
 
     const initialValues = currentValues
-        ? currentValues
+        ? {
+              ...currentValues,
+              photoPath: currentValues.photoPath || undefined,
+              instagramHandle: currentValues.instagramHandle || undefined,
+              website: currentValues.website || undefined
+          }
         : {
               name: '',
-              address: '',
               latitude: 0,
               longitude: 0,
               city: '',
+              address: '',
               instagramHandle: '',
               website: ''
           }
 
     return (
         <div>
-            <h1 className="mb-5">Add your venue here!</h1>
+            <h1 className="mb-5">
+                {currentValues ? 'Edit venue' : 'Add your venue here!'}
+            </h1>
             <Formik
                 initialValues={initialValues}
                 // validate={(values) => {

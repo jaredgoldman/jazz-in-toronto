@@ -3,6 +3,7 @@ import { api } from '~/utils/api'
 import { DatePicker, Input, Select } from '../Fields'
 import { ModalForms } from '~/components/Modal/types'
 import Button from '~/components/Button'
+import { EventWithBandVenue } from '~/types/data'
 
 export interface Values {
     name: string
@@ -16,7 +17,7 @@ export interface Values {
 }
 
 interface Props {
-    currentValues?: Values
+    currentValues?: EventWithBandVenue
 }
 export default function EventForm({ currentValues }: Props): JSX.Element {
     const { data: venueData } = api.venue.getAll.useQuery()
@@ -25,21 +26,28 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
     const eventMutation = api.event.create.useMutation()
 
     const initialValues = currentValues
-        ? currentValues
+        ? {
+              ...currentValues,
+              photoPath: currentValues.photoPath || undefined,
+              instagramHandle: currentValues.instagramHandle || undefined,
+              website: currentValues.website || undefined
+          }
         : {
               name: '',
               startDate: new Date(),
               endDate: new Date(),
               bandId: '',
               photoPath: '',
+              venueId: '',
               instagramHandle: '',
-              website: '',
-              venueId: ''
+              website: ''
           }
 
     return (
         <div className="w-full">
-            <h1 className="mb-5">Book your gig here!</h1>
+            <h1 className="mb-5">
+                {currentValues ? 'Edit gig' : 'Add your gig here!'}
+            </h1>
             <Formik
                 initialValues={initialValues}
                 // validate={(values) => {

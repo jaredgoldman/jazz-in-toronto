@@ -4,6 +4,7 @@ import BandForm from '~/components/Forms/Band'
 import VenueForm from '~/components/Forms/Venue'
 import EventForm from '~/components/Forms/Event'
 import { Band, EventWithBandVenue, Venue } from '~/types/data'
+import { isBand, isEvent, isVenue } from '~/components/SearchContainer/utils'
 
 export default function useModal(): ModalContextProps {
     const [showModal, setShowModal] = useState<boolean>(false)
@@ -20,13 +21,32 @@ export default function useModal(): ModalContextProps {
         formType: ModalForms,
         itemData?: EventWithBandVenue | Band | Venue
     ) => {
-        const modalForms = {
-            [ModalForms.Band]: <BandForm />,
-            [ModalForms.Venue]: <VenueForm />,
-            [ModalForms.Event]: <EventForm />
+        let form
+        switch (formType) {
+            case ModalForms.Band:
+                form = (
+                    <BandForm
+                        currentValues={isBand(itemData) ? itemData : undefined}
+                    />
+                )
+                break
+            case ModalForms.Venue:
+                form = (
+                    <VenueForm
+                        currentValues={isVenue(itemData) ? itemData : undefined}
+                    />
+                )
+                break
+            case ModalForms.Event:
+                form = (
+                    <EventForm
+                        currentValues={isEvent(itemData) ? itemData : undefined}
+                    />
+                )
+                break
         }
         setShowModal(true)
-        setModalContent(modalForms[formType])
+        setModalContent(form)
     }
 
     const closeModal = () => setShowModal(false)

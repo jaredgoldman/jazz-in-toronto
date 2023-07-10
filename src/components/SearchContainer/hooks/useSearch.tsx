@@ -43,10 +43,6 @@ export default function useSearch(
         if (items && searchData) {
             const filterItems = () => {
                 return items.filter((item: Item) => {
-                    console.log({
-                        isEvent: isEvent(item),
-                        isSameDay: isSameDay((item as EventWithBandVenue).startDate, searchData.date as Date)
-                    })
                     let nameMatch = false
                     let websiteMatch = false
                     let instagramHandleMatch = false
@@ -88,11 +84,7 @@ export default function useSearch(
                         websiteMatch,
                         instagramHandleMatch
                     })
-                    if (
-                        nameMatch &&
-                        websiteMatch &&
-                        instagramHandleMatch
-                    ) {
+                    if (nameMatch && websiteMatch && instagramHandleMatch) {
                         return item
                     }
                 })

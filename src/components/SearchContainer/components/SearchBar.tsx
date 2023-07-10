@@ -11,42 +11,55 @@ interface Props {
 
 export default function SearchBar({ onSearch, searchDate }: Props) {
     return (
-        <div>
+        <div className="m-2 flex flex-col">
             <h1>Search</h1>
-            {searchDate && (
-                <>
-                    <label>Date</label>
-                    <ReactDatePicker
-                        onChange={(date) => onSearch(date, SearchOption.Date)}
-                        selected={new Date()}
+            <div className="flex">
+                {searchDate && (
+                    <div className="m-2 flex flex-col">
+                        <label>Date</label>
+                        <ReactDatePicker
+                            className="border-2 border-black p-1"
+                            onChange={(date) =>
+                                onSearch(date, SearchOption.Date)
+                            }
+                            selected={new Date()}
+                        />
+                    </div>
+                )}
+                <div className="m-2 flex flex-col">
+                    <label>Name</label>
+                    <input
+                        className="border-2 border-black p-1"
+                        type="text"
+                        onChange={(event) =>
+                            onSearch(event.target.value, SearchOption.Name)
+                        }
                     />
-                </>
-            )}
-            <label>Name</label>
-            <input
-                className="border-2 border-black"
-                type="text"
-                onChange={(event) =>
-                    onSearch(event.target.value, SearchOption.Name)
-                }
-            />
-            <label>Website</label>
-            <input
-                className="border-2 border-black"
-                type="text"
-                onChange={(event) =>
-                    onSearch(event.target.value, SearchOption.Website)
-                }
-            />
-            <label>Instagram Handle</label>
-            <input
-                className="border-2 border-black"
-                type="text"
-                onChange={(event) =>
-                    onSearch(event.target.value, SearchOption.InstagramHandle)
-                }
-            />
-            )
+                </div>
+                <div className="m-2 flex flex-col">
+                    <label>Website</label>
+                    <input
+                        className="border-2 border-black p-1"
+                        type="text"
+                        onChange={(event) =>
+                            onSearch(event.target.value, SearchOption.Website)
+                        }
+                    />
+                </div>
+                <div className="m-2 flex flex-col">
+                    <label>Instagram Handle</label>
+                    <input
+                        className="border-2 border-black p-1"
+                        type="text"
+                        onChange={(event) =>
+                            onSearch(
+                                event.target.value,
+                                SearchOption.InstagramHandle
+                            )
+                        }
+                    />
+                </div>
+            </div>
         </div>
     )
 }

@@ -2,28 +2,36 @@ import { Form, Formik } from 'formik'
 import { api } from '~/utils/api'
 import { Input } from '../Fields'
 import Button from '~/components/Button'
+import { Band } from '@prisma/client'
 
 export interface Values {
     name: string
-    genre?: string
+    genre: string
     photoPath?: string
-    instagramHandle?: string
+    instagramHandle: string | null | undefined
     website?: string
 }
 
 interface Props {
-    currentValues?: Values
+    currentValues?: Band
 }
 
 export default function BandForm({ currentValues }: Props): JSX.Element {
     const bandMutation = api.band.create.useMutation()
     const initialValues = currentValues
-        ? currentValues
+        ? {
+              name: currentValues.name,
+              instagramHandle: currentValues.instagramHandle || undefined,
+              genre: currentValues.genre || undefined,
+              website: currentValues.website || undefined
+          }
         : { name: '', instagramHandle: '', genre: '', website: '' }
 
     return (
         <div className="w-full">
-            <h1 className="mb-5">Add your band to our database</h1>
+            <h1 className="mb-5">
+                {currentValues ? `Edit band` : 'Add your band to our database'}
+            </h1>
             <Formik
                 initialValues={initialValues}
                 // validate={(values) => {
