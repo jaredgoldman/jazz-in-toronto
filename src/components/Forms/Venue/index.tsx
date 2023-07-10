@@ -1,8 +1,8 @@
-import { Form, Formik } from "formik"
-import { api } from "~/utils/api"
-import PlacesAutocomplete from "../Fields/PlacesAutoComplete"
-import { Input } from "../Fields"
-import Button from "~/components/Button"
+import { Form, Formik } from 'formik'
+import { api } from '~/utils/api'
+import PlacesAutocomplete from '../Fields/PlacesAutoComplete'
+import { Input } from '../Fields'
+import Button from '~/components/Button'
 
 export interface Values {
     name: string
@@ -16,24 +16,27 @@ export interface Values {
     website?: string
 }
 
-export default function VenueForm(): JSX.Element {
+interface Props {
+    currentValues?: Values
+}
+
+export default function VenueForm({ currentValues }: Props): JSX.Element {
     const venueMutation = api.venue.create.useMutation()
+
+    const initialValues = currentValues
+        ? currentValues
+        : {
+              name: '',
+              location: { address: '', latitude: 0, longitude: 0, city: '' },
+              instagramHandle: '',
+              website: ''
+          }
 
     return (
         <div>
             <h1 className="mb-5">Add your venue here!</h1>
             <Formik
-                initialValues={{
-                    name: "",
-                    location: {
-                        address: "",
-                        latitude: 0,
-                        longitude: 0,
-                        city: ""
-                    },
-                    instagramHandle: "",
-                    website: ""
-                }}
+                initialValues={initialValues}
                 // validate={(values) => {
                 // const errors: any = {}
                 // if (!values.email) {

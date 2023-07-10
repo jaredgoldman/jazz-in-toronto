@@ -7,7 +7,7 @@ export interface ModalContextProps {
 }
 
 export enum ModalForms {
-    Band = "Band",
-    Venue = "Venue"
+    Band = 'Band',
+    Venue = 'Venue',
+    Event = 'Event'
 }
-

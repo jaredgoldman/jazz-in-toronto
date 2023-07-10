@@ -1,7 +1,7 @@
-import { Form, Formik } from "formik"
-import { api } from "~/utils/api"
-import { Input } from "../Fields"
-import Button from "~/components/Button"
+import { Form, Formik } from 'formik'
+import { api } from '~/utils/api'
+import { Input } from '../Fields'
+import Button from '~/components/Button'
 
 export interface Values {
     name: string
@@ -11,18 +11,21 @@ export interface Values {
     website?: string
 }
 
-export default function BandForm(): JSX.Element {
+interface Props {
+    currentValues?: Values
+}
+
+export default function BandForm({ currentValues }: Props): JSX.Element {
     const bandMutation = api.band.create.useMutation()
+    const initialValues = currentValues
+        ? currentValues
+        : { name: '', instagramHandle: '', genre: '', website: '' }
+
     return (
         <div className="w-full">
             <h1 className="mb-5">Add your band to our database</h1>
             <Formik
-                initialValues={{
-                    name: "",
-                    instagramHandle: "",
-                    genre: "",
-                    website: ""
-                }}
+                initialValues={initialValues}
                 // validate={(values) => {
                 // const errors: any = {}
                 // if (!values.email) {

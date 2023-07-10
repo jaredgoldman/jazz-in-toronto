@@ -1,8 +1,8 @@
-import { Form, Formik } from "formik"
-import { api } from "~/utils/api"
-import { DatePicker, Input, Select } from "../Fields"
-import { ModalForms } from "~/components/Modal/types"
-import Button from "~/components/Button"
+import { Form, Formik } from 'formik'
+import { api } from '~/utils/api'
+import { DatePicker, Input, Select } from '../Fields'
+import { ModalForms } from '~/components/Modal/types'
+import Button from '~/components/Button'
 
 export interface Values {
     name: string
@@ -15,25 +15,33 @@ export interface Values {
     venueId: string
 }
 
-export default function EventForm(): JSX.Element {
+interface Props {
+    currentValues?: Values
+}
+export default function EventForm({ currentValues }: Props): JSX.Element {
     const { data: venueData } = api.venue.getAll.useQuery()
     const { data: bandData } = api.band.getAll.useQuery()
 
     const eventMutation = api.event.create.useMutation()
 
+    const initialValues = currentValues
+        ? currentValues
+        : {
+              name: '',
+              startDate: new Date(),
+              endDate: new Date(),
+              bandId: '',
+              photoPath: '',
+              instagramHandle: '',
+              website: '',
+              venueId: ''
+          }
+
     return (
         <div className="w-full">
             <h1 className="mb-5">Book your gig here!</h1>
             <Formik
-                initialValues={{
-                    name: "",
-                    startDate: new Date(),
-                    endDate: new Date(),
-                    bandId: "",
-                    instagramHandle: "",
-                    website: "",
-                    venueId: ""
-                }}
+                initialValues={initialValues}
                 // validate={(values) => {
                 // const errors: any = {}
                 // if (!values.email) {
