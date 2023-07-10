@@ -56,20 +56,21 @@ const EventHeader = (): JSX.Element => {
 const EventRow = ({ item }: { item: EventWithBandVenue }): JSX.Element => {
     return (
         <tr>
-            <td className="border px-4 py-2 text-left text-gray-800">{item.name}</td>
-            <td className="border px-4 py-2 text-left text-gray-800">{item.featured ? "Yes" : "No"}</td>
-            <td className="border px-4 py-2 text-left text-gray-800">{item.venue.name}</td>
-            <td className="border px-4 py-2 text-left text-gray-800">{`${getFormattedTime(
+            <td className="border px-4 py-2 text-left text-gray-800 text-xs">{item.name}</td>
+            <td className="border px-4 py-2 text-left text-gray-800 text-xs">{item.featured ? "Yes" : "No"}</td>
+            <td className="border px-4 py-2 text-left text-gray-800 text-xs">{item.venue.name}</td>
+            <td className="border px-4 py-2 text-left text-gray-800 text-xs">{item.startDate.toDateString()}</td>
+            <td className="border px-4 py-2 text-left text-gray-800 text-xs">{`${getFormattedTime(
                 item.startDate
             )} - ${getFormattedTime(item.endDate)}`}</td>
-            <td className="border px-4 py-2 text-left text-gray-800">{item.band.name}</td>
-            <td className="border px-4 py-2 text-left text-gray-800">
+            <td className="border px-4 py-2 text-left text-gray-800 text-xs">{item.band.name}</td>
+            <td className="border px-4 py-2 text-left text-gray-800 text-xs">
                 {item.website ? item.website : ''}
             </td>
-            <td className="border px-4 py-2 text-left text-gray-800">
+            <td className="border px-4 py-2 text-left text-gray-800 text-xs">
                 {item.instagramHandle ? item.instagramHandle : ''}
             </td>
-            <td className="border px-4 py-2 text-left text-gray-800">{item.cancelled}</td>
+            <td className="border px-4 py-2 text-left text-gray-800 text-xs">{item.cancelled}</td>
         </tr>
     )
 }
