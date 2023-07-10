@@ -1,5 +1,6 @@
 import { EventWithBandVenue } from '~/types/data'
 import { Item } from './types'
+import { Band } from '~/types/data'
 
 export const isSameDay = (date1: Date, date2: Date) => {
     return (
@@ -9,6 +10,10 @@ export const isSameDay = (date1: Date, date2: Date) => {
     )
 }
 
-export const isEvent = (item: Item): item is EventWithBandVenue => {
-    return (item as EventWithBandVenue).startDate !== undefined
+export const isEvent = (item: Item | undefined): item is EventWithBandVenue => {
+    return (item as EventWithBandVenue)?.startDate !== undefined
+}
+
+export const isBand = (item: Item | undefined): item is Band => {
+    return (item as Band)?.genre !== undefined
 }

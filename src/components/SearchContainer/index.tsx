@@ -2,6 +2,7 @@ import { Venue, Band } from '@prisma/client'
 import { EventWithBandVenue } from '~/types/data'
 import SearchBar from './components/SearchBar'
 import useSearch from './hooks/useSearch'
+import SearchTable from './components/SearchTable'
 
 interface Props {
     items: Venue[] | Band[] | EventWithBandVenue[] | undefined
@@ -21,24 +22,14 @@ export default function SearchContainer({
         searchDate,
         setSearchDate
     )
-
-    const searchedItems =
-        isLoading || !filteredItems ? (
-            <div>Loading...</div>
-        ) : (
-            filteredItems.map((item) => {
-                return (
-                    <div>
-                        <div>{item.name}</div>
-                    </div>
-                )
-            })
-        )
-
     return (
         <div>
             <SearchBar onSearch={handleSearch} searchDate={searchDate} />
-            <div>{searchedItems}</div>
+            {filteredItems ? (
+                <SearchTable items={filteredItems} />
+            ) : (
+                <div>Loading...</div>
+            )}
         </div>
     )
 }

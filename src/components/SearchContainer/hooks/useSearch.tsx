@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { isSameDay } from 'date-fns'
+import { isSameDay } from '../utils'
 import { deepEqual } from '~/utils/shared'
 import { Item, SearchOption } from '../types'
 import { isEvent } from '../utils'
+import { EventWithBandVenue } from '~/types/data'
 
 interface SearchData {
     name: string
@@ -42,8 +43,11 @@ export default function useSearch(
         if (items && searchData) {
             const filterItems = () => {
                 return items.filter((item: Item) => {
+                    console.log({
+                        isEvent: isEvent(item),
+                        isSameDay: isSameDay((item as EventWithBandVenue).startDate, searchData.date as Date)
+                    })
                     let nameMatch = false
-                    let dateMatch = false
                     let websiteMatch = false
                     let instagramHandleMatch = false
 
@@ -55,14 +59,6 @@ export default function useSearch(
                                 .includes(searchData.name.toLowerCase()))
                     ) {
                         nameMatch = true
-                    }
-                    if (
-                        !searchData.date ||
-                        (isEvent(item) &&
-                            searchData.date &&
-                            isSameDay(item.startDate, searchData.date))
-                    ) {
-                        dateMatch = true
                     }
                     if (
                         !searchData.website ||
@@ -78,7 +74,7 @@ export default function useSearch(
                         !searchData.instagramHandle ||
                         (searchData.instagramHandle &&
                             item.instagramHandle &&
-                            !item.instagramHandle
+                            item.instagramHandle
                                 .toLowerCase()
                                 .includes(
                                     searchData.instagramHandle.toLowerCase()
@@ -86,9 +82,14 @@ export default function useSearch(
                     ) {
                         instagramHandleMatch = true
                     }
+                    console.log('SEARCH DATA: ', searchData)
+                    console.log({
+                        nameMatch,
+                        websiteMatch,
+                        instagramHandleMatch
+                    })
                     if (
                         nameMatch &&
-                        dateMatch &&
                         websiteMatch &&
                         instagramHandleMatch
                     ) {
@@ -97,6 +98,7 @@ export default function useSearch(
                 })
             }
             const filteredItems = filterItems()
+            console.log('FILTERED ITEMS', filteredItems)
             setFilteredItems(filteredItems)
         }
     }, [searchData, items])

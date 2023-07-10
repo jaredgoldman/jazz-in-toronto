@@ -3,3 +3,4 @@ export enum adminRoles {
     SUPER_ADMIN = "SUPER_ADMIN",
     DISABLED = "DISABLED",
 }
+

@@ -3,7 +3,6 @@ import { ModalContext } from "./context/ModalContext"
 
 export default function Modal(): JSX.Element | null {
     const { showModal, modalContent, closeModal } = useContext(ModalContext)
-    console.log("modalContent", modalContent, showModal)
     if (showModal) {
         return (
             <div className="absolute left-1/2 top-1/2 z-10 w-4/5 -translate-x-1/2 -translate-y-1/2 transform border-2 border-black bg-white p-2">

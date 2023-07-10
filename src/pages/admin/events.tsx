@@ -4,17 +4,18 @@ import SearchContainer from '~/components/SearchContainer'
 import { api } from '~/utils/api'
 
 export default function AdminEvents() {
-    const [searchDay, setSearchDay] = useState<Date>(new Date())
+    const [searchDate, setSearchDate] = useState<Date>(new Date())
     const { data: events, isLoading } = api.event.getAllByDay.useQuery({
-        date: searchDay
+        date: searchDate
     })
+
     return (
         <AdminLayout>
             <SearchContainer
                 items={events}
                 isLoading={isLoading}
-                searchDay={searchDay}
-                setSearchDay={setSearchDay}
+                searchDate={searchDate}
+                setSearchDate={setSearchDate}
             />
         </AdminLayout>
     )
