@@ -1,14 +1,20 @@
 import { createCanvas } from 'canvas'
 import fs from 'fs'
+import { EventWithBandVenue } from '~/types/data'
 
 export default class InstagramService {
-    constructor() {}
+    private events: EventWithBandVenue[]
+
+    constructor(events: EventWithBandVenue[]) {
+        this.events = events
+    }
+
     public async createPost() {
         await this.drawImage()
     }
 
     public async savePostLocally(canvasBuffer: Buffer) {
-        console.log("Saving post locally")
+        console.log('Saving post locally')
         const filePath = 'src/temp/posts/test.png'
         return fs.writeFileSync(filePath, canvasBuffer)
     }
@@ -25,33 +31,55 @@ export default class InstagramService {
         ctx.fillStyle = '#ffffff'
         ctx.fillRect(0, 0, canvas.width, canvas.height)
 
+        // Global sizes
+        const rectWidth = canvas.width - canvas.width * 0.1
+        const rectX = canvas.width * 0.05
+
         // Make title rect
-        const titleRectWidth = canvas.width - canvas.width * 0.10
         const titleRectHeight = canvas.height * 0.1
-        const titleRectX = canvas.width * 0.05
         const titleRectY = canvas.height * 0.05
 
-        console.log({
-            titleRectWidth,
-            titleRectHeight,
-            titleRectX,
-            titleRectY
-        })
-
         ctx.fillStyle = 'white'
-        ctx.fillRect(titleRectX, titleRectY, titleRectWidth, titleRectHeight)
+        ctx.fillRect(rectX, titleRectY, rectWidth, titleRectHeight)
         ctx.strokeStyle = 'black'
-        ctx.strokeRect(titleRectX, titleRectY, titleRectWidth, titleRectHeight)
+        ctx.strokeRect(rectX, titleRectY, rectWidth, titleRectHeight)
 
         // draw main rect
         const mainRectHeight = canvas.height * 0.7
-        const mainRectY = canvas.height * 0.20
+        const mainRectY = canvas.height * 0.2
         ctx.fillStyle = 'white'
-        ctx.fillRect(titleRectX, mainRectY, titleRectWidth, mainRectHeight)
+        ctx.fillRect(rectX, mainRectY, rectWidth, mainRectHeight)
         ctx.strokeStyle = 'black'
-        ctx.strokeRect(titleRectX, mainRectY, titleRectWidth, mainRectHeight)
+        ctx.strokeRect(rectX, mainRectY, rectWidth, mainRectHeight)
 
-        if (process.env.NODE_ENV === 'test')  {
+        // Set text properties
+        const text = 'Jazz In Toronto'
+        ctx.font = '50px Arial' // Font size and family
+        ctx.fillStyle = 'black' // Text color
+
+        // Calculate the width of the text
+        // Calculate the width and height of the text
+        const textWidth = ctx.measureText(text).width
+        const textHeight = ctx.measureText('M').actualBoundingBoxAscent
+
+        // Calculate the starting position to center the text within the rectangle
+        const textX = rectX + (rectWidth - textWidth) / 2
+        const textY = titleRectY + (titleRectHeight + textHeight) / 2
+
+        // Draw the text in the center of the rectangle
+        ctx.fillText(text, textX, textY)
+
+        ctx.font = '20px Arial'
+        let currentY = mainRectY + 20
+        let eventTextX = rectX + 5
+        this.events.forEach(event => {
+            const { band, startDate, venue } = event
+            const text = `${band.name} - ${ startDate.toTimeString() } - ${ venue.name }`
+            ctx.fillText(text, eventTextX, currentY)
+            currentY += 20
+        })
+
+        if (process.env.NODE_ENV === 'test') {
             const buffer = canvas.toBuffer('image/png')
             this.savePostLocally(buffer)
         }
