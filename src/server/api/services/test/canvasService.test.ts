@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import InstagramService from '../instagramService'
+import CanvasService from '../canvasService'
 import { prisma } from '~/server/db'
 import fs from 'fs'
 
@@ -12,11 +12,11 @@ describe('InstagramService', () => {
                 venue: true
             }
         })
-        const instagramService = new InstagramService(events)
-        await instagramService.createPost()
+        const date = new Date()
+        const canvasService = new CanvasService()
+        canvasService.drawPost(events, date)
         // check for existence of file
         const fileExists = fs.existsSync('src/temp/posts/test.png')
-        console.log(fileExists)
         expect(fileExists).toBe(true)
     })
 })

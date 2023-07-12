@@ -1,12 +1,14 @@
-import { useState, useEffect } from "react"
-import { addMonths, getDaysInMonth } from "date-fns"
-import { api } from "~/utils/api"
-import { DailyEventData } from "../types"
-import { EventWithBandVenue } from "~/types/data"
+import { useState, useEffect } from 'react'
+import { addMonths, getDaysInMonth } from 'date-fns'
+import { daysOfTheWeek } from '~/utils/constants'
+import { api } from '~/utils/api'
+import { DailyEventData } from '../types'
+import { EventWithBandVenue } from '~/types/data'
 
 interface ReturnType {
     changeMonth: (numOfMonths: number) => void
     currentMonthName: string
+    currentDayName: string
     monthlyEvents: DailyEventData[]
     isLoading: boolean
 }
@@ -17,6 +19,7 @@ export default function useCalendar(): ReturnType {
     const currentYear = selectedDate.getFullYear()
     const currentMonthIndex = selectedDate.getMonth()
     const currentMonthName = months[currentMonthIndex] as string
+    const currentDayName = daysOfTheWeek[selectedDate.getDay()]
     const daysInMonth: number = getDaysInMonth(selectedDate)
 
     const { data: monthlyEventsData, isLoading } =
@@ -45,13 +48,14 @@ export default function useCalendar(): ReturnType {
     return {
         changeMonth,
         currentMonthName,
+        currentDayName,
         monthlyEvents,
         isLoading
     }
 }
 
 const months = Array.from({ length: 12 }, (_, i) => {
-    return new Date(0, i).toLocaleString("en-US", { month: "long" })
+    return new Date(0, i).toLocaleString('en-US', { month: 'long' })
 })
 
 // TODO: Optimize

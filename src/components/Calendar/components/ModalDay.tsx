@@ -1,11 +1,13 @@
-import { DailyEventData, EventWithBandVenue } from "../types"
+import { DailyEventData } from '../types'
+import { EventWithBandVenue } from '~/types/data'
+
 interface Props {
     dailyEvents: DailyEventData
 }
 
 export default function ModalDay({ dailyEvents: { date, events } }: Props) {
-    const readableDate = new Intl.DateTimeFormat("en-US", {
-        dateStyle: "full"
+    const readableDate = new Intl.DateTimeFormat('en-US', {
+        dateStyle: 'full'
     }).format(date)
 
     const eventCards = events.length ? (
