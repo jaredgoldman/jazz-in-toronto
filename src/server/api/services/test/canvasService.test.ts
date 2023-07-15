@@ -15,8 +15,10 @@ describe('InstagramService', () => {
         const date = new Date()
         const canvasService = new CanvasService()
         canvasService.createPosts(events, date)
-        // check for existence of file
-        // const fileExists = fs.existsSync('src/temp/posts/test.png')
-        expect(true).toBe(true)
+        // check for existence of files
+        const fileExists = fs.existsSync('src/temp/posts/test-1.png')
+        const secondFileExists = fs.existsSync('src/temp/posts/test-2.png')
+        expect(fileExists).toBe(true)
+        expect(secondFileExists).toBe(true)
     })
 })

@@ -129,7 +129,7 @@ export default class CanvasService {
     }
 
     private async savePostLocally(canvasBuffer: Buffer, postNum: number) {
-        const filePath = `src/temp/posts/test.png-${postNum}`
+        const filePath = `src/temp/posts/test-${postNum}.png`
         return fs.writeFileSync(filePath, canvasBuffer)
     }
 }
