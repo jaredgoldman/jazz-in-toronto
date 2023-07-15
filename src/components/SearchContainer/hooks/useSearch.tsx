@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { deepEqual } from '~/utils/shared'
-import { Item, SearchOption } from '../types'
+import { SearchOption } from '../types'
+import { Item, Items } from '~/types/data'
 
 interface SearchData {
     name: string
@@ -17,7 +18,7 @@ const initialSearchData = {
 }
 
 export default function useSearch(
-    items: Item[] | undefined,
+    items: Items,
     searchDate?: Date,
     setSearchDate?: (date: Date) => void
 ) {
@@ -28,18 +29,18 @@ export default function useSearch(
         instagramHandle: ''
     })
 
-    const [filteredItems, setFilteredItems] = useState<Item[] | undefined>(
-        items
-    )
+    const [filteredItems, setFilteredItems] = useState<Items>(items)
 
     useEffect(() => {
         // If we havne't searched yet or if we've cleared the search, return all items
         if (deepEqual(searchData, initialSearchData)) {
             return setFilteredItems(items)
         }
+
         if (items && searchData) {
             const filterItems = () => {
-                return items.filter((item: Item) => {
+                // XXX: Fix this
+                return (items as any).filter((item: Item) => {
                     let nameMatch = false
                     let websiteMatch = false
                     let instagramHandleMatch = false

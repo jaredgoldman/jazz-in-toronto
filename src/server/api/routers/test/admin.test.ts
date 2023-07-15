@@ -2,7 +2,7 @@ import { expect, it, describe, beforeAll, afterAll } from "vitest"
 import { type RouterInputs } from "~/utils/api"
 import { appRouter } from "~/server/api/root"
 import { createInnerTRPCContext } from "~/server/api/trpc"
-import { adminRoles } from "~/types/enums"
+import { AdminRoles } from "~/types/enums"
 import { prisma } from "~/server/db"
 import { Admin } from "@prisma/client"
 import { TRPCError } from "@trpc/server"
@@ -15,7 +15,7 @@ const adminData = {
 const superAdminData = {
     email: "testsuperadmin@test.com",
     password: "password",
-    role: adminRoles.SUPER_ADMIN,
+    role: AdminRoles.SUPER_ADMIN,
 }
 
 const otherAdminData = {
@@ -250,7 +250,7 @@ describe("Admin Router", () => {
         const input: RouterInputs["admin"]["update"] = {
             id: admin.id,
             email: "updatedemail@test.com",
-            role: adminRoles.SUPER_ADMIN,
+            role: AdminRoles.SUPER_ADMIN,
         }
 
         let res

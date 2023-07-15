@@ -9,6 +9,6 @@ export default class InstagramService {
     }
 
     public async createPost(canvasSerice: CanvasService, date: Date) {
-        canvasSerice.drawPost(this.events, date)
+        canvasSerice.createPostImages(this.events, date)
     }
 }

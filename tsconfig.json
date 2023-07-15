@@ -21,7 +21,8 @@
             "~/*": ["./src/*"],
             "~/types/*": ["./src/types/*"],
             "~/components/*": ["./src/components/*"],
-            "~/types": ["./src/types"]
+            "~/types": ["./src/types"],
+            "~/utils": ["./src/utils"]
         }
     },
     "include": [

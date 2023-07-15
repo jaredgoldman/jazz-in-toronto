@@ -4,7 +4,7 @@ import BandForm from '~/components/Forms/Band'
 import VenueForm from '~/components/Forms/Venue'
 import EventForm from '~/components/Forms/Event'
 import { Band, EventWithBandVenue, Venue } from '~/types/data'
-import { isBand, isEvent, isVenue } from '~/components/SearchContainer/utils'
+import { isBand, isEvent, isVenue } from '~/utils/typeguards'
 
 export default function useModal(): ModalContextProps {
     const [showModal, setShowModal] = useState<boolean>(false)

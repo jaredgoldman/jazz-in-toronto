@@ -1,10 +1,7 @@
-import { z } from "zod"
-import { adminRoles } from "~/types/enums"
-import {
-    createTRPCRouter,
-    protectedProcedure,
-} from "~/server/api/trpc"
-import { TRPCError } from "@trpc/server"
+import { z } from 'zod'
+import { AdminRoles } from '~/types/enums'
+import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc'
+import { TRPCError } from '@trpc/server'
 
 export const adminRouter = createTRPCRouter({
     create: protectedProcedure
@@ -12,21 +9,21 @@ export const adminRouter = createTRPCRouter({
             z.object({
                 name: z.string().optional(),
                 email: z.string(),
-                password: z.string(),
+                password: z.string()
             })
         )
         .mutation(async ({ ctx, input }) => {
             const user = await ctx.prisma.admin.findUnique({
                 where: {
-                    id: ctx.session.user.id,
-                },
+                    id: ctx.session.user.id
+                }
             })
-            if (user?.role === adminRoles.SUPER_ADMIN) {
+            if (user?.role === AdminRoles.SUPER_ADMIN) {
                 return ctx.prisma.admin.create({
-                    data: input,
+                    data: input
                 })
             } else {
-                throw new TRPCError({ code: "UNAUTHORIZED" })
+                throw new TRPCError({ code: 'UNAUTHORIZED' })
             }
         }),
 
@@ -35,18 +32,18 @@ export const adminRouter = createTRPCRouter({
         .query(async ({ ctx, input }) => {
             const user = await ctx.prisma.admin.findUnique({
                 where: {
-                    id: ctx.session.user.id,
-                },
+                    id: ctx.session.user.id
+                }
             })
             if (
                 ctx.session?.user.id === input.id ||
-                user?.role === adminRoles.SUPER_ADMIN
+                user?.role === AdminRoles.SUPER_ADMIN
             ) {
                 return ctx.prisma.admin.findUnique({
-                    where: { id: input.id },
+                    where: { id: input.id }
                 })
             } else {
-                throw new TRPCError({ code: "UNAUTHORIZED" })
+                throw new TRPCError({ code: 'UNAUTHORIZED' })
             }
         }),
 
@@ -57,19 +54,19 @@ export const adminRouter = createTRPCRouter({
                 name: z.string().optional(),
                 email: z.string().optional(),
                 password: z.string().optional(),
-                role: z.string().optional(),
+                role: z.string().optional()
             })
         )
         .mutation(async ({ ctx, input }) => {
             const user = await ctx.prisma.admin.findUnique({
                 where: {
-                    id: ctx.session.user.id,
-                },
+                    id: ctx.session.user.id
+                }
             })
 
             const { id, ...adminData } = input
 
-            const isSuper = user?.role === adminRoles.SUPER_ADMIN
+            const isSuper = user?.role === AdminRoles.SUPER_ADMIN
             const editingSelf = user?.id === id
             const isEditingRole =
                 adminData.role && adminData.role === user?.role ? true : false
@@ -77,10 +74,10 @@ export const adminRouter = createTRPCRouter({
             if (isSuper || (editingSelf && !isEditingRole)) {
                 return ctx.prisma.admin.update({
                     where: { id: input.id },
-                    data: adminData,
+                    data: adminData
                 })
             } else {
-                throw new TRPCError({ code: "UNAUTHORIZED" })
+                throw new TRPCError({ code: 'UNAUTHORIZED' })
             }
         }),
 
@@ -89,15 +86,15 @@ export const adminRouter = createTRPCRouter({
         .mutation(async ({ ctx, input }) => {
             const user = await ctx.prisma.admin.findUnique({
                 where: {
-                    id: ctx.session.user.id,
-                },
+                    id: ctx.session.user.id
+                }
             })
-            if (user?.role === adminRoles.SUPER_ADMIN) {
+            if (user?.role === AdminRoles.SUPER_ADMIN) {
                 return ctx.prisma.admin.delete({
-                    where: { id: input.id },
+                    where: { id: input.id }
                 })
             } else {
-                throw new TRPCError({ code: "UNAUTHORIZED" })
+                throw new TRPCError({ code: 'UNAUTHORIZED' })
             }
-        }),
+        })
 })
