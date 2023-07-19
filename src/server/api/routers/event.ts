@@ -113,5 +113,13 @@ export const eventRouter = createTRPCRouter({
             return ctx.prisma.event.delete({
                 where: { id: input.id }
             })
+        }),
+
+    getVenueEvents: protectedProcedure
+        .input(z.object({ venueId: z.string().cuid() }))
+        .mutation(({ ctx, input }) => {
+            const venue = ctx.prisma.venue.findUnique({
+                where: { id: input.venueId }
+            })
         })
 })

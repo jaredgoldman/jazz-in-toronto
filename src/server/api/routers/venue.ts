@@ -1,9 +1,9 @@
-import { z } from "zod"
+import { z } from 'zod'
 import {
     createTRPCRouter,
     publicProcedure,
-    protectedProcedure,
-} from "~/server/api/trpc"
+    protectedProcedure
+} from '~/server/api/trpc'
 
 export const venueRouter = createTRPCRouter({
     create: publicProcedure
@@ -17,13 +17,13 @@ export const venueRouter = createTRPCRouter({
                 photoPath: z.string().optional(),
                 featured: z.boolean().optional(),
                 instagramHandle: z.string().optional(),
-                website: z.string().optional(),
-                active: z.boolean().optional(),
+                website: z.string(),
+                active: z.boolean().optional()
             })
         )
         .mutation(({ ctx, input }) => {
             return ctx.prisma.venue.create({
-                data: input,
+                data: input
             })
         }),
 
@@ -31,7 +31,7 @@ export const venueRouter = createTRPCRouter({
         .input(z.object({ id: z.string().cuid() }))
         .query(({ ctx, input }) => {
             return ctx.prisma.venue.findUnique({
-                where: { id: input.id },
+                where: { id: input.id }
             })
         }),
 
@@ -52,14 +52,14 @@ export const venueRouter = createTRPCRouter({
                 featured: z.boolean().optional(),
                 instagramHandle: z.string().optional(),
                 website: z.string().optional(),
-                active: z.boolean().optional(),
+                active: z.boolean().optional()
             })
         )
         .mutation(({ ctx, input }) => {
             const { id, ...venueData } = input
             return ctx.prisma.venue.update({
                 where: { id: input.id },
-                data: venueData,
+                data: venueData
             })
         }),
 
@@ -67,7 +67,7 @@ export const venueRouter = createTRPCRouter({
         .input(z.object({ id: z.string().cuid() }))
         .mutation(({ ctx, input }) => {
             return ctx.prisma.venue.delete({
-                where: { id: input.id },
+                where: { id: input.id }
             })
-        }),
+        })
 })

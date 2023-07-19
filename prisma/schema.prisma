@@ -45,7 +45,7 @@ model Venue {
   photoPath       String?
   featured        Boolean  @default(false)
   instagramHandle String?
-  website         String?
+  website         String
   events          Event[]
   active          Boolean  @default(true)
   latitude        Float

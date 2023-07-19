@@ -11,8 +11,8 @@ export interface Values {
     latitude: number
     longitude: number
     city: string
+    website: string
     instagramHandle?: string
-    website?: string
 }
 
 interface Props {
@@ -26,8 +26,7 @@ export default function VenueForm({ currentValues }: Props): JSX.Element {
         ? {
               ...currentValues,
               photoPath: currentValues.photoPath || undefined,
-              instagramHandle: currentValues.instagramHandle || undefined,
-              website: currentValues.website || undefined
+              instagramHandle: currentValues.instagramHandle || undefined
           }
         : {
               name: '',
