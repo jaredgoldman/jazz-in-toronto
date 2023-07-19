@@ -3,6 +3,7 @@ import { Canvas, createCanvas, CanvasRenderingContext2D } from 'canvas'
 import { EventWithBandVenue } from '~/types/data'
 import { getFormattedTime } from '~/utils/date'
 import { daysOfTheWeek } from '~/utils/constants'
+import { buffer } from 'stream/consumers'
 
 export default class CanvasService {
     private ctx: CanvasRenderingContext2D
@@ -39,22 +40,40 @@ export default class CanvasService {
         return { canvas, ctx }
     }
 
-    public createPosts(events: EventWithBandVenue[], date: Date) {
+    public createPosts(
+        events: EventWithBandVenue[],
+        date: Date
+    ): string[] | void {
+        const fileUrls = []
         if (events.length > this.eventsPerCanvas.initial) {
             let splicedEvents = events.splice(0, this.eventsPerCanvas.initial)
             this.createPost(splicedEvents, date)
             let canvasNumber = 2
+
             while (events.length) {
                 splicedEvents = events.splice(0, this.eventsPerCanvas.rest)
-                this.createPost(splicedEvents, date, canvasNumber)
+                const fileUrl = this.createPost(
+                    splicedEvents,
+                    date,
+                    canvasNumber
+                )
+                fileUrls.push(fileUrl)
                 canvasNumber++
             }
         } else {
-            this.createPost(events, date)
+            const fileUrl = this.createPost(events, date)
+            fileUrls.push(fileUrl)
+        }
+        if (fileUrls.length) {
+            return fileUrls
         }
     }
 
-    private createPost(events: EventWithBandVenue[], date?: Date, i = 1) {
+    private createPost(
+        events: EventWithBandVenue[],
+        date: Date,
+        i = 1
+    ): string {
         // Set the background color to white
         this.ctx.fillStyle = '#ffffff'
         this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight)
@@ -122,14 +141,27 @@ export default class CanvasService {
             currentY += postFontHeight
         })
 
-        if (process.env.NODE_ENV === 'test') {
-            const buffer = this.canvas.toBuffer('image/png')
-            this.savePostLocally(buffer, i)
-        }
+        // draw tags and brand in bottom of frame
+        let tagY = this.canvasHeight - fontHeight + 15
+        let tagX = 10
+        this.ctx.fillText('@JAZZINTORONTO', tagX, tagY)
+
+        const siteText = 'www.jazzintoronto.com'
+        const siteTextWidth = this.ctx.measureText(siteText).width
+        let siteX = this.canvasWidth - 10 - siteTextWidth
+        this.ctx.fillText('www.jazzintoronto.com', siteX, tagY)
+
+        const buffer = this.canvas.toBuffer('image/png')
+        return this.savePostLocally(buffer, i, date) // what's the best way to "return" the canvas for upload?
     }
 
-    private async savePostLocally(canvasBuffer: Buffer, postNum: number) {
-        const filePath = `src/temp/posts/test-${postNum}.png`
-        return fs.writeFileSync(filePath, canvasBuffer)
+    private savePostLocally(
+        canvasBuffer: Buffer,
+        postNum: number,
+        date: Date
+    ): string {
+        const filePath = `src/temp/posts/jit_ig_${date.toDateString()}-${postNum}.png`
+        fs.writeFileSync(filePath, canvasBuffer)
+        return filePath
     }
 }
