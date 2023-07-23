@@ -5,6 +5,9 @@ import {
     protectedProcedure
 } from '~/server/api/trpc'
 import addDays from 'date-fns/addDays'
+import scraperService from '../services/scraperService'
+import ScraperService from '../services/scraperService'
+import { publicDecrypt } from 'crypto'
 
 export const eventRouter = createTRPCRouter({
     create: publicProcedure
@@ -115,11 +118,15 @@ export const eventRouter = createTRPCRouter({
             })
         }),
 
-    getVenueEvents: protectedProcedure
+    getVenueEvents: publicProcedure
         .input(z.object({ venueId: z.string().cuid() }))
-        .mutation(({ ctx, input }) => {
-            const venue = ctx.prisma.venue.findUnique({
+        .mutation(async ({ ctx, input }) => {
+            const venue = await ctx.prisma.venue.findUnique({
                 where: { id: input.venueId }
             })
+            if (venue) {
+                const scraper = new ScraperService(venue)
+                await scraper.getEvents()
+            }
         })
 })

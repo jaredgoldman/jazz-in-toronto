@@ -1,6 +1,6 @@
-import { Venue } from "@prisma/client"
-import { prisma } from "../src/server/db"
-import { BandNameGenerator } from "./bandNameGenerator"
+import { Venue } from '@prisma/client'
+import { prisma } from '../src/server/db'
+import { BandNameGenerator } from './bandNameGenerator'
 
 const bandNameGenerator = new BandNameGenerator()
 
@@ -8,27 +8,15 @@ const seed = async () => {
     // create 100 bands
     const bands = Array.from({ length: 100 }).map((_, i) => ({
         name: bandNameGenerator.generateBandName(),
-        genre: "jazz",
-        photoPath: "https://picsum.photos/200/300",
+        genre: 'jazz',
+        photoPath: 'https://picsum.photos/200/300',
         instagramHandle: `@band${i + 1}`,
         website: `https://google.com`
     }))
     await prisma.band.createMany({ data: bands })
     const bandsData = await prisma.band.findMany()
 
-    // create 100 venues
-    const venues = Array.from({ length: 100 }).map((_, i) => ({
-        name: `Venue ${i + 1}`,
-        address: `100 Yonge St`,
-        city: "Toronto",
-        photoPath: "https://picsum.photos/200/300",
-        instagramHandle: `@venue${i + 1}`,
-        website: `https://google.com`,
-        latitude: 43.6532,
-        longitude: -79.3832
-    }))
-
-    await prisma.venue.createMany({ data: venues })
+    await generateVenues()
     const venuesData = await prisma.venue.findMany()
 
     const oneDay = 60 * 60 * 24 * 1000
@@ -38,19 +26,50 @@ const seed = async () => {
             name: `Event ${i + 1}`,
             startDate: new Date(Date.now() + i * oneDay),
             endDate: new Date(Date.now() + i * oneDay + oneDay),
-            photoPath: "https://picsum.photos/200/300",
+            photoPath: 'https://picsum.photos/200/300',
             instagramHandle: `@event${i + 1}`,
             website: `https://google.com`,
             bandId: band.id,
-            venueId: venuesData[i]?.id as Venue["id"]
+            venueId: venuesData[0]?.id as Venue['id']
         }
     })
 
     await prisma.event.createMany({ data: events })
     await prisma.admin.create({
         data: {
-            email: "test@test.com",
-            password: "test"
+            email: 'test@test.com',
+            password: 'test'
+        }
+    })
+}
+
+const generateVenues = async () => {
+    await prisma.venue.create({
+        data: {
+            name: 'The Rex',
+            address: '194 Queen St W',
+            city: 'Toronto',
+            photoPath: 'https://picsum.photos/200/300',
+            instagramHandle: '@therextoronto',
+            website: 'https://therex.ca/',
+            latitude: 43.6509,
+            longitude: -79.3883,
+            crawlable: true,
+            eventsPath: 'events'
+        }
+    })
+    await prisma.venue.create({
+        data: {
+            name: 'Drom Taberna',
+            address: '458 Queen St W',
+            city: 'Toronto',
+            photoPath: 'https://picsum.photos/200/300',
+            instagramHandle: '@dromtaberna',
+            website: 'https://dromtaberna.com/',
+            latitude: 43.6479,
+            longitude: -79.4004,
+            crawlable: true,
+            eventsPath: 'events-9O8Cm'
         }
     })
 }

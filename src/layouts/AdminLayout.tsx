@@ -4,7 +4,7 @@ import { HeaderType } from '~/components/Header/types'
 import Footer from '~/components/Footer'
 
 interface Props {
-    children: JSX.Element
+    children: JSX.Element | undefined
 }
 export default function AdminLayout({ children }: Props): JSX.Element {
     const isAuthenticatedAdmin = false

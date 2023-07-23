@@ -14,7 +14,6 @@ export default function SearchBar({ onSearch, searchDate }: Props) {
     const [startDate, setStartDate] = useState<Date | null>(searchDate || null)
     return (
         <div className="m-2 flex flex-col">
-            <h1>Search</h1>
             <div className="flex">
                 {searchDate && (
                     <div className="m-2 flex flex-col">

@@ -3,3 +3,7 @@ export const deepEqual = (x: {}, y: {}): boolean => {
     const strObj2 = JSON.stringify(y)
     return strObj1 === strObj2
 }
+
+export const wait = (ms: number) => {
+    return new Promise((resolve) => setTimeout(resolve, ms))
+}

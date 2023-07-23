@@ -3,7 +3,6 @@ import { Canvas, createCanvas, CanvasRenderingContext2D } from 'canvas'
 import { EventWithBandVenue } from '~/types/data'
 import { getFormattedTime } from '~/utils/date'
 import { daysOfTheWeek } from '~/utils/constants'
-import { buffer } from 'stream/consumers'
 
 export default class CanvasService {
     private ctx: CanvasRenderingContext2D

@@ -50,6 +50,8 @@ model Venue {
   active          Boolean  @default(true)
   latitude        Float
   longitude       Float
+  crawlable       Boolean @default(false)
+  eventsPath      String?
 }
 
 model Event {

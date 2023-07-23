@@ -5,48 +5,48 @@ export class BandNameGenerator {
 
     constructor() {
         this.adjectives = [
-            "Electric",
-            "Funky",
-            "Cosmic",
-            "Epic",
-            "Lunar",
-            "Mystic",
-            "Neon",
-            "Psychedelic",
-            "Sonic",
-            "Vibrant",
-            "Wild",
-            "Astral",
-            "Blazing",
-            "Dancing",
-            "Eternal",
-            "Fierce",
-            "Glowing",
+            'Electric',
+            'Funky',
+            'Cosmic',
+            'Epic',
+            'Lunar',
+            'Mystic',
+            'Neon',
+            'Psychedelic',
+            'Sonic',
+            'Vibrant',
+            'Wild',
+            'Astral',
+            'Blazing',
+            'Dancing',
+            'Eternal',
+            'Fierce',
+            'Glowing'
         ]
 
         this.nouns = [
-            "Cats",
-            "Dreamers",
-            "Fire",
-            "Galaxy",
-            "Harmony",
-            "Jammers",
-            "Legends",
-            "Rebels",
-            "Soul",
-            "Wizards",
-            "Zodiac",
-            "Aces",
-            "Blasters",
-            "Crew",
-            "Dancers",
+            'Cats',
+            'Dreamers',
+            'Fire',
+            'Galaxy',
+            'Harmony',
+            'Jammers',
+            'Legends',
+            'Rebels',
+            'Soul',
+            'Wizards',
+            'Zodiac',
+            'Aces',
+            'Blasters',
+            'Crew',
+            'Dancers'
         ]
 
         this.generatedNames = new Set<string>()
     }
 
     generateBandName(): string {
-        let bandName = ""
+        let bandName = ''
 
         do {
             const randomAdjective = this.getRandomElement(this.adjectives)
