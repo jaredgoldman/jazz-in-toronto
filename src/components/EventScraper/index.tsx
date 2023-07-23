@@ -38,7 +38,10 @@ export default function EventScraper({ venues }: Props): JSX.Element {
                     try {
                         const { venueId } = values
                         if (venueId) {
-                            eventScraperMutation.mutate({ venueId })
+                            eventScraperMutation.mutate({
+                                venueId
+                            })
+                            console.log(eventScraperMutation.data)
                         }
                     } catch (error) {
                         // display error

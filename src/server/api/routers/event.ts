@@ -5,9 +5,7 @@ import {
     protectedProcedure
 } from '~/server/api/trpc'
 import addDays from 'date-fns/addDays'
-import scraperService from '../services/scraperService'
 import ScraperService from '../services/scraperService'
-import { publicDecrypt } from 'crypto'
 
 export const eventRouter = createTRPCRouter({
     create: publicProcedure
@@ -126,7 +124,58 @@ export const eventRouter = createTRPCRouter({
             })
             if (venue) {
                 const scraper = new ScraperService(venue)
-                await scraper.getEvents()
+                const events = await scraper.getEvents()
+                const processedEvents = []
+                if (events) {
+                    for (const event of events) {
+                        const existingEvent = await ctx.prisma.event.findFirst({
+                            where: {
+                                name: {
+                                    contains: event.name.toLowerCase(),
+                                    mode: 'insensitive'
+                                },
+                                venueId: { equals: input.venueId },
+                                startDate: { equals: event.startDate }
+                            }
+                        })
+                        if (existingEvent) {
+                            console.log('Event already exists, skipping')
+                            continue
+                        }
+                        let band
+                        // Create band for even name if band doesn't exist
+                        // TODO: Clean name before this step
+                        band = await ctx.prisma.band.findFirst({
+                            where: {
+                                name: {
+                                    contains: event.name.toLowerCase(),
+                                    mode: 'insensitive'
+                                }
+                            }
+                        })
+
+                        if (!band) {
+                            band = await ctx.prisma.band.create({
+                                data: {
+                                    name: event.name
+                                }
+                            })
+                        }
+
+                        processedEvents.push({
+                            name: event.name,
+                            venueId: input.venueId,
+                            bandId: band.id,
+                            startDate: event.startDate,
+                            endDate: event.endDate
+                        })
+                    }
+                    // Batch create all events
+                    await ctx.prisma.event.createMany({
+                        data: processedEvents
+                    })
+                    ctx.prisma.$disconnect()
+                }
             }
         })
 })
