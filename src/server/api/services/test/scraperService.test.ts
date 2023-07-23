@@ -25,6 +25,5 @@ describe('Scraper service', () => {
     it('should be able to scrape a website', async () => {
         const scraperService = new ScraperService(venue)
         const events = await scraperService.getEvents()
-        console.log(JSON.stringify(events.events))
     })
 })

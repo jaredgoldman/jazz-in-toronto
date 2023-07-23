@@ -13,3 +13,7 @@ export const isBand = (item: Item | undefined): item is Band => {
 export const isVenue = (item: Item | undefined): item is Venue => {
     return (item as Venue)?.address !== undefined
 }
+
+export const nonNullable = <T>(value: T): value is NonNullable<T> => {
+    return value !== null && value !== undefined
+}
