@@ -48,19 +48,16 @@ export default function VenueForm({ currentValues }: Props): JSX.Element {
             </h1>
             <Formik
                 initialValues={initialValues}
-                // validate={(values) => {
-                // const errors: any = {}
-                // if (!values.email) {
-                //     errors.email = "Required"
-                // } else if (
-                //     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
-                //         values.email
-                //     )
-                // ) {
-                //     errors.email = "Invalid email address"
-                // }
-                // return errors
-                // }}
+                validate={(values) => {
+                    const errors: any = {}
+                    if (!values.name) {
+                        errors.name = 'Required'
+                    }
+                    if (!values.latitude || !values.longitude || !values.city) {
+                        errors.location = 'Please enter a valid location'
+                    }
+                    return errors
+                }}
                 onSubmit={async (values) => {
                     try {
                         venueMutation.mutate(values)

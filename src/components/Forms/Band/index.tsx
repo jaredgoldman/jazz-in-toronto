@@ -9,7 +9,7 @@ import { api } from '~/utils/api'
 
 export interface Values {
     name: string
-    genre: string
+    genre?: string
     photoPath?: string
     instagramHandle: string | null | undefined
     website?: string
@@ -21,6 +21,7 @@ interface Props {
 
 export default function BandForm({ currentValues }: Props): JSX.Element {
     const bandMutation = api.band.create.useMutation()
+
     const initialValues = currentValues
         ? {
               name: currentValues.name,
@@ -37,19 +38,13 @@ export default function BandForm({ currentValues }: Props): JSX.Element {
             </h1>
             <Formik
                 initialValues={initialValues}
-                // validate={(values) => {
-                // const errors: any = {}
-                // if (!values.email) {
-                //     errors.email = "Required"
-                // } else if (
-                //     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
-                //         values.email
-                //     )
-                // ) {
-                //     errors.email = "Invalid email address"
-                // }
-                // return errors
-                // }}
+                validate={(values) => {
+                    const errors: any = {}
+                    if (!values.name) {
+                        errors.name = 'Required'
+                    }
+                    return errors
+                }}
                 onSubmit={async (values) => {
                     try {
                         bandMutation.mutate(values)
