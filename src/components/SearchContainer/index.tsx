@@ -1,7 +1,10 @@
-import { Items } from '~/types/data'
+// Components
 import SearchBar from './components/SearchBar'
-import useSearch from './hooks/useSearch'
 import SearchTable from './components/SearchTable'
+// Types
+import { type Items } from '~/types/data'
+// Hooks
+import useSearch from './hooks/useSearch'
 
 interface Props {
     items: Items

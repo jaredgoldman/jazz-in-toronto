@@ -1,6 +1,7 @@
+// Libraries
 import { useEffect, useState } from 'react'
 import ReactDatePicker from 'react-datepicker'
-import { FieldInputProps, FormikProps, Field, ErrorMessage } from 'formik'
+import { type FieldInputProps, type FormikProps, Field, ErrorMessage } from 'formik'
 import 'react-datepicker/dist/react-datepicker.css'
 
 interface Props {
@@ -14,7 +15,7 @@ interface Props {
 export default function DatePickerField({
     label,
     name,
-    className = 'flex flex-col m-2',
+    className = 'flex flex-col mb-5',
     fieldClassName = 'mb-5 border-2 border-black',
     showTimeSelect = true
 }: Props): JSX.Element {

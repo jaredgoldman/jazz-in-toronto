@@ -1,15 +1,16 @@
 interface ButtonProps {
     children: string
     className?: string
-    onClick?: () => any
-    type?: "button" | "submit" | "reset"
+    onClick?: () => void
+    type?: 'button' | 'submit' | 'reset'
     disabled?: boolean
 }
+
 export default function Button({
     children,
-    className = "flex flex-col m-2 border-2 border-black p-1",
+    className = 'border-2 border-black p-1',
     onClick,
-    type = "button",
+    type = 'button',
     disabled = false
 }: ButtonProps): JSX.Element {
     return (

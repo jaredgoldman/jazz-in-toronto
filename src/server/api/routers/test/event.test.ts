@@ -3,7 +3,7 @@ import { type RouterInputs } from "~/utils/api"
 import { appRouter } from "~/server/api/root"
 import { createInnerTRPCContext } from "~/server/api/trpc"
 import { prisma } from "~/server/db"
-import { Admin, Band, Event, Venue } from "@prisma/client"
+import { type Admin, type Band, type Event, type Venue } from "@prisma/client"
 
 const testVenueData = {
     name: "test venue",

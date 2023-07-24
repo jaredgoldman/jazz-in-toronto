@@ -1,4 +1,5 @@
-import { EventWithBandVenue, Band, Venue } from '~/types/data'
+// Types
+import { type EventWithBandVenue, type Band, type Venue } from '~/types/data'
 
 type Item = EventWithBandVenue | Band | Venue
 

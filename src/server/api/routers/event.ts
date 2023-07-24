@@ -1,10 +1,14 @@
+// Libraries
 import { z } from 'zod'
+import cloudinary from 'cloudinary'
 import {
     createTRPCRouter,
     publicProcedure,
     protectedProcedure
 } from '~/server/api/trpc'
+// Utils
 import addDays from 'date-fns/addDays'
+// Services
 import ScraperService from '../services/scraperService'
 import InstagramService from '../services/instagramService'
 import CanvasService from '../services/canvasService'
@@ -195,8 +199,10 @@ export const eventRouter = createTRPCRouter({
                     venue: true
                 }
             })
+
             const canvasService = new CanvasService()
-            const instagramService = new InstagramService(events)
+            const instagramService = new InstagramService(events, cloudinary.v2)
+
             return await instagramService.createSavePost(
                 canvasService,
                 input.date

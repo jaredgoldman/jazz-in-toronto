@@ -1,6 +1,9 @@
+// Libraries
 import { useState } from 'react'
-import { SearchOption } from '../types'
+// Components
 import ReactDatePicker from 'react-datepicker'
+// Types
+import { SearchOption } from '../types'
 
 interface Props {
     onSearch: (

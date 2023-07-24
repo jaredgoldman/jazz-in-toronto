@@ -1,9 +1,12 @@
+// Components
+import { Field, ErrorMessage } from 'formik'
+import { type ModalForms } from '~/components/Modal/types'
+import Button from '~/components/Button'
+// Types
+import { type Venue, type Band } from '~/types/data'
+// Context
 import { useContext } from 'react'
 import { ModalContext } from '~/components/Modal/context/ModalContext'
-import { ModalForms } from '~/components/Modal/types'
-import { Field, ErrorMessage } from 'formik'
-import { Venue, Band } from '@prisma/client'
-import Button from '~/components/Button'
 
 interface SelectProps {
     label: string
@@ -20,8 +23,8 @@ export default function Select({
     name,
     optionData,
     modalForm,
-    className = 'm-2 flex flex-col',
-    fieldClassName = 'flex items-center border-2 border-black'
+    className = 'flex flex-col mb-5',
+    fieldClassName = 'flex items-center border-2 border-black mb-2'
 }: SelectProps): JSX.Element {
     const { handleModalForm } = useContext(ModalContext)
     const mappedOptions = optionData.map((option) => {
@@ -33,8 +36,8 @@ export default function Select({
 
     return (
         <div className={className}>
-            <label>{label}</label>
-            <div className="flex items-center">
+            <label className="mb-1">{label}</label>
+            <div className="flex w-2/5 flex-col">
                 <Field className={fieldClassName} name={name} as="select">
                     <option value="">Select a {label}</option>
                     {mappedOptions.map((option) => {

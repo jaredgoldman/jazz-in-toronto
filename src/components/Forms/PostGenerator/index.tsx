@@ -1,13 +1,12 @@
+// Libraries
 import { useState, useEffect } from 'react'
-import Button from '~/components/Button'
-import { api } from '~/utils/api'
+// Components
 import { Formik, Form } from 'formik'
-import { DatePicker } from '../Fields'
+import Button from '~/components/Button'
 import Gallery from '~/components/Gallery'
-
-// interface Props {
-//     venues: Venue[]
-// }
+import { DatePicker } from '../Fields'
+// Utils
+import { api } from '~/utils/api'
 
 export default function PostGenerator(): JSX.Element {
     const [postImages, setPostImages] = useState<string[]>([])

@@ -1,15 +1,15 @@
+// Libraries
 import fs from 'fs'
 import path from 'path'
 
-const removeFolderContents = (folderPath: string) => {
+export const removeFolderContents = (folderPath: string) => {
     fs.readdir(folderPath, (err, files) => {
         if (err) {
             console.error('Error reading folder:', err)
             return
         }
-
         files.forEach((file) => {
-            const filePath = path.join(__dirname, folderPath, file)
+            const filePath = path.join(folderPath, file)
 
             fs.stat(filePath, (err, stat) => {
                 if (err) {
@@ -31,9 +31,4 @@ const removeFolderContents = (folderPath: string) => {
             })
         })
     })
-}
-
-export const removeTempFolderContents = () => {
-    const folderPath = path.join(__dirname, '../temp/')
-    removeFolderContents(folderPath)
 }

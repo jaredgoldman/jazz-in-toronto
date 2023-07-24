@@ -1,7 +1,10 @@
-import Button from "../Button"
-import CalendarDay from "./components/CalendarDay"
-import useCalendar from "./hooks/useCalendar"
-import { DailyEventData } from "./types"
+// Components
+import Button from '../Button'
+import CalendarDay from './components/CalendarDay'
+// Hooks
+import useCalendar from './hooks/useCalendar'
+// Types
+import { type DailyEventData } from './types'
 
 export default function Calendar(): JSX.Element {
     const { changeMonth, currentMonthName, monthlyEvents, isLoading } =

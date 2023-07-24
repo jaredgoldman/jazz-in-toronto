@@ -1,9 +1,12 @@
+// Libraries
 import { useState, useEffect } from 'react'
 import { addMonths, getDaysInMonth } from 'date-fns'
+// Types
+import { type DailyEventData } from '../types'
+import { type EventWithBandVenue } from '~/types/data'
+// Utils
 import { daysOfTheWeek } from '~/utils/constants'
 import { api } from '~/utils/api'
-import { DailyEventData } from '../types'
-import { EventWithBandVenue } from '~/types/data'
 
 interface ReturnType {
     changeMonth: (numOfMonths: number) => void
@@ -19,7 +22,7 @@ export default function useCalendar(): ReturnType {
     const currentYear = selectedDate.getFullYear()
     const currentMonthIndex = selectedDate.getMonth()
     const currentMonthName = months[currentMonthIndex] as string
-    const currentDayName = daysOfTheWeek[selectedDate.getDay()]
+    const currentDayName = daysOfTheWeek[selectedDate.getDay()] as string
     const daysInMonth: number = getDaysInMonth(selectedDate)
 
     const { data: monthlyEventsData, isLoading } =
@@ -39,7 +42,13 @@ export default function useCalendar(): ReturnType {
                 )
             )
         }
-    }, [monthlyEventsData, daysInMonth, selectedDate])
+    }, [
+        monthlyEventsData,
+        daysInMonth,
+        selectedDate,
+        currentMonthIndex,
+        currentYear
+    ])
 
     const changeMonth = (numOfMonths: number) => {
         setSelectedDate(addMonths(selectedDate, numOfMonths))

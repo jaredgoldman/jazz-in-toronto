@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import ScraperService from '../scraperService'
 import { prisma } from '~/server/db'
-import { Venue } from '@prisma/client'
+import { type Venue } from '@prisma/client'
 let venue: Venue
 
 beforeAll(async () => {

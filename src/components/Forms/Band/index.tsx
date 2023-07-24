@@ -1,8 +1,11 @@
+// Components
 import { Form, Formik } from 'formik'
-import { api } from '~/utils/api'
-import { Input } from '../Fields'
 import Button from '~/components/Button'
-import { Band } from '@prisma/client'
+import { Input } from '../Fields'
+// Types
+import { type Band } from '~/types/data'
+// Utils
+import { api } from '~/utils/api'
 
 export interface Values {
     name: string

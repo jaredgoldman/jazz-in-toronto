@@ -1,9 +1,12 @@
+// Components
 import { Form, Formik } from 'formik'
-import { api } from '~/utils/api'
 import PlacesAutocomplete from '../Fields/PlacesAutoComplete'
 import { Input } from '../Fields'
 import Button from '~/components/Button'
-import { Venue } from '@prisma/client'
+// Types
+import { type Venue } from '~/types/data'
+// Utils
+import { api } from '~/utils/api'
 
 export interface Values {
     name: string

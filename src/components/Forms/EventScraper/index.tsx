@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
-import { Venue } from '~/types/data'
-import Button from '~/components/Button'
-import { api } from '~/utils/api'
+// Components
 import { Formik, Form } from 'formik'
 import { Select } from '../Fields'
+import Button from '~/components/Button'
+// Types
+import { type Venue } from '~/types/data'
+// Utils
+import { api } from '~/utils/api'
 
 interface Props {
     venues: Venue[]

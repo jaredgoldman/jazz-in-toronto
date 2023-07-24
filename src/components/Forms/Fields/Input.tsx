@@ -1,4 +1,5 @@
-import { Field, ErrorMessage } from "formik"
+// Components
+import { Field, ErrorMessage } from 'formik'
 
 interface InputProps {
     name: string
@@ -10,14 +11,14 @@ interface InputProps {
 export default function Input({
     label,
     name,
-    className = "flex flex-col m-2",
-    fieldClassName = "mb-5 border-2 border-black"
+    className = 'flex flex-col w-2/5',
+    fieldClassName = 'mb-5 border-2 border-black'
 }: InputProps): JSX.Element {
     return (
         <div className={className}>
-            <label>{label}</label>
+            <label className="mb-1">{label}</label>
             <Field name={name} className={fieldClassName} />
-            <ErrorMessage name={name}/>
+            <ErrorMessage name={name} />
         </div>
     )
 }

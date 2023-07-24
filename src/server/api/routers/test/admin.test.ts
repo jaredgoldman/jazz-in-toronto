@@ -1,26 +1,26 @@
-import { expect, it, describe, beforeAll, afterAll } from "vitest"
-import { type RouterInputs } from "~/utils/api"
-import { appRouter } from "~/server/api/root"
-import { createInnerTRPCContext } from "~/server/api/trpc"
-import { AdminRoles } from "~/types/enums"
-import { prisma } from "~/server/db"
-import { Admin } from "@prisma/client"
-import { TRPCError } from "@trpc/server"
+import { expect, it, describe, beforeAll, afterAll } from 'vitest'
+import { type RouterInputs } from '~/utils/api'
+import { appRouter } from '~/server/api/root'
+import { createInnerTRPCContext } from '~/server/api/trpc'
+import { AdminRoles } from '~/types/enums'
+import { prisma } from '~/server/db'
+import { type Admin } from '~/types/data'
+import { TRPCError } from '@trpc/server'
 
 const adminData = {
-    email: "testadmin@test.com",
-    password: "password",
+    email: 'testadmin@test.com',
+    password: 'password'
 }
 
 const superAdminData = {
-    email: "testsuperadmin@test.com",
-    password: "password",
-    role: AdminRoles.SUPER_ADMIN,
+    email: 'testsuperadmin@test.com',
+    password: 'password',
+    role: AdminRoles.SUPER_ADMIN
 }
 
 const otherAdminData = {
-    email: "otheradmin@test.com",
-    password: "password",
+    email: 'otheradmin@test.com',
+    password: 'password'
 }
 
 let admin: Admin
@@ -33,88 +33,88 @@ beforeAll(async () => {
     otherAdmin = await prisma.admin.create({ data: otherAdminData })
 })
 
-describe("Admin Router", () => {
+describe('Admin Router', () => {
     // CREATE
-    it("should allow a super admin to create an admin user", async () => {
+    it('should allow a super admin to create an admin user', async () => {
         const ctx = createInnerTRPCContext({
             session: {
                 user: {
-                    id: superAdmin.id,
+                    id: superAdmin.id
                 },
-                expires: "1",
-            },
+                expires: '1'
+            }
         })
         const caller = appRouter.createCaller(ctx)
 
-        const input: RouterInputs["admin"]["create"] = adminData
+        const input: RouterInputs['admin']['create'] = adminData
 
-        admin = (await caller.admin.create(input)) as Admin
+        admin = (await caller.admin.create(input))
 
         const query = await prisma.admin.findMany({
-            where: { email: adminData.email },
+            where: { email: adminData.email }
         })
         expect(query.length).toEqual(1)
     })
 
-    it("should not allow a regular admin to create an admin user", async () => {
+    it('should not allow a regular admin to create an admin user', async () => {
         const ctx = createInnerTRPCContext({
             session: {
                 user: {
-                    id: admin.id,
+                    id: admin.id
                 },
-                expires: "1",
-            },
+                expires: '1'
+            }
         })
         const caller = appRouter.createCaller(ctx)
 
-        const input: RouterInputs["admin"]["create"] = {
-            email: "eviladmin@test.com",
-            password: "password",
+        const input: RouterInputs['admin']['create'] = {
+            email: 'eviladmin@test.com',
+            password: 'password'
         }
 
         let res
         try {
             res = await caller.admin.create(input)
         } catch (error) {
-            expect(error).toStrictEqual(new TRPCError({ code: "UNAUTHORIZED" }))
+            expect(error).toStrictEqual(new TRPCError({ code: 'UNAUTHORIZED' }))
             expect(res).toBeUndefined()
         }
     })
 
-    it("should not allow an unauthorized user to create an admin user", async () => {
+    it('should not allow an unauthorized user to create an admin user', async () => {
         const ctx = createInnerTRPCContext({
-            session: null,
+            session: null
         })
         const caller = appRouter.createCaller(ctx)
 
-        const input: RouterInputs["admin"]["create"] = {
-            email: "eviladmin@test.com",
-            password: "password",
+        const input: RouterInputs['admin']['create'] = {
+            email: 'eviladmin@test.com',
+            password: 'password'
         }
 
         let res
         try {
             res = await caller.admin.create(input)
         } catch (error) {
-            expect(error).toStrictEqual(new TRPCError({ code: "UNAUTHORIZED" }))
+            expect(error).toStrictEqual(new TRPCError({ code: 'UNAUTHORIZED' }))
             expect(res).toBeUndefined()
         }
     })
 
     // READ
-    it("should allow an super admins to fetch other admins data", async () => {
+    it('should allow an super admins to fetch other admins data', async () => {
         const ctx = createInnerTRPCContext({
             session: {
                 user: {
-                    id: superAdmin.id,
+                    id: superAdmin.id
                 },
-                expires: "1",
-            },
+                expires: '1'
+            }
         })
         const caller = appRouter.createCaller(ctx)
 
-        const input: RouterInputs["admin"]["get"] = { id: admin.id }
-        const otherInput: RouterInputs["admin"]["get"] = { id: otherAdmin.id }
+        const input: RouterInputs['admin']['get'] = { id: admin.id }
+        const otherInput: RouterInputs['admin']['get'] = { id: otherAdmin.id }
 
         const fetchedAdmin = await caller.admin.get(input)
         expect(fetchedAdmin).toStrictEqual(admin)
@@ -122,200 +122,200 @@ describe("Admin Router", () => {
         expect(otherFetchedAdmin).toStrictEqual(otherAdmin)
     })
 
-    it("should allow an admin user fetch their own data", async () => {
+    it('should allow an admin user fetch their own data', async () => {
         const ctx = createInnerTRPCContext({
             session: {
                 user: {
-                    id: admin.id,
+                    id: admin.id
                 },
-                expires: "1",
-            },
+                expires: '1'
+            }
         })
         const caller = appRouter.createCaller(ctx)
 
-        const input: RouterInputs["admin"]["get"] = { id: admin.id }
+        const input: RouterInputs['admin']['get'] = { id: admin.id }
 
         const fetchedAdmin = await caller.admin.get(input)
         expect(fetchedAdmin).toStrictEqual(admin)
     })
 
-    it("should not allow an admin user to fetch other admins data", async () => {
+    it('should not allow an admin user to fetch other admins data', async () => {
         const ctx = createInnerTRPCContext({
             session: {
                 user: {
-                    id: admin.id,
+                    id: admin.id
                 },
-                expires: "1",
-            },
+                expires: '1'
+            }
         })
         const caller = appRouter.createCaller(ctx)
 
-        const input: RouterInputs["admin"]["get"] = { id: superAdmin.id }
+        const input: RouterInputs['admin']['get'] = { id: superAdmin.id }
 
         let res
         try {
             res = await caller.admin.get(input)
         } catch (error) {
-            expect(error).toStrictEqual(new TRPCError({ code: "UNAUTHORIZED" }))
+            expect(error).toStrictEqual(new TRPCError({ code: 'UNAUTHORIZED' }))
             expect(res).toBeUndefined()
         }
     })
 
-    it("should not allow an unauthorized user to fetch admin data", async () => {
+    it('should not allow an unauthorized user to fetch admin data', async () => {
         const ctx = createInnerTRPCContext({
-            session: null,
+            session: null
         })
         const caller = appRouter.createCaller(ctx)
 
-        const input: RouterInputs["admin"]["get"] = { id: superAdmin.id }
+        const input: RouterInputs['admin']['get'] = { id: superAdmin.id }
 
         let res
         try {
             res = await caller.admin.get(input)
         } catch (error) {
-            expect(error).toStrictEqual(new TRPCError({ code: "UNAUTHORIZED" }))
+            expect(error).toStrictEqual(new TRPCError({ code: 'UNAUTHORIZED' }))
             expect(res).toBeUndefined()
         }
     })
 
     // UPDATE
-    it("should allow a super admin to update an admin user", async () => {
+    it('should allow a super admin to update an admin user', async () => {
         const ctx = createInnerTRPCContext({
             session: {
                 user: {
-                    id: superAdmin.id,
+                    id: superAdmin.id
                 },
-                expires: "1",
-            },
+                expires: '1'
+            }
         })
         const caller = appRouter.createCaller(ctx)
 
-        const input: RouterInputs["admin"]["update"] = {
+        const input: RouterInputs['admin']['update'] = {
             id: admin.id,
-            email: "updatedemail@test.com",
+            email: 'updatedemail@test.com'
         }
 
         await caller.admin.update(input)
 
         const query = await prisma.admin.findUnique({
-            where: { email: input.email },
+            where: { email: input.email }
         })
 
         expect(query?.email).toEqual(input.email)
     })
 
-    it("should allow an admin user to update themselves but not other admins", async () => {
+    it('should allow an admin user to update themselves but not other admins', async () => {
         const ctx = createInnerTRPCContext({
             session: {
                 user: {
-                    id: admin.id,
+                    id: admin.id
                 },
-                expires: "1",
-            },
+                expires: '1'
+            }
         })
         const caller = appRouter.createCaller(ctx)
-        const updateSelfInput: RouterInputs["admin"]["update"] = {
+        const updateSelfInput: RouterInputs['admin']['update'] = {
             id: admin.id,
-            email: "updatedemail@test.com",
+            email: 'updatedemail@test.com'
         }
 
         const query = await caller.admin.update(updateSelfInput)
 
         expect(query.email).toEqual(updateSelfInput.email)
 
-        const updateOtherInput: RouterInputs["admin"]["update"] = {
+        const updateOtherInput: RouterInputs['admin']['update'] = {
             id: otherAdmin.id,
-            email: "updatedemail@test.com",
+            email: 'updatedemail@test.com'
         }
 
         let res
         try {
             res = await caller.admin.update(updateOtherInput)
         } catch (error) {
-            expect(error).toStrictEqual(new TRPCError({ code: "UNAUTHORIZED" }))
+            expect(error).toStrictEqual(new TRPCError({ code: 'UNAUTHORIZED' }))
             expect(res).toBeUndefined()
         }
     })
 
-    it("should not allow an admin user to change their role", async () => {
+    it('should not allow an admin user to change their role', async () => {
         const ctx = createInnerTRPCContext({
             session: {
                 user: {
-                    id: admin.id,
+                    id: admin.id
                 },
-                expires: "1",
-            },
+                expires: '1'
+            }
         })
         const caller = appRouter.createCaller(ctx)
-        const input: RouterInputs["admin"]["update"] = {
+        const input: RouterInputs['admin']['update'] = {
             id: admin.id,
-            email: "updatedemail@test.com",
-            role: AdminRoles.SUPER_ADMIN,
+            email: 'updatedemail@test.com',
+            role: AdminRoles.SUPER_ADMIN
         }
 
         let res
         try {
             admin = await caller.admin.update(input)
         } catch (error) {
-            expect(error).toStrictEqual(new TRPCError({ code: "UNAUTHORIZED" }))
+            expect(error).toStrictEqual(new TRPCError({ code: 'UNAUTHORIZED' }))
             expect(res).toBeUndefined()
         }
     })
 
     // DELETE
-    it("should allow a super admin to delete an admin user", async () => {
+    it('should allow a super admin to delete an admin user', async () => {
         const ctx = createInnerTRPCContext({
             session: {
                 user: {
-                    id: superAdmin.id,
+                    id: superAdmin.id
                 },
-                expires: "1",
-            },
+                expires: '1'
+            }
         })
         const caller = appRouter.createCaller(ctx)
 
-        const input: RouterInputs["admin"]["delete"] = { id: admin.id }
+        const input: RouterInputs['admin']['delete'] = { id: admin.id }
 
         const deletedadmin = await caller.admin.delete(input)
 
         expect(deletedadmin.id).toEqual(admin.id)
     })
 
-    it("should not allow an admin to delete another admin user", async () => {
+    it('should not allow an admin to delete another admin user', async () => {
         const ctx = createInnerTRPCContext({
             session: {
                 user: {
-                    id: otherAdmin.id,
+                    id: otherAdmin.id
                 },
-                expires: "1",
-            },
+                expires: '1'
+            }
         })
         const caller = appRouter.createCaller(ctx)
 
-        const input: RouterInputs["admin"]["delete"] = { id: admin.id }
+        const input: RouterInputs['admin']['delete'] = { id: admin.id }
 
         let res
         try {
             res = await caller.admin.delete(input)
         } catch (error) {
-            expect(error).toStrictEqual(new TRPCError({ code: "UNAUTHORIZED" }))
+            expect(error).toStrictEqual(new TRPCError({ code: 'UNAUTHORIZED' }))
             expect(res).toBeUndefined()
         }
     })
 
-    it("should not allow an unauthorized user to delete another admin user", async () => {
+    it('should not allow an unauthorized user to delete another admin user', async () => {
         const ctx = createInnerTRPCContext({
-            session: null,
+            session: null
         })
         const caller = appRouter.createCaller(ctx)
 
-        const input: RouterInputs["admin"]["delete"] = { id: admin.id }
+        const input: RouterInputs['admin']['delete'] = { id: admin.id }
 
         let res
         try {
             res = await caller.admin.delete(input)
         } catch (error) {
-            expect(error).toStrictEqual(new TRPCError({ code: "UNAUTHORIZED" }))
+            expect(error).toStrictEqual(new TRPCError({ code: 'UNAUTHORIZED' }))
             expect(res).toBeUndefined()
         }
     })
@@ -324,12 +324,12 @@ describe("Admin Router", () => {
 afterAll(async () => {
     await prisma.admin.delete({
         where: {
-            id: superAdmin.id,
-        },
+            id: superAdmin.id
+        }
     })
     await prisma.admin.delete({
         where: {
-            id: otherAdmin.id,
-        },
+            id: otherAdmin.id
+        }
     })
 })

@@ -16,9 +16,13 @@
         -   add venue x
         -   list venue x
     -   Admin section x
--   Add crawling and instagram modules
+-   Add crawling and instagram modules x
+-   Clean up imports x
+-   Form validation
 -   Add seperate DB instance for testing
--   Add CMS w/ graphQL input
+-   Add CMS
+-   Style site
+-
 
 ## Requirements
 

@@ -1,4 +1,6 @@
+// Components
 import Link from 'next/link'
+// Types
 import { HeaderType } from './types'
 
 interface Props {

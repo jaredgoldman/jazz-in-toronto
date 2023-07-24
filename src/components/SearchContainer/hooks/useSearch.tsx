@@ -1,7 +1,10 @@
+// Libraries
 import { useEffect, useState } from 'react'
-import { deepEqual } from '~/utils/shared'
+// Types
 import { SearchOption } from '../types'
-import { Item, Items } from '~/types/data'
+import { type Item, type Items } from '~/types/data'
+// Utils
+import { deepEqual } from '~/utils/shared'
 
 interface SearchData {
     name: string

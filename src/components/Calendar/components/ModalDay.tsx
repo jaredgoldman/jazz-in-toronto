@@ -1,5 +1,6 @@
-import { DailyEventData } from '../types'
-import { EventWithBandVenue } from '~/types/data'
+// Types
+import { type DailyEventData } from '../types'
+import { type EventWithBandVenue } from '~/types/data'
 
 interface Props {
     dailyEvents: DailyEventData

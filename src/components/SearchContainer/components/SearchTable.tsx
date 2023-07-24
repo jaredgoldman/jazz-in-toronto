@@ -1,8 +1,6 @@
+// Libraries
 import { useContext } from 'react'
-import { ModalContext } from '~/components/Modal/context/ModalContext'
-import { isBand, isEvent } from '~/utils/typeguards'
-import { Items } from '~/types/data'
-import { DataTypes } from '~/types/enums'
+// Components
 import {
     EventHeader,
     EventRow,
@@ -11,6 +9,13 @@ import {
     VenueHeader,
     VenueRow
 } from './SearchTableRows'
+// Types
+import { DataTypes } from '~/types/enums'
+import { type Items } from '~/types/data'
+// Utils
+import { isBand, isEvent } from '~/utils/typeguards'
+// Context
+import { ModalContext } from '~/components/Modal/context/ModalContext'
 
 interface Props {
     items: Items

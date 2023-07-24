@@ -1,4 +1,4 @@
 export enum HeaderType {
     Admin = 'Admin',
-    Public = 'Public',
+    Public = 'Public'
 }

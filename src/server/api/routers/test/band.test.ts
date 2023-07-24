@@ -4,7 +4,7 @@ import { appRouter } from "~/server/api/root"
 import { createInnerTRPCContext } from "~/server/api/trpc"
 import { prisma } from "~/server/db"
 import { TRPCError } from "@trpc/server"
-import { Admin, Band } from "@prisma/client"
+import { type Admin, type Band } from "@prisma/client"
 
 const testBandData = {
     name: "test band",

@@ -1,10 +1,12 @@
+// Libraries
 import { useState } from 'react'
 import AdminLayout from '~/layouts/AdminLayout'
 import SearchContainer from '~/components/SearchContainer'
 import PostGenerator from '~/components/Forms/PostGenerator'
-import { api } from '~/utils/api'
 import Button from '~/components/Button'
 import EventScraper from '~/components/Forms/EventScraper'
+// Utils
+import { api } from '~/utils/api'
 
 enum View {
     Search = 'Search',

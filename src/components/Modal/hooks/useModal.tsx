@@ -1,9 +1,13 @@
+// Libraries
 import { useState } from 'react'
-import { ModalContextProps, ModalForms } from '../types'
+// Components
 import BandForm from '~/components/Forms/Band'
 import VenueForm from '~/components/Forms/Venue'
 import EventForm from '~/components/Forms/Event'
-import { Band, EventWithBandVenue, Venue } from '~/types/data'
+// Types
+import { type ModalContextProps, ModalForms } from '../types'
+import { type Band, type EventWithBandVenue, type Venue } from '~/types/data'
+// Utils
 import { isBand, isEvent, isVenue } from '~/utils/typeguards'
 
 export default function useModal(): ModalContextProps {

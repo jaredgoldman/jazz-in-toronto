@@ -1,9 +1,14 @@
+// Libraries
 import { useContext } from 'react'
-import { ModalContext } from '~/components/Modal/context/ModalContext'
+// Compoments
 import ModalDay from './ModalDay'
-import { DailyEventData } from '../types'
 import Button from '~/components/Button'
+// Types
+import { type DailyEventData } from '../types'
+// Utils
 import { nthNumber } from '~/utils/date'
+// Context
+import { ModalContext } from '~/components/Modal/context/ModalContext'
 
 interface Props {
     dailyEvents: DailyEventData

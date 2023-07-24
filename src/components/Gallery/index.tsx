@@ -1,5 +1,8 @@
+// Libraries
 import { useState } from 'react'
+// Components
 import Button from '../Button'
+
 interface Props {
     images: string[]
 }
@@ -18,7 +21,7 @@ export default function Gallery({ images }: Props): JSX.Element {
     const showNavButtons = images.length > 1
 
     return (
-        <div>
+        <div className="flex">
             {showNavButtons && (
                 <Button
                     onClick={prevImage}

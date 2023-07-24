@@ -1,4 +1,4 @@
-import { EventWithBandVenue } from "~/types/data"
+import { type EventWithBandVenue } from "~/types/data"
 
 export type DailyEventData = {
     events: Array<EventWithBandVenue> | []

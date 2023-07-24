@@ -1,6 +1,9 @@
+// Libraries
 import fs from 'fs'
-import { Canvas, createCanvas, CanvasRenderingContext2D } from 'canvas'
-import { EventWithBandVenue } from '~/types/data'
+import { type Canvas, createCanvas, type CanvasRenderingContext2D } from 'canvas'
+// Types
+import { type EventWithBandVenue } from '~/types/data'
+// Utils
 import { getFormattedTime } from '~/utils/date'
 import { daysOfTheWeek } from '~/utils/constants'
 
@@ -9,18 +12,12 @@ export default class CanvasService {
     private canvas: Canvas
     private canvasWidth: number
     private canvasHeight: number
-    private eventsPerCanvas: {
-        initial: number
-        rest: number
-    }
+    private eventsPerCanvas: number
 
     constructor(
-        width: number = 1080,
-        height: number = 1080,
-        eventsPerCanvas = {
-            initial: 19,
-            rest: 25
-        }
+        eventsPerCanvas = 19,
+        width = 1080,
+        height = 1080
     ) {
         const { canvas, ctx } = this.getCanvas(width, height)
         this.canvas = canvas
@@ -44,13 +41,11 @@ export default class CanvasService {
         date: Date
     ): string[] | void {
         const fileUrls = []
-        if (events.length > this.eventsPerCanvas.initial) {
-            let splicedEvents = events.splice(0, this.eventsPerCanvas.initial)
-            this.createPost(splicedEvents, date)
-            let canvasNumber = 2
+        if (events.length > this.eventsPerCanvas) {
+            let canvasNumber = 1
 
             while (events.length) {
-                splicedEvents = events.splice(0, this.eventsPerCanvas.rest)
+                const splicedEvents = events.splice(0, this.eventsPerCanvas)
                 const fileUrl = this.createPost(
                     splicedEvents,
                     date,
@@ -129,7 +124,7 @@ export default class CanvasService {
         this.ctx.font = `${fontHeight}px Arial`
 
         let currentY = mainRectY + postFontHeight
-        let eventTextX = rectX + 5
+        const eventTextX = rectX + 5
 
         events.forEach((event) => {
             const { band, startDate, venue } = event
@@ -141,13 +136,13 @@ export default class CanvasService {
         })
 
         // draw tags and brand in bottom of frame
-        let tagY = this.canvasHeight - fontHeight + 15
-        let tagX = 10
+        const tagY = this.canvasHeight - fontHeight + 15
+        const tagX = 10
         this.ctx.fillText('@JAZZINTORONTO', tagX, tagY)
 
         const siteText = 'www.jazzintoronto.com'
         const siteTextWidth = this.ctx.measureText(siteText).width
-        let siteX = this.canvasWidth - 10 - siteTextWidth
+        const siteX = this.canvasWidth - 10 - siteTextWidth
         this.ctx.fillText('www.jazzintoronto.com', siteX, tagY)
 
         const buffer = this.canvas.toBuffer('image/png')
@@ -159,7 +154,7 @@ export default class CanvasService {
         postNum: number,
         date: Date
     ): string {
-        const filePath = `src/temp/posts/jit_ig_${date.toDateString()}-${postNum}.png`
+        const filePath = `src/temp/posts/jit_ig-${date.toDateString()}-${postNum}.png`
         fs.writeFileSync(filePath, canvasBuffer)
         return filePath
     }

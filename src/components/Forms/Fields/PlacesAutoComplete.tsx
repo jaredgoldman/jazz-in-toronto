@@ -1,9 +1,11 @@
+// Components
+import { type FieldProps, Field, ErrorMessage } from 'formik'
+// Libraries
 import usePlacesAutocomplete, {
     getGeocode,
     getLatLng
 } from 'use-places-autocomplete'
 import useOnclickOutside from 'react-cool-onclickoutside'
-import { FieldProps, Field, ErrorMessage } from 'formik'
 
 interface PlacesAutoCompleteProps {
     label: string
@@ -15,8 +17,8 @@ interface PlacesAutoCompleteProps {
 export default function PlacesAutoCompleteField({
     label,
     name,
-    className = 'flex-col m-2',
-    fieldClassName = 'mb-5 border-2 border-black'
+    className = 'flex-col mb-5',
+    fieldClassName = 'border-2 border-black'
 }: PlacesAutoCompleteProps): JSX.Element {
     return (
         <div className={className}>
@@ -31,10 +33,7 @@ export default function PlacesAutoCompleteField({
     )
 }
 
-const PlacesAutocomplete = ({
-    form,
-    field
-}: FieldProps<Date, any>): JSX.Element => {
+const PlacesAutocomplete = ({ form }: FieldProps<Date, any>): JSX.Element => {
     const {
         ready,
         value,

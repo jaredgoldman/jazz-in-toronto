@@ -1,7 +1,11 @@
+// Libraries
 import { createContext } from 'react'
-import useModal from '../hooks/useModal'
-import { ModalContextProps } from '../types'
+// Components
 import Modal from '../Modal'
+// Types
+import { type ModalContextProps } from '../types'
+// Hooks
+import useModal from '../hooks/useModal'
 
 const initialModalContext: ModalContextProps = {
     showModal: false,

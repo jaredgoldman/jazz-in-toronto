@@ -1,18 +1,19 @@
-import { EventWithBandVenue } from '~/types/data'
-import CanvasService from './canvasService'
-import { removeTempFolderContents } from '~/utils/file'
-const cloudinary = require('cloudinary').v2
-
-// Return "https" URLs by setting secure: true
-cloudinary.config({
-    secure: true
-})
+// Types
+import { type EventWithBandVenue } from '~/types/data'
+// Services
+import type CanvasService from './canvasService'
 
 export default class InstagramService {
     private events: EventWithBandVenue[]
+    private cloudinary: any
 
-    constructor(events: EventWithBandVenue[]) {
+    constructor(events: EventWithBandVenue[], cloudinary: any) {
         this.events = events
+        this.cloudinary = cloudinary
+
+        cloudinary.config({
+            secure: true
+        })
     }
 
     public async createSavePost(
@@ -22,7 +23,7 @@ export default class InstagramService {
         const fileUrls = this.createPost(canvasService, date)
         if (fileUrls) {
             const storedUrls = await this.storePosts(fileUrls)
-            await this.post(storedUrls)
+            await this.postToInstagram(storedUrls)
             return storedUrls
             // await this.deleteStored()
         } else {
@@ -45,8 +46,6 @@ export default class InstagramService {
     private async storePosts(fileUrls: string[]): Promise<Array<string>> {
         const storedUrls: Array<string> = []
         for (const fileUrl of fileUrls) {
-            // Use the uploaded file's name as the asset's public ID and
-            // allow overwriting the asset with new versions
             const options = {
                 use_filename: true,
                 unique_filename: false,
@@ -54,7 +53,7 @@ export default class InstagramService {
             }
 
             try {
-                const result = await cloudinary.uploader.upload(
+                const result = await this.cloudinary.uploader.upload(
                     fileUrl,
                     options
                 )
@@ -66,7 +65,7 @@ export default class InstagramService {
         return storedUrls
     }
 
-    private async post(storedUrls: string[]): Promise<void> {
+    private async postToInstagram(storedUrls: string[]): Promise<void> {
         storedUrls.forEach((storedUrl) => {
             try {
                 // post each image to insta
@@ -74,9 +73,5 @@ export default class InstagramService {
         })
     }
 
-    // XXX: Currently deleting locally but should be moved to
-    // a block storage provider later
-    private async deleteStored(): Promise<void> {
-        removeTempFolderContents()
-    }
+    private async deleteStored(): Promise<void> {}
 }

@@ -1,7 +1,10 @@
-import { EventWithBandVenue, Band, Venue } from '~/types/data'
-import { getFormattedTime } from '~/utils/date'
-import Button from '~/components/Button'
+// Components
 import { ModalForms } from '~/components/Modal/types'
+import Button from '~/components/Button'
+// Types
+import { type EventWithBandVenue, type Band, type Venue } from '~/types/data'
+// Utils
+import { getFormattedTime } from '~/utils/date'
 
 export const EventHeader = (): JSX.Element => {
     return (

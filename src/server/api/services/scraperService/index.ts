@@ -1,10 +1,14 @@
+// Libraries
 import puppeteer from 'puppeteer'
-import { Venue, PartialEvent } from '~/types/data'
+import { cheerioJsonMapper, type JsonTemplate } from 'cheerio-json-mapper'
+// types
+import { type Venue, type PartialEvent } from '~/types/data'
+// Utils
 import { wait } from '~/utils/shared'
-import rexJson from './templates/rex.json'
 import { nonNullable } from '~/utils/typeguards'
-import { RexEvent, VenueEvents } from './types'
-import { cheerioJsonMapper, JsonTemplate } from 'cheerio-json-mapper'
+import { type RexEvent, type VenueEvents } from './types'
+// Data
+import rexJson from './templates/rex.json'
 
 export default class ScraperService {
     private venue: Venue
@@ -39,6 +43,10 @@ export default class ScraperService {
         switch (this.venue.name.toLowerCase()) {
             case 'the rex':
                 return this.scrapeRexEvents(content)
+            case 'jazz bistro':
+            // return this.scrapeJazzBistroEvents(content)
+            case 'drom taberna':
+            // return this.scrapeDromTabernaEvents(content)
             default:
                 throw new Error("Venue doesn't exist or is not crawlable")
         }
@@ -48,7 +56,7 @@ export default class ScraperService {
         return (await cheerioJsonMapper(html, json)) as T
     }
 
-    public async scrapeRexEvents(html: string): Promise<PartialEvent[]> {
+    private async scrapeRexEvents(html: string): Promise<PartialEvent[]> {
         const { monthAndYear, events } = await this.mapEvents<
             VenueEvents<RexEvent>
         >(html, rexJson)
@@ -96,4 +104,11 @@ export default class ScraperService {
             .filter(nonNullable)
         return eventData
     }
+
+    // private async scrapeJazzBistroEvents(
+    //     content: string
+    // ): Promise<PartialEvent> {}
+    // private async scrapeDromTabernaEvents(
+    //     content: string
+    // ): Promise<PartialEvent> {}
 }

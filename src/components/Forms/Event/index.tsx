@@ -1,9 +1,12 @@
+// Components
 import { Form, Formik } from 'formik'
-import { api } from '~/utils/api'
 import { DatePicker, Input, Select } from '../Fields'
 import { ModalForms } from '~/components/Modal/types'
 import Button from '~/components/Button'
-import { EventWithBandVenue } from '~/types/data'
+// Types
+import { type EventWithBandVenue } from '~/types/data'
+// Utils
+import { api } from '~/utils/api'
 
 export interface Values {
     name: string
@@ -44,8 +47,8 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
           }
 
     return (
-        <div className="w-full">
-            <h1 className="mb-5">
+        <div className="m-5 w-1/2">
+            <h1 className="text-bold mb-5 text-center">
                 {currentValues ? 'Edit gig' : 'Add your gig here!'}
             </h1>
             <Formik
@@ -97,7 +100,7 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                             label="Instagram Handle"
                         />
                         <Input name="website" label="Website" />
-                        <div>
+                        <div className="mt-5 flex w-full justify-center">
                             <Button type="submit" disabled={isSubmitting}>
                                 Submit
                             </Button>
