@@ -18,11 +18,14 @@
     -   Admin section x
 -   Add crawling and instagram modules x
 -   Clean up imports x
--   Form validation
+-   Form validation x
 -   Add seperate DB instance for testing
 -   Add CMS
 -   Style site
--
+-   Complete unit testing
+-   Complete integration testing
+-   End-to-end testing with playwright
+-   Advanced form validation
 
 ## Requirements
 
