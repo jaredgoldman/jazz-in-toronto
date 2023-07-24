@@ -34,6 +34,9 @@ dependencies:
   cheerio-json-mapper:
     specifier: ^1.0.3
     version: 1.0.3
+  cloudinary:
+    specifier: ^1.38.0
+    version: 1.38.0
   date-fns:
     specifier: ^2.30.0
     version: 2.30.0
@@ -1479,6 +1482,24 @@ packages:
       wrap-ansi: 7.0.0
     dev: false
 
+  /cloudinary-core@2.13.0(lodash@4.17.21):
+    resolution: {integrity: sha512-Nt0Q5I2FtenmJghtC4YZ3MZZbGg1wLm84SsxcuVwZ83OyJqG9CNIGp86CiI6iDv3QobaqBUpOT7vg+HqY5HxEA==}
+    peerDependencies:
+      lodash: '>=4.0'
+    dependencies:
+      lodash: 4.17.21
+    dev: false
+
+  /cloudinary@1.38.0:
+    resolution: {integrity: sha512-s5Sh/uButN0M7lxTYvrvPcImaieI1aYh1qmgyhO0wbPUMfb0BSb+mBa5SETFJpzQGCAqP46yxapkPeEFyGZX9A==}
+    engines: {node: '>=0.6'}
+    dependencies:
+      cloudinary-core: 2.13.0(lodash@4.17.21)
+      core-js: 3.31.1
+      lodash: 4.17.21
+      q: 1.5.1
+    dev: false
+
   /color-convert@1.9.3:
     resolution: {integrity: sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==}
     dependencies:
@@ -1539,6 +1560,11 @@ packages:
     engines: {node: '>=12.13'}
     dependencies:
       is-what: 4.1.15
+    dev: false
+
+  /core-js@3.31.1:
+    resolution: {integrity: sha512-2sKLtfq1eFST7l7v62zaqXacPc7uG8ZAya8ogijLhTtaKNcpzpB4TMoTw2Si+8GYKRwFPMMtUT0263QFWFfqyQ==}
+    requiresBuild: true
     dev: false
 
   /cosmiconfig@8.2.0:
@@ -3860,6 +3886,11 @@ packages:
       - supports-color
       - typescript
       - utf-8-validate
+    dev: false
+
+  /q@1.5.1:
+    resolution: {integrity: sha512-kV/CThkXo6xyFEZUugw/+pIOywXcDbFYgSct5cT3gqlbkBE1SJdwy6UQoZvodiWF/ckQLZyDE/Bu1M6gVu5lVw==}
+    engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
     dev: false
 
   /queue-microtask@1.2.3:

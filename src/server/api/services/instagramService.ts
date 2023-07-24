@@ -1,6 +1,12 @@
 import { EventWithBandVenue } from '~/types/data'
 import CanvasService from './canvasService'
 import { removeTempFolderContents } from '~/utils/file'
+const cloudinary = require('cloudinary').v2
+
+// Return "https" URLs by setting secure: true
+cloudinary.config({
+    secure: true
+})
 
 export default class InstagramService {
     private events: EventWithBandVenue[]
@@ -38,16 +44,25 @@ export default class InstagramService {
 
     private async storePosts(fileUrls: string[]): Promise<Array<string>> {
         const storedUrls: Array<string> = []
-        fileUrls.forEach((fileUrl) => {
+        for (const fileUrl of fileUrls) {
+            // Use the uploaded file's name as the asset's public ID and
+            // allow overwriting the asset with new versions
+            const options = {
+                use_filename: true,
+                unique_filename: false,
+                overwrite: true
+            }
+
             try {
-                // store post on storage bucket
-                // cloudinary? S3? GCP?
-                // Locally?
-                storedUrls.push(fileUrl)
-            } catch (e) {
+                const result = await cloudinary.uploader.upload(
+                    fileUrl,
+                    options
+                )
+                storedUrls.push(result.secure_url)
+            } catch (error) {
                 throw new Error("Couldn't store posts")
             }
-        })
+        }
         return storedUrls
     }
 

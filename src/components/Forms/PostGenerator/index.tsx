@@ -19,6 +19,7 @@ export default function PostGenerator(): JSX.Element {
 
     useEffect(() => {
         if (postMutation.data) {
+            console.log(postMutation.data)
             setPostImages(postMutation.data)
         }
     }, [postMutation.data])
