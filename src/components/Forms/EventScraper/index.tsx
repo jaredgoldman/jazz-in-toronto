@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Venue } from '~/types/data'
-import Button from '../Button'
+import Button from '~/components/Button'
 import { api } from '~/utils/api'
 import { Formik, Form } from 'formik'
-import { Select } from '../Forms/Fields'
+import { Select } from '../Fields'
 
 interface Props {
     venues: Venue[]
@@ -15,6 +15,12 @@ export default function EventScraper({ venues }: Props): JSX.Element {
     const initialValues = {
         venueId: ''
     }
+
+    // useEffect(() => {
+    //     if (eventScraperMutation.data) {
+    //         console.log(eventScraperMutation)
+    //     }
+    // }, [eventScraperMutation.data])
 
     return (
         <div className="w-full">
@@ -41,7 +47,6 @@ export default function EventScraper({ venues }: Props): JSX.Element {
                             eventScraperMutation.mutate({
                                 venueId
                             })
-                            console.log(eventScraperMutation.data)
                         }
                     } catch (error) {
                         // display error

@@ -6,6 +6,8 @@ import {
 } from '~/server/api/trpc'
 import addDays from 'date-fns/addDays'
 import ScraperService from '../services/scraperService'
+import InstagramService from '../services/instagramService'
+import CanvasService from '../services/canvasService'
 
 export const eventRouter = createTRPCRouter({
     create: publicProcedure
@@ -138,6 +140,7 @@ export const eventRouter = createTRPCRouter({
                                 startDate: { equals: event.startDate }
                             }
                         })
+
                         if (existingEvent) {
                             console.log('Event already exists, skipping')
                             continue
@@ -171,11 +174,32 @@ export const eventRouter = createTRPCRouter({
                         })
                     }
                     // Batch create all events
-                    await ctx.prisma.event.createMany({
-                        data: processedEvents
-                    })
-                    ctx.prisma.$disconnect()
+                    return events
                 }
             }
+        }),
+
+    post: publicProcedure
+        .input(z.object({ date: z.date() }))
+        .mutation(async ({ ctx, input }) => {
+            // Fetch daily Events
+            const events = await ctx.prisma.event.findMany({
+                where: {
+                    startDate: {
+                        gte: new Date(input.date),
+                        lt: new Date(addDays(input.date, 1))
+                    }
+                },
+                include: {
+                    band: true,
+                    venue: true
+                }
+            })
+            const canvasService = new CanvasService()
+            const instagramService = new InstagramService(events)
+            return await instagramService.createSavePost(
+                canvasService,
+                input.date
+            )
         })
 })

@@ -1,5 +1,6 @@
 import { EventWithBandVenue } from '~/types/data'
 import CanvasService from './canvasService'
+import { removeTempFolderContents } from '~/utils/file'
 
 export default class InstagramService {
     private events: EventWithBandVenue[]
@@ -11,12 +12,15 @@ export default class InstagramService {
     public async createSavePost(
         canvasService: CanvasService,
         date: Date
-    ): Promise<void> {
+    ): Promise<string[]> {
         const fileUrls = this.createPost(canvasService, date)
         if (fileUrls) {
             const storedUrls = await this.storePosts(fileUrls)
-            await this.postPosts(storedUrls)
-            await this.deleteStored(storedUrls)
+            await this.post(storedUrls)
+            return storedUrls
+            // await this.deleteStored()
+        } else {
+            throw new Error('Error creating post')
         }
     }
 
@@ -28,8 +32,7 @@ export default class InstagramService {
         if (fileUrls) {
             return fileUrls
         } else {
-            // catch errors
-            throw new Error()
+            throw new Error("Couldn't create posts")
         }
     }
 
@@ -39,12 +42,16 @@ export default class InstagramService {
             try {
                 // store post on storage bucket
                 // cloudinary? S3? GCP?
-            } catch (e) {}
+                // Locally?
+                storedUrls.push(fileUrl)
+            } catch (e) {
+                throw new Error("Couldn't store posts")
+            }
         })
         return storedUrls
     }
 
-    private async postPosts(storedUrls: string[]): Promise<void> {
+    private async post(storedUrls: string[]): Promise<void> {
         storedUrls.forEach((storedUrl) => {
             try {
                 // post each image to insta
@@ -52,12 +59,9 @@ export default class InstagramService {
         })
     }
 
-    private async deleteStored(storedUrls: string[]): Promise<void> {
-        storedUrls.forEach((storedUrl) => {
-            try {
-                // delete each image from cloud provider
-                // delete each image locally
-            } catch (e) {}
-        })
+    // XXX: Currently deleting locally but should be moved to
+    // a block storage provider later
+    private async deleteStored(): Promise<void> {
+        removeTempFolderContents()
     }
 }
