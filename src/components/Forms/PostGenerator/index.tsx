@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Button from '~/components/Button'
 import { api } from '~/utils/api'
 import { Formik, Form } from 'formik'
 import { DatePicker } from '../Fields'
-import { useEffect } from 'react'
+import Gallery from '~/components/Gallery'
 
 // interface Props {
 //     venues: Venue[]
@@ -11,18 +11,17 @@ import { useEffect } from 'react'
 
 export default function PostGenerator(): JSX.Element {
     const [postImages, setPostImages] = useState<string[]>([])
-    const postMutation = api.event.post.useMutation()
+    const { mutate, data, isLoading } = api.event.post.useMutation()
 
     const initialValues = {
         date: new Date()
     }
 
     useEffect(() => {
-        if (postMutation.data) {
-            console.log(postMutation.data)
-            setPostImages(postMutation.data)
+        if (data) {
+            setPostImages(data)
         }
-    }, [postMutation.data])
+    }, [data])
 
     return (
         <div className="w-full">
@@ -44,7 +43,8 @@ export default function PostGenerator(): JSX.Element {
                 // }}
                 onSubmit={async (values) => {
                     try {
-                        postMutation.mutate(values)
+                        setPostImages([])
+                        mutate(values)
                     } catch (error) {
                         // display error
                     }
@@ -66,12 +66,17 @@ export default function PostGenerator(): JSX.Element {
                     </Form>
                 )}
             </Formik>
-            <>
-                {postImages.length &&
-                    postImages.map((image: string) => {
-                        return <img key={image} src={image} />
-                    })}
-            </>
+            <div>
+                {isLoading && <div>Loading...</div>}
+                {postImages.length && (
+                    <>
+                        <Gallery images={postImages} />
+                        <div>
+                            <Button>Post to Instagram</Button>
+                        </div>
+                    </>
+                )}
+            </div>
         </div>
     )
 }
