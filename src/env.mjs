@@ -10,7 +10,11 @@ export const env = createEnv({
         DATABASE_URL: z.string().url(),
         NODE_ENV: z.enum(['development', 'test', 'production']),
         GOOGLE_API_KEY: z.string(),
-        CLOUDINARY_URL: z.string().url()
+        CLOUDINARY_URL: z.string().url(),
+        FACEBOOK_CLIENT_ID: z.string(),
+        FACEBOOK_CLIENT_SECRET: z.string(),
+        EMAIL_SERVER: z.string().url(),
+        EMAIL_FROM: z.string().email()
     },
 
     /**
@@ -30,11 +34,11 @@ export const env = createEnv({
         DATABASE_URL: process.env.DATABASE_URL,
         NODE_ENV: process.env.NODE_ENV,
         GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
-        CLOUDINARY_URL: process.env.CLOUDINARY_URL
-        // NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
-        // NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-        // DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
-        // DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
+        CLOUDINARY_URL: process.env.CLOUDINARY_URL,
+        FACEBOOK_CLIENT_ID: process.env.FACEBOOK_CLIENT_ID,
+        FACEBOOK_CLIENT_SECRET: process.env.FACEBOOK_CLIENT_SECRET,
+        EMAIL_SERVER: process.env.EMAIL_SERVER,
+        EMAIL_FROM: process.env.EMAIL_FROM
     },
     /**
      * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

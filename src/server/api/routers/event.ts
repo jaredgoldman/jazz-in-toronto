@@ -10,7 +10,7 @@ import {
 import addDays from 'date-fns/addDays'
 // Services
 import ScraperService from '../services/scraperService'
-import InstagramService from '../services/instagramService'
+import PostService from '../services/postService'
 import CanvasService from '../services/canvasService'
 
 export const eventRouter = createTRPCRouter({
@@ -201,11 +201,8 @@ export const eventRouter = createTRPCRouter({
             })
 
             const canvasService = new CanvasService()
-            const instagramService = new InstagramService(events, cloudinary.v2)
+            const postService = new PostService(events, cloudinary.v2)
 
-            return await instagramService.createSavePost(
-                canvasService,
-                input.date
-            )
+            return await postService.createSavePost(canvasService, input.date)
         })
 })

@@ -2,7 +2,8 @@
 import { Form, Formik } from 'formik'
 import { Input } from '../Fields'
 import Button from '~/components/Button'
-
+import { useSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 export interface Values {
     email: string
     password: string
@@ -35,7 +36,9 @@ export default function LoginForm(): JSX.Element {
                 }}
                 onSubmit={async (values) => {
                     try {
-                        // bandMutation.mutate(values)
+                        // Login to the admin panel
+                        // Facebook login
+                        await signIn()
                     } catch (error) {
                         // display error
                     }

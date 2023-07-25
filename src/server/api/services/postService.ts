@@ -3,7 +3,7 @@ import { type EventWithBandVenue } from '~/types/data'
 // Services
 import type CanvasService from './canvasService'
 
-export default class InstagramService {
+export default class postService {
     private events: EventWithBandVenue[]
     private cloudinary: any
 
