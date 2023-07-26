@@ -5,9 +5,11 @@ import SearchTable from './components/SearchTable'
 import { type Items } from '~/types/data'
 // Hooks
 import useSearch from './hooks/useSearch'
+import { DataType } from '~/types/enums'
 
 interface Props {
     items: Items
+    itemType: DataType
     isLoading: boolean
     searchDate?: Date
     setSearchDate?: (date: Date) => void
@@ -15,6 +17,7 @@ interface Props {
 
 export default function SearchContainer({
     items,
+    itemType,
     searchDate,
     setSearchDate
 }: Props): JSX.Element {
@@ -27,7 +30,7 @@ export default function SearchContainer({
         <div>
             <SearchBar onSearch={handleSearch} searchDate={searchDate} />
             {filteredItems ? (
-                <SearchTable items={filteredItems} />
+                <SearchTable items={filteredItems} headerType={itemType} />
             ) : (
                 <div>Loading...</div>
             )}

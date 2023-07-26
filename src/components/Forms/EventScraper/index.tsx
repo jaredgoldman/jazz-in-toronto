@@ -7,6 +7,7 @@ import SearchTable from '~/components/SearchContainer/components/SearchTable'
 import { type Venue } from '~/types/data'
 // Utils
 import { api } from '~/utils/api'
+import { DataType } from '~/types/enums'
 
 interface Props {
     venues: Venue[]
@@ -67,7 +68,10 @@ export default function EventScraper({ venues }: Props): JSX.Element {
                         {isSuccess && data && (
                             <>
                                 <h2 className="mb-3 mt-5">Results</h2>
-                                <SearchTable items={data} />
+                                <SearchTable
+                                    items={data}
+                                    headerType={DataType.EVENT}
+                                />
                             </>
                         )}
                     </Form>

@@ -1,10 +1,10 @@
-export enum AdminRoles {
+export enum AdminRole {
     ADMIN = 'ADMIN',
     SUPER_ADMIN = 'SUPER_ADMIN',
     DISABLED = 'DISABLED'
 }
 
-export enum DataTypes {
+export enum DataType {
     BAND = 'BAND',
     VENUE = 'VENUE',
     EVENT = 'EVENT',
