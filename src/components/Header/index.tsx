@@ -1,5 +1,8 @@
+// Libraries
+import { signOut } from 'next-auth/react'
 // Components
 import Link from 'next/link'
+import Button from '../Button'
 // Types
 import { HeaderType } from './types'
 
@@ -53,6 +56,7 @@ export default function Header({ headerType }: Props): JSX.Element {
                             <li className="p-2">
                                 <Link href="/admin/venues">Venues</Link>
                             </li>
+                            <Button onClick={signOut}>Logout</Button>
                         </>
                     )}
                 </ul>
