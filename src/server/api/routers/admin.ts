@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc'
 import { TRPCError } from '@trpc/server'
 // Types
-import { AdminRoles } from '~/types/enums'
+import { AdminRole } from '~/types/enums'
 
 export const adminRouter = createTRPCRouter({
     create: protectedProcedure
@@ -20,7 +20,7 @@ export const adminRouter = createTRPCRouter({
                     id: ctx.session.user.id
                 }
             })
-            if (user?.role === AdminRoles.SUPER_ADMIN) {
+            if (user?.role === AdminRole.SUPER_ADMIN) {
                 return ctx.prisma.admin.create({
                     data: input
                 })
@@ -39,7 +39,7 @@ export const adminRouter = createTRPCRouter({
             })
             if (
                 ctx.session?.user.id === input.id ||
-                user?.role === AdminRoles.SUPER_ADMIN
+                user?.role === AdminRole.SUPER_ADMIN
             ) {
                 return ctx.prisma.admin.findUnique({
                     where: { id: input.id }
@@ -68,7 +68,7 @@ export const adminRouter = createTRPCRouter({
 
             const { id, ...adminData } = input
 
-            const isSuper = user?.role === AdminRoles.SUPER_ADMIN
+            const isSuper = user?.role === AdminRole.SUPER_ADMIN
             const editingSelf = user?.id === id
             const isEditingRole =
                 adminData.role && adminData.role === user?.role ? true : false
@@ -91,7 +91,7 @@ export const adminRouter = createTRPCRouter({
                     id: ctx.session.user.id
                 }
             })
-            if (user?.role === AdminRoles.SUPER_ADMIN) {
+            if (user?.role === AdminRole.SUPER_ADMIN) {
                 return ctx.prisma.admin.delete({
                     where: { id: input.id }
                 })
