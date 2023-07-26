@@ -56,7 +56,7 @@ export default function SearchTable({ items }: Props): JSX.Element {
     return (
         <table className="table w-full border-collapse rounded-lg bg-white shadow-md">
             {header}
-            <tbody>{rows}</tbody>
+            <tbody>{items.length ? rows : <tr>No results</tr>}</tbody>
         </table>
     )
 }

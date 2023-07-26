@@ -133,6 +133,7 @@ export const eventRouter = createTRPCRouter({
                 const events = await scraper.getEvents()
                 const processedEvents = []
                 if (events) {
+                    //  Tranform partialEvent to Event
                     for (const event of events) {
                         const existingEvent = await ctx.prisma.event.findFirst({
                             where: {
@@ -168,20 +169,22 @@ export const eventRouter = createTRPCRouter({
                                 }
                             })
                         }
-
-                        processedEvents.push({
-                            name: event.name,
-                            venueId: input.venueId,
-                            bandId: band.id,
-                            startDate: event.startDate,
-                            endDate: event.endDate
+                        const processedEvent = await ctx.prisma.event.create({
+                            data: {
+                                name: event.name,
+                                venueId: input.venueId,
+                                bandId: band.id,
+                                startDate: event.startDate,
+                                endDate: event.endDate
+                            },
+                            include: {
+                                band: true,
+                                venue: true
+                            }
                         })
+                        processedEvents.push(processedEvent)
                     }
-                    // Batch create all events
-                    await ctx.prisma.event.createMany({
-                        data: processedEvents
-                    })
-                    return events
+                    return processedEvents
                 }
             }
         }),

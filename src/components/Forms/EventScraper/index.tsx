@@ -2,6 +2,7 @@
 import { Formik, Form } from 'formik'
 import { Select } from '../Fields'
 import Button from '~/components/Button'
+import SearchTable from '~/components/SearchContainer/components/SearchTable'
 // Types
 import { type Venue } from '~/types/data'
 // Utils
@@ -12,7 +13,8 @@ interface Props {
 }
 
 export default function EventScraper({ venues }: Props): JSX.Element {
-    const eventScraperMutation = api.event.getVenueEvents.useMutation()
+    const { isLoading, mutate, data, isSuccess } =
+        api.event.getVenueEvents.useMutation()
 
     const initialValues = {
         venueId: ''
@@ -40,7 +42,7 @@ export default function EventScraper({ venues }: Props): JSX.Element {
                     try {
                         const { venueId } = values
                         if (venueId) {
-                            eventScraperMutation.mutate({
+                            mutate({
                                 venueId
                             })
                         }
@@ -61,6 +63,13 @@ export default function EventScraper({ venues }: Props): JSX.Element {
                                 Submit
                             </Button>
                         </div>
+                        {isLoading && <div>Loading...</div>}
+                        {isSuccess && data && (
+                            <>
+                                <h2 className="mb-3 mt-5">Results</h2>
+                                <SearchTable items={data} />
+                            </>
+                        )}
                     </Form>
                 )}
             </Formik>
