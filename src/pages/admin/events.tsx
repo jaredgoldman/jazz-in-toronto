@@ -6,7 +6,8 @@ import SearchContainer from '~/components/SearchContainer'
 import PostGenerator from '~/components/Forms/PostGenerator'
 import Button from '~/components/Button'
 import EventScraper from '~/components/Forms/EventScraper'
-
+// Types
+import { DataType } from '~/types/enums'
 // Utils
 import { api } from '~/utils/api'
 
@@ -53,6 +54,7 @@ export default function AdminEvents(): JSX.Element {
                 {view === View.Search && events && (
                     <SearchContainer
                         items={events}
+                        itemType={DataType.EVENT}
                         isLoading={isLoadingEvents}
                         searchDate={searchDate}
                         setSearchDate={setSearchDate}
