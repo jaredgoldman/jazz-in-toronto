@@ -75,7 +75,7 @@ export default class ScraperService {
         }
 
         // Find month number
-        const month = new Date(`${monthString} 1 ${year}`).getMonth() + 1
+        const month = new Date(`${monthString} 1 ${year}`).getMonth()
 
         // Map partial events, convert strings to numbers where necessary
         const eventData = events.each

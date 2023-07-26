@@ -48,7 +48,14 @@ export const authOptions: NextAuthOptions = {
             clientSecret: env.FACEBOOK_CLIENT_SECRET
         }),
         EmailProvider({
-            server: env.EMAIL_SERVER,
+            server: {
+                host: env.EMAIL_SERVER_HOST,
+                port: env.EMAIL_SERVER_PORT,
+                auth: {
+                    user: env.EMAIL_SERVER_USER,
+                    pass: env.EMAIL_SERVER_PASSWORD
+                }
+            },
             from: env.EMAIL_FROM
         })
     ]

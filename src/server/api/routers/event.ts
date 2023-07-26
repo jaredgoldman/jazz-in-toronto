@@ -178,6 +178,9 @@ export const eventRouter = createTRPCRouter({
                         })
                     }
                     // Batch create all events
+                    await ctx.prisma.event.createMany({
+                        data: processedEvents
+                    })
                     return events
                 }
             }
