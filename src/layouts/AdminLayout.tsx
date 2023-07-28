@@ -10,14 +10,21 @@ import Button from '~/components/Button'
 
 interface Props {
     children: JSX.Element | undefined
+    showHeaderLinks?: boolean
 }
-export default function AdminLayout({ children }: Props): JSX.Element {
+
+export default function AdminLayout({
+    children,
+    showHeaderLinks = true
+}: Props): JSX.Element {
     const { data: session } = useSession()
     return (
         <ModalProvider>
             <main>
-                <Header headerType={HeaderType.Admin} />
-
+                <Header
+                    headerType={HeaderType.Admin}
+                    showLinks={showHeaderLinks}
+                />
                 {session ? children : <Button onClick={signIn}>Sign In</Button>}
                 <Footer />
             </main>

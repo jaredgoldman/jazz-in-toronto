@@ -32,14 +32,12 @@ declare module 'next-auth' {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
+    debug: true,
     callbacks: {
-        session: ({ session, user }) => ({
-            ...session,
-            user: {
-                ...session.user,
-                id: user.id
-            }
-        })
+        session: ({ session, user }) => {
+            console.log('session', session)
+            return session
+        }
     },
     adapter: PrismaAdapter(prisma),
     providers: [
