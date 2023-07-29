@@ -2,12 +2,13 @@
 import { type EventWithBandVenue } from '~/types/data'
 // Services
 import type CanvasService from './canvasService'
+import { type CloudinaryService } from '~/types/library'
 
 export default class postService {
     private events: EventWithBandVenue[]
-    private cloudinary: any
+    private cloudinary: CloudinaryService
 
-    constructor(events: EventWithBandVenue[], cloudinary: any) {
+    constructor(events: EventWithBandVenue[], cloudinary: CloudinaryService) {
         this.events = events
         this.cloudinary = cloudinary
 
@@ -23,7 +24,7 @@ export default class postService {
         const fileUrls = this.createPost(canvasService, date)
         if (fileUrls) {
             const storedUrls = await this.storePosts(fileUrls)
-            await this.postToInstagram(storedUrls)
+            // await this.postToInstagram(storedUrls)
             return storedUrls
             // await this.deleteStored()
         } else {
@@ -65,13 +66,13 @@ export default class postService {
         return storedUrls
     }
 
-    private async postToInstagram(storedUrls: string[]): Promise<void> {
-        storedUrls.forEach((storedUrl) => {
-            try {
-                // post each image to insta
-            } catch (e) {}
-        })
-    }
+    // private async postToInstagram(storedUrls: string[]): Promise<void> {
+    //     storedUrls.forEach((storedUrl) => {
+    //         try {
+    //             // post each image to insta
+    //         } catch (e) {}
+    //     })
+    // }
 
-    private async deleteStored(): Promise<void> {}
+    // private async deleteStored(): Promise<void> {}
 }

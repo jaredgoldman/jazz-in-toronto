@@ -3,19 +3,11 @@ import { createContext } from 'react'
 // Components
 import Modal from '../Modal'
 // Types
-import { type ModalContextProps } from '../types'
+import { type ModalContextType } from '../types'
 // Hooks
 import useModal from '../hooks/useModal'
 
-const initialModalContext: ModalContextProps = {
-    showModal: false,
-    handleModal: () => {},
-    handleModalForm: () => {},
-    closeModal: () => {},
-    modalContent: ''
-}
-
-const ModalContext = createContext(initialModalContext)
+const ModalContext = createContext<ModalContextType | null>(null)
 
 const { Provider } = ModalContext
 

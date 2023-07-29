@@ -7,7 +7,7 @@ export const getFormattedTime = (date: Date) => {
 }
 
 export const nthNumber = (number: number) => {
-    if (number > 3 && number < 21) return number + 'th'
+    if (number > 3 && number < 21) return `${number}th`
     let ordinal
     switch (number % 10) {
         case 1:
@@ -22,7 +22,7 @@ export const nthNumber = (number: number) => {
         default:
             ordinal = 'th'
     }
-    return number + ordinal
+    return `${number}${ordinal}`
 }
 
 export const getShortDate = (date: Date) => {

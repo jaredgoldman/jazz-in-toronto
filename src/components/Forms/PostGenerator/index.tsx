@@ -8,6 +8,10 @@ import { DatePicker } from '../Fields'
 // Utils
 import { api } from '~/utils/api'
 
+interface Errors {
+    date?: string
+}
+
 export default function PostGenerator(): JSX.Element {
     const [postImages, setPostImages] = useState<string[]>([])
     const { mutate, data, isLoading } = api.event.post.useMutation()
@@ -28,13 +32,13 @@ export default function PostGenerator(): JSX.Element {
             <Formik
                 initialValues={initialValues}
                 validate={(values) => {
-                    const errors: any = {}
+                    const errors: Errors = {}
                     if (!values.date) {
                         errors.date = 'Required'
                     }
                     return errors
                 }}
-                onSubmit={async (values) => {
+                onSubmit={(values) => {
                     try {
                         setPostImages([])
                         mutate(values)

@@ -1,3 +1,4 @@
+/* eslint-disable */
 // Components
 import { type FieldProps, Field, ErrorMessage } from 'formik'
 // Libraries
@@ -12,6 +13,14 @@ interface PlacesAutoCompleteProps {
     name: string
     className?: string
     fieldClassName?: string
+}
+
+interface GeoCodeResults {
+    address_components: {
+        long_name: string
+        short_name: string
+        types: string[]
+    }[]
 }
 
 export default function PlacesAutoCompleteField({
@@ -33,7 +42,7 @@ export default function PlacesAutoCompleteField({
     )
 }
 
-const PlacesAutocomplete = ({ form }: FieldProps<Date, any>): JSX.Element => {
+const PlacesAutocomplete = ({ form }: FieldProps<Date, Date>): JSX.Element => {
     const {
         ready,
         value,
@@ -56,31 +65,29 @@ const PlacesAutocomplete = ({ form }: FieldProps<Date, any>): JSX.Element => {
         clearSuggestions()
     })
 
-    const handleInput = (e: any) => {
+    const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         // Update the keyword of the input element
         setValue(e.target.value)
     }
 
-    const handleSelect =
-        ({ description }: { description: string }) =>
-        () => {
-            // When user selects a place, we can replace the keyword without request data from API
-            // by setting the second parameter to "false"
-            setValue(description, false)
-            clearSuggestions()
+    const handleSelect = async ({ description }: { description: string }) => {
+        // When user selects a place, we can replace the keyword without request data from API
+        // by setting the second parameter to "false"
+        setValue(description, false)
+        clearSuggestions()
 
-            // Get latitude and longitude via utility functions
-            getGeocode({ address: description }).then((results) => {
-                const { lat, lng } = getLatLng(results[0])
-                form.setFieldValue('address', description)
-                form.setFieldValue('latitude', lat)
-                form.setFieldValue('longitude', lng)
-                form.setFieldValue(
-                    'city',
-                    results[0].address_components[3].long_name
-                )
-            })
-        }
+        // Get latitude and longitude via utility functions
+        const results = await getGeocode({ address: description })
+        const { lat, lng } = getLatLng(results[0])
+        await form.setFieldValue('address', description)
+        await form.setFieldValue('latitude', lat)
+        await form.setFieldValue('longitude', lng)
+        await form.setFieldValue(
+            'city',
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            results[0].address_components[3].long_name
+        )
+    }
 
     const renderSuggestions = () =>
         data.map((suggestion) => {
@@ -90,7 +97,12 @@ const PlacesAutocomplete = ({ form }: FieldProps<Date, any>): JSX.Element => {
             } = suggestion
 
             return (
-                <li key={place_id} onClick={handleSelect(suggestion)}>
+                <li
+                    key={place_id}
+                    onClick={async () => {
+                        await handleSelect(suggestion)
+                    }}
+                >
                     <strong>{main_text}</strong> <small>{secondary_text}</small>
                 </li>
             )

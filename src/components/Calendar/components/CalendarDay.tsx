@@ -5,6 +5,7 @@ import ModalDay from './ModalDay'
 import Button from '~/components/Button'
 // Types
 import { type DailyEventData } from '../types'
+import { type ModalContextType } from '~/components/Modal/types'
 // Utils
 import { nthNumber } from '~/utils/date'
 // Context
@@ -15,7 +16,7 @@ interface Props {
 }
 
 export default function CalendarDay({ dailyEvents }: Props) {
-    const { handleModal } = useContext(ModalContext)
+    const { handleModal } = useContext(ModalContext) as ModalContextType
     const dayOfMonth = dailyEvents.date.getDate()
 
     const modalDay = <ModalDay dailyEvents={dailyEvents} />

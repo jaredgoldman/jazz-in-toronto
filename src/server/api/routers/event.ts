@@ -6,6 +6,8 @@ import {
     publicProcedure,
     protectedProcedure
 } from '~/server/api/trpc'
+// Types
+import { type CloudinaryService } from '~/types/library'
 // Utils
 import addDays from 'date-fns/addDays'
 // Services
@@ -33,8 +35,8 @@ export const eventRouter = createTRPCRouter({
             return ctx.prisma.event.create({
                 data: {
                     ...eventData,
-                    band: { connect: { id: input.bandId } },
-                    venue: { connect: { id: input.venueId } }
+                    band: { connect: { id: bandId } },
+                    venue: { connect: { id: venueId } }
                 }
             })
         }),
@@ -109,7 +111,7 @@ export const eventRouter = createTRPCRouter({
         .mutation(({ ctx, input }) => {
             const { id, ...eventData } = input
             return ctx.prisma.event.update({
-                where: { id: input.id },
+                where: { id },
                 data: eventData
             })
         }),
@@ -208,7 +210,10 @@ export const eventRouter = createTRPCRouter({
             })
 
             const canvasService = new CanvasService()
-            const postService = new PostService(events, cloudinary.v2)
+            const postService = new PostService(
+                events,
+                cloudinary.v2 as CloudinaryService
+            )
 
             return await postService.createSavePost(canvasService, input.date)
         })

@@ -11,14 +11,15 @@ import {
 } from './SearchTableRows'
 // Types
 import { DataType } from '~/types/enums'
-import { type Items } from '~/types/data'
+import { type Item } from '~/types/data'
+import { type ModalContextType } from '~/components/Modal/types'
 // Utils
 import { isBand, isEvent } from '~/utils/typeguards'
 // Context
 import { ModalContext } from '~/components/Modal/context/ModalContext'
 
 interface Props {
-    items: Items
+    items: Array<Item>
     headerType: DataType
 }
 
@@ -30,7 +31,7 @@ const headers = {
 }
 
 export default function SearchTable({ items, headerType }: Props): JSX.Element {
-    const { handleModalForm } = useContext(ModalContext)
+    const { handleModalForm } = useContext(ModalContext) as ModalContextType
 
     const rowProps = {
         handleModalForm
@@ -40,11 +41,11 @@ export default function SearchTable({ items, headerType }: Props): JSX.Element {
     // however let's just make TS happy by typeguarding all items
     const rows = items.map((item) => {
         if (isEvent(item)) {
-            return <EventRow item={item} {...rowProps} />
+            return <EventRow item={item} key={item.id} {...rowProps} />
         } else if (isBand(item)) {
-            return <BandRow item={item} {...rowProps} />
+            return <BandRow item={item} key={item.id} {...rowProps} />
         } else {
-            return <VenueRow item={item} {...rowProps} />
+            return <VenueRow item={item} key={item.id} {...rowProps} />
         }
     })
 

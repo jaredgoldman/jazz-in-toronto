@@ -5,7 +5,7 @@ import SearchTable from './components/SearchTable'
 import { type Items } from '~/types/data'
 // Hooks
 import useSearch from './hooks/useSearch'
-import { DataType } from '~/types/enums'
+import { type DataType } from '~/types/enums'
 
 interface Props {
     items: Items

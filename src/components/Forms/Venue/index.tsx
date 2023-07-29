@@ -18,6 +18,11 @@ export interface Values {
     instagramHandle?: string
 }
 
+interface Errors {
+    name?: string
+    location?: string
+}
+
 interface Props {
     currentValues?: Venue
 }
@@ -49,7 +54,7 @@ export default function VenueForm({ currentValues }: Props): JSX.Element {
             <Formik
                 initialValues={initialValues}
                 validate={(values) => {
-                    const errors: any = {}
+                    const errors: Errors = {}
                     if (!values.name) {
                         errors.name = 'Required'
                     }
@@ -58,7 +63,7 @@ export default function VenueForm({ currentValues }: Props): JSX.Element {
                     }
                     return errors
                 }}
-                onSubmit={async (values) => {
+                onSubmit={(values) => {
                     try {
                         venueMutation.mutate(values)
                     } catch (error) {

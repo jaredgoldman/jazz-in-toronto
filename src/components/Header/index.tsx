@@ -24,8 +24,8 @@ export default function Header({
                 </Link>
             </div>
             <h2>
-                Connections Toronto's Jazz Musicians, Audiences, Venues and
-                Presenters
+                Connections Toronto\&apos;s Jazz Musicians, Audiences, Venues
+                and Presenters
             </h2>
             {showLinks && (
                 <nav className="flex justify-center ">
@@ -72,7 +72,7 @@ export default function Header({
                 </nav>
             )}
             {headerType === HeaderType.Admin && session && (
-                <Button onClick={() => signOut()}>Sign Out</Button>
+                <Button onClick={() => void signOut()}>Sign Out</Button>
             )}
         </header>
     )

@@ -13,7 +13,7 @@ import rexJson from './templates/rex.json'
 export default class ScraperService {
     private venue: Venue
     private page?: Page
-    private initialized: boolean = false
+    private initialized = false
 
     constructor(venue: Venue) {
         if (!venue.website || !venue.eventsPath) {
@@ -45,7 +45,7 @@ export default class ScraperService {
     }
 
     private async loadPage(): Promise<void> {
-        const url = `${this.venue.website}${this.venue.eventsPath}`
+        const url = `${this.venue.website}${this.venue?.eventsPath || ''}`
         const browser = await puppeteer.launch()
         const page = await browser.newPage()
         await page.setViewport({ width: 1920, height: 1080 })
@@ -120,7 +120,7 @@ export default class ScraperService {
                 // map through sets in each daily events object
                 sets.each.forEach(({ name, time }) => {
                     // parse time and date
-                    const tfTime = time.split(/\s+/)[1]!
+                    const tfTime = time.split(/\s+/)[1] as string
                     const hours = Number(tfTime.split(':')[0])
                     const minutes = Number(tfTime.split(':')[1])
                     const day = Number(date.date)

@@ -4,16 +4,11 @@ import { createContext } from 'react'
 import { api } from '~/utils/api'
 
 interface CmsContextProps {
-    data: any
+    data: { [key: string]: string }
     isLoading: boolean
 }
 
-const initialCmsContext: CmsContextProps = {
-    data: null,
-    isLoading: true
-}
-
-const CmsContext = createContext(initialCmsContext)
+const CmsContext = createContext<CmsContextProps | null>(null)
 
 const { Provider } = CmsContext
 
@@ -23,7 +18,7 @@ export default function CmsProvider({ children }: { children: JSX.Element }) {
     return (
         <Provider
             value={{
-                data,
+                data: data || {},
                 isLoading
             }}
         >

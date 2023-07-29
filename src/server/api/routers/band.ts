@@ -51,7 +51,7 @@ export const bandRouter = createTRPCRouter({
         .mutation(({ ctx, input }) => {
             const { id, ...bandData } = input
             return ctx.prisma.band.update({
-                where: { id: input.id },
+                where: { id },
                 data: bandData
             })
         }),

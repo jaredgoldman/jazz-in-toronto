@@ -14,6 +14,10 @@ interface Props {
     venues: Venue[]
 }
 
+interface Errors {
+    venueId?: string
+}
+
 export default function EventScraper({ venues }: Props): JSX.Element {
     const { isLoading, mutate, data, isSuccess } =
         api.event.getVenueEvents.useMutation()
@@ -29,13 +33,13 @@ export default function EventScraper({ venues }: Props): JSX.Element {
             <Formik
                 initialValues={initialValues}
                 validate={(values) => {
-                    const errors: any = {}
+                    const errors: Errors = {}
                     if (!values.venueId) {
                         errors.venueId = 'Required'
                     }
                     return errors
                 }}
-                onSubmit={async (values) => {
+                onSubmit={(values) => {
                     try {
                         const { venueId, date } = values
                         if (venueId) {

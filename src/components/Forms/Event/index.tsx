@@ -19,6 +19,17 @@ export interface Values {
     venueId: string
 }
 
+interface Errors {
+    name?: string
+    startDate?: string
+    endDate?: string
+    bandId?: string
+    photoPath?: string
+    instagramHandle?: string
+    website?: string
+    venueId?: string
+}
+
 interface Props {
     currentValues?: EventWithBandVenue
 }
@@ -54,7 +65,7 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
             <Formik
                 initialValues={initialValues}
                 validate={(values) => {
-                    const errors: any = {}
+                    const errors: Errors = {}
                     if (!values.name) {
                         errors.name = 'Required'
                     }
@@ -73,7 +84,7 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
 
                     return errors
                 }}
-                onSubmit={async (values) => {
+                onSubmit={(values) => {
                     try {
                         eventMutation.mutate(values)
                     } catch (error) {

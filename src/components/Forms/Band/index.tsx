@@ -15,13 +15,20 @@ export interface Values {
     website?: string
 }
 
+interface Errors {
+    name?: string
+    genre?: string
+    photoPath?: string
+    instagramHandle?: string
+    website?: string
+}
+
 interface Props {
     currentValues?: Band
 }
 
 export default function BandForm({ currentValues }: Props): JSX.Element {
     const bandMutation = api.band.create.useMutation()
-
     const initialValues = currentValues
         ? {
               name: currentValues.name,
@@ -39,13 +46,13 @@ export default function BandForm({ currentValues }: Props): JSX.Element {
             <Formik
                 initialValues={initialValues}
                 validate={(values) => {
-                    const errors: any = {}
+                    const errors: Errors = {}
                     if (!values.name) {
                         errors.name = 'Required'
                     }
                     return errors
                 }}
-                onSubmit={async (values) => {
+                onSubmit={(values) => {
                     try {
                         bandMutation.mutate(values)
                     } catch (error) {

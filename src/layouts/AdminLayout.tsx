@@ -17,8 +17,7 @@ export default function AdminLayout({
     children,
     showHeaderLinks = true
 }: Props): JSX.Element {
-    // const { data: session } = useSession()
-    const session = true
+    const { data: session } = useSession()
     return (
         <ModalProvider>
             <main>
@@ -26,7 +25,11 @@ export default function AdminLayout({
                     headerType={HeaderType.Admin}
                     showLinks={showHeaderLinks}
                 />
-                {session ? children : <Button onClick={signIn}>Sign In</Button>}
+                {session ? (
+                    children
+                ) : (
+                    <Button onClick={() => void signIn()}>Sign In</Button>
+                )}
                 <Footer />
             </main>
         </ModalProvider>

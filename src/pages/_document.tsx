@@ -8,7 +8,7 @@ export default function Document() {
     return (
         <Html>
             <Head>
-                <script src={src} />
+                <script async src={src} />
             </Head>
             <body className="font-body text-black dark:bg-black dark:text-white">
                 <Main />

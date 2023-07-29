@@ -5,12 +5,12 @@ import BandForm from '~/components/Forms/Band'
 import VenueForm from '~/components/Forms/Venue'
 import EventForm from '~/components/Forms/Event'
 // Types
-import { type ModalContextProps, ModalForms } from '../types'
+import { type ModalContextType, ModalForms } from '../types'
 import { type Band, type EventWithBandVenue, type Venue } from '~/types/data'
 // Utils
 import { isBand, isEvent, isVenue } from '~/utils/typeguards'
 
-export default function useModal(): ModalContextProps {
+export default function useModal(): ModalContextType {
     const [showModal, setShowModal] = useState<boolean>(false)
     const [modalContent, setModalContent] = useState<JSX.Element | string>('')
 

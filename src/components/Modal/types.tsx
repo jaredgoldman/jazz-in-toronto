@@ -1,4 +1,4 @@
-export interface ModalContextProps {
+export interface ModalContextType {
     showModal: boolean
     handleModal: (content?: string | JSX.Element) => void
     handleModalForm: (formType: ModalForms) => void

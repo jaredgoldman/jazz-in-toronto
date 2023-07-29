@@ -2,6 +2,7 @@
 import { useState } from 'react'
 // Components
 import Button from '../Button'
+import Image from 'next/image'
 
 interface Props {
     images: string[]
@@ -29,7 +30,10 @@ export default function Gallery({ images }: Props): JSX.Element {
                 >{`<`}</Button>
             )}
             <div>
-                <img src={images[imageIndex]} />
+                <Image
+                    src={images[imageIndex] as string}
+                    alt="pending instagram post"
+                />
             </div>
             {showNavButtons && (
                 <Button

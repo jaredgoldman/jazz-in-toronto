@@ -1,9 +1,12 @@
 // Components
 import { Field, ErrorMessage } from 'formik'
-import { type ModalForms } from '~/components/Modal/types'
 import Button from '~/components/Button'
 // Types
 import { type Venue, type Band } from '~/types/data'
+import {
+    type ModalContextType,
+    type ModalForms
+} from '~/components/Modal/types'
 // Context
 import { useContext } from 'react'
 import { ModalContext } from '~/components/Modal/context/ModalContext'
@@ -26,7 +29,7 @@ export default function Select({
     className = 'flex flex-col mb-5',
     fieldClassName = 'flex items-center border-2 border-black mb-2 text-black'
 }: SelectProps): JSX.Element {
-    const { handleModalForm } = useContext(ModalContext)
+    const { handleModalForm } = useContext(ModalContext) as ModalContextType
     const mappedOptions = optionData.map((option) => {
         return {
             value: option.id,

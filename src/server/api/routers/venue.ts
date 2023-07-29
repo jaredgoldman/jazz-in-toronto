@@ -59,7 +59,7 @@ export const venueRouter = createTRPCRouter({
         .mutation(({ ctx, input }) => {
             const { id, ...venueData } = input
             return ctx.prisma.venue.update({
-                where: { id: input.id },
+                where: { id },
                 data: venueData
             })
         }),

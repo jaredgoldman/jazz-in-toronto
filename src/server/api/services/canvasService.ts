@@ -1,6 +1,10 @@
 // Libraries
 import fs from 'fs'
-import { type Canvas, createCanvas, type CanvasRenderingContext2D } from 'canvas'
+import {
+    type Canvas,
+    createCanvas,
+    type CanvasRenderingContext2D
+} from 'canvas'
 // Types
 import { type EventWithBandVenue } from '~/types/data'
 // Utils
@@ -14,11 +18,7 @@ export default class CanvasService {
     private canvasHeight: number
     private eventsPerCanvas: number
 
-    constructor(
-        eventsPerCanvas = 19,
-        width = 1080,
-        height = 1080
-    ) {
+    constructor(eventsPerCanvas = 19, width = 1080, height = 1080) {
         const { canvas, ctx } = this.getCanvas(width, height)
         this.canvas = canvas
         this.ctx = ctx
@@ -96,7 +96,7 @@ export default class CanvasService {
         // Draw the date rect
         if (date) {
             // Set text properties
-            const day = daysOfTheWeek[date.getDay()]
+            const day = daysOfTheWeek[date.getDay()] as string
             const formattedDate = new Intl.DateTimeFormat('en-US', {
                 dateStyle: 'long'
             }).format(date)
