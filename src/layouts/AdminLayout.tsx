@@ -17,7 +17,8 @@ export default function AdminLayout({
     children,
     showHeaderLinks = true
 }: Props): JSX.Element {
-    const { data: session } = useSession()
+    // const { data: session } = useSession()
+    const session = true
     return (
         <ModalProvider>
             <main>

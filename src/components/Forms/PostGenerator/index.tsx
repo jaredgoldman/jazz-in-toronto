@@ -48,7 +48,9 @@ export default function PostGenerator(): JSX.Element {
                         <DatePicker
                             label="Select a day to generate a post for"
                             name="date"
-                            showTimeSelect={false}
+                            datePickerProps={{
+                                showTimeSelect: false
+                            }}
                         />
 
                         <div>
