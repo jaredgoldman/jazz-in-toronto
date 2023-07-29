@@ -91,7 +91,7 @@ export const adminRouter = createTRPCRouter({
                     id: ctx.session.user.id
                 }
             })
-            if (user?.role === AdminRoles.SUPER_ADMIN) {
+            if (user?.role === AdminRole.SUPER_ADMIN) {
                 return ctx.prisma.admin.delete({
                     where: { id: input.id }
                 })
