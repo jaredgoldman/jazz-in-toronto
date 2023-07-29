@@ -24,7 +24,7 @@ export default function Select({
     optionData,
     modalForm,
     className = 'flex flex-col mb-5',
-    fieldClassName = 'flex items-center border-2 border-black mb-2'
+    fieldClassName = 'flex items-center border-2 border-black mb-2 text-black'
 }: SelectProps): JSX.Element {
     const { handleModalForm } = useContext(ModalContext)
     const mappedOptions = optionData.map((option) => {
@@ -39,7 +39,9 @@ export default function Select({
             <label className="mb-1">{label}</label>
             <div className="flex flex-col">
                 <Field className={fieldClassName} name={name} as="select">
-                    <option value="">Select a {label}</option>
+                    <option value="" disabled selected>
+                        Select a {label}
+                    </option>
                     {mappedOptions.map((option) => {
                         return (
                             <option key={option.value} value={option.value}>

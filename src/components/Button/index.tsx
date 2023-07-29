@@ -8,7 +8,7 @@ interface ButtonProps {
 
 export default function Button({
     children,
-    className = 'border-2 border-black p-1',
+    className = 'border-2 border-black dark:border-white dark:bg-gray p-1',
     onClick,
     type = 'button',
     disabled = false
