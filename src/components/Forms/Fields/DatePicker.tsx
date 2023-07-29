@@ -1,7 +1,12 @@
 // Libraries
 import { useEffect, useState } from 'react'
-import ReactDatePicker from 'react-datepicker'
-import { type FieldInputProps, type FormikProps, Field, ErrorMessage } from 'formik'
+import ReactDatePicker, { ReactDatePickerProps } from 'react-datepicker'
+import {
+    type FieldInputProps,
+    type FormikProps,
+    Field,
+    ErrorMessage
+} from 'formik'
 import 'react-datepicker/dist/react-datepicker.css'
 
 interface Props {
@@ -9,15 +14,15 @@ interface Props {
     name: string
     className?: string
     fieldClassName?: string
-    showTimeSelect?: boolean
+    datePickerProps?: Omit<ReactDatePickerProps, 'onChange'>
 }
 
 export default function DatePickerField({
     label,
     name,
     className = 'flex flex-col mb-5',
-    fieldClassName = 'mb-5 border-2 border-black',
-    showTimeSelect = true
+    fieldClassName = 'mb-5 border-2 border-black text-black',
+    datePickerProps
 }: Props): JSX.Element {
     return (
         <div className={className}>
@@ -26,7 +31,7 @@ export default function DatePickerField({
                 name={name}
                 className={fieldClassName}
                 component={DatePicker}
-                props={{ showTimeSelect }}
+                props={datePickerProps}
             />
             <ErrorMessage name={name} component="div" />
         </div>
@@ -36,29 +41,21 @@ export default function DatePickerField({
 interface DatePickerProps {
     field: FieldInputProps<Date>
     form: FormikProps<any>
-
-    props: {
-        showTimeSelect: boolean
-    }
+    props: Omit<ReactDatePickerProps, 'onChange'>
 }
 
-const DatePicker = ({
-    form,
-    field,
-    props: { showTimeSelect }
-}: DatePickerProps): JSX.Element => {
+const DatePicker = ({ form, field, props }: DatePickerProps): JSX.Element => {
     const [startDate, setStartDate] = useState<Date | null>(new Date())
     useEffect(() => {
         if (startDate !== field.value) form.setFieldValue(field.name, startDate)
     }, [startDate, form, field.name])
 
-    const dateFormat = showTimeSelect ? 'MM/dd/yyyy h:mm aa' : 'MM/dd/yyyy'
     return (
         <ReactDatePicker
+            className='border-2 border-black text-black'
             selected={startDate}
+            {...props}
             onChange={(date: Date) => setStartDate(new Date(date))}
-            showTimeSelect={showTimeSelect}
-            dateFormat={dateFormat}
         />
     )
 }

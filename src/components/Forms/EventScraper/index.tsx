@@ -8,6 +8,7 @@ import { type Venue } from '~/types/data'
 // Utils
 import { api } from '~/utils/api'
 import { DataType } from '~/types/enums'
+import DatePickerField from '../Fields/DatePicker'
 
 interface Props {
     venues: Venue[]
@@ -18,14 +19,9 @@ export default function EventScraper({ venues }: Props): JSX.Element {
         api.event.getVenueEvents.useMutation()
 
     const initialValues = {
-        venueId: ''
+        venueId: '',
+        date: new Date()
     }
-
-    // useEffect(() => {
-    //     if (eventScraperMutation.data) {
-    //         console.log(eventScraperMutation)
-    //     }
-    // }, [eventScraperMutation.data])
 
     return (
         <div className="w-full">
@@ -41,19 +37,30 @@ export default function EventScraper({ venues }: Props): JSX.Element {
                 }}
                 onSubmit={async (values) => {
                     try {
-                        const { venueId } = values
+                        const { venueId, date } = values
                         if (venueId) {
                             mutate({
-                                venueId
+                                venueId,
+                                date
                             })
                         }
                     } catch (error) {
+                        console.log(error)
                         // display error
                     }
                 }}
             >
                 {({ isSubmitting }) => (
                     <Form className="flex flex-col">
+                        <DatePickerField
+                            name="date"
+                            label="Select a month to scrape"
+                            datePickerProps={{
+                                dateFormat: 'MM/yyyy',
+                                showMonthYearPicker: true,
+                                showPreviousMonths: false
+                            }}
+                        />
                         <Select
                             name="venueId"
                             label="Select a venue to scrape"

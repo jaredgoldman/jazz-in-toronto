@@ -22,7 +22,7 @@ export default function SearchBar({ onSearch, searchDate }: Props) {
                     <div className="m-2 flex flex-col">
                         <label>Date</label>
                         <ReactDatePicker
-                            className="border-2 border-black p-1"
+                            className="border-2 border-black p-1 text-black"
                             onChange={(date) => {
                                 onSearch(date, SearchOption.Date)
                                 setStartDate(date)
@@ -34,27 +34,29 @@ export default function SearchBar({ onSearch, searchDate }: Props) {
                 <div className="m-2 flex flex-col">
                     <label>Name</label>
                     <input
-                        className="border-2 border-black p-1"
+                        className="border-2 border-black p-1 text-black"
                         type="text"
                         onChange={(event) =>
                             onSearch(event.target.value, SearchOption.Name)
                         }
+                        placeholder="Filter by name"
                     />
                 </div>
                 <div className="m-2 flex flex-col">
                     <label>Website</label>
                     <input
-                        className="border-2 border-black p-1"
+                        className="border-2 border-black p-1 text-black"
                         type="text"
                         onChange={(event) =>
                             onSearch(event.target.value, SearchOption.Website)
                         }
+                        placeholder="Filter by website"
                     />
                 </div>
                 <div className="m-2 flex flex-col">
                     <label>Instagram Handle</label>
                     <input
-                        className="border-2 border-black p-1"
+                        className="border-2 border-black p-1 text-black"
                         type="text"
                         onChange={(event) =>
                             onSearch(
@@ -62,6 +64,7 @@ export default function SearchBar({ onSearch, searchDate }: Props) {
                                 SearchOption.InstagramHandle
                             )
                         }
+                        placeholder="Filter by instagram handle"
                     />
                 </div>
             </div>

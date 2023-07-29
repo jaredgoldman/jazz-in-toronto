@@ -100,8 +100,20 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                                 modalForm={ModalForms.Band}
                             />
                         )}
-                        <DatePicker name="startDate" label="Start Date" />
-                        <DatePicker name="endDate" label="End Date" />
+                        <DatePicker
+                            name="startDate"
+                            label="Start Date"
+                            datePickerProps={{
+                                showTimeSelect: true
+                            }}
+                        />
+                        <DatePicker
+                            name="endDate"
+                            label="End Date"
+                            datePickerProps={{
+                                showTimeSelect: true
+                            }}
+                        />
                         <Input
                             name="instagramHandle"
                             label="Instagram Handle"

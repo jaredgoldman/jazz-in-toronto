@@ -3,46 +3,38 @@ import puppeteer from 'puppeteer'
 import { cheerioJsonMapper, type JsonTemplate } from 'cheerio-json-mapper'
 // types
 import { type Venue, type PartialEvent } from '~/types/data'
+import { Page } from 'puppeteer'
 // Utils
 import { wait } from '~/utils/shared'
-import { nonNullable } from '~/utils/typeguards'
 import { type RexEvent, type VenueEvents } from './types'
 // Data
 import rexJson from './templates/rex.json'
 
 export default class ScraperService {
     private venue: Venue
+    private page?: Page
+    private initialized: boolean = false
 
     constructor(venue: Venue) {
-        this.venue = venue
-    }
-
-    public async getEvents() {
-        if (!this.venue.website || !this.venue.eventsPath) {
+        if (!venue.website || !venue.eventsPath) {
             throw new Error('No website or events path provided')
         }
-        const url = `${this.venue.website}${this.venue.eventsPath}`
-        const content = await this.loadContents(url)
-        return await this.scrapeSite(content)
+        this.venue = venue
+        this.page = new Page()
     }
 
-    private async loadContents(url: string): Promise<string> {
-        const browser = await puppeteer.launch()
-        const page = await browser.newPage()
-        await page.setViewport({ width: 1920, height: 1080 })
-        await page.goto(url, {
-            waitUntil: 'domcontentloaded'
-        })
-        // wait for any additional js to load
-        // TODO: Wait for certain selector
-        await wait(1000)
-        return await page.content()
+    public async init(): Promise<void> {
+        await this.loadPage()
+        this.initialized = true
     }
 
-    private async scrapeSite(content: string): Promise<PartialEvent[]> {
+    public async getEvents(date: Date): Promise<PartialEvent[]> {
+        if (!this.initialized) {
+            throw new Error('Scraper not initialized')
+        }
         switch (this.venue.name.toLowerCase()) {
             case 'the rex':
-                return this.scrapeRexEvents(content)
+                return await this.scrapeRexEvents(date)
             case 'jazz bistro':
             // return this.scrapeJazzBistroEvents(content)
             case 'drom taberna':
@@ -52,15 +44,54 @@ export default class ScraperService {
         }
     }
 
+    private async loadPage(): Promise<void> {
+        const url = `${this.venue.website}${this.venue.eventsPath}`
+        const browser = await puppeteer.launch()
+        const page = await browser.newPage()
+        await page.setViewport({ width: 1920, height: 1080 })
+        await page.goto(url, {
+            waitUntil: 'domcontentloaded'
+        })
+        // wait for any additional js to load
+        // TODO: Wait for certain selector
+        await wait(1000)
+        this.page = page
+    }
+
     private async mapEvents<T>(html: string, json: JsonTemplate): Promise<T> {
         return (await cheerioJsonMapper(html, json)) as T
     }
 
-    private async scrapeRexEvents(html: string): Promise<PartialEvent[]> {
+    private async scrapeRexEvents(date: Date): Promise<PartialEvent[]> {
+        if (!this.page) {
+            throw new Error('No page loaded')
+        }
+        const monthIndex = date.getMonth()
+        const currentMonthIndex = new Date().getMonth()
+
+        const nextMonthButton = await this.page.waitForSelector(
+            `${rexJson['$']} > .yui3-calendar-header > .yui3-calendarnav-nextmonth`
+        )
+
+        // If the month is in the future, we need to click the next month button
+        if (nextMonthButton) {
+            for (let i = 0; i < monthIndex - currentMonthIndex; i++) {
+                await nextMonthButton.click()
+            }
+        }
+
+        await wait(500)
+
+        const html = await this.page.content()
+
         const {
             monthAndYear,
             monthlyEvents: { dailyEvents }
         } = await this.mapEvents<VenueEvents<RexEvent>>(html, rexJson)
+
+        if (!dailyEvents.length) {
+            throw new Error('Error getting daily events')
+        }
 
         // Parse calendar heading
         if (monthAndYear.split(' ').length !== 2) {
@@ -81,10 +112,14 @@ export default class ScraperService {
         // Map partial events, convert strings to numbers where necessary
         const processedEvents: PartialEvent[] = []
         dailyEvents.forEach(({ date, sets }: RexEvent) => {
+            console.log({
+                date,
+                sets
+            })
             if (date && sets?.each) {
-                console.log(sets.each)
                 // map through sets in each daily events object
                 sets.each.forEach(({ name, time }) => {
+                    // parse time and date
                     const tfTime = time.split(/\s+/)[1]!
                     const hours = Number(tfTime.split(':')[0])
                     const minutes = Number(tfTime.split(':')[1])
@@ -94,6 +129,7 @@ export default class ScraperService {
                         year,
                         month,
                         day,
+                        // Rex sets are 2 hours long
                         hours + 2,
                         minutes
                     )
