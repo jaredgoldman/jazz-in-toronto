@@ -30,7 +30,9 @@ export default function Calendar(): JSX.Element {
                 <Button onClick={() => changeMonth(-1)}>Previous</Button>
                 <Button onClick={() => changeMonth(1)}>Next</Button>
             </div>
-            <div className="grid grid-cols-7">{calendarDays}</div>
+            <div className="grid grid-cols-7 gap-x-1 gap-y-1">
+                {calendarDays}
+            </div>
         </main>
     )
 }

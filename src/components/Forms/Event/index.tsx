@@ -47,7 +47,7 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
           }
 
     return (
-        <div className="m-5 w-1/2">
+        <div className="px-40">
             <h1 className="text-bold mb-5 text-center">
                 {currentValues ? 'Edit gig' : 'Add your gig here!'}
             </h1>

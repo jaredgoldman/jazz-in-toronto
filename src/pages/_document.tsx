@@ -10,7 +10,7 @@ export default function Document() {
             <Head>
                 <script src={src} />
             </Head>
-            <body>
+            <body className="font-body text-black dark:bg-black dark:text-white">
                 <Main />
                 <NextScript />
             </body>

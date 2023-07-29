@@ -37,7 +37,7 @@ export default function Select({
     return (
         <div className={className}>
             <label className="mb-1">{label}</label>
-            <div className="flex w-2/5 flex-col">
+            <div className="flex flex-col">
                 <Field className={fieldClassName} name={name} as="select">
                     <option value="">Select a {label}</option>
                     {mappedOptions.map((option) => {

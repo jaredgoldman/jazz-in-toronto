@@ -8,14 +8,21 @@ import { HeaderType } from './types'
 
 interface Props {
     headerType: HeaderType
-    showLinks: boolean
+    showLinks?: boolean
 }
 
-export default function Header({ headerType, showLinks }: Props): JSX.Element {
-    const { session } = useSession()
+export default function Header({
+    headerType,
+    showLinks = true
+}: Props): JSX.Element {
+    const { data: session } = useSession()
     return (
         <header className="w-full flex-col items-center text-center">
-            <Link href="/">JAZZINTORONTO</Link>
+            <div className="m-8">
+                <Link className="text-2xl font-bold" href="/">
+                    JAZZINTORONTO
+                </Link>
+            </div>
             <h2>
                 Connections Toronto's Jazz Musicians, Audiences, Venues and
                 Presenters

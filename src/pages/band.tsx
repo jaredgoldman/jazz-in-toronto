@@ -5,7 +5,9 @@ import BandForm from '~/components/Forms/Band'
 export default function Book(): JSX.Element {
     return (
         <RootLayout>
-            <BandForm />
+            <main>
+                <BandForm />
+            </main>
         </RootLayout>
     )
 }
