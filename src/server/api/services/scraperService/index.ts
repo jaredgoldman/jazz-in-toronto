@@ -57,9 +57,10 @@ export default class ScraperService {
     }
 
     private async scrapeRexEvents(html: string): Promise<PartialEvent[]> {
-        const { monthAndYear, events } = await this.mapEvents<
-            VenueEvents<RexEvent>
-        >(html, rexJson)
+        const {
+            monthAndYear,
+            monthlyEvents: { dailyEvents }
+        } = await this.mapEvents<VenueEvents<RexEvent>>(html, rexJson)
 
         // Parse calendar heading
         if (monthAndYear.split(' ').length !== 2) {
@@ -78,13 +79,16 @@ export default class ScraperService {
         const month = new Date(`${monthString} 1 ${year}`).getMonth()
 
         // Map partial events, convert strings to numbers where necessary
-        const eventData = events.each
-            .map((event: RexEvent) => {
-                if (event.date && event?.description) {
-                    const time = event.description.time.split(/\s+/)[1]!
-                    const hours = Number(time.split(':')[0])
-                    const minutes = Number(time.split(':')[1])
-                    const day = Number(event.date.date)
+        const processedEvents: PartialEvent[] = []
+        dailyEvents.forEach(({ date, sets }: RexEvent) => {
+            if (date && sets?.each) {
+                console.log(sets.each)
+                // map through sets in each daily events object
+                sets.each.forEach(({ name, time }) => {
+                    const tfTime = time.split(/\s+/)[1]!
+                    const hours = Number(tfTime.split(':')[0])
+                    const minutes = Number(tfTime.split(':')[1])
+                    const day = Number(date.date)
                     const startDate = new Date(year, month, day, hours, minutes)
                     const endDate = new Date(
                         year,
@@ -93,16 +97,17 @@ export default class ScraperService {
                         hours + 2,
                         minutes
                     )
-                    return {
+
+                    processedEvents.push({
                         startDate,
                         endDate,
-                        name: event.description.name,
+                        name: name,
                         venueId: this.venue.id
-                    }
-                }
-            }) // filter events via typeguard
-            .filter(nonNullable)
-        return eventData
+                    })
+                })
+            }
+        })
+        return processedEvents
     }
 
     // private async scrapeJazzBistroEvents(

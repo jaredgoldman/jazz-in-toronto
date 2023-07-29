@@ -1,7 +1,7 @@
 export interface VenueEvents<T> {
     monthAndYear: string
-    events: {
-        each: T[]
+    monthlyEvents: {
+        dailyEvents: T[]
     }
 }
 
@@ -10,8 +10,12 @@ export interface RexEvent {
         day: string
         date: string
     }
-    description: {
-        name: string
-        time: string
+    sets: {
+        each: [
+            {
+                name: string
+                time: string
+            }
+        ]
     }
 }

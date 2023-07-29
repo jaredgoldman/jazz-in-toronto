@@ -25,6 +25,7 @@ describe('Scraper service', () => {
     it('should be able to scrape a website and return an array of events', async () => {
         const scraperService = new ScraperService(venue)
         const events = await scraperService.getEvents()
+        // console.log(events)
         events.forEach((event) => {
             // confirm that all events have a name, date, and time
             expect(event.name).toBeDefined()

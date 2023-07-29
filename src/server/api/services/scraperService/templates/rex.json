@@ -1,9 +1,9 @@
 {
     "$": "body > .site-wrapper > main > .sections > .page-section > .content-wrapper > .content > .sqs-layout > .sqs-row > .span-7 > .sqs-block > .sqs-block-content > .yui3-widget > .yui3-squarespacecalendar-content > .yui3-calendar-pane",
     "monthAndYear": "> .yui3-calendar-header > h1 > .yui3-calendar-header-label",
-    "events": {
+    "monthlyEvents": {
         "$": "> .yui3-u-1 > .yui3-calendar-grid > tbody",
-        "each": [
+        "dailyEvents": [
             {
                 "$": "> tr > .yui3-calendar-day",
                 "date": {
@@ -11,10 +11,15 @@
                     "day": "> .marker-dayname",
                     "date": "> .marker-daynum"
                 },
-                "description": {
-                    "$": "> .itemlist > .item > .item-link",
-                    "time": "> .item-time",
-                    "name": "> .item-title"
+                "sets": {
+                    "$": "> .itemlist",
+                    "each": [
+                        {
+                            "$": "> .item > .item-link",
+                            "time": "> .item-time",
+                            "name": "> .item-title"
+                        }
+                    ]
                 }
             }
         ]
