@@ -1,9 +1,9 @@
 // Libraries
-import puppeteer from 'puppeteer'
+import puppeteer from 'puppeteer-core'
 import { cheerioJsonMapper, type JsonTemplate } from 'cheerio-json-mapper'
 // types
 import { type Venue, type PartialEvent } from '~/types/data'
-import { Page } from 'puppeteer'
+import { Page } from 'puppeteer-core'
 // Utils
 import { wait } from '~/utils/shared'
 import { type RexEvent, type VenueEvents } from './types'
