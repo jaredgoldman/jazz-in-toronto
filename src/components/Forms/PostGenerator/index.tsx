@@ -1,30 +1,29 @@
 // Libraries
-import { useState, useEffect } from 'react'
+import { useState, useEffect, RefObject } from 'react'
 // Components
 import { Formik, Form } from 'formik'
 import Button from '~/components/Button'
-import Gallery from '~/components/Gallery'
+import Canvas from './components/canvas'
 import { DatePicker } from '../Fields'
 // Utils
 import { api } from '~/utils/api'
+// Hooks
+import useCanvas from './hooks/useCanvas'
 
 interface Errors {
     date?: string
 }
 
 export default function PostGenerator(): JSX.Element {
-    const [postImages, setPostImages] = useState<string[]>([])
-    const { mutate, data, isLoading } = api.event.post.useMutation()
+    const [date, setDate] = useState<Date>(new Date())
+    const { data: events, isLoading } = api.event.getAllByDay.useQuery({
+        date
+    })
+    const canvases = useCanvas(events, date)
 
     const initialValues = {
         date: new Date()
     }
-
-    useEffect(() => {
-        if (data) {
-            setPostImages(data)
-        }
-    }, [data])
 
     return (
         <div className="w-full">
@@ -40,8 +39,7 @@ export default function PostGenerator(): JSX.Element {
                 }}
                 onSubmit={(values) => {
                     try {
-                        setPostImages([])
-                        mutate(values)
+                        setDate(values.date)
                     } catch (error) {
                         // display error
                     }
@@ -58,24 +56,12 @@ export default function PostGenerator(): JSX.Element {
                         />
 
                         <div>
-                            <Button type="submit" disabled={isSubmitting}>
-                                Submit
-                            </Button>
+                            <Button type="submit">Submit</Button>
                         </div>
                     </Form>
                 )}
             </Formik>
-            <div>
-                {isLoading && <div>Loading...</div>}
-                {postImages.length && (
-                    <>
-                        <Gallery images={postImages} />
-                        <div>
-                            <Button>Post to Instagram</Button>
-                        </div>
-                    </>
-                )}
-            </div>
+            {canvases.length > 0 && canvases}
         </div>
     )
 }

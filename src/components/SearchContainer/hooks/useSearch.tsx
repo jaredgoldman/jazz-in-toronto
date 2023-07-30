@@ -25,7 +25,6 @@ export default function useSearch(
     searchDate?: Date,
     setSearchDate?: (date: Date) => void
 ) {
-    console.log(items)
     const [searchData, setSearchData] = useState<SearchData>({
         name: '',
         date: searchDate || null,
