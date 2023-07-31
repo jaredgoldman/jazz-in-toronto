@@ -14,6 +14,7 @@ interface Props {
     name: string
     className?: string
     fieldClassName?: string
+    outerOnChange?: (startDate: Date) => void
     datePickerProps?: Omit<ReactDatePickerProps, 'onChange'>
 }
 
@@ -22,6 +23,7 @@ export default function DatePickerField({
     name,
     className = 'flex flex-col mb-5',
     fieldClassName = 'mb-5 border-2 border-black text-black',
+    outerOnChange,
     datePickerProps
 }: Props): JSX.Element {
     return (
@@ -31,7 +33,7 @@ export default function DatePickerField({
                 name={name}
                 className={fieldClassName}
                 component={DatePicker}
-                props={datePickerProps}
+                props={{ ...datePickerProps, outerOnChange }}
             />
             <ErrorMessage name={name} component="div" />
         </div>
@@ -41,15 +43,22 @@ export default function DatePickerField({
 interface DatePickerProps {
     field: FieldInputProps<Date>
     form: FormikProps<Date>
-    props: Omit<ReactDatePickerProps, 'onChange'>
+    props: ReactDatePickerProps & { outerOnChange?: (startDate: Date) => void }
 }
 
 const DatePicker = ({ form, field, props }: DatePickerProps): JSX.Element => {
     const [startDate, setStartDate] = useState<Date | null>(new Date())
     useEffect(() => {
+        const setStartDateFromField = async () => {
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            if (startDate && startDate !== field.value) {
+                props.outerOnChange && props.outerOnChange(startDate)
+                await form.setFieldValue(field.name, startDate)
+            }
+        }
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        if (startDate !== field.value) form.setFieldValue(field.name, startDate)
-    }, [startDate, form, field.name, field.value])
+        setStartDateFromField()
+    }, [startDate, form, field.name, field.value, props])
 
     return (
         <ReactDatePicker

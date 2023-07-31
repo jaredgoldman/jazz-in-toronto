@@ -1,19 +1,19 @@
 // Libraries
 import { z } from 'zod'
-import cloudinary from 'cloudinary'
+// import cloudinary from 'cloudinary'
 import {
     createTRPCRouter,
     publicProcedure,
     protectedProcedure
 } from '~/server/api/trpc'
 // Types
-import { type CloudinaryService } from '~/types/library'
+// import { type CloudinaryService } from '~/types/library'
 // Utils
 import addDays from 'date-fns/addDays'
 // Services
 import ScraperService from '../services/scraperService'
-import PostService from '../services/postService'
-import CanvasService from '../services/canvasService'
+// import PostService from '../services/postService'
+// import CanvasService from '../services/canvasService'
 
 export const eventRouter = createTRPCRouter({
     create: publicProcedure
@@ -61,13 +61,11 @@ export const eventRouter = createTRPCRouter({
     getAllByDay: publicProcedure
         .input(z.object({ date: z.date() }))
         .query(({ ctx, input }) => {
-            const startDate = new Date(input.date.setHours(0, 0, 0, 0))
-            const endDate = new Date(addDays(startDate, 1))
             return ctx.prisma.event.findMany({
                 where: {
                     startDate: {
-                        gte: startDate,
-                        lt: endDate
+                        gte: new Date(input.date.setHours(0, 0, 0, 0)),
+                        lt: new Date(addDays(input.date, 1))
                     }
                 },
                 include: {
@@ -195,20 +193,9 @@ export const eventRouter = createTRPCRouter({
         }),
 
     post: publicProcedure
-        .input(z.object({ date: z.date() }))
-        .mutation(async ({ ctx, input }) => {
+        .input(z.object({ blobs: z.record(z.unknown()) }))
+        .mutation(({ input }) => {
             // Fetch daily Events
-            const events = await ctx.prisma.event.findMany({
-                where: {
-                    startDate: {
-                        gte: new Date(input.date),
-                        lt: new Date(addDays(input.date, 1))
-                    }
-                },
-                include: {
-                    band: true,
-                    venue: true
-                }
-            })
+            console.log(input.blobs)
         })
 })

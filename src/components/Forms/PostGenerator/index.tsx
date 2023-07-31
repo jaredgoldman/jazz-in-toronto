@@ -1,9 +1,8 @@
 // Libraries
-import { useState, useEffect, RefObject } from 'react'
+import { useState } from 'react'
 // Components
 import { Formik, Form } from 'formik'
 import Button from '~/components/Button'
-import Canvas from './components/canvas'
 import { DatePicker } from '../Fields'
 // Utils
 import { api } from '~/utils/api'
@@ -15,12 +14,13 @@ interface Errors {
 }
 
 export default function PostGenerator(): JSX.Element {
-    const [date, setDate] = useState<Date>(new Date(Date.now()))
+    const [date, setDate] = useState<Date>(new Date())
+    const postMutation = api.event.post.useMutation()
     const { data: events } = api.event.getAllByDay.useQuery({
         date
     })
 
-    const canvases = useCanvas(events, date)
+    const { canvases, blobs } = useCanvas(events, date)
 
     const initialValues = {
         date: new Date()
@@ -38,31 +38,44 @@ export default function PostGenerator(): JSX.Element {
                     }
                     return errors
                 }}
-                onSubmit={(values) => {
+                onSubmit={() => {
                     try {
-                        setDate(values.date)
+                        postMutation.mutate({ blobs })
                     } catch (error) {
                         // display error
                     }
                 }}
             >
-                {({ isSubmitting }) => (
+                {() => (
                     <Form className="flex flex-col">
                         <DatePicker
                             label="Select a day to generate a post for"
                             name="date"
+                            outerOnChange={setDate}
                             datePickerProps={{
                                 showTimeSelect: false
                             }}
                         />
-
-                        <div>
-                            <Button type="submit">Submit</Button>
-                        </div>
+                        <Button type="submit">Generate Post</Button>
                     </Form>
                 )}
             </Formik>
-            {canvases.length > 0 && canvases}
+            {canvases.length && (
+                <div className="my-3 flex w-full justify-center">
+                    <div className="grid grid-cols-3 gap-1">
+                        {canvases.map((canvas, index) => {
+                            return (
+                                <div
+                                    className="flex items-center justify-center "
+                                    key={index}
+                                >
+                                    {canvas}
+                                </div>
+                            )
+                        })}
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

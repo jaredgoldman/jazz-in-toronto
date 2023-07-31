@@ -21,22 +21,22 @@ const seed = async () => {
 
     const oneDay = 60 * 60 * 24 * 1000
     // create 100 days with 100 events
-    // for (let i = 0; i < 100; i++) {
-    //     const events = bandsData.map((band) => {
-    //         return {
-    //             name: `Event ${i + 1}`,
-    //             startDate: new Date(Date.now() + i * oneDay),
-    //             endDate: new Date(Date.now() + i * oneDay + oneDay),
-    //             photoPath: 'https://picsum.photos/200/300',
-    //             instagramHandle: `@event${i + 1}`,
-    //             website: `https://google.com`,
-    //             bandId: band.id,
-    //             venueId: venuesData[0]?.id as Venue['id']
-    //         }
-    //     })
-    //
-    //     await prisma.event.createMany({ data: events })
-    // }
+    for (let i = 0; i < 100; i++) {
+        const events = bandsData.map((band) => {
+            return {
+                name: `Event ${i + 1}`,
+                startDate: new Date(Date.now() + i * oneDay),
+                endDate: new Date(Date.now() + i * oneDay + oneDay),
+                photoPath: 'https://picsum.photos/200/300',
+                instagramHandle: `@event${i + 1}`,
+                website: `https://google.com`,
+                bandId: band.id,
+                venueId: venuesData[0]?.id as Venue['id']
+            }
+        })
+
+        await prisma.event.createMany({ data: events })
+    }
     await prisma.admin.create({
         data: {
             email: 'test@test.com',
