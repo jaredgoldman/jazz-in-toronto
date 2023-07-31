@@ -96,7 +96,8 @@ export default class CanvasService {
         // Draw the date rect
         if (date) {
             // Set text properties
-            const day = daysOfTheWeek[date.getDay()] as string
+            const day = daysOfTheWeek[date.getDay() - 1] as string
+            console.log('DAY', day)
             const formattedDate = new Intl.DateTimeFormat('en-US', {
                 dateStyle: 'long'
             }).format(date)

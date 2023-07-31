@@ -6,7 +6,6 @@ export default function useCanvas(
     date: Date,
     eventsPerCanvas = 19
 ) {
-    console.log('EVENTS', events)
     const canvases: JSX.Element[] = []
     // while (events?.length) {
     if (events) {

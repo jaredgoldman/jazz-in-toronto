@@ -61,11 +61,13 @@ export const eventRouter = createTRPCRouter({
     getAllByDay: publicProcedure
         .input(z.object({ date: z.date() }))
         .query(({ ctx, input }) => {
+            const startDate = new Date(input.date.setHours(0, 0, 0, 0))
+            const endDate = new Date(addDays(startDate, 1))
             return ctx.prisma.event.findMany({
                 where: {
                     startDate: {
-                        gte: new Date(input.date),
-                        lt: new Date(addDays(input.date, 1))
+                        gte: startDate,
+                        lt: endDate
                     }
                 },
                 include: {
@@ -208,13 +210,5 @@ export const eventRouter = createTRPCRouter({
                     venue: true
                 }
             })
-
-            const canvasService = new CanvasService()
-            const postService = new PostService(
-                events,
-                cloudinary.v2 as CloudinaryService
-            )
-
-            return await postService.createSavePost(canvasService, input.date)
         })
 })

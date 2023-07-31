@@ -2,6 +2,7 @@ import { useRef, useEffect } from 'react'
 import { EventWithBandVenue } from '~/types/data'
 import { getFormattedTime } from '~/utils/date'
 import { daysOfTheWeek } from '~/utils/constants'
+import { getDay } from 'date-fns'
 
 interface Props {
     events: EventWithBandVenue[]
@@ -67,7 +68,7 @@ export default function Canvas({
             // Draw the date rect
             if (date) {
                 // Set text properties
-                const day = daysOfTheWeek[date.getDay()] as string
+                const day = daysOfTheWeek[getDay(date)] as string
                 const formattedDate = new Intl.DateTimeFormat('en-US', {
                     dateStyle: 'long'
                 }).format(date)

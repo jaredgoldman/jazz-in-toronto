@@ -15,10 +15,11 @@ interface Errors {
 }
 
 export default function PostGenerator(): JSX.Element {
-    const [date, setDate] = useState<Date>(new Date())
-    const { data: events, isLoading } = api.event.getAllByDay.useQuery({
+    const [date, setDate] = useState<Date>(new Date(Date.now()))
+    const { data: events } = api.event.getAllByDay.useQuery({
         date
     })
+
     const canvases = useCanvas(events, date)
 
     const initialValues = {
