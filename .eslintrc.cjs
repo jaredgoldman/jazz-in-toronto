@@ -21,6 +21,7 @@ const config = {
     plugins: ['@typescript-eslint'],
     extends: ['next/core-web-vitals', 'plugin:@typescript-eslint/recommended'],
     rules: {
+        'react/no-unescaped-entities': 'off',
         '@typescript-eslint/no-floating-promises': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',
         '@typescript-eslint/consistent-type-imports': [
