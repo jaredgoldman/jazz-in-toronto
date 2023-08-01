@@ -6,7 +6,9 @@ export default function PrivacyPolicy() {
             <main>
                 <h1>Privacy Policy</h1>
                 <p>
-                    Last updated: [Date]
+                    <br />
+                    Last updated: August 1st, 2023
+                    <br />
                     <br />
                     Jazz In Toronto ("us", "we", or "our") operates [your
                     website or application URL] (the "Service"). This page
@@ -19,8 +21,8 @@ export default function PrivacyPolicy() {
                     and use of information in accordance with this policy.
                 </p>
                 <br />
+                <h2>Information Collection and Use</h2>
                 <p>
-                    <h2>Information Collection and Use</h2>
                     <br />
                     While using our Service, we may ask you to provide us with
                     certain personally identifiable information that can be used
@@ -30,8 +32,8 @@ export default function PrivacyPolicy() {
                     information ("Personal Information").
                 </p>
                 <br />
+                <h2>Log Data</h2>
                 <p>
-                    <h2>Log Data</h2>
                     <br />
                     We collect information that your browser sends whenever you
                     visit our Service ("Log Data"). This Log Data may include
@@ -41,8 +43,8 @@ export default function PrivacyPolicy() {
                     time spent on those pages and other statistics.
                 </p>
                 <br />
+                <h2>Cookies</h2>
                 <p>
-                    <h2>Cookies</h2>
                     <br />
                     Cookies are files with a small amount of data, which may
                     include an anonymous unique identifier. Cookies are sent to
@@ -57,8 +59,8 @@ export default function PrivacyPolicy() {
                     we recommend that you leave them turned on.
                 </p>
                 <br />
+                <h2>Service Providers</h2>
                 <p>
-                    <h2>Service Providers</h2>
                     <br />
                     We may employ third party companies and individuals to
                     facilitate our Service, to provide the Service on our
@@ -69,8 +71,8 @@ export default function PrivacyPolicy() {
                     disclose or use your information for any other purpose.
                 </p>
                 <br />
+                <h2>Security</h2>
                 <p>
-                    <h2>Security</h2>
                     <br />
                     The security of your Personal Information is important to
                     us, and we strive to implement and maintain reasonable,
@@ -84,8 +86,8 @@ export default function PrivacyPolicy() {
                     we have collected from you.
                 </p>
                 <br />
+                <h2>Links to Other Sites</h2>
                 <p>
-                    <h2>Links to Other Sites</h2>
                     <br />
                     Our Service may contain links to other sites. If you click
                     on a third-party link, you will be directed to that site.
@@ -97,8 +99,8 @@ export default function PrivacyPolicy() {
                     or practices of any third-party sites or services.
                 </p>
                 <br />
+                <h2>Changes to This Privacy Policy</h2>
                 <p>
-                    <h2>Changes to This Privacy Policy</h2>
                     <br />
                     This Privacy Policy is effective as of [Date] and will
                     remain in effect except concerning any changes in its
@@ -113,7 +115,7 @@ export default function PrivacyPolicy() {
                     your consent to abide and be bound by the modified Privacy
                     Policy.
                 </p>
-
+                <br />
             </main>
         </RootLayout>
     )
