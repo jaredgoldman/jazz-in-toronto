@@ -72,7 +72,7 @@ export default function PostGenerator(): JSX.Element {
                         />
                         {canvases.length && (
                             <div className="my-3 flex w-full justify-center">
-                                <div className="grid grid-cols-3 gap-1">
+                                <div className="flex">
                                     {canvases.map((canvas, index) => {
                                         return (
                                             <div

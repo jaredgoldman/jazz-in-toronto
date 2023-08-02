@@ -3,6 +3,7 @@ import { type EventWithBandVenue } from '~/types/data'
 import { getFormattedTime } from '~/utils/date'
 import { daysOfTheWeek } from '~/utils/constants'
 import { getDay } from 'date-fns'
+import FileUploadButton from '~/components/FileUpload'
 
 interface Props {
     events: EventWithBandVenue[]
@@ -11,6 +12,7 @@ interface Props {
     currentIndex: number
     width?: number
     height?: number
+    showFileUpload?: boolean
 }
 
 export default function Canvas({
@@ -19,7 +21,8 @@ export default function Canvas({
     fileCallback,
     currentIndex,
     width = 1080,
-    height = 1080
+    height = 1080,
+    showFileUpload = true
 }: Props) {
     const [src, setSrc] = useState<string | undefined>('')
     const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -160,7 +163,14 @@ export default function Canvas({
                 width={width}
                 height={height}
             ></canvas>
-            {src && <img src={src} alt="post" />}
+            <div className="flex overflow-x-auto whitespace-nowrap">
+                {src && (
+                    <div className="w-20 object-contain">
+                        <img src={src} className="h-full w-full" alt="post" />
+                    </div>
+                )}
+                {showFileUpload && <FileUploadButton />}
+            </div>
         </div>
     )
 }
