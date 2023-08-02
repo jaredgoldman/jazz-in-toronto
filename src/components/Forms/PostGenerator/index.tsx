@@ -1,5 +1,5 @@
 // Libraries
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 // Components
 import { Formik, Form } from 'formik'
 import Button from '~/components/Button'
@@ -7,7 +7,7 @@ import { DatePicker } from '../Fields'
 // Utils
 import { api } from '~/utils/api'
 // Hooks
-import useCanvas from './hooks/useCanvas'
+import useCreatePosts from './hooks/useCreatePosts'
 import { useUploadThing } from '~/hooks/useUploadThing'
 
 interface Errors {
@@ -31,7 +31,11 @@ export default function PostGenerator(): JSX.Element {
         }
     })
 
-    const { canvases, files } = useCanvas(events, date)
+    useCreatePosts(events, date)
+
+    // useEffect(() => {
+    //     console.log('POSTDATA', postData)
+    // }, [postData])
 
     const initialValues = {
         date: new Date()
@@ -51,10 +55,10 @@ export default function PostGenerator(): JSX.Element {
                 }}
                 onSubmit={async () => {
                     try {
-                        const res = await startUpload(Object.values(files))
-                        if (res) {
-                            postMutation.mutate(res)
-                        }
+                        // const res = await startUpload(Object.values(files))
+                        // if (res) {
+                        //     postMutation.mutate(res)
+                        // }
                     } catch (error) {
                         // display error
                     }
@@ -70,22 +74,6 @@ export default function PostGenerator(): JSX.Element {
                                 showTimeSelect: false
                             }}
                         />
-                        {canvases.length && (
-                            <div className="my-3 flex w-full justify-center">
-                                <div className="grid grid-cols-3 gap-1">
-                                    {canvases.map((canvas, index) => {
-                                        return (
-                                            <div
-                                                className="flex items-center justify-center "
-                                                key={index}
-                                            >
-                                                {canvas}
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-                            </div>
-                        )}
                         <div className="mb-3 flex w-full justify-center">
                             <Button type="submit">Upload</Button>
                         </div>
