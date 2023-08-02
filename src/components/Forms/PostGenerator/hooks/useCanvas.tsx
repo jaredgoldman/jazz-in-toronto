@@ -7,25 +7,22 @@ export default function useCanvas(
     date: Date,
     eventsPerCanvas = 19
 ) {
-    const [blobs, setBlobs] = useState<{ [key: number]: Blob }>({})
+    const files: { [key: string]: File } = {}
     const canvases: JSX.Element[] = []
     const eventsCopy = events ? [...events] : []
     let currentIndex = 0
 
-    const getBlob = (
+    const getBlob = async (
         canvas: HTMLCanvasElement | null,
         currentIndex: number
-    ): Promise<Blob> => {
-        return new Promise(() => {
-            canvas?.toBlob((blob) => {
-                if (blob) {
-                    setBlobs((prevBlobs) => ({
-                        ...prevBlobs,
-                        [currentIndex]: blob
-                    }))
-                }
-            })
+    ): Promise<Blob | undefined> => {
+        if (files[currentIndex] || !canvas) return
+        const dataURL = canvas.toDataURL('image/png')
+        const blob = await (await fetch(dataURL)).blob()
+        const file = new File([blob], `ig_post-${currentIndex + 1}.png`, {
+            type: 'image/png'
         })
+        files[currentIndex] = file
     }
 
     while (eventsCopy?.length) {
@@ -45,6 +42,6 @@ export default function useCanvas(
 
     return {
         canvases,
-        blobs
+        files
     }
 }

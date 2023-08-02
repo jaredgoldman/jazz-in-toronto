@@ -1,5 +1,6 @@
 // Libraries
 import { z } from 'zod'
+import fs from 'fs'
 // import cloudinary from 'cloudinary'
 import {
     createTRPCRouter,
@@ -192,10 +193,7 @@ export const eventRouter = createTRPCRouter({
             }
         }),
 
-    post: publicProcedure
+    post: protectedProcedure
         .input(z.object({ blobs: z.record(z.unknown()) }))
-        .mutation(({ input }) => {
-            // Fetch daily Events
-            console.log(input.blobs)
-        })
+        .mutation(({ input }) => {})
 })

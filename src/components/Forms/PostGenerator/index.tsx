@@ -1,5 +1,5 @@
 // Libraries
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 // Components
 import { Formik, Form } from 'formik'
 import Button from '~/components/Button'
@@ -8,6 +8,7 @@ import { DatePicker } from '../Fields'
 import { api } from '~/utils/api'
 // Hooks
 import useCanvas from './hooks/useCanvas'
+import { useUploadThing } from '~/hooks/useUploadThing'
 
 interface Errors {
     date?: string
@@ -20,7 +21,22 @@ export default function PostGenerator(): JSX.Element {
         date
     })
 
-    const { canvases, blobs } = useCanvas(events, date)
+    const { startUpload } = useUploadThing({
+        endpoint: 'uploadPosts',
+        onClientUploadComplete: () => {
+            alert("I'm done!")
+        },
+        onUploadError: (e) => {
+            console.log(e)
+            alert('Error!')
+        }
+    })
+
+    const { canvases, files } = useCanvas(events, date)
+
+    useEffect(() => {
+        console.log(files)
+    }, [files])
 
     const initialValues = {
         date: new Date()
@@ -40,7 +56,7 @@ export default function PostGenerator(): JSX.Element {
                 }}
                 onSubmit={() => {
                     try {
-                        postMutation.mutate({ blobs })
+                        startUpload(Object.values(files))
                     } catch (error) {
                         // display error
                     }
@@ -56,26 +72,28 @@ export default function PostGenerator(): JSX.Element {
                                 showTimeSelect: false
                             }}
                         />
-                        <Button type="submit">Generate Post</Button>
+                        {canvases.length && (
+                            <div className="my-3 flex w-full justify-center">
+                                <div className="grid grid-cols-3 gap-1">
+                                    {canvases.map((canvas, index) => {
+                                        return (
+                                            <div
+                                                className="flex items-center justify-center "
+                                                key={index}
+                                            >
+                                                {canvas}
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                        )}
+                        <div className="mb-3 flex w-full justify-center">
+                            <Button type="submit">Upload</Button>
+                        </div>
                     </Form>
                 )}
             </Formik>
-            {canvases.length && (
-                <div className="my-3 flex w-full justify-center">
-                    <div className="grid grid-cols-3 gap-1">
-                        {canvases.map((canvas, index) => {
-                            return (
-                                <div
-                                    className="flex items-center justify-center "
-                                    key={index}
-                                >
-                                    {canvas}
-                                </div>
-                            )
-                        })}
-                    </div>
-                </div>
-            )}
         </div>
     )
 }

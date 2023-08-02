@@ -10,7 +10,7 @@ interface Props {
     getBlob: (
         canvas: HTMLCanvasElement | null,
         currentIndex: number
-    ) => Promise<Blob>
+    ) => Promise<Blob | undefined>
     currentIndex: number
     width?: number
     height?: number
