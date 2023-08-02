@@ -9,34 +9,28 @@ export default function useCanvas(
     const files: { [key: string]: File } = {}
     const canvases: JSX.Element[] = []
     const eventsCopy = events ? [...events] : []
-    let currentIndex = 0
+    const canvasesNeeded = Math.ceil(eventsCopy.length / eventsPerCanvas)
 
-    const getBlob = async (
-        canvas: HTMLCanvasElement | null,
+    const getFile = async (
+        file: File,
         currentIndex: number
     ): Promise<Blob | undefined> => {
-        if (files[currentIndex] || !canvas) return
-        const dataURL = canvas.toDataURL('image/png')
-        const blob = await (await fetch(dataURL)).blob()
-        const file = new File([blob], `ig_post-${currentIndex + 1}.png`, {
-            type: 'image/png'
-        })
+        if (files[currentIndex]) return
         files[currentIndex] = file
     }
 
-    while (eventsCopy?.length) {
+    for (let i = 0; i < canvasesNeeded; i++) {
         const canvasEvents = eventsCopy.splice(0, eventsPerCanvas)
         const canvas = (
             <Canvas
                 events={canvasEvents}
                 date={date}
-                key={currentIndex}
-                getBlob={getBlob}
-                currentIndex={currentIndex}
+                key={i}
+                fileCallback={getFile}
+                currentIndex={i}
             />
         )
         canvases.push(canvas)
-        currentIndex++
     }
 
     return {

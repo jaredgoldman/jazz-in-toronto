@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { type EventWithBandVenue } from '~/types/data'
 import { getFormattedTime } from '~/utils/date'
 import { daysOfTheWeek } from '~/utils/constants'
@@ -7,10 +7,7 @@ import { getDay } from 'date-fns'
 interface Props {
     events: EventWithBandVenue[]
     date: Date
-    getBlob: (
-        canvas: HTMLCanvasElement | null,
-        currentIndex: number
-    ) => Promise<Blob | undefined>
+    fileCallback: (file: File, currentIndex: number) => void
     currentIndex: number
     width?: number
     height?: number
@@ -19,11 +16,12 @@ interface Props {
 export default function Canvas({
     events,
     date,
-    getBlob,
+    fileCallback,
     currentIndex,
     width = 1080,
     height = 1080
 }: Props) {
+    const [src, setSrc] = useState<string | undefined>('')
     const canvasRef = useRef<HTMLCanvasElement>(null)
 
     useEffect(() => {
@@ -119,29 +117,50 @@ export default function Canvas({
             }
         }
 
+        const getBlob = async (
+            canvas: HTMLCanvasElement | null,
+            currentIndex: number
+        ): Promise<string | undefined> => {
+            if (canvas) {
+                const dataURL = canvas.toDataURL('image/png')
+                const blob = await (await fetch(dataURL)).blob()
+                const file = new File(
+                    [blob],
+                    `ig_post#${currentIndex + 1}.png`,
+                    {
+                        type: 'image/png'
+                    }
+                )
+                fileCallback(file, currentIndex)
+                return dataURL
+            }
+        }
+
         const canvas = canvasRef.current
 
         const createAndGetBlob = async () => {
             if (canvas) {
                 const ctx = canvas.getContext('2d')
-                if (!ctx) {
-                    throw new Error('no canvas context')
-                }
+                if (!ctx) throw new Error('no canvas context')
                 createPostCanvas(events, date, canvas, ctx)
-                await getBlob(canvasRef.current, currentIndex)
+                const dataURL = await getBlob(canvasRef.current, currentIndex)
+                if (dataURL) setSrc(dataURL)
             }
         }
         // TODO: fix this
         //eslint-disable-next-line
         createAndGetBlob()
-    }, [canvasRef, getBlob, currentIndex, events, date, width, height])
+    }, [fileCallback, currentIndex, events, date, width, height])
 
     return (
-        <canvas
-            className="h-auto w-1/2"
-            ref={canvasRef}
-            width={width}
-            height={height}
-        ></canvas>
+        <div>
+            <canvas
+                className="hidden h-auto w-1/2"
+                ref={canvasRef}
+                width={width}
+                height={height}
+            ></canvas>
+            {src && <img src={src} alt="post" />}
+        </div>
     )
 }
