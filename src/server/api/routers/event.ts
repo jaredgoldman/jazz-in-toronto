@@ -1,20 +1,15 @@
 // Libraries
 import { z } from 'zod'
-import fs from 'fs'
-// import cloudinary from 'cloudinary'
 import {
     createTRPCRouter,
     publicProcedure,
     protectedProcedure
 } from '~/server/api/trpc'
-// Types
-// import { type CloudinaryService } from '~/types/library'
 // Utils
 import addDays from 'date-fns/addDays'
 // Services
 import ScraperService from '../services/scraperService'
-// import PostService from '../services/postService'
-// import CanvasService from '../services/canvasService'
+import PostService from '../services/postService'
 
 export const eventRouter = createTRPCRouter({
     create: publicProcedure
@@ -194,6 +189,12 @@ export const eventRouter = createTRPCRouter({
         }),
 
     post: protectedProcedure
-        .input(z.object({ blobs: z.record(z.unknown()) }))
-        .mutation(({ input }) => {})
+        .input(z.array(z.object({ fileKey: z.string(), fileUrl: z.string() })))
+        .mutation(async ({ input }) => {
+            // post to instagram
+            const postService = new PostService(input)
+            await postService.postAndDeleteImages()
+            return true
+            // return res.status(200).json({ message: 'Posted to Instagram' })
+        })
 })

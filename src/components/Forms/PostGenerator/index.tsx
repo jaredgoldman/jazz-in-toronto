@@ -1,5 +1,5 @@
 // Libraries
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 // Components
 import { Formik, Form } from 'formik'
 import Button from '~/components/Button'
@@ -26,17 +26,12 @@ export default function PostGenerator(): JSX.Element {
         onClientUploadComplete: () => {
             alert("I'm done!")
         },
-        onUploadError: (e) => {
-            console.log(e)
+        onUploadError: () => {
             alert('Error!')
         }
     })
 
     const { canvases, files } = useCanvas(events, date)
-
-    useEffect(() => {
-        console.log(files)
-    }, [files])
 
     const initialValues = {
         date: new Date()
@@ -54,9 +49,12 @@ export default function PostGenerator(): JSX.Element {
                     }
                     return errors
                 }}
-                onSubmit={() => {
+                onSubmit={async () => {
                     try {
-                        startUpload(Object.values(files))
+                        const res = await startUpload(Object.values(files))
+                        if (res) {
+                            postMutation.mutate(res)
+                        }
                     } catch (error) {
                         // display error
                     }

@@ -3,19 +3,6 @@ import { useState } from 'react'
 import { DANGEROUS__uploadFiles } from 'uploadthing/client'
 
 import { useEvent } from './useEvent'
-import useFetch from './useFetch'
-
-type EndpointMetadata = {
-    slug: string
-    config: any
-}[]
-const useEndpointMetadata = (endpoint: string) => {
-    const { data } = useFetch<EndpointMetadata>('/api/uploadthing')
-
-    // TODO: Log on errors in dev
-
-    return data?.find((x) => x.slug === endpoint)
-}
 
 export const useUploadThing = <T extends string>({
     endpoint,
@@ -29,8 +16,6 @@ export const useUploadThing = <T extends string>({
     onUploadError?: (e: Error) => void
 }) => {
     const [isUploading, setUploading] = useState(false)
-
-    // const permittedFileInfo = useEndpointMetadata(endpoint)
 
     const startUpload = useEvent(async (files: File[]) => {
         setUploading(true)

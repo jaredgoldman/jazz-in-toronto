@@ -1,76 +1,29 @@
-// // Types
-// import { type EventWithBandVenue } from '~/types/data'
-// // Services
-// import { type CloudinaryService } from '~/types/library'
-//
-// export default class postService {
-//     private events: EventWithBandVenue[]
-//     private cloudinary: CloudinaryService
-//
-//     constructor(events: EventWithBandVenue[], cloudinary: CloudinaryService) {
-//         this.events = events
-//         this.cloudinary = cloudinary
-//
-//         cloudinary.config({
-//             secure: true
-//         })
-//     }
-//
-//     public async createSavePost(
-//         date: Date
-//     ): Promise<string[]> {
-//         const fileUrls = this.createPost(canvasService, date)
-//         if (fileUrls) {
-//             const storedUrls = await this.storePosts(fileUrls)
-//             // await this.postToInstagram(storedUrls)
-//             return storedUrls
-//             // await this.deleteStored()
-//         } else {
-//             throw new Error('Error creating post')
-//         }
-//     }
-//
-//     private createPost(
-//         canvasService: CanvasService,
-//         date: Date
-//     ): string[] | void {
-//         const fileUrls = canvasService.createPosts(this.events, date)
-//         if (fileUrls) {
-//             return fileUrls
-//         } else {
-//             throw new Error("Couldn't create posts")
-//         }
-//     }
-//
-//     private async storePosts(fileUrls: string[]): Promise<Array<string>> {
-//         const storedUrls: Array<string> = []
-//         for (const fileUrl of fileUrls) {
-//             const options = {
-//                 use_filename: true,
-//                 unique_filename: false,
-//                 overwrite: true
-//             }
-//
-//             try {
-//                 const result = await this.cloudinary.uploader.upload(
-//                     fileUrl,
-//                     options
-//                 )
-//                 storedUrls.push(result.secure_url)
-//             } catch (error) {
-//                 throw new Error("Couldn't store posts")
-//             }
-//         }
-//         return storedUrls
-//     }
-//
-//     // private async postToInstagram(storedUrls: string[]): Promise<void> {
-//     //     storedUrls.forEach((storedUrl) => {
-//     //         try {
-//     //             // post each image to insta
-//     //         } catch (e) {}
-//     //     })
-//     // }
-//
-//     // private async deleteStored(): Promise<void> {}
-// }
+import { utapi } from 'uploadthing/server'
+
+interface PostedImageData {
+    fileUrl: string
+    fileKey: string
+}
+
+export default class postService {
+    private postedImageData: PostedImageData[]
+
+    constructor(postedImageData: PostedImageData[]) {
+        this.postedImageData = postedImageData
+    }
+
+    async postAndDeleteImages() {
+        await this.deletePostedImages()
+    }
+
+    async deletePostedImages() {
+        // delete imag
+        const fileKeys = this.postedImageData.map(
+            (file: PostedImageData) => file.fileKey
+        )
+        const { success } = await utapi.deleteFiles(fileKeys)
+        if (!success) {
+            throw new Error('Failed to delete files')
+        }
+    }
+}

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { type EventWithBandVenue } from '~/types/data'
 import Canvas from '../components/canvas'
 
@@ -19,7 +18,7 @@ export default function useCanvas(
         if (files[currentIndex] || !canvas) return
         const dataURL = canvas.toDataURL('image/png')
         const blob = await (await fetch(dataURL)).blob()
-        const file = new File([blob], `ig_post-${currentIndex + 1}.png`, {
+        const file = new File([blob], `ig_post#${currentIndex + 1}.png`, {
             type: 'image/png'
         })
         files[currentIndex] = file
