@@ -1,5 +1,5 @@
 // Libraries
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 // Components
 import { Formik, Form } from 'formik'
 import Button from '~/components/Button'
@@ -34,6 +34,10 @@ export default function PostGenerator(): JSX.Element {
 
     const { postImages, addPostImage, files } = usePostImages(events, date)
 
+    useEffect(() => {
+        console.log('files', files)
+    }, [files])
+
     const initialValues = {
         date: new Date()
     }
@@ -52,6 +56,7 @@ export default function PostGenerator(): JSX.Element {
                 }}
                 onSubmit={async () => {
                     try {
+                        console.log(Object.values(files))
                         const res = await startUpload(Object.values(files))
                         if (res) {
                             postMutation.mutate(res)

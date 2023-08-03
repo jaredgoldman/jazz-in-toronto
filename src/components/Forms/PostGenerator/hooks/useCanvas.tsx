@@ -128,7 +128,9 @@ export default function useCanvas({
         if (canvas) {
             const dataURL = canvas.toDataURL('image/png')
             const blob = await (await fetch(dataURL)).blob()
-            const file = new File([blob], `jazzintoronto-${currentIndex}.png`)
+            const file = new File([blob], `jazzintoronto-${currentIndex}.png`, {
+                type: 'image/png'
+            })
             return {
                 file,
                 src: dataURL
