@@ -1,5 +1,5 @@
 // Libraries
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 // Components
 import { Formik, Form } from 'formik'
 import Button from '~/components/Button'
