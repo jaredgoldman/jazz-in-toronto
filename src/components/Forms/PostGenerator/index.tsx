@@ -7,7 +7,7 @@ import { DatePicker } from '../Fields'
 // Utils
 import { api } from '~/utils/api'
 // Hooks
-import useCanvas from './hooks/useCanvas'
+import usePostImages from './hooks/usePostImages'
 import { useUploadThing } from '~/hooks/useUploadThing'
 
 interface Errors {
@@ -31,7 +31,7 @@ export default function PostGenerator(): JSX.Element {
         }
     })
 
-    const { canvases, files } = useCanvas(events, date)
+    const { postImages, files } = usePostImages(events, date)
 
     const initialValues = {
         date: new Date()
@@ -70,16 +70,16 @@ export default function PostGenerator(): JSX.Element {
                                 showTimeSelect: false
                             }}
                         />
-                        {canvases.length && (
+                        {postImages.length && (
                             <div className="my-3 flex w-full justify-center">
                                 <div className="flex">
-                                    {canvases.map((canvas, index) => {
+                                    {postImages.map((postImage, index) => {
                                         return (
                                             <div
                                                 className="flex items-center justify-center "
                                                 key={index}
                                             >
-                                                {canvas}
+                                                {postImage}
                                             </div>
                                         )
                                     })}

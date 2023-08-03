@@ -1,12 +1,30 @@
-import { ChangeEvent, useState, useRef } from 'react'
+import { ChangeEvent, useState, useRef, useEffect } from 'react'
+import PostImage from '../Forms/PostGenerator/components/postImage'
 
-const FileUploadButton = () => {
-    const [selectedFile, setSelectedFile] = useState<File | null>(null)
+interface Props {
+    onUpload: (data: { file: File; dataURL: string }) => void
+}
+
+const FileUploadButton = ({ onUpload }: Props) => {
+    const [selectedFile, setSelectedFile] = useState<{
+        file: File
+        dataURL: string
+    } | null>(null)
+
     const fileInputRef = useRef<HTMLInputElement>(null)
+
+    useEffect(() => {
+        if (selectedFile) {
+            onUpload(selectedFile)
+        }
+    }, [selectedFile])
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0]
-        setSelectedFile(file || null)
+        if (file) {
+            const dataURL = URL.createObjectURL(file)
+            setSelectedFile({ file, dataURL })
+        }
     }
 
     const handleButtonClick = () => {
@@ -16,18 +34,23 @@ const FileUploadButton = () => {
     }
 
     return (
-        <div className="flex flex-col justify-center p-2">
-            <input
-                type="file"
-                onChange={handleFileChange}
-                className="hidden"
-                ref={fileInputRef}
-            ></input>
-            <button type="button" onClick={handleButtonClick}>
-                +
-            </button>
-        </div>
-        // {selectedFile && <p>Selected file: {selectedFile.name}</p>}
+        <>
+            {selectedFile ? (
+                <PostImage src={selectedFile.dataURL} />
+            ) : (
+                <div className="flex flex-col justify-center p-2">
+                    <input
+                        type="file"
+                        onChange={handleFileChange}
+                        className="hidden"
+                        ref={fileInputRef}
+                    ></input>
+                    <button type="button" onClick={handleButtonClick}>
+                        +
+                    </button>
+                </div>
+            )}
+        </>
     )
 }
 
