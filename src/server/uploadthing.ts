@@ -6,7 +6,7 @@ import { authOptions } from './auth'
 const f = createUploadthing()
 
 export const uploadRouter = {
-    uploadPosts: f({ image: { maxFileSize: '2MB', maxFileCount: 6 } })
+    uploadPosts: f({ image: { maxFileSize: '2MB', maxFileCount: 8 } })
         .middleware(async ({ req, res }) => {
             const auth = await getServerSession(req, res, authOptions)
 
