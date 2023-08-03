@@ -1,11 +1,14 @@
 import { type ChangeEvent, useState, useRef, useEffect } from 'react'
+import Button from '../Button'
 import { type FileData } from '~/types/data'
 
 interface Props {
     onUpload: (data: FileData) => void
+    className?: string
+    label: string
 }
 
-const FileUploadButton = ({ onUpload }: Props) => {
+const FileUploadButton = ({ onUpload, label, className }: Props) => {
     const [selectedFile, setSelectedFile] = useState<FileData | null>(null)
 
     const fileInputRef = useRef<HTMLInputElement>(null)
@@ -32,17 +35,21 @@ const FileUploadButton = ({ onUpload }: Props) => {
     }
 
     return (
-        <div className="my-2 flex flex-col justify-center border-white hover:border">
+        <>
             <input
                 type="file"
                 onChange={handleFileChange}
                 className="hidden"
                 ref={fileInputRef}
             ></input>
-            <button type="button" onClick={handleButtonClick}>
-                +
-            </button>
-        </div>
+            <Button
+                type="button"
+                className={className}
+                onClick={handleButtonClick}
+            >
+                {label}
+            </Button>
+        </>
     )
 }
 

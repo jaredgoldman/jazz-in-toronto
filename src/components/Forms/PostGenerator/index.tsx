@@ -58,7 +58,6 @@ export default function PostGenerator(): JSX.Element {
                 }}
                 onSubmit={async ({ caption }) => {
                     try {
-                        console.log(Object.values(files))
                         const res = await startUpload(Object.values(files))
                         if (res) {
                             postMutation.mutate({ files: res, caption })
@@ -96,6 +95,8 @@ export default function PostGenerator(): JSX.Element {
                                         onUpload={({ file, dataURL }) => {
                                             addPostImage(file, dataURL)
                                         }}
+                                        className="border-white hover:border"
+                                        label="+"
                                     />
                                 </div>
                             </div>

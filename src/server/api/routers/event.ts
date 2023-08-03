@@ -146,7 +146,6 @@ export const eventRouter = createTRPCRouter({
                         })
 
                         if (existingEvent) {
-                            console.log('Event already exists, skipping')
                             continue
                         }
                         let band
@@ -193,7 +192,8 @@ export const eventRouter = createTRPCRouter({
             z.object({
                 files: z.array(
                     z.object({ fileKey: z.string(), fileUrl: z.string() })
-                )
+                ),
+                caption: z.string()
             })
         )
         .mutation(async ({ input }) => {
