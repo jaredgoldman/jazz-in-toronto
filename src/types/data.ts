@@ -1,4 +1,10 @@
-import { type Prisma, type Band, type Venue, type Event, type Admin } from '@prisma/client'
+import {
+    type Prisma,
+    type Band,
+    type Venue,
+    type Event,
+    type Admin
+} from '@prisma/client'
 
 export type EventWithBandVenue = Prisma.EventGetPayload<{
     include: { band: true; venue: true }
@@ -14,3 +20,8 @@ export type PartialEvent = Pick<
 >
 
 export type { Band, Venue, Event, Admin }
+
+export interface FileData {
+    file: File
+    dataURL: string
+}

@@ -20,11 +20,23 @@ export const uploadRouter = {
             }
         })
         .onUploadComplete(({ metadata, file }) => {
-            console.log('uploaded with the following metadata:', metadata)
-            metadata
-            console.log('files successfully uploaded:', file)
+            console.log('UPLOAD COMPLETE - DO SOMETHING WITH THIS CODEBLOCK')
+            console.log({
+                metadata,
+                file
+            })
+            return
+        }),
+    uploadImage: f({
+        image: { maxFileSize: '2MB' }
+    }).onUploadComplete(({ metadata, file }) => {
+        console.log('UPLOAD COMPLETE - DO SOMETHING WITH THIS CODEBLOCK')
+        console.log({
+            metadata,
             file
         })
+        return
+    })
 } satisfies FileRouter
 
 export type OurFileRouter = typeof uploadRouter

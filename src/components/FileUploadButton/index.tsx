@@ -1,14 +1,12 @@
 import { type ChangeEvent, useState, useRef, useEffect } from 'react'
+import { type FileData } from '~/types/data'
 
 interface Props {
-    onUpload: (data: { file: File; dataURL: string }) => void
+    onUpload: (data: FileData) => void
 }
 
 const FileUploadButton = ({ onUpload }: Props) => {
-    const [selectedFile, setSelectedFile] = useState<{
-        file: File
-        dataURL: string
-    } | null>(null)
+    const [selectedFile, setSelectedFile] = useState<FileData | null>(null)
 
     const fileInputRef = useRef<HTMLInputElement>(null)
 
