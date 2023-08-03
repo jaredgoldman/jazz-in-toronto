@@ -18,6 +18,15 @@ export default function Header({
     const { data: session } = useSession()
     return (
         <header className="w-full flex-col items-center text-center">
+            {headerType === HeaderType.Admin && session && (
+                <Button
+                    className="white absolute right-2 top-2 border p-1"
+                    onClick={() => void signOut()}
+                >
+                    Sign Out
+                </Button>
+            )}
+
             <div className="m-8">
                 <Link className="text-2xl font-bold" href="/">
                     JAZZINTORONTO
@@ -70,9 +79,6 @@ export default function Header({
                         )}
                     </ul>
                 </nav>
-            )}
-            {headerType === HeaderType.Admin && session && (
-                <Button onClick={() => void signOut()}>Sign Out</Button>
             )}
         </header>
     )
