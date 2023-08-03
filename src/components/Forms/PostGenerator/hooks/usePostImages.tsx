@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from 'react'
 import { type EventWithBandVenue } from '~/types/data'
 import PostImage from '../components/postImage'
 
@@ -6,34 +7,73 @@ export default function usePostImages(
     date: Date,
     eventsPerCanvas = 19
 ) {
-    const files: { [key: string]: File } = {}
-    const postImages: JSX.Element[] = []
-    const eventsCopy = events ? [...events] : []
-    const postImageEventsNeeded = Math.ceil(eventsCopy.length / eventsPerCanvas)
+    // Files for uploadthingd
+    const [files, setFiles] = useState<{ [key: string]: File }>({})
+    // Files for rendering in the Post generator
+    const [postImages, setPostImages] = useState<JSX.Element[]>([])
+    const eventLength = events?.length || 0
+    const postImageEventsNeeded = Math.ceil(eventLength / eventsPerCanvas)
+    const hasRun = useRef(false)
 
-    const getFile = async (
-        file: File,
-        currentIndex: number
-    ): Promise<Blob | undefined> => {
-        if (files[currentIndex]) return
-        files[currentIndex] = file
+    const removePostImage = (index: number): void => {
+        const newFiles = { ...files }
+        delete newFiles[index]
+        setFiles(newFiles)
+        const newPostImages = [...postImages]
+        newPostImages.splice(index, 1)
+        setPostImages(newPostImages)
     }
 
-    for (let i = 0; i < postImageEventsNeeded; i++) {
-        const postImageEvents = eventsCopy.splice(0, eventsPerCanvas)
+    const addPostImage = (file: File, dataURL: string) => {
+        const index = Object.values(files).length + 1
         const postImage = (
             <PostImage
-                events={postImageEvents}
-                date={date}
-                key={i}
-                fileCallback={getFile}
-                index={i}
+                imgSrc={dataURL}
+                index={index}
+                removePostImage={() => removePostImage(index)}
             />
         )
-        postImages.push(postImage)
+        setFiles((prevFiles) => ({
+            ...prevFiles,
+            [index]: file
+        }))
+        setPostImages((prevPostImages) => [...prevPostImages, postImage])
     }
 
+    useEffect(() => {
+        // if it's a cnavas element, we need to get the blob
+        // pull the file out of PostImage once it's rendered
+        const getFile = (file: File, currentIndex: number): void => {
+            // Do not store the file if it already exists
+            if (files[currentIndex]) return
+            setFiles((prevFiles) => ({ ...prevFiles, [currentIndex]: file }))
+        }
+
+        // don't re-run if we've mapped events
+        if (events && events.length && !hasRun.current) {
+            const eventsCopy = events ? [...events] : []
+            const images: JSX.Element[] = []
+            for (let i = 0; i < postImageEventsNeeded; i++) {
+                const postImageEvents = eventsCopy.splice(0, eventsPerCanvas)
+                const postImage = (
+                    <PostImage
+                        events={postImageEvents}
+                        date={date}
+                        key={i}
+                        fileCallback={getFile}
+                        index={i}
+                    />
+                )
+                images.push(postImage)
+            }
+            setPostImages((prevImages) => [...prevImages, ...images])
+            hasRun.current = true
+        }
+    }, [events, date, eventsPerCanvas, postImageEventsNeeded, files])
+
     return {
+        addPostImage,
+        removePostImage,
         postImages,
         files
     }

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Formik, Form } from 'formik'
 import Button from '~/components/Button'
 import { DatePicker } from '../Fields'
+import FileUploadButton from '~/components/FileUploadButton'
 // Utils
 import { api } from '~/utils/api'
 // Hooks
@@ -31,7 +32,7 @@ export default function PostGenerator(): JSX.Element {
         }
     })
 
-    const { postImages, files } = usePostImages(events, date)
+    const { postImages, addPostImage, files } = usePostImages(events, date)
 
     const initialValues = {
         date: new Date()
@@ -83,6 +84,11 @@ export default function PostGenerator(): JSX.Element {
                                             </div>
                                         )
                                     })}
+                                    <FileUploadButton
+                                        onUpload={({ file, dataURL }) => {
+                                            addPostImage(file, dataURL)
+                                        }}
+                                    />
                                 </div>
                             </div>
                         )}

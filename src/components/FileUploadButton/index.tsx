@@ -1,5 +1,4 @@
-import { ChangeEvent, useState, useRef, useEffect } from 'react'
-import PostImage from '../Forms/PostGenerator/components/postImage'
+import { type ChangeEvent, useState, useRef, useEffect } from 'react'
 
 interface Props {
     onUpload: (data: { file: File; dataURL: string }) => void
@@ -17,6 +16,7 @@ const FileUploadButton = ({ onUpload }: Props) => {
         if (selectedFile) {
             onUpload(selectedFile)
         }
+        //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedFile])
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -34,23 +34,17 @@ const FileUploadButton = ({ onUpload }: Props) => {
     }
 
     return (
-        <>
-            {selectedFile ? (
-                <PostImage src={selectedFile.dataURL} />
-            ) : (
-                <div className="flex flex-col justify-center p-2">
-                    <input
-                        type="file"
-                        onChange={handleFileChange}
-                        className="hidden"
-                        ref={fileInputRef}
-                    ></input>
-                    <button type="button" onClick={handleButtonClick}>
-                        +
-                    </button>
-                </div>
-            )}
-        </>
+        <div className="flex flex-col justify-center p-2">
+            <input
+                type="file"
+                onChange={handleFileChange}
+                className="hidden"
+                ref={fileInputRef}
+            ></input>
+            <button type="button" onClick={handleButtonClick}>
+                +
+            </button>
+        </div>
     )
 }
 
