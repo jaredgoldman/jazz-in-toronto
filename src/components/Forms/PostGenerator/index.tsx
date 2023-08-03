@@ -5,6 +5,7 @@ import { Formik, Form } from 'formik'
 import Button from '~/components/Button'
 import { DatePicker } from '../Fields'
 import FileUploadButton from '~/components/FileUploadButton'
+import { Input } from '../Fields'
 // Utils
 import { api } from '~/utils/api'
 // Hooks
@@ -13,6 +14,7 @@ import { useUploadThing } from '~/hooks/useUploadThing'
 
 interface Errors {
     date?: string
+    description?: string
 }
 
 export default function PostGenerator(): JSX.Element {
@@ -34,12 +36,9 @@ export default function PostGenerator(): JSX.Element {
 
     const { postImages, addPostImage, files } = usePostImages(events, date)
 
-    useEffect(() => {
-        console.log('files', files)
-    }, [files])
-
     const initialValues = {
-        date: new Date()
+        date: new Date(),
+        caption: ''
     }
 
     return (
@@ -52,14 +51,17 @@ export default function PostGenerator(): JSX.Element {
                     if (!values.date) {
                         errors.date = 'Required'
                     }
+                    if (!values.caption) {
+                        errors.description = 'Description required'
+                    }
                     return errors
                 }}
-                onSubmit={async () => {
+                onSubmit={async ({ caption }) => {
                     try {
                         console.log(Object.values(files))
                         const res = await startUpload(Object.values(files))
                         if (res) {
-                            postMutation.mutate(res)
+                            postMutation.mutate({ files: res, caption })
                         }
                     } catch (error) {
                         // display error
@@ -76,6 +78,7 @@ export default function PostGenerator(): JSX.Element {
                                 showTimeSelect: false
                             }}
                         />
+                        <Input name="caption" label="Caption" />
                         {postImages.length && (
                             <div className="my-3 flex w-full justify-center">
                                 <div className="flex">
@@ -98,7 +101,7 @@ export default function PostGenerator(): JSX.Element {
                             </div>
                         )}
                         <div className="mb-3 flex w-full justify-center">
-                            <Button type="submit">Upload</Button>
+                            <Button type="submit">Upload to Instagram</Button>
                         </div>
                     </Form>
                 )}

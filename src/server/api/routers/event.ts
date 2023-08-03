@@ -189,12 +189,17 @@ export const eventRouter = createTRPCRouter({
         }),
 
     post: protectedProcedure
-        .input(z.array(z.object({ fileKey: z.string(), fileUrl: z.string() })))
+        .input(
+            z.object({
+                files: z.array(
+                    z.object({ fileKey: z.string(), fileUrl: z.string() })
+                )
+            })
+        )
         .mutation(async ({ input }) => {
             // post to instagram
             const postService = new PostService(input)
             await postService.postAndDeleteImages()
-            return true
             // return res.status(200).json({ message: 'Posted to Instagram' })
         })
 })

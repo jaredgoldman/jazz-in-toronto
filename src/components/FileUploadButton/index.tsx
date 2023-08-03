@@ -34,7 +34,7 @@ const FileUploadButton = ({ onUpload }: Props) => {
     }
 
     return (
-        <div className="flex flex-col justify-center p-2">
+        <div className="my-2 flex flex-col justify-center border-white hover:border">
             <input
                 type="file"
                 onChange={handleFileChange}
