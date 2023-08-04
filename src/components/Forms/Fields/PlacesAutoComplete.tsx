@@ -15,14 +15,6 @@ interface PlacesAutoCompleteProps {
     fieldClassName?: string
 }
 
-interface GeoCodeResults {
-    address_components: {
-        long_name: string
-        short_name: string
-        types: string[]
-    }[]
-}
-
 export default function PlacesAutoCompleteField({
     label,
     name,
@@ -111,6 +103,7 @@ const PlacesAutocomplete = ({ form }: FieldProps<Date, Date>): JSX.Element => {
     return (
         <div ref={ref}>
             <input
+                className="text-black"
                 value={value}
                 onChange={handleInput}
                 disabled={!ready}

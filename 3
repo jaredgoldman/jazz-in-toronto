@@ -1,1 +1,68 @@
-import { createUploadthing } from 'uploadthing/next-legacy'
+import { useState } from 'react'
+import FileUploadButton from '~/components/FileUploadButton'
+import Image from 'next/image'
+import { type FileData } from '~/types/data'
+import Button from '~/components/Button'
+
+interface Props {
+    className?: string
+    buttonClassName?: string
+    label?: string
+    buttonLabel?: string
+    showPreview?: boolean
+    onUpload?: (fileData: FileData) => void
+    name?: string
+}
+
+export default function UploadField({
+    className = 'flex flex-col',
+    buttonClassName = 'w-1/2 border-2 dark:border-white',
+    label = 'Upload a File',
+    buttonLabel = 'Upload',
+    showPreview = true,
+    onUpload,
+    name = 'file'
+}: Props) {
+    const [fileData, setFileData] = useState<FileData | undefined>()
+
+    const onSaveFile = (fileData: FileData) => {
+        setFileData(fileData)
+        if (onUpload) {
+            onUpload(fileData)
+        }
+    }
+
+    const removeFile = () => {
+        setFileData(undefined)
+    }
+
+    return (
+        <div className={className}>
+            <label className="mb-1">{label}</label>
+            <div className="flex">
+                <FileUploadButton
+                    className={buttonClassName}
+                    onUpload={onSaveFile}
+                    label={buttonLabel}
+                    name={name}
+                />
+                {showPreview && fileData && (
+                    <div className="relative h-20 w-20 object-contain">
+                        <Button
+                            onClick={removeFile}
+                            className="absolute right-0 top-0"
+                        >
+                            X
+                        </Button>
+                        <Image
+                            src={fileData.dataURL}
+                            alt="Uploaded image"
+                            width={200}
+                            height={200}
+                        />
+                    </div>
+                )}
+            </div>
+        </div>
+    )
+}

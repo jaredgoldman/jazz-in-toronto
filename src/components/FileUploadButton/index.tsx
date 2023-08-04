@@ -6,9 +6,15 @@ interface Props {
     onUpload: (data: FileData) => void
     className?: string
     label: string
+    name?: string
 }
 
-const FileUploadButton = ({ onUpload, label, className }: Props) => {
+const FileUploadButton = ({
+    onUpload,
+    label,
+    className,
+    name = 'file'
+}: Props) => {
     const [selectedFile, setSelectedFile] = useState<FileData | null>(null)
 
     const fileInputRef = useRef<HTMLInputElement>(null)
@@ -41,6 +47,7 @@ const FileUploadButton = ({ onUpload, label, className }: Props) => {
                 onChange={handleFileChange}
                 className="hidden"
                 ref={fileInputRef}
+                name={name}
             ></input>
             <Button
                 type="button"
