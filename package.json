@@ -14,7 +14,8 @@
         "db:reset": "NODE_ENV=development prisma migrate reset --force --skip-seed && pnpm run db:push && pnpm run db:seed",
         "db:clear": "NODE_ENV=development prisma migrate reset --force --skip-seed",
         "db:seed": "NODE_ENV=development prisma db seed",
-        "schema:format": "prisma format"
+        "schema:format": "prisma format",
+        "prepare": "husky install"
     },
     "prisma": {
         "seed": "tsx prisma/seed.ts"
@@ -58,6 +59,8 @@
         "autoprefixer": "^10.4.14",
         "eslint": "^8.40.0",
         "eslint-config-next": "^13.4.2",
+        "husky": "^8.0.0",
+        "lint-staged": "^13.2.3",
         "postcss": "^8.4.21",
         "prettier": "^2.8.8",
         "prettier-plugin-tailwindcss": "^0.2.8",
@@ -69,5 +72,10 @@
     },
     "ct3aMetadata": {
         "initVersion": "7.14.1"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "pnpm run lint"
+        }
     }
 }
