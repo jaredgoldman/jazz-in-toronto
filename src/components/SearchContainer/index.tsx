@@ -28,7 +28,11 @@ export default function SearchContainer({
     )
     return (
         <div>
-            <SearchBar onSearch={handleSearch} searchDate={searchDate} />
+            <SearchBar
+                onSearch={handleSearch}
+                searchDate={searchDate}
+                itemType={itemType}
+            />
             {filteredItems ? (
                 <SearchTable items={filteredItems} headerType={itemType} />
             ) : (
