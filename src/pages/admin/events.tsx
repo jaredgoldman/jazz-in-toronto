@@ -26,7 +26,12 @@ export default function AdminEvents(): JSX.Element {
         api.event.getAllByDay.useQuery({
             date: searchDate
         })
-    const { data: venues } = api.venue.getAll.useQuery()
+    const { data: venues, isLoading: isLoadingVenues } =
+        api.venue.getAll.useQuery()
+    const { data: featuredItem, isLoading: featuredLoading } =
+        api.event.getFeatured.useQuery()
+
+    const isLoading = isLoadingEvents || isLoadingVenues || featuredLoading
 
     return (
         <AdminLayout>
@@ -51,15 +56,17 @@ export default function AdminEvents(): JSX.Element {
                         Post
                     </Button>
                 </div>
-                {view === View.Search && events && (
+                {view === View.Search && events && !isLoading && (
                     <SearchContainer
                         items={events}
+                        featuredItem={featuredItem}
                         itemType={DataType.EVENT}
                         isLoading={isLoadingEvents}
                         searchDate={searchDate}
                         setSearchDate={setSearchDate}
                     />
                 )}
+                {isLoading && <div>Loading...</div>}
                 {view === View.Scrape && venues && (
                     <EventScraper venues={venues} />
                 )}

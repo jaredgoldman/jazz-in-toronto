@@ -15,11 +15,13 @@ import { type Item } from '~/types/data'
 import { type ModalContextType } from '~/components/Modal/types'
 // Utils
 import { isBand, isEvent } from '~/utils/typeguards'
+import { api } from '~/utils/api'
 // Context
 import { ModalContext } from '~/components/Modal/context/ModalContext'
 
 interface Props {
     items: Array<Item>
+    featuredItem: Item | null
     headerType: DataType
 }
 
@@ -30,22 +32,67 @@ const headers = {
     [DataType.ADMIN]: null
 }
 
-export default function SearchTable({ items, headerType }: Props): JSX.Element {
+export default function SearchTable({
+    items,
+    headerType,
+    featuredItem
+}: Props): JSX.Element {
+    const eventSetFeaturedMutation = api.event.setFeatured.useMutation()
+    const venueSetFeaturedMutation = api.venue.setFeatured.useMutation()
+    const bandSetFeaturedMutation = api.band.setFeatured.useMutation()
+    const [featured, setFeatured] = useState<string | undefined>(
+        featuredItem?.id
+    )
+
     const { handleModalForm } = useContext(ModalContext) as ModalContextType
 
-    const rowProps = {
-        handleModalForm
+    const handleSetFeatured = (id: string, type: DataType) => {
+        setFeatured(id)
+        switch (type) {
+            case DataType.EVENT:
+                eventSetFeaturedMutation.mutate({ id })
+                break
+            case DataType.VENUE:
+                venueSetFeaturedMutation.mutate({ id })
+                break
+            case DataType.BAND:
+                bandSetFeaturedMutation.mutate({ id })
+                break
+        }
     }
-
     // We can assume items will be all of one type
     // however let's just make TS happy by typeguarding all items
     const rows = items.map((item) => {
         if (isEvent(item)) {
-            return <EventRow item={item} key={item.id} {...rowProps} />
+            return (
+                <EventRow
+                    item={item}
+                    key={item.id}
+                    handleModalForm={handleModalForm}
+                    featured={featured}
+                    setFeatured={handleSetFeatured}
+                />
+            )
         } else if (isBand(item)) {
-            return <BandRow item={item} key={item.id} {...rowProps} />
+            return (
+                <BandRow
+                    item={item}
+                    key={item.id}
+                    handleModalForm={handleModalForm}
+                    featured={featured}
+                    setFeatured={handleSetFeatured}
+                />
+            )
         } else {
-            return <VenueRow item={item} key={item.id} {...rowProps} />
+            return (
+                <VenueRow
+                    item={item}
+                    key={item.id}
+                    handleModalForm={handleModalForm}
+                    featured={featured}
+                    setFeatured={handleSetFeatured}
+                />
+            )
         }
     })
 

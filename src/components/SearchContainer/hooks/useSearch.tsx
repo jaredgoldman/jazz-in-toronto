@@ -1,12 +1,12 @@
 // Libraries
 import { useEffect, useState } from 'react'
+import { useEvent } from '~/hooks/useEvent'
 // Types
 import { SearchOption } from '../types'
-import { EventWithBandVenue, type Item } from '~/types/data'
+import { type EventWithBandVenue, type Item } from '~/types/data'
 import { DataType } from '~/types/enums'
 // Utils
 import { deepEqual } from '~/utils/shared'
-import { isEvent } from '~/utils/typeguards'
 
 interface SearchData {
     name: string
@@ -25,6 +25,7 @@ const initialSearchData = {
 
 export default function useSearch(
     items: Array<Item>,
+    itemType: DataType,
     searchDate?: Date,
     setSearchDate?: (date: Date) => void
 ) {
@@ -38,6 +39,48 @@ export default function useSearch(
 
     const [filteredItems, setFilteredItems] = useState<Array<Item>>(items)
 
+    // Filter functions
+    const filterName = useEvent((item: Item) => {
+        return (
+            !searchData.name ||
+            (searchData.name &&
+                item.name.toLowerCase().includes(searchData.name.toLowerCase()))
+        )
+    })
+
+    const filterWebsite = useEvent((item: Item) => {
+        return (
+            !searchData.website ||
+            (searchData.website &&
+                item.website &&
+                item.website
+                    .toLowerCase()
+                    .includes(searchData.website.toLowerCase()))
+        )
+    })
+
+    const filterInstagramHandle = useEvent((item: Item) => {
+        return (
+            !searchData.instagramHandle ||
+            (searchData.instagramHandle &&
+                item.instagramHandle &&
+                item.instagramHandle
+                    .toLowerCase()
+                    .includes(searchData.instagramHandle.toLowerCase()))
+        )
+    })
+
+    const filterVenue = useEvent((event: EventWithBandVenue) => {
+        return (
+            !searchData.venue ||
+            (searchData.venue &&
+                event.venue.name &&
+                event.venue.name
+                    .toLowerCase()
+                    .includes(searchData.venue.toLowerCase()))
+        )
+    })
+
     useEffect(() => {
         // If we havne't searched yet or if we've cleared the search, return all items
         if (deepEqual(searchData, initialSearchData)) {
@@ -48,7 +91,7 @@ export default function useSearch(
             const filterItems = () => {
                 // XXX: Fix this
                 return items.filter((item: Item) => {
-                    const itemIsEvent = isEvent(item)
+                    const itemIsEvent = itemType === DataType.EVENT
                     let nameMatch = false
                     let websiteMatch = false
                     let instagramHandleMatch = false
@@ -63,7 +106,10 @@ export default function useSearch(
                     if (filterInstagramHandle(item)) {
                         instagramHandleMatch = true
                     }
-                    if (itemIsEvent && filterVenue(item)) {
+                    if (
+                        itemIsEvent &&
+                        filterVenue(item as EventWithBandVenue)
+                    ) {
                         venueMatch = true
                     }
                     if (
@@ -77,49 +123,18 @@ export default function useSearch(
                 })
             }
             const filteredItems = filterItems()
-            setFilteredItems(filteredItems)
+            setFilteredItems(filteredItems.sort())
         }
-    }, [searchData, items])
+    }, [
+        searchData,
+        items,
+        filterInstagramHandle,
+        filterName,
+        filterVenue,
+        filterWebsite
+    ])
 
-    const filterName = (item: Item) => {
-        return (
-            !searchData.name ||
-            (searchData.name &&
-                item.name.toLowerCase().includes(searchData.name.toLowerCase()))
-        )
-    }
-    const filterWebsite = (item: Item) => {
-        return (
-            !searchData.website ||
-            (searchData.website &&
-                item.website &&
-                item.website
-                    .toLowerCase()
-                    .includes(searchData.website.toLowerCase()))
-        )
-    }
-
-    const filterInstagramHandle = (item: Item) => {
-        return (
-            !searchData.instagramHandle ||
-            (searchData.instagramHandle &&
-                item.instagramHandle &&
-                item.instagramHandle
-                    .toLowerCase()
-                    .includes(searchData.instagramHandle.toLowerCase()))
-        )
-    }
-
-    const filterVenue = (event: EventWithBandVenue) => {
-        return (
-            !searchData.venue ||
-            (searchData.venue &&
-                event.venue.name &&
-                event.venue.name
-                    .toLowerCase()
-                    .includes(searchData.venue.toLowerCase()))
-        )
-    }
+    // const sortItems = (items: Array<Item>) => {}
 
     // TODO: replace with reducer
     const handleSearch = (

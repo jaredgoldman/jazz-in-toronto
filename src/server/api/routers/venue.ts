@@ -70,5 +70,26 @@ export const venueRouter = createTRPCRouter({
             return ctx.prisma.venue.delete({
                 where: { id: input.id }
             })
+        }),
+
+    getFeatured: publicProcedure.query(({ ctx }) => {
+        return ctx.prisma.venue.findFirst({
+            where: { featured: true }
+        })
+    }),
+
+    setFeatured: protectedProcedure
+        .input(z.object({ id: z.string().cuid() }))
+        .mutation(async ({ ctx, input }) => {
+            // First remove any other features
+            // Only one band hsould be featured at a time
+            await ctx.prisma.venue.updateMany({
+                where: { featured: true },
+                data: { featured: false }
+            })
+            return ctx.prisma.venue.update({
+                where: { id: input.id },
+                data: { featured: true }
+            })
         })
 })

@@ -3,6 +3,7 @@ import { createTRPCRouter } from '~/server/api/trpc'
 import { venueRouter } from './routers/venue'
 import { adminRouter } from './routers/admin'
 import { bandRouter } from './routers/band'
+import { featuredRouter } from './routers/featured'
 import { cmsRouter } from './routers/cms'
 
 /**
@@ -15,7 +16,8 @@ export const appRouter = createTRPCRouter({
     venue: venueRouter,
     admin: adminRouter,
     band: bandRouter,
-    cms: cmsRouter
+    cms: cmsRouter,
+    featured: featuredRouter
 })
 
 // export type definition of API

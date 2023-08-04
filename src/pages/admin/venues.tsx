@@ -6,13 +6,19 @@ import { api } from '~/utils/api'
 import { DataType } from '~/types/enums'
 
 export default function AdminVenues() {
-    const { data: events, isLoading } = api.venue.getAll.useQuery()
+    const { data: events, isLoading: venuesLoading } =
+        api.venue.getAll.useQuery()
+    const { data: featuredItem, isLoading: featuredLoading } =
+        api.venue.getFeatured.useQuery()
+
+    const isLoading = venuesLoading || featuredLoading
     return (
         <AdminLayout>
             <>
-                {events && (
+                {events && !isLoading && (
                     <SearchContainer
                         items={events}
+                        featuredItem={featuredItem}
                         isLoading={isLoading}
                         itemType={DataType.VENUE}
                     />

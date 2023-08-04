@@ -62,5 +62,26 @@ export const bandRouter = createTRPCRouter({
             return ctx.prisma.band.delete({
                 where: { id: input.id }
             })
+        }),
+
+    getFeatured: publicProcedure.query(({ ctx }) => {
+        return ctx.prisma.band.findFirst({
+            where: { featured: true }
+        })
+    }),
+
+    setFeatured: protectedProcedure
+        .input(z.object({ id: z.string().cuid() }))
+        .mutation(async ({ ctx, input }) => {
+            // First remove any other features
+            // Only one band hsould be featured at a time
+            await ctx.prisma.band.updateMany({
+                where: { featured: true },
+                data: { featured: false }
+            })
+            return ctx.prisma.band.update({
+                where: { id: input.id },
+                data: { featured: true }
+            })
         })
 })

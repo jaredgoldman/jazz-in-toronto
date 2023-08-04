@@ -199,5 +199,30 @@ export const eventRouter = createTRPCRouter({
             const postService = new PostService(input)
             await postService.postAndDeleteImages()
             // return res.status(200).json({ message: 'Posted to Instagram' })
+        }),
+
+    getFeatured: publicProcedure.query(({ ctx }) => {
+        return ctx.prisma.event.findFirst({
+            where: { featured: true },
+            include: {
+                band: true,
+                venue: true
+            }
+        })
+    }),
+
+    setFeatured: protectedProcedure
+        .input(z.object({ id: z.string().cuid() }))
+        .mutation(async ({ ctx, input }) => {
+            // First remove any other features
+            // Only one band hsould be featured at a time
+            await ctx.prisma.event.updateMany({
+                where: { featured: true },
+                data: { featured: false }
+            })
+            return ctx.prisma.event.update({
+                where: { id: input.id },
+                data: { featured: true }
+            })
         })
 })

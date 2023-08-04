@@ -5,6 +5,14 @@ import Button from '~/components/Button'
 import { type EventWithBandVenue, type Band, type Venue } from '~/types/data'
 // Utils
 import { getFormattedTime } from '~/utils/date'
+import { DataType } from '~/types/enums'
+
+interface RowProps<T> {
+    item: T
+    handleModalForm: (formType: ModalForms, item: T) => void
+    featured: string | undefined
+    setFeatured: (id: string, type: DataType) => void
+}
 
 export const EventHeader = (): JSX.Element => {
     return (
@@ -36,6 +44,9 @@ export const EventHeader = (): JSX.Element => {
             <th className="border-b bg-gray-100 px-6 py-3 text-left font-semibold text-gray-700">
                 Cancelled
             </th>
+            <th className="border-b bg-gray-100 px-6 py-3 text-left font-semibold text-gray-700">
+                Featured
+            </th>
             <th className="border-b bg-gray-100 px-6 py-3 text-left font-semibold text-gray-700"></th>
         </tr>
     )
@@ -43,11 +54,10 @@ export const EventHeader = (): JSX.Element => {
 
 export const EventRow = ({
     item,
-    handleModalForm
-}: {
-    item: EventWithBandVenue
-    handleModalForm: (formType: ModalForms, item: EventWithBandVenue) => void
-}): JSX.Element => {
+    handleModalForm,
+    featured,
+    setFeatured
+}: RowProps<EventWithBandVenue>): JSX.Element => {
     return (
         <tr>
             <td className="border px-4 py-2 text-left text-xs text-gray-800">
@@ -78,6 +88,13 @@ export const EventRow = ({
                 {item.cancelled}
             </td>
             <td className="border px-4 py-2 text-left text-xs text-gray-800">
+                <input
+                    type="checkbox"
+                    checked={item.id === featured}
+                    onChange={() => setFeatured(item.id, DataType.EVENT)}
+                />
+            </td>
+            <td className="border px-4 py-2 text-left text-xs text-gray-800">
                 <Button onClick={() => handleModalForm(ModalForms.Event, item)}>
                     Edit
                 </Button>
@@ -93,9 +110,6 @@ export const BandHeader = (): JSX.Element => {
                 Name
             </th>
             <th className="border-b bg-gray-100 px-6 py-3 text-left font-semibold text-gray-700">
-                featured
-            </th>
-            <th className="border-b bg-gray-100 px-6 py-3 text-left font-semibold text-gray-700">
                 Genre
             </th>
             <th className="border-b bg-gray-100 px-6 py-3 text-left font-semibold text-gray-700">
@@ -107,6 +121,10 @@ export const BandHeader = (): JSX.Element => {
             <th className="border-b bg-gray-100 px-6 py-3 text-left font-semibold text-gray-700">
                 Active
             </th>
+            <th className="border-b bg-gray-100 px-6 py-3 text-left font-semibold text-gray-700">
+                Featured
+            </th>
+
             <th className="border-b bg-gray-100 px-6 py-3 text-left font-semibold text-gray-700"></th>
         </tr>
     )
@@ -114,18 +132,14 @@ export const BandHeader = (): JSX.Element => {
 
 export const BandRow = ({
     item,
-    handleModalForm
-}: {
-    item: Band
-    handleModalForm: (formType: ModalForms, item: Band) => void
-}) => {
+    handleModalForm,
+    featured,
+    setFeatured
+}: RowProps<Band>) => {
     return (
         <tr>
             <td className="border px-4 py-2 text-left text-xs text-gray-800">
                 {item.name}
-            </td>
-            <td className="border px-4 py-2 text-left text-xs text-gray-800">
-                {item.featured}
             </td>
             <td className="border px-4 py-2 text-left text-xs text-gray-800">
                 {item.genre ? item.genre : ''}
@@ -139,6 +153,14 @@ export const BandRow = ({
             <td className="border px-4 py-2 text-left text-xs text-gray-800">
                 {item.active}
             </td>
+            <td className="border px-4 py-2 text-left text-xs text-gray-800">
+                <input
+                    type="checkbox"
+                    checked={item.id === featured}
+                    onChange={() => setFeatured(item.id, DataType.BAND)}
+                />
+            </td>
+
             <td className="border px-4 py-2 text-left text-xs text-gray-800">
                 <Button onClick={() => handleModalForm(ModalForms.Band, item)}>
                     Edit
@@ -155,9 +177,6 @@ export const VenueHeader = (): JSX.Element => {
                 Name
             </th>
             <th className="border-b bg-gray-100 px-6 py-3 text-left font-semibold text-gray-700">
-                Featured
-            </th>
-            <th className="border-b bg-gray-100 px-6 py-3 text-left font-semibold text-gray-700">
                 Address
             </th>
             <th className="border-b bg-gray-100 px-6 py-3 text-left font-semibold text-gray-700">
@@ -172,6 +191,9 @@ export const VenueHeader = (): JSX.Element => {
             <th className="border-b bg-gray-100 px-6 py-3 text-left font-semibold text-gray-700">
                 Active
             </th>
+            <th className="border-b bg-gray-100 px-6 py-3 text-left font-semibold text-gray-700">
+                Featured
+            </th>
             <th className="border-b bg-gray-100 px-6 py-3 text-left font-semibold text-gray-700"></th>
         </tr>
     )
@@ -179,18 +201,14 @@ export const VenueHeader = (): JSX.Element => {
 
 export const VenueRow = ({
     item,
-    handleModalForm
-}: {
-    item: Venue
-    handleModalForm: (formType: ModalForms, item: Venue) => void
-}) => {
+    handleModalForm,
+    featured,
+    setFeatured
+}: RowProps<Venue>) => {
     return (
         <tr>
             <td className="border px-4 py-2 text-left text-xs text-gray-800">
                 {item.name}
-            </td>
-            <td className="border px-4 py-2 text-left text-xs text-gray-800">
-                {item.featured ? 'Yes' : 'No'}
             </td>
             <td className="border px-4 py-2 text-left text-xs text-gray-800">
                 {item.address}
@@ -207,6 +225,14 @@ export const VenueRow = ({
             <td className="border px-4 py-2 text-left text-xs text-gray-800">
                 {item.active ? 'Yes' : 'No'}
             </td>
+            <td className="border px-4 py-2 text-left text-xs text-gray-800">
+                <input
+                    type="checkbox"
+                    checked={item.id === featured}
+                    onChange={() => setFeatured(item.id, DataType.VENUE)}
+                />
+            </td>
+
             <td className="border px-4 py-2 text-left text-xs text-gray-800">
                 <Button onClick={() => handleModalForm(ModalForms.Venue, item)}>
                     Edit
