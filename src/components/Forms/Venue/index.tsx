@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 // Components
 import { Form, Formik } from 'formik'
 import PlacesAutocomplete from '../Fields/PlacesAutoComplete'
@@ -61,13 +61,6 @@ export default function VenueForm({ currentValues }: Props): JSX.Element {
               website: '',
               fileData: undefined
           }
-
-    useEffect(() => {
-        console.log(
-            'formikRef?.current?.isSubmitting',
-            formikRef?.current?.isSubmitting
-        )
-    }, [formikRef?.current?.isSubmitting])
 
     const { startUpload } = useUploadThing({
         endpoint: 'uploadImage',
