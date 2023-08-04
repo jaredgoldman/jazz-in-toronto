@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 // Components
 import { Form, Formik } from 'formik'
 import PlacesAutocomplete from '../Fields/PlacesAutoComplete'
@@ -7,7 +7,7 @@ import Button from '~/components/Button'
 import Upload from '../Fields/Upload'
 // Types
 import { type Venue } from '~/types/data'
-import { FormikContextType } from 'formik'
+import { type FormikContextType } from 'formik'
 // Utils
 import { api } from '~/utils/api'
 // Hooks
@@ -38,8 +38,12 @@ interface Props {
 }
 
 export default function VenueForm({ currentValues }: Props): JSX.Element {
+    // Abstract form context out of component so we can submit when
+    // file uplaod is complete
     const formikRef = useRef<FormikContextType<Values>>(null)
     const venueMutation = api.venue.create.useMutation()
+
+    // If we're editing, initial values = db row values
     const initialValues: Values = currentValues
         ? {
               ...currentValues,
@@ -57,7 +61,14 @@ export default function VenueForm({ currentValues }: Props): JSX.Element {
               website: '',
               fileData: undefined
           }
-    console.log('CURRENT VALUES', currentValues)
+
+    useEffect(() => {
+        console.log(
+            'formikRef?.current?.isSubmitting',
+            formikRef?.current?.isSubmitting
+        )
+    }, [formikRef?.current?.isSubmitting])
+
     const { startUpload } = useUploadThing({
         endpoint: 'uploadImage',
         onClientUploadComplete: (uploadedFileData) => {
@@ -68,9 +79,12 @@ export default function VenueForm({ currentValues }: Props): JSX.Element {
                     photoPath: uploadedFileData[0]?.fileUrl
                 }
                 venueMutation.mutate(newValues)
+                formikRef.current.setSubmitting(false)
             }
+        },
+        onUploadError: (e) => {
+            console.log('Error uploading file', e)
         }
-        // onUploadError: (e) => {}
     })
 
     return (
@@ -92,13 +106,9 @@ export default function VenueForm({ currentValues }: Props): JSX.Element {
                     return errors
                 }}
                 onSubmit={(values) => {
-                    try {
-                        // Start upload for now
-                        if (values?.fileData?.file) {
-                            startUpload([values.fileData.file])
-                        }
-                    } catch (error) {
-                        // display error
+                    // Start upload for now
+                    if (values?.fileData?.file) {
+                        startUpload([values.fileData.file])
                     }
                 }}
             >
@@ -108,6 +118,7 @@ export default function VenueForm({ currentValues }: Props): JSX.Element {
                         <PlacesAutocomplete name="location" label="Address" />
                         <Upload
                             name="fileData"
+                            label="Upload a photo of your venue"
                             photoPath={initialValues.photoPath}
                         />
                         <Input name="instagramHandle" label="instagramHandle" />

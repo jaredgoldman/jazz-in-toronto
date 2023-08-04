@@ -62,7 +62,6 @@ model Event {
   startDate       DateTime
   endDate         DateTime
   band            Band     @relation(fields: [bandId], references: [id])
-  photoPath       String?
   featured        Boolean  @default(false)
   instagramHandle String?
   website         String?

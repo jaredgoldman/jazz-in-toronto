@@ -13,7 +13,6 @@ export interface Values {
     startDate: Date
     endDate: Date
     bandId: string
-    photoPath: string
     instagramHandle: string
     website: string
     venueId: string
@@ -24,7 +23,6 @@ interface Errors {
     startDate?: string
     endDate?: string
     bandId?: string
-    photoPath?: string
     instagramHandle?: string
     website?: string
     venueId?: string
@@ -42,7 +40,6 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
     const initialValues = currentValues
         ? {
               ...currentValues,
-              photoPath: currentValues.photoPath || undefined,
               instagramHandle: currentValues.instagramHandle || undefined,
               website: currentValues.website || undefined
           }
@@ -51,7 +48,6 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
               startDate: new Date(),
               endDate: new Date(),
               bandId: '',
-              photoPath: '',
               venueId: '',
               instagramHandle: '',
               website: ''

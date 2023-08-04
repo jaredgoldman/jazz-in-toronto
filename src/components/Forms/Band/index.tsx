@@ -1,9 +1,15 @@
+// Libararies
+import { useRef } from 'react'
 // Components
 import { Form, Formik } from 'formik'
 import Button from '~/components/Button'
 import { Input } from '../Fields'
+import Upload from '../Fields/Upload'
 // Types
 import { type Band } from '~/types/data'
+import { type FormikContextType } from 'formik'
+// hooks
+import { useUploadThing } from '~/hooks/useUploadThing'
 // Utils
 import { api } from '~/utils/api'
 
@@ -11,8 +17,12 @@ export interface Values {
     name: string
     genre?: string
     photoPath?: string
-    instagramHandle: string | null | undefined
+    instagramHandle: string | undefined
     website?: string
+    fileData?: {
+        file: File
+        dataURL: string
+    }
 }
 
 interface Errors {
@@ -28,15 +38,44 @@ interface Props {
 }
 
 export default function BandForm({ currentValues }: Props): JSX.Element {
+    // Abstract form context out of component so we can submit when
+    // file uplaod is complete
+    const formikRef = useRef<FormikContextType<Values>>(null)
     const bandMutation = api.band.create.useMutation()
-    const initialValues = currentValues
+    const initialValues: Values = currentValues
         ? {
               name: currentValues.name,
               instagramHandle: currentValues.instagramHandle || undefined,
               genre: currentValues.genre || undefined,
-              website: currentValues.website || undefined
+              website: currentValues.website || undefined,
+              photoPath: currentValues.photoPath || undefined
           }
-        : { name: '', instagramHandle: '', genre: '', website: '' }
+        : {
+              name: '',
+              instagramHandle: '',
+              genre: '',
+              website: '',
+              photoPath: '',
+              fileData: undefined
+          }
+
+    // Handle file uploads and form submission
+    const { startUpload } = useUploadThing({
+        endpoint: 'uploadImage',
+        onClientUploadComplete: (uploadedFileData) => {
+            if (uploadedFileData && formikRef.current?.values) {
+                const { fileData, ...rest } = formikRef.current?.values
+                const newValues = {
+                    ...rest,
+                    photoPath: uploadedFileData[0]?.fileUrl
+                }
+                bandMutation.mutate(newValues)
+            }
+        },
+        onUploadError: (e) => {
+            console.error('Error uploading image', e)
+        }
+    })
 
     return (
         <div className="w-full">
@@ -44,6 +83,7 @@ export default function BandForm({ currentValues }: Props): JSX.Element {
                 {currentValues ? `Edit band` : 'Add your band to our database'}
             </h1>
             <Formik
+                innerRef={formikRef}
                 initialValues={initialValues}
                 validate={(values) => {
                     const errors: Errors = {}
@@ -53,10 +93,9 @@ export default function BandForm({ currentValues }: Props): JSX.Element {
                     return errors
                 }}
                 onSubmit={(values) => {
-                    try {
-                        bandMutation.mutate(values)
-                    } catch (error) {
-                        // display error
+                    // Start upload for now
+                    if (values?.fileData?.file) {
+                        startUpload([values.fileData.file])
                     }
                 }}
             >
@@ -64,6 +103,11 @@ export default function BandForm({ currentValues }: Props): JSX.Element {
                     <Form className="flex flex-col">
                         <Input name="name" label="Name" />
                         <Input name="genre" label="Musical genre" />
+                        <Upload
+                            name="fileData"
+                            label="Upload a band photo"
+                            photoPath={initialValues.photoPath}
+                        />
                         <Input
                             name="instagramHandle"
                             label="Instagram Handle"
