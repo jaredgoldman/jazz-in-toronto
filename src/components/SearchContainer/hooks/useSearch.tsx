@@ -2,15 +2,18 @@
 import { useEffect, useState } from 'react'
 // Types
 import { SearchOption } from '../types'
-import { type Item } from '~/types/data'
+import { EventWithBandVenue, type Item } from '~/types/data'
+import { DataType } from '~/types/enums'
 // Utils
 import { deepEqual } from '~/utils/shared'
+import { isEvent } from '~/utils/typeguards'
 
 interface SearchData {
     name: string
     date: Date | null
     website: string
     instagramHandle: string
+    venue: string
 }
 
 const initialSearchData = {
@@ -29,7 +32,8 @@ export default function useSearch(
         name: '',
         date: searchDate || null,
         website: '',
-        instagramHandle: ''
+        instagramHandle: '',
+        venue: ''
     })
 
     const [filteredItems, setFilteredItems] = useState<Array<Item>>(items)
@@ -47,40 +51,26 @@ export default function useSearch(
                     let nameMatch = false
                     let websiteMatch = false
                     let instagramHandleMatch = false
+                    let venueMatch = false
 
-                    if (
-                        !searchData.name ||
-                        (searchData.name &&
-                            item.name
-                                .toLowerCase()
-                                .includes(searchData.name.toLowerCase()))
-                    ) {
+                    if (filterName(item)) {
                         nameMatch = true
                     }
-                    if (
-                        !searchData.website ||
-                        (searchData.website &&
-                            item.website &&
-                            item.website
-                                .toLowerCase()
-                                .includes(searchData.website.toLowerCase()))
-                    ) {
+                    if (filterWebsite(item)) {
                         websiteMatch = true
                     }
-                    if (
-                        !searchData.instagramHandle ||
-                        (searchData.instagramHandle &&
-                            item.instagramHandle &&
-                            item.instagramHandle
-                                .toLowerCase()
-                                .includes(
-                                    searchData.instagramHandle.toLowerCase()
-                                ))
-                    ) {
+                    if (filterInstagramHandle(item)) {
                         instagramHandleMatch = true
                     }
-
-                    if (nameMatch && websiteMatch && instagramHandleMatch) {
+                    if (isEvent(item) && filterVenue(item)) {
+                        venueMatch = true
+                    }
+                    if (
+                        nameMatch &&
+                        websiteMatch &&
+                        instagramHandleMatch &&
+                        venueMatch
+                    ) {
                         return item
                     }
                 })
@@ -90,6 +80,47 @@ export default function useSearch(
         }
     }, [searchData, items])
 
+    const filterName = (item: Item) => {
+        return (
+            !searchData.name ||
+            (searchData.name &&
+                item.name.toLowerCase().includes(searchData.name.toLowerCase()))
+        )
+    }
+    const filterWebsite = (item: Item) => {
+        return (
+            !searchData.website ||
+            (searchData.website &&
+                item.website &&
+                item.website
+                    .toLowerCase()
+                    .includes(searchData.website.toLowerCase()))
+        )
+    }
+
+    const filterInstagramHandle = (item: Item) => {
+        return (
+            !searchData.instagramHandle ||
+            (searchData.instagramHandle &&
+                item.instagramHandle &&
+                item.instagramHandle
+                    .toLowerCase()
+                    .includes(searchData.instagramHandle.toLowerCase()))
+        )
+    }
+
+    const filterVenue = (event: EventWithBandVenue) => {
+        return (
+            !searchData.venue ||
+            (searchData.venue &&
+                event.venue.name &&
+                event.venue.name
+                    .toLowerCase()
+                    .includes(searchData.venue.toLowerCase()))
+        )
+    }
+
+    // TODO: replace with reducer
     const handleSearch = (
         searchData: string | Date | null,
         searchOption: SearchOption
@@ -119,6 +150,12 @@ export default function useSearch(
                 setSearchData((prevValues) => ({
                     ...prevValues,
                     date: searchData as Date
+                }))
+                break
+            case SearchOption.Venue:
+                setSearchData((prevValues) => ({
+                    ...prevValues,
+                    venue: searchData as string
                 }))
                 break
         }

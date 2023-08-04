@@ -4,7 +4,12 @@ import { type EventWithBandVenue, type Band, type Venue } from '~/types/data'
 type Item = EventWithBandVenue | Band | Venue
 
 export const isEvent = (item: Item | undefined): item is EventWithBandVenue => {
-    return (item as EventWithBandVenue)?.startDate !== undefined
+    return (
+        (item as EventWithBandVenue)?.startDate !== undefined &&
+        (item as EventWithBandVenue)?.endDate !== undefined &&
+        (item as EventWithBandVenue)?.band !== undefined &&
+        (item as EventWithBandVenue)?.venue !== undefined
+    )
 }
 
 export const isBand = (item: Item | undefined): item is Band => {
