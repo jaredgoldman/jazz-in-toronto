@@ -3,7 +3,7 @@ import Button from '../Button'
 import { type FileData } from '~/types/data'
 
 interface Props {
-    onUpload: (data: FileData) => void
+    onUpload: (data: FileData) => Promise<void>
     className?: string
     label: string
     name?: string
@@ -21,7 +21,7 @@ const FileUploadButton = ({
 
     useEffect(() => {
         if (selectedFile) {
-            onUpload(selectedFile)
+            void onUpload(selectedFile)
         }
         //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedFile])

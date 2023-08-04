@@ -68,7 +68,7 @@ const Upload = ({
     }
 }: UploadProps) => {
     const [fileData, setFileData] = useState<FileData | undefined>()
-    const onSaveFile = async (fileData: FileData) => {
+    const onSaveFile = async (fileData: FileData): Promise<void> => {
         setFileData(fileData)
         await form.setFieldValue(name, fileData)
     }

@@ -73,6 +73,7 @@ export default function VenueForm({ currentValues }: Props): JSX.Element {
         endpoint: 'uploadImage',
         onClientUploadComplete: (uploadedFileData) => {
             if (uploadedFileData && formikRef.current?.values) {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const { fileData, ...rest } = formikRef.current?.values
                 const newValues = {
                     ...rest,
@@ -105,10 +106,10 @@ export default function VenueForm({ currentValues }: Props): JSX.Element {
                     }
                     return errors
                 }}
-                onSubmit={(values) => {
+                onSubmit={async (values) => {
                     // Start upload for now
                     if (values?.fileData?.file) {
-                        startUpload([values.fileData.file])
+                        await startUpload([values.fileData.file])
                     }
                 }}
             >

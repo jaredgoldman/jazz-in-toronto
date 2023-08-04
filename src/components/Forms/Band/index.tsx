@@ -64,12 +64,14 @@ export default function BandForm({ currentValues }: Props): JSX.Element {
         endpoint: 'uploadImage',
         onClientUploadComplete: (uploadedFileData) => {
             if (uploadedFileData && formikRef.current?.values) {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const { fileData, ...rest } = formikRef.current?.values
                 const newValues = {
                     ...rest,
                     photoPath: uploadedFileData[0]?.fileUrl
                 }
                 bandMutation.mutate(newValues)
+                formikRef.current?.setSubmitting(false)
             }
         },
         onUploadError: (e) => {
@@ -92,10 +94,11 @@ export default function BandForm({ currentValues }: Props): JSX.Element {
                     }
                     return errors
                 }}
-                onSubmit={(values) => {
+                onSubmit={async (values, actions) => {
                     // Start upload for now
                     if (values?.fileData?.file) {
-                        startUpload([values.fileData.file])
+                        await startUpload([values.fileData.file])
+                        actions.setSubmitting(false)
                     }
                 }}
             >
