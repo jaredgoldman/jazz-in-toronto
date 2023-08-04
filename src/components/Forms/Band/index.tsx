@@ -94,11 +94,10 @@ export default function BandForm({ currentValues }: Props): JSX.Element {
                     }
                     return errors
                 }}
-                onSubmit={async (values, actions) => {
+                onSubmit={async (values) => {
                     // Start upload for now
                     if (values?.fileData?.file) {
                         await startUpload([values.fileData.file])
-                        actions.setSubmitting(false)
                     }
                 }}
             >

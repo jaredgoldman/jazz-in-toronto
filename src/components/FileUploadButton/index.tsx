@@ -3,7 +3,7 @@ import Button from '../Button'
 import { type FileData } from '~/types/data'
 
 interface Props {
-    onUpload: (data: FileData) => Promise<void>
+    onUpload: (data: FileData) => Promise<void> | void
     className?: string
     label: string
     name?: string

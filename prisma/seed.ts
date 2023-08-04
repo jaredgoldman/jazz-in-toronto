@@ -27,7 +27,6 @@ const seed = async () => {
                 name: `Event ${i + 1}`,
                 startDate: new Date(Date.now() + i * oneDay),
                 endDate: new Date(Date.now() + i * oneDay + oneDay),
-                photoPath: 'https://picsum.photos/200/300',
                 instagramHandle: `@event${i + 1}`,
                 website: `https://google.com`,
                 bandId: band.id,

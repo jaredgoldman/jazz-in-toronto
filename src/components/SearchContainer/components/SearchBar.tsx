@@ -4,6 +4,7 @@ import { useState } from 'react'
 import ReactDatePicker from 'react-datepicker'
 // Types
 import { SearchOption } from '../types'
+import { DataType } from '~/types/enums'
 
 interface Props {
     onSearch: (
@@ -11,6 +12,7 @@ interface Props {
         searchOption: SearchOption
     ) => void
     searchDate?: Date
+    itemType: DataType
 }
 
 export default function SearchBar({ onSearch, searchDate }: Props) {

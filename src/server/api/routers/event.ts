@@ -94,7 +94,6 @@ export const eventRouter = createTRPCRouter({
                 name: z.string().optional(),
                 startDate: z.date().optional(),
                 endDate: z.date().optional(),
-                photoPath: z.string().optional(),
                 featured: z.boolean().optional(),
                 instagramHandle: z.string().optional(),
                 website: z.string().optional(),
