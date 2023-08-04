@@ -48,10 +48,11 @@ export default function useSearch(
             const filterItems = () => {
                 // XXX: Fix this
                 return items.filter((item: Item) => {
+                    const itemIsEvent = isEvent(item)
                     let nameMatch = false
                     let websiteMatch = false
                     let instagramHandleMatch = false
-                    let venueMatch = false
+                    let venueMatch = itemIsEvent ? false : true
 
                     if (filterName(item)) {
                         nameMatch = true
@@ -62,7 +63,7 @@ export default function useSearch(
                     if (filterInstagramHandle(item)) {
                         instagramHandleMatch = true
                     }
-                    if (isEvent(item) && filterVenue(item)) {
+                    if (itemIsEvent && filterVenue(item)) {
                         venueMatch = true
                     }
                     if (

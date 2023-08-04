@@ -6,14 +6,14 @@ import { api } from '~/utils/api'
 import { DataType } from '~/types/enums'
 
 export default function AdminBands() {
-    const { data: events, isLoading } = api.band.getAll.useQuery()
+    const { data: bands, isLoading } = api.band.getAll.useQuery()
 
     return (
         <AdminLayout>
             <>
-                {events && (
+                {bands && (
                     <SearchContainer
-                        items={events}
+                        items={bands}
                         isLoading={isLoading}
                         itemType={DataType.BAND}
                     />

@@ -1,5 +1,5 @@
 // Libraries
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 // Components
 import {
     EventHeader,
@@ -53,8 +53,16 @@ export default function SearchTable({ items, headerType }: Props): JSX.Element {
 
     return (
         <table className="table w-full border-collapse rounded-lg bg-white shadow-md">
-            {header}
-            <tbody>{items.length ? rows : <tr>No results</tr>}</tbody>
+            <thead>{header}</thead>
+            <tbody>
+                {items.length ? (
+                    rows
+                ) : (
+                    <tr>
+                        <td>No results</td>
+                    </tr>
+                )}
+            </tbody>
         </table>
     )
 }

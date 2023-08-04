@@ -23,10 +23,10 @@ export default function SearchContainer({
 }: Props): JSX.Element {
     const { filteredItems, handleSearch } = useSearch(
         items,
-        itemType,
         searchDate,
         setSearchDate
     )
+
     return (
         <div>
             <SearchBar
