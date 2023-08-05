@@ -18,7 +18,7 @@ export default function ModalDay({ dailyEvents: { date, events } }: Props) {
                 <div>
                     {events.map((event: EventWithBandVenue) => {
                         return (
-                            <div className="m-2" key={event.name}>
+                            <div className="m-2" key={event.id}>
                                 <div>Event name: {event.name}</div>
                                 <div>Band name: {event.band.name}</div>
                                 <div>Venue name: {event.venue.name}</div>

@@ -20,7 +20,7 @@ export default function RootLayout({ children }: Props): JSX.Element {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <ModalProvider>
-                <main className=" flex flex-col items-center font-body">
+                <main className=" flex flex-col items-center overflow-hidden font-body">
                     <Header headerType={HeaderType.Public} />
                     <div className="flex max-w-2xl flex-col">{children}</div>
                     <Footer />

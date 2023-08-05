@@ -19,12 +19,28 @@ export default function CalendarDay({ dailyEvents }: Props) {
     const { handleModal } = useContext(ModalContext) as ModalContextType
     const dayOfMonth = dailyEvents.date.getDate()
 
+    // Can we lazy load this?
     const modalDay = <ModalDay dailyEvents={dailyEvents} />
+
     return (
         <div className="border-2 border-black text-xs dark:border-white">
-            <div>{nthNumber(dayOfMonth)}</div>
-            <div>{`${dailyEvents.numOfEvents} events`}</div>
-            <Button onClick={() => handleModal(modalDay)}>View</Button>
+            {dailyEvents.placeholder ? (
+                <div></div>
+            ) : (
+                <>
+                    <div>{nthNumber(dayOfMonth)}</div>
+                    <div>
+                        {dailyEvents.numOfEvents > 0
+                            ? `${dailyEvents.numOfEvents} events`
+                            : 'no events'}
+                    </div>
+                    {dailyEvents.numOfEvents ? (
+                        <Button onClick={() => handleModal(modalDay)}>
+                            View
+                        </Button>
+                    ) : null}
+                </>
+            )}
         </div>
     )
 }

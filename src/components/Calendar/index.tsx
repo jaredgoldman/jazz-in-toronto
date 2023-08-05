@@ -8,13 +8,18 @@ import useCalendar from './hooks/useCalendar'
 import { type DailyEventData } from './types'
 // Utils
 import { api } from '~/utils/api'
+import { daysOfTheWeek } from '~/utils/constants'
 
 export default function Calendar(): JSX.Element {
     const [selectedDate, setSelectedDate] = useState(new Date())
     const currentYear = selectedDate.getFullYear()
     const currentMonth = selectedDate.getMonth()
 
-    const { data: events, isLoading } = api.event.getAllByMonth.useQuery({
+    const {
+        data: events,
+        isLoading,
+        refetch
+    } = api.event.getAllByMonth.useQuery({
         year: currentYear,
         month: currentMonth
     })
@@ -24,31 +29,57 @@ export default function Calendar(): JSX.Element {
         currentYear,
         currentMonth,
         selectedDate,
-        setSelectedDate
+        setSelectedDate,
+        refetch
     )
 
-    const calendarDays = isLoading ? (
-        <div>loading...</div>
-    ) : (
-        monthlyEvents?.map((dailyEvents: DailyEventData, i: number) => {
-            return (
-                <CalendarDay
-                    key={`${currentMonthName}-${i + 1}`}
-                    dailyEvents={dailyEvents}
-                />
+    const mapEventsToCalendarRows = () => {
+        if (!monthlyEvents) return
+        const monthlyEventsCopy = [...monthlyEvents]
+        const rows = []
+        // map events to calendar rows
+        for (let i = 0; i < 5; i++) {
+            const rowDays = monthlyEventsCopy.splice(0, 7)
+            const calendarRowDays = (
+                <tr className="text-center text-gray-900">
+                    {rowDays.map((dailyEvents, i) => {
+                        return (
+                            <td key={`${currentMonthName}-${i + 1}`}>
+                                <CalendarDay dailyEvents={dailyEvents} />
+                            </td>
+                        )
+                    })}
+                </tr>
             )
-        })
-    )
+            rows.push(calendarRowDays)
+        }
+        return rows
+    }
+
+    const eventRows = mapEventsToCalendarRows()
 
     return (
         <main>
-            <h1 className="text-center">{`Events in ${currentMonthName}`}</h1>
+            <h1 className="text-center">{`Events in ${currentMonthName}, ${currentYear}`}</h1>
             <div className="flex w-full justify-center">
                 <Button onClick={() => changeMonth(-1)}>Previous</Button>
                 <Button onClick={() => changeMonth(1)}>Next</Button>
             </div>
-            <div className="grid grid-cols-7 gap-x-1 gap-y-1">
-                {calendarDays}
+            <div>
+                {isLoading ? (
+                    <div>loading...</div>
+                ) : (
+                    <table className="min-w-full rounded-md border border-gray-300 bg-white">
+                        <thead className="bg-blue-500 text-white">
+                            <tr>
+                                {daysOfTheWeek.map((day) => (
+                                    <td className="px-4 py-2 text-sm">{day}</td>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>{eventRows}</tbody>
+                    </table>
+                )}
             </div>
         </main>
     )

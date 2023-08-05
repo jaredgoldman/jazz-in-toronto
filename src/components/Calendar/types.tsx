@@ -5,4 +5,5 @@ export interface DailyEventData {
     events: { [key: string]: EventWithBandVenue[] }
     date: Date
     numOfEvents: number
+    placeholder?: boolean
 }
