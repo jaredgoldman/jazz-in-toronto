@@ -1,7 +1,7 @@
 // Libraries
 import { createContext } from 'react'
 // Components
-import Modal from '../Modal'
+import Modal from '..'
 // Types
 import { type ModalContextType } from '../types'
 // Hooks

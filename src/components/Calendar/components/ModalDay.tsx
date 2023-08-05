@@ -1,6 +1,8 @@
 // Types
 import { type DailyEventData } from '../types'
 import { type EventWithBandVenue } from '~/types/data'
+// Utils
+import { getFormattedTime } from '~/utils/date'
 
 interface Props {
     dailyEvents: DailyEventData
@@ -13,35 +15,35 @@ export default function ModalDay({ dailyEvents: { date, events } }: Props) {
 
     const venueEvents = Object.entries(events).map(([venueName, events]) => {
         return (
-            <div className="m-2" key={venueName}>
-                <h1>Venue name: {venueName}</h1>
-                <div>
-                    {events.map((event: EventWithBandVenue) => {
-                        return (
-                            <div className="m-2" key={event.id}>
-                                <div>Event name: {event.name}</div>
-                                <div>Band name: {event.band.name}</div>
-                                <div>Venue name: {event.venue.name}</div>
-                                <div>
-                                    Start time:{' '}
-                                    {event.startDate.toLocaleDateString()}
-                                </div>
-                                <div>
-                                    End time:{' '}
-                                    {event.startDate.toLocaleDateString()}
-                                </div>
-                            </div>
-                        )
-                    })}
-                </div>
-            </div>
+            <>
+                <tr className="m-2" key={venueName}>
+                    <td>{venueName}</td>
+                </tr>
+                {events.map((event: EventWithBandVenue) => {
+                    return (
+                        <tr className="m-2" key={event.id}>
+                            <td>
+                                {`${event.band.name}: ${getFormattedTime(
+                                    event.startDate
+                                )} - ${getFormattedTime(event.endDate)}`}
+                            </td>
+                        </tr>
+                    )
+                })}
+            </>
         )
     })
 
     return (
-        <div>
-            <div>{readableDate}</div>
-            <div>{venueEvents}</div>
+        <div className="h-full overflow-auto">
+            <table className="border-white-2 h-full overflow-auto border">
+                <thead>
+                    <tr>
+                        <th>{`Events on ${readableDate}`}</th>
+                    </tr>
+                </thead>
+                <tbody>{venueEvents}</tbody>
+            </table>
         </div>
     )
 }

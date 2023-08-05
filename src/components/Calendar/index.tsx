@@ -5,7 +5,6 @@ import CalendarDay from './components/CalendarDay'
 // Hooks
 import useCalendar from './hooks/useCalendar'
 // Types
-import { type DailyEventData } from './types'
 // Utils
 import { api } from '~/utils/api'
 import { daysOfTheWeek } from '~/utils/constants'
@@ -41,7 +40,7 @@ export default function Calendar(): JSX.Element {
         for (let i = 0; i < 5; i++) {
             const rowDays = monthlyEventsCopy.splice(0, 7)
             const calendarRowDays = (
-                <tr className="text-center text-gray-900">
+                <tr className="text-center text-gray-900" key={i}>
                     {rowDays.map((dailyEvents, i) => {
                         return (
                             <td key={`${currentMonthName}-${i + 1}`}>
@@ -73,7 +72,9 @@ export default function Calendar(): JSX.Element {
                         <thead className="bg-blue-500 text-white">
                             <tr>
                                 {daysOfTheWeek.map((day) => (
-                                    <td className="px-4 py-2 text-sm">{day}</td>
+                                    <td className="px-4 py-2 text-sm" key={day}>
+                                        {day}
+                                    </td>
                                 ))}
                             </tr>
                         </thead>

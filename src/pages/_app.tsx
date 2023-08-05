@@ -20,7 +20,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
     console.log(poppins)
     return (
         <SessionProvider session={session}>
-            <main className={`${poppins.variable} bg-white dark:bg-black`}>
+            <main className={`${poppins.variable}`}>
                 <Component {...pageProps} />
             </main>
         </SessionProvider>

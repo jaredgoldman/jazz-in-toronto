@@ -11,9 +11,9 @@ export default function Modal(): JSX.Element | null {
     ) as ModalContextType
     if (showModal) {
         return (
-            <div className="z-100 border-white-2 m-2 box-border border bg-black p-2">
+            <div className="z-100 border-white-2 m-10 box-border h-full w-3/5 border bg-black p-2">
                 <div onClick={() => closeModal()}>X</div>
-                <div className="flex w-full justify-center">{modalContent}</div>
+                <div className="h-screen">{modalContent}</div>
             </div>
         )
     } else return null
