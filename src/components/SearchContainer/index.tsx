@@ -40,7 +40,7 @@ export default function SearchContainer({
             {filteredItems ? (
                 <SearchTable
                     items={filteredItems}
-                    headerType={itemType}
+                    dataType={itemType}
                     featuredItem={featuredItem}
                 />
             ) : (

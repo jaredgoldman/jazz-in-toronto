@@ -11,18 +11,22 @@ import {
 } from './SearchTableRows'
 // Types
 import { DataType } from '~/types/enums'
-import { type Item } from '~/types/data'
+import {
+    type Band,
+    type EventWithBandVenue,
+    type Venue,
+    type Item
+} from '~/types/data'
 import { type ModalContextType } from '~/components/Modal/types'
 // Utils
-import { isBand, isEvent } from '~/utils/typeguards'
 import { api } from '~/utils/api'
 // Context
 import { ModalContext } from '~/components/Modal/context/ModalContext'
 
 interface Props {
     items: Array<Item>
+    dataType: DataType
     featuredItem?: Item | null
-    headerType: DataType
 }
 
 const headers = {
@@ -34,7 +38,7 @@ const headers = {
 
 export default function SearchTable({
     items,
-    headerType,
+    dataType,
     featuredItem
 }: Props): JSX.Element {
     const eventSetFeaturedMutation = api.event.setFeatured.useMutation()
@@ -63,20 +67,20 @@ export default function SearchTable({
     // We can assume items will be all of one type
     // however let's just make TS happy by typeguarding all items
     const rows = items.map((item) => {
-        if (isEvent(item)) {
+        if (dataType === DataType.EVENT) {
             return (
                 <EventRow
-                    item={item}
+                    item={item as EventWithBandVenue}
                     key={item.id}
                     handleModalForm={handleModalForm}
                     featured={featured}
                     setFeatured={handleSetFeatured}
                 />
             )
-        } else if (isBand(item)) {
+        } else if (dataType === DataType.BAND) {
             return (
                 <BandRow
-                    item={item}
+                    item={item as Band}
                     key={item.id}
                     handleModalForm={handleModalForm}
                     featured={featured}
@@ -86,7 +90,7 @@ export default function SearchTable({
         } else {
             return (
                 <VenueRow
-                    item={item}
+                    item={item as Venue}
                     key={item.id}
                     handleModalForm={handleModalForm}
                     featured={featured}
@@ -96,7 +100,7 @@ export default function SearchTable({
         }
     })
 
-    const header = headers[headerType]
+    const header = headers[dataType]
 
     return (
         <table className="table w-full border-collapse rounded-lg bg-white shadow-md">

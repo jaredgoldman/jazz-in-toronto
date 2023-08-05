@@ -1,4 +1,4 @@
-import { Band } from '@prisma/client'
+import { type Band } from '@prisma/client'
 import Image from 'next/image'
 
 interface Props {

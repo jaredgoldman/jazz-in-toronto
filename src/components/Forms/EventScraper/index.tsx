@@ -81,7 +81,7 @@ export default function EventScraper({ venues }: Props): JSX.Element {
                                 <h2 className="mb-3 mt-5">Results</h2>
                                 <SearchTable
                                     items={data}
-                                    headerType={DataType.EVENT}
+                                    dataType={DataType.EVENT}
                                 />
                             </>
                         )}

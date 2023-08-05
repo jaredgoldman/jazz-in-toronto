@@ -131,7 +131,8 @@ export default function useSearch(
         filterInstagramHandle,
         filterName,
         filterVenue,
-        filterWebsite
+        filterWebsite,
+        itemType
     ])
 
     // const sortItems = (items: Array<Item>) => {}

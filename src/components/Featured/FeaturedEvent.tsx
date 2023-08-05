@@ -1,4 +1,4 @@
-import { EventWithBandVenue } from '~/types/data'
+import { type EventWithBandVenue } from '~/types/data'
 import Image from 'next/image'
 
 interface Props {
