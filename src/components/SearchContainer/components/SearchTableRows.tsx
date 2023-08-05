@@ -10,7 +10,7 @@ import { DataType } from '~/types/enums'
 interface RowProps<T> {
     item: T
     handleModalForm: (formType: ModalForms, item: T) => void
-    featured: string | undefined
+    featured?: string
     setFeatured: (id: string, type: DataType) => void
 }
 

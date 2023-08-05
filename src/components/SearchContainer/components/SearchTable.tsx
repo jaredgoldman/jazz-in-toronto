@@ -21,7 +21,7 @@ import { ModalContext } from '~/components/Modal/context/ModalContext'
 
 interface Props {
     items: Array<Item>
-    featuredItem: Item | null
+    featuredItem?: Item | null
     headerType: DataType
 }
 
