@@ -6,49 +6,39 @@ import { type DailyEventData } from '../types'
 import { type EventWithBandVenue } from '~/types/data'
 // Utils
 import { daysOfTheWeek } from '~/utils/constants'
-import { api } from '~/utils/api'
 
 interface ReturnType {
     changeMonth: (numOfMonths: number) => void
     currentMonthName: string
     currentDayName: string
     monthlyEvents: DailyEventData[]
-    isLoading: boolean
 }
 
-export default function useCalendar(): ReturnType {
-    const [selectedDate, setSelectedDate] = useState(new Date(Date.now()))
+export default function useCalendar(
+    events: EventWithBandVenue[] | undefined,
+    currentYear: number,
+    currentMonth: number,
+    selectedDate: Date,
+    setSelectedDate: (date: Date) => void
+): ReturnType {
     const [monthlyEvents, setDailyEvents] = useState<DailyEventData[]>([])
-    const currentYear = selectedDate.getFullYear()
-    const currentMonthIndex = selectedDate.getMonth()
-    const currentMonthName = months[currentMonthIndex] as string
-    const currentDayName = daysOfTheWeek[selectedDate.getDay()] as string
-    const daysInMonth: number = getDaysInMonth(selectedDate)
 
-    const { data: monthlyEventsData, isLoading } =
-        api.event.getAllByMonth.useQuery({
-            year: currentYear,
-            month: currentMonthIndex
-        })
+    const currentMonthName = months[currentMonth] as string
+    const currentDayName = daysOfTheWeek[selectedDate.getDay()] as string
+    const daysInMonth = getDaysInMonth(selectedDate)
 
     useEffect(() => {
-        if (monthlyEventsData?.length) {
+        if (events?.length) {
             setDailyEvents(
-                mapEventsToDays(
+                mapEventsToDaysAndVenue(
                     daysInMonth,
-                    monthlyEventsData,
-                    currentMonthIndex,
+                    events,
+                    currentMonth,
                     currentYear
                 )
             )
         }
-    }, [
-        monthlyEventsData,
-        daysInMonth,
-        selectedDate,
-        currentMonthIndex,
-        currentYear
-    ])
+    }, [events, daysInMonth, selectedDate, currentMonth, currentYear])
 
     const changeMonth = (numOfMonths: number) => {
         setSelectedDate(addMonths(selectedDate, numOfMonths))
@@ -58,8 +48,7 @@ export default function useCalendar(): ReturnType {
         changeMonth,
         currentMonthName,
         currentDayName,
-        monthlyEvents,
-        isLoading
+        monthlyEvents
     }
 }
 
@@ -68,28 +57,43 @@ const months = Array.from({ length: 12 }, (_, i) => {
 })
 
 // TODO: Optimize
-const mapEventsToDays = (
+const mapEventsToDaysAndVenue = (
     daysInMonth: number,
     monthlyEvents: EventWithBandVenue[],
     monthIndex: number,
     year: number
 ): DailyEventData[] => {
-    const eventDays: { [key: number]: EventWithBandVenue[] | undefined } = {}
-    // Filter every event into a specific day
+    const dailyEvents: {
+        [key: number]: {
+            events: { [key: string]: EventWithBandVenue[] }
+            numOfEvents: number
+        }
+    } = {}
+    // Filter every event into a specific day and venue
     monthlyEvents.forEach((event) => {
         const day = event.startDate.getDate()
-        if (eventDays[day]) {
-            eventDays[day]?.push(event)
+        if (dailyEvents[day]) {
+            if (dailyEvents[day]!.events[event.venue.name]) {
+                dailyEvents[day]!.events[event.venue.name]!.push(event)
+                dailyEvents[day]!.numOfEvents! += 1
+            } else {
+                dailyEvents[day]!.events[event.venue.name] = [event]
+                dailyEvents[day]!.numOfEvents! += 1
+            }
         } else {
-            eventDays[day] = [event]
+            dailyEvents[day] = { events: {}, numOfEvents: 1 }
+            dailyEvents[day]!.events[event.venue.name] = [event]
         }
     })
-    // add to array representing entire month
+
+    // add to array representing the entire month
     return Array.from({ length: daysInMonth }, (_, i) => {
         const date = new Date(year, monthIndex, i + 1)
+        const dayData = dailyEvents[i + 1] || { events: {}, numOfEvents: 0 }
         return {
-            events: eventDays[i + 1] || [],
-            date
+            events: dayData.events,
+            date,
+            numOfEvents: dayData.numOfEvents
         }
     })
 }

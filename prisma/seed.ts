@@ -22,15 +22,17 @@ const seed = async () => {
     const oneDay = 60 * 60 * 24 * 1000
     // create 100 days with 100 events
     for (let i = 0; i < 100; i++) {
-        const events = bandsData.map((band) => {
+        const events = bandsData.map((band, j) => {
             return {
-                name: `Event ${i + 1}`,
+                name: `Event ${j + 1}`,
                 startDate: new Date(Date.now() + i * oneDay),
                 endDate: new Date(Date.now() + i * oneDay + oneDay),
                 instagramHandle: `@event${i + 1}`,
                 website: `https://google.com`,
                 bandId: band.id,
-                venueId: venuesData[0]?.id as Venue['id']
+                venueId: venuesData[
+                    Math.floor(Math.random() * venuesData.length)
+                ]?.id as Venue['id']
             }
         })
 
@@ -71,6 +73,20 @@ const generateVenues = async () => {
             longitude: -79.4004,
             crawlable: true,
             eventsPath: 'events-9O8Cm'
+        }
+    })
+    await prisma.venue.create({
+        data: {
+            name: 'Jazz Bistro',
+            address: '251 Victoria St',
+            city: 'Toronto',
+            photoPath: 'https://picsum.photos/200/300',
+            instagramHandle: '@jazzbistroto',
+            website: 'https://jazzbistro.ca/',
+            latitude: 43.6559,
+            longitude: -79.3794,
+            crawlable: true,
+            eventsPath: 'performance_calendar'
         }
     })
 }

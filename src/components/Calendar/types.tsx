@@ -1,8 +1,8 @@
-import { type EventWithBandVenue } from "~/types/data"
+import { type EventWithBandVenue } from '~/types/data'
 
-export type DailyEventData = {
-    events: Array<EventWithBandVenue> | []
+// The key here will represent a venue name
+export interface DailyEventData {
+    events: { [key: string]: EventWithBandVenue[] }
     date: Date
+    numOfEvents: number
 }
-
-

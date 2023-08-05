@@ -11,27 +11,37 @@ export default function ModalDay({ dailyEvents: { date, events } }: Props) {
         dateStyle: 'full'
     }).format(date)
 
-    const eventCards = events.length ? (
-        events.map((event: EventWithBandVenue) => {
-            return (
-                <div className="m-2" key={event.name}>
-                    <div>Event name: {event.name}</div>
-                    <div>Band name: {event.band.name}</div>
-                    <div>Venue name: {event.venue.name}</div>
-                    <div>
-                        Start time: {event.startDate.toLocaleDateString()}
-                    </div>
-                    <div>End time: {event.startDate.toLocaleDateString()}</div>
+    const venueEvents = Object.entries(events).map(([venueName, events]) => {
+        return (
+            <div className="m-2" key={venueName}>
+                <h1>Venue name: {venueName}</h1>
+                <div>
+                    {events.map((event: EventWithBandVenue) => {
+                        return (
+                            <div className="m-2" key={event.name}>
+                                <div>Event name: {event.name}</div>
+                                <div>Band name: {event.band.name}</div>
+                                <div>Venue name: {event.venue.name}</div>
+                                <div>
+                                    Start time:{' '}
+                                    {event.startDate.toLocaleDateString()}
+                                </div>
+                                <div>
+                                    End time:{' '}
+                                    {event.startDate.toLocaleDateString()}
+                                </div>
+                            </div>
+                        )
+                    })}
                 </div>
-            )
-        })
-    ) : (
-        <div>No events today</div>
-    )
+            </div>
+        )
+    })
+
     return (
         <div>
             <div>{readableDate}</div>
-            <div>{eventCards}</div>
+            <div>{venueEvents}</div>
         </div>
     )
 }

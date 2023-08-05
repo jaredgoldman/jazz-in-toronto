@@ -1,3 +1,4 @@
+import { useState } from 'react'
 // Components
 import Button from '../Button'
 import CalendarDay from './components/CalendarDay'
@@ -5,10 +6,26 @@ import CalendarDay from './components/CalendarDay'
 import useCalendar from './hooks/useCalendar'
 // Types
 import { type DailyEventData } from './types'
+// Utils
+import { api } from '~/utils/api'
 
 export default function Calendar(): JSX.Element {
-    const { changeMonth, currentMonthName, monthlyEvents, isLoading } =
-        useCalendar()
+    const [selectedDate, setSelectedDate] = useState(new Date())
+    const currentYear = selectedDate.getFullYear()
+    const currentMonth = selectedDate.getMonth()
+
+    const { data: events, isLoading } = api.event.getAllByMonth.useQuery({
+        year: currentYear,
+        month: currentMonth
+    })
+
+    const { changeMonth, currentMonthName, monthlyEvents } = useCalendar(
+        events,
+        currentYear,
+        currentMonth,
+        selectedDate,
+        setSelectedDate
+    )
 
     const calendarDays = isLoading ? (
         <div>loading...</div>

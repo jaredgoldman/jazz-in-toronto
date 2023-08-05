@@ -23,7 +23,7 @@ export default function CalendarDay({ dailyEvents }: Props) {
     return (
         <div className="border-2 border-black text-xs dark:border-white">
             <div>{nthNumber(dayOfMonth)}</div>
-            <div>{`${dailyEvents.events.length} events`}</div>
+            <div>{`${dailyEvents.numOfEvents} events`}</div>
             <Button onClick={() => handleModal(modalDay)}>View</Button>
         </div>
     )
