@@ -1,3 +1,5 @@
+// Libraries
+import { useState } from 'react'
 // Components
 import { Form, Formik } from 'formik'
 import { DatePicker, Input, Select } from '../Fields'
@@ -33,6 +35,7 @@ interface Props {
     currentValues?: EventWithBandVenue
 }
 export default function EventForm({ currentValues }: Props): JSX.Element {
+    const [error, setError] = useState<string>('')
     const { data: venueData } = api.venue.getAll.useQuery()
     const { data: bandData } = api.band.getAll.useQuery()
 
@@ -84,8 +87,10 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                 onSubmit={(values) => {
                     try {
                         eventMutation.mutate(values)
-                    } catch (error) {
-                        // display error
+                    } catch (_error) {
+                        setError(
+                            'There was an error submitting your data. Please try again'
+                        )
                     }
                 }}
             >
@@ -126,8 +131,15 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                             name="instagramHandle"
                             label="Instagram Handle"
                         />
-                        <Input name="website" label="Website" />
-                        <div className="mt-5 flex w-full justify-center">
+                        <Input
+                            className="flex flex-col"
+                            name="website"
+                            label="Website"
+                        />
+                        <div className="flex w-full flex-col items-center">
+                            <div className="flex h-10 flex-col justify-center text-sm text-red-500">
+                                {error && <p>{error}</p>}
+                            </div>
                             <Button type="submit" disabled={isSubmitting}>
                                 Submit
                             </Button>

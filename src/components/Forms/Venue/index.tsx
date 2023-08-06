@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 // Components
 import { Form, Formik } from 'formik'
 import PlacesAutocomplete from '../Fields/PlacesAutoComplete'
@@ -41,6 +41,7 @@ interface Props {
 export default function VenueForm({ currentValues }: Props): JSX.Element {
     // Abstract form context out of component so we can submit when
     // file uplaod is complete
+    const [error, setError] = useState<string>('')
     const formikRef = useRef<FormikContextType<Values>>(null)
     const venueMutation = api.venue.create.useMutation()
 
@@ -73,12 +74,20 @@ export default function VenueForm({ currentValues }: Props): JSX.Element {
                     ...rest,
                     photoPath: uploadedFileData[0]?.fileUrl
                 }
-                venueMutation.mutate(newValues)
+                try {
+                    venueMutation.mutate(newValues)
+                } catch (e) {
+                    setError(
+                        'There was an error uploading your data. Please try again.'
+                    )
+                }
                 formikRef.current.setSubmitting(false)
             }
         },
-        onUploadError: (e) => {
-            console.log('Error uploading file', e)
+        onUploadError: () => {
+            setError(
+                'There was an error uploading your data. Please try again.'
+            )
         }
     })
 
@@ -118,9 +127,14 @@ export default function VenueForm({ currentValues }: Props): JSX.Element {
                         />
                         <Input name="instagramHandle" label="instagramHandle" />
                         <Input name="website" label="Venue Website" />
-                        <Button type="submit" disabled={isSubmitting}>
-                            Submit
-                        </Button>
+                        <div className="flex w-full flex-col items-center">
+                            <div className="flex h-10 flex-col justify-center text-sm text-red-500">
+                                {error && <p>{error}</p>}
+                            </div>
+                            <Button type="submit" disabled={isSubmitting}>
+                                Submit
+                            </Button>
+                        </div>
                     </Form>
                 )}
             </Formik>

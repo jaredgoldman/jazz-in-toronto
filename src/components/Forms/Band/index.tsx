@@ -1,5 +1,5 @@
 // Libararies
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 // Components
 import { Form, Formik } from 'formik'
 import Button from '~/components/Button'
@@ -39,10 +39,12 @@ interface Props {
 }
 
 export default function BandForm({ currentValues }: Props): JSX.Element {
+    const [error, setError] = useState<string>('')
     // Abstract form context out of component so we can submit when
     // file uplaod is complete
     const formikRef = useRef<FormikContextType<Values>>(null)
     const bandMutation = api.band.create.useMutation()
+
     const initialValues: Values = currentValues
         ? {
               name: currentValues.name,
@@ -71,12 +73,20 @@ export default function BandForm({ currentValues }: Props): JSX.Element {
                     ...rest,
                     photoPath: uploadedFileData[0]?.fileUrl
                 }
-                bandMutation.mutate(newValues)
+                try {
+                    bandMutation.mutate(newValues)
+                } catch {
+                    setError(
+                        'There was an error uploading your data. Please try again.'
+                    )
+                }
                 formikRef.current?.setSubmitting(false)
             }
         },
-        onUploadError: (e) => {
-            console.error('Error uploading image', e)
+        onUploadError: () => {
+            setError(
+                'There was an error uploading your image data. Is your file too large?'
+            )
         }
     })
 
@@ -115,8 +125,15 @@ export default function BandForm({ currentValues }: Props): JSX.Element {
                             name="instagramHandle"
                             label="Instagram Handle"
                         />
-                        <Input name="website" label="Website" />
-                        <div>
+                        <Input
+                            name="website"
+                            label="Website"
+                            className="flex flex-col"
+                        />
+                        <div className="flex w-full flex-col items-center">
+                            <div className="flex h-10 flex-col justify-center text-sm text-red-500">
+                                {error && <p>{error}</p>}
+                            </div>
                             <Button type="submit" disabled={isSubmitting}>
                                 Submit
                             </Button>
