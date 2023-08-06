@@ -28,7 +28,12 @@ export default function AdminLayout({
                 {session ? (
                     children
                 ) : (
-                    <Button onClick={() => void signIn()}>Sign In</Button>
+                    <Button
+                        className="white absolute right-2 top-2 border p-1"
+                        onClick={() => void signIn()}
+                    >
+                        Sign In
+                    </Button>
                 )}
                 <Footer />
             </main>

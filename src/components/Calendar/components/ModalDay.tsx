@@ -16,7 +16,7 @@ export default function ModalDay({ dailyEvents: { date, events } }: Props) {
     const venueEvents = Object.entries(events).map(([venueName, events]) => {
         return (
             <>
-                <tr className="m-2" key={venueName}>
+                <tr className="m-2 " key={venueName}>
                     <td>{venueName}</td>
                 </tr>
                 {events.map((event: EventWithBandVenue) => {
@@ -35,15 +35,13 @@ export default function ModalDay({ dailyEvents: { date, events } }: Props) {
     })
 
     return (
-        <div className="h-full overflow-auto">
-            <table className="border-white-2 h-full overflow-auto border">
-                <thead>
-                    <tr>
-                        <th>{`Events on ${readableDate}`}</th>
-                    </tr>
-                </thead>
-                <tbody>{venueEvents}</tbody>
-            </table>
+        <div className="mb-4">
+            <div className="mb-2">{`Events on ${readableDate}`}</div>
+            <div className="h-[60vh] overflow-y-auto">
+                <table>
+                    <tbody>{venueEvents}</tbody>
+                </table>
+            </div>
         </div>
     )
 }

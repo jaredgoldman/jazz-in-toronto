@@ -5,9 +5,7 @@ import Calendar from '~/components/Calendar'
 export default function Listings(): JSX.Element {
     return (
         <RootLayout>
-            <main>
-                <Calendar />
-            </main>
+            <Calendar />
         </RootLayout>
     )
 }
