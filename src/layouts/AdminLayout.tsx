@@ -20,20 +20,31 @@ export default function AdminLayout({
     const { data: session } = useSession()
     return (
         <ModalProvider>
-            <main>
+            <main className="mt-5 flex min-h-screen flex-col items-center font-body">
                 <Header
                     headerType={HeaderType.Admin}
                     showLinks={showHeaderLinks}
                 />
                 {session ? (
-                    children
+                    <div className="flex max-w-2xl flex-grow flex-col">
+                        {children}
+                    </div>
                 ) : (
-                    <Button
-                        className="white absolute right-2 top-2 border p-1"
-                        onClick={() => void signIn()}
-                    >
-                        Sign In
-                    </Button>
+                    <>
+                        <div className="flex max-w-2xl flex-grow flex-col">
+                            <div className="text-center">
+                                <p className="mt-6 text-lg">
+                                    Please sign in to access the admin panel.
+                                </p>
+                            </div>
+                        </div>
+                        <Button
+                            className="white absolute right-2 top-2 border p-1"
+                            onClick={() => void signIn()}
+                        >
+                            Sign In
+                        </Button>
+                    </>
                 )}
                 <Footer />
             </main>
