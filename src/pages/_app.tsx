@@ -17,7 +17,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
     Component,
     pageProps: { session, ...pageProps }
 }) => {
-    console.log(poppins)
     return (
         <SessionProvider session={session}>
             <main className={`${poppins.variable}`}>

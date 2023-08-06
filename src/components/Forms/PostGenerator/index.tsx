@@ -37,9 +37,8 @@ export default function PostGenerator(): JSX.Element {
     const { startUpload } = useUploadThing({
         endpoint: 'uploadPosts',
         onClientUploadComplete: (uploadedFileData) => {
-            if (uploadedFileData && formikRef.current?.values) {
+            if (uploadedFileData && formikRef.current) {
                 const { caption } = formikRef.current.values
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 try {
                     postMutation.mutate({ caption, files: uploadedFileData })
                 } catch {
@@ -47,7 +46,7 @@ export default function PostGenerator(): JSX.Element {
                         'There was an error uploading your data. Please try again.'
                     )
                 }
-                formikRef.current?.setSubmitting(false)
+                formikRef.current.setSubmitting(false)
             }
         },
         onUploadError: () => {
