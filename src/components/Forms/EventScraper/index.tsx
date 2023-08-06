@@ -76,8 +76,13 @@ export default function EventScraper({ venues }: Props): JSX.Element {
                             optionData={venues}
                         />
                         <div className="flex w-full flex-col items-center">
-                            <div className="flex h-10 flex-col justify-center text-sm text-red-500">
-                                {error && <p>{error}</p>}
+                            <div className="flex h-10 flex-col justify-center text-sm">
+                                {error && (
+                                    <p className="text-red-500">{error}</p>
+                                )}
+                                {isSuccess && data && (
+                                    <p className="text-green-500">Success!</p>
+                                )}
                             </div>
                             <Button type="submit" disabled={isSubmitting}>
                                 Submit

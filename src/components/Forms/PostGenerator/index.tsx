@@ -13,7 +13,6 @@ import { api } from '~/utils/api'
 // Hooks
 import usePostImages from './hooks/usePostImages'
 import { useUploadThing } from '~/hooks/useUploadThing'
-import { w } from 'vitest/dist/types-2b1c412e'
 
 interface Values {
     date: Date
@@ -38,11 +37,6 @@ export default function PostGenerator(): JSX.Element {
     const { startUpload } = useUploadThing({
         endpoint: 'uploadPosts',
         onClientUploadComplete: (uploadedFileData) => {
-            console.log('CLIENT UPLOAD COMPLETE', {
-                uploadedFileData,
-                ref: formikRef.current
-            })
-
             if (uploadedFileData && formikRef.current?.values) {
                 const { caption } = formikRef.current.values
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
