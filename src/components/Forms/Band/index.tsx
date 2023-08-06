@@ -5,6 +5,7 @@ import { Form, Formik } from 'formik'
 import Button from '~/components/Button'
 import { Input } from '../Fields'
 import Upload from '../Fields/Upload'
+import FormLayout from '~/layouts/FormLayout'
 // Types
 import { type Band } from '~/types/data'
 import { type FormikContextType } from 'formik'
@@ -80,7 +81,7 @@ export default function BandForm({ currentValues }: Props): JSX.Element {
     })
 
     return (
-        <div className="w-full">
+        <FormLayout>
             <h1 className="mb-5">
                 {currentValues ? `Edit band` : 'Add your band to our database'}
             </h1>
@@ -123,6 +124,6 @@ export default function BandForm({ currentValues }: Props): JSX.Element {
                     </Form>
                 )}
             </Formik>
-        </div>
+        </FormLayout>
     )
 }

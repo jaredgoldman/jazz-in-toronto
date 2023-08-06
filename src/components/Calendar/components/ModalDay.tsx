@@ -35,7 +35,7 @@ export default function ModalDay({ dailyEvents: { date, events } }: Props) {
     })
 
     return (
-        <div className="mb-4">
+        <div className="mb-2">
             <div className="mb-2">{`Events on ${readableDate}`}</div>
             <div className="h-[60vh] overflow-y-auto">
                 <table>

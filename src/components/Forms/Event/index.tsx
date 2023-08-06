@@ -3,6 +3,7 @@ import { Form, Formik } from 'formik'
 import { DatePicker, Input, Select } from '../Fields'
 import { ModalForms } from '~/components/Modal/types'
 import Button from '~/components/Button'
+import FormLayout from '~/layouts/FormLayout'
 // Types
 import { type EventWithBandVenue } from '~/types/data'
 // Utils
@@ -54,7 +55,7 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
           }
 
     return (
-        <div className="px-40">
+        <FormLayout>
             <h1 className="text-bold mb-5 text-center">
                 {currentValues ? 'Edit gig' : 'Add your gig here!'}
             </h1>
@@ -134,6 +135,6 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                     </Form>
                 )}
             </Formik>
-        </div>
+        </FormLayout>
     )
 }

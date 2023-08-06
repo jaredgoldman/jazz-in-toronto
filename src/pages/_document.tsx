@@ -10,7 +10,7 @@ export default function Document() {
             <Head>
                 <script async src={src} />
             </Head>
-            <body className="h-screen overflow-hidden font-body text-black dark:bg-black dark:text-white">
+            <body className="h-screen overflow-y-auto font-body text-black dark:bg-black dark:text-white">
                 <Main />
                 <NextScript />
             </body>

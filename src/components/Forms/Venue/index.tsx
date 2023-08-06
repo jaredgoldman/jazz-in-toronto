@@ -5,6 +5,7 @@ import PlacesAutocomplete from '../Fields/PlacesAutoComplete'
 import { Input } from '../Fields'
 import Button from '~/components/Button'
 import Upload from '../Fields/Upload'
+import FormLayout from '~/layouts/FormLayout'
 // Types
 import { type Venue } from '~/types/data'
 import { type FormikContextType } from 'formik'
@@ -82,7 +83,7 @@ export default function VenueForm({ currentValues }: Props): JSX.Element {
     })
 
     return (
-        <div>
+        <FormLayout>
             <h1 className="mb-5">
                 {currentValues ? 'Edit venue' : 'Add your venue here!'}
             </h1>
@@ -123,6 +124,6 @@ export default function VenueForm({ currentValues }: Props): JSX.Element {
                     </Form>
                 )}
             </Formik>
-        </div>
+        </FormLayout>
     )
 }

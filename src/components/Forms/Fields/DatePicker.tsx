@@ -1,5 +1,5 @@
 // Libraries
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import ReactDatePicker, { type ReactDatePickerProps } from 'react-datepicker'
 import {
     type FieldInputProps,
@@ -7,6 +7,8 @@ import {
     Field,
     ErrorMessage
 } from 'formik'
+import { ModalContext } from '~/components/Modal/context/ModalContext'
+import { ModalContextType } from '~/components/Modal/types'
 import 'react-datepicker/dist/react-datepicker.css'
 
 interface Props {
@@ -16,6 +18,7 @@ interface Props {
     fieldClassName?: string
     outerOnChange?: (startDate: Date) => void
     datePickerProps?: Omit<ReactDatePickerProps, 'onChange'>
+    adjustZIndex?: boolean
 }
 
 export default function DatePickerField({
@@ -43,26 +46,29 @@ export default function DatePickerField({
 interface DatePickerProps {
     field: FieldInputProps<Date>
     form: FormikProps<Date>
-    props: ReactDatePickerProps & { outerOnChange?: (startDate: Date) => void }
+    props: ReactDatePickerProps & {
+        outerOnChange?: (startDate: Date) => void
+    }
 }
 
 const DatePicker = ({ form, field, props }: DatePickerProps): JSX.Element => {
+    const { showModal } = useContext(ModalContext) as ModalContextType
     const [startDate, setStartDate] = useState<Date | null>(new Date())
     useEffect(() => {
         const setStartDateFromField = async () => {
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             if (startDate && startDate !== field.value) {
                 props.outerOnChange && props.outerOnChange(startDate)
                 await form.setFieldValue(field.name, startDate)
             }
         }
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        setStartDateFromField()
+        void setStartDateFromField()
     }, [startDate, form, field.name, field.value, props])
 
+    // XXX: Solution to stop React DatePicker input filed from rendering above form
+    const zIndex = showModal ? -1 : 0
     return (
         <ReactDatePicker
-            className="border-2 border-black text-black"
+            className={`relative z-[${zIndex}] border-2 border-black text-black`}
             selected={startDate}
             {...props}
             onChange={(date: Date) => setStartDate(new Date(date))}
