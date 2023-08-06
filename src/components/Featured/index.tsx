@@ -8,7 +8,7 @@ export default function Featured() {
         api.featured.getFeatured.useQuery()
 
     return (
-        <div className="h-[70vh] flex-grow">
+        <div className="flex-grow">
             {featuredItems && !isLoading ? (
                 <div className="flex">
                     {featuredItems?.venue && (

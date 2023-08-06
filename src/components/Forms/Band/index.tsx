@@ -132,9 +132,20 @@ export default function BandForm({ currentValues }: Props): JSX.Element {
                         />
                         <div className="flex w-full flex-col items-center">
                             <div className="flex h-10 flex-col justify-center text-sm text-red-500">
-                                {error && <p>{error}</p>}
+                                {error && (
+                                    <p className="text-red-500">{error}</p>
+                                )}
+                                {bandMutation.isSuccess && (
+                                    <p className="text-green-500">
+                                        Band added successfully!
+                                    </p>
+                                )}
                             </div>
-                            <Button type="submit" disabled={isSubmitting}>
+                            <Button
+                                type="submit"
+                                disabled={isSubmitting}
+                                isLoading={isSubmitting}
+                            >
                                 Submit
                             </Button>
                         </div>

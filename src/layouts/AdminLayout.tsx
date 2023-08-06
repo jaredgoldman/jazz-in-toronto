@@ -26,7 +26,7 @@ export default function AdminLayout({
                     showLinks={showHeaderLinks}
                 />
                 {session ? (
-                    <div className="flex max-w-2xl flex-grow flex-col">
+                    <div className="mx-5 flex min-h-[70vh] w-full flex-grow flex-col items-center">
                         {children}
                     </div>
                 ) : (

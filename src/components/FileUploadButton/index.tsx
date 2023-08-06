@@ -9,6 +9,14 @@ interface Props {
     name?: string
 }
 
+const trimFileName = (originalFile: File) => {
+    const trimmedName = originalFile.name.trim()
+    return new File([originalFile], trimmedName, {
+        type: originalFile.type,
+        lastModified: originalFile.lastModified
+    })
+}
+
 const FileUploadButton = ({
     onUpload,
     label,
@@ -30,7 +38,7 @@ const FileUploadButton = ({
         const file = event.target.files?.[0]
         if (file) {
             const dataURL = URL.createObjectURL(file)
-            setSelectedFile({ file, dataURL })
+            setSelectedFile({ file: trimFileName(file), dataURL })
         }
     }
 

@@ -1,36 +1,65 @@
 // Libraries
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 // Components
 import { Formik, Form } from 'formik'
 import Button from '~/components/Button'
 import { DatePicker } from '../Fields'
 import FileUploadButton from '~/components/FileUploadButton'
 import { Input } from '../Fields'
+// Types
+import { type FormikContextType } from 'formik'
 // Utils
 import { api } from '~/utils/api'
 // Hooks
 import usePostImages from './hooks/usePostImages'
 import { useUploadThing } from '~/hooks/useUploadThing'
+import { w } from 'vitest/dist/types-2b1c412e'
+
+interface Values {
+    date: Date
+    caption: string
+}
 
 interface Errors {
     date?: string
-    description?: string
+    caption?: string
 }
 
 export default function PostGenerator(): JSX.Element {
+    const formikRef = useRef<FormikContextType<Values>>(null)
+    const [error, setError] = useState<string>('')
     const [date, setDate] = useState<Date>(new Date())
     const postMutation = api.event.post.useMutation()
     const { data: events } = api.event.getAllByDay.useQuery({
         date
     })
 
+    // Handle file uploads and form submission
     const { startUpload } = useUploadThing({
         endpoint: 'uploadPosts',
-        onClientUploadComplete: () => {
-            alert("I'm done!")
+        onClientUploadComplete: (uploadedFileData) => {
+            console.log('CLIENT UPLOAD COMPLETE', {
+                uploadedFileData,
+                ref: formikRef.current
+            })
+
+            if (uploadedFileData && formikRef.current?.values) {
+                const { caption } = formikRef.current.values
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                try {
+                    postMutation.mutate({ caption, files: uploadedFileData })
+                } catch {
+                    setError(
+                        'There was an error uploading your data. Please try again.'
+                    )
+                }
+                formikRef.current?.setSubmitting(false)
+            }
         },
         onUploadError: () => {
-            alert('Error!')
+            setError(
+                'There was an error uploading your image data. Is your file too large?'
+            )
         }
     })
 
@@ -45,6 +74,7 @@ export default function PostGenerator(): JSX.Element {
         <div className="w-full">
             <h1 className="mb-5">Event Scraper</h1>
             <Formik
+                innerRef={formikRef}
                 initialValues={initialValues}
                 validate={(values) => {
                     const errors: Errors = {}
@@ -52,22 +82,15 @@ export default function PostGenerator(): JSX.Element {
                         errors.date = 'Required'
                     }
                     if (!values.caption) {
-                        errors.description = 'Description required'
+                        errors.caption = 'Caption required'
                     }
                     return errors
                 }}
-                onSubmit={async ({ caption }) => {
-                    try {
-                        const res = await startUpload(Object.values(files))
-                        if (res) {
-                            postMutation.mutate({ files: res, caption })
-                        }
-                    } catch (error) {
-                        // display error
-                    }
+                onSubmit={async () => {
+                    await startUpload(Object.values(files))
                 }}
             >
-                {() => (
+                {({ isSubmitting }) => (
                     <Form className="flex flex-col">
                         <DatePicker
                             label="Select a day to generate a post for"
@@ -78,7 +101,7 @@ export default function PostGenerator(): JSX.Element {
                             }}
                         />
                         <Input name="caption" label="Caption" />
-                        {postImages.length && (
+                        {postImages.length && !postMutation.isSuccess && (
                             <div className="my-3 flex w-full justify-center">
                                 <div className="flex">
                                     {postImages.map((postImage, index) => {
@@ -101,8 +124,20 @@ export default function PostGenerator(): JSX.Element {
                                 </div>
                             </div>
                         )}
-                        <div className="mb-3 flex w-full justify-center">
-                            <Button type="submit">Upload to Instagram</Button>
+                        <div className="flex w-full flex-col items-center">
+                            <div className="flex h-10 flex-col justify-center text-sm">
+                                {error && (
+                                    <p className="text-red-500">{error}</p>
+                                )}
+                                {postMutation.isSuccess && (
+                                    <div className="text-green-500">
+                                        Success!
+                                    </div>
+                                )}
+                            </div>
+                            <Button type="submit" disabled={isSubmitting}>
+                                Submit
+                            </Button>
                         </div>
                     </Form>
                 )}

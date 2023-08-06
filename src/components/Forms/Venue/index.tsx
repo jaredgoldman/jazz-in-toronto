@@ -84,7 +84,8 @@ export default function VenueForm({ currentValues }: Props): JSX.Element {
                 formikRef.current.setSubmitting(false)
             }
         },
-        onUploadError: () => {
+        onUploadError: (e) => {
+            console.log(e)
             setError(
                 'There was an error uploading your data. Please try again.'
             )
@@ -129,9 +130,20 @@ export default function VenueForm({ currentValues }: Props): JSX.Element {
                         <Input name="website" label="Venue Website" />
                         <div className="flex w-full flex-col items-center">
                             <div className="flex h-10 flex-col justify-center text-sm text-red-500">
-                                {error && <p>{error}</p>}
+                                {error && (
+                                    <p className="text-red-500">{error}</p>
+                                )}
+                                {venueMutation.isSuccess && (
+                                    <p className="text-green-500">
+                                        Success adding venue
+                                    </p>
+                                )}
                             </div>
-                            <Button type="submit" disabled={isSubmitting}>
+                            <Button
+                                type="submit"
+                                disabled={isSubmitting}
+                                isLoading={isSubmitting}
+                            >
                                 Submit
                             </Button>
                         </div>

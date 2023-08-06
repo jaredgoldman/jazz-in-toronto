@@ -65,10 +65,11 @@ const DatePicker = ({ form, field, props }: DatePickerProps): JSX.Element => {
     }, [startDate, form, field.name, field.value, props])
 
     // XXX: Solution to stop React DatePicker input filed from rendering above form
-    const zIndex = showModal ? -1 : 0
+    const zIndex = showModal ? 'z-[-10]' : 'z-0'
+
     return (
         <ReactDatePicker
-            className={`relative z-[${zIndex}] border-2 border-black text-black`}
+            className={`relative ${zIndex} border-2 border-black text-black`}
             selected={startDate}
             {...props}
             onChange={(date: Date) => setStartDate(new Date(date))}

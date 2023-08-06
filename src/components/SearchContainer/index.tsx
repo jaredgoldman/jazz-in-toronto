@@ -31,7 +31,7 @@ export default function SearchContainer({
     )
 
     return (
-        <div>
+        <div className="w-full">
             <SearchBar
                 onSearch={handleSearch}
                 searchDate={searchDate}

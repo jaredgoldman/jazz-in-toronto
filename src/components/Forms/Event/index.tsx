@@ -1,5 +1,5 @@
 // Libraries
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 // Components
 import { Form, Formik } from 'formik'
 import { DatePicker, Input, Select } from '../Fields'
@@ -7,6 +7,7 @@ import { ModalForms } from '~/components/Modal/types'
 import Button from '~/components/Button'
 import FormLayout from '~/layouts/FormLayout'
 // Types
+import { type FormikContextType } from 'formik'
 import { type EventWithBandVenue } from '~/types/data'
 // Utils
 import { api } from '~/utils/api'
@@ -16,8 +17,8 @@ export interface Values {
     startDate: Date
     endDate: Date
     bandId: string
-    instagramHandle: string
-    website: string
+    instagramHandle?: string
+    website?: string
     venueId: string
 }
 
@@ -35,11 +36,17 @@ interface Props {
     currentValues?: EventWithBandVenue
 }
 export default function EventForm({ currentValues }: Props): JSX.Element {
-    const [error, setError] = useState<string>('')
+    const formikRef = useRef<FormikContextType<Values>>(null)
     const { data: venueData } = api.venue.getAll.useQuery()
     const { data: bandData } = api.band.getAll.useQuery()
 
     const eventMutation = api.event.create.useMutation()
+
+    useEffect(() => {
+        if (eventMutation.isSuccess && formikRef.current) {
+            formikRef.current?.setSubmitting(false)
+        }
+    }, [eventMutation.isSuccess, formikRef])
 
     const initialValues = currentValues
         ? {
@@ -63,6 +70,7 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                 {currentValues ? 'Edit gig' : 'Add your gig here!'}
             </h1>
             <Formik
+                innerRef={formikRef}
                 initialValues={initialValues}
                 validate={(values) => {
                     const errors: Errors = {}
@@ -85,13 +93,7 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                     return errors
                 }}
                 onSubmit={(values) => {
-                    try {
-                        eventMutation.mutate(values)
-                    } catch (_error) {
-                        setError(
-                            'There was an error submitting your data. Please try again'
-                        )
-                    }
+                    eventMutation.mutate(values)
                 }}
             >
                 {({ isSubmitting }) => (
@@ -137,10 +139,24 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                             label="Website"
                         />
                         <div className="flex w-full flex-col items-center">
-                            <div className="flex h-10 flex-col justify-center text-sm text-red-500">
-                                {error && <p>{error}</p>}
+                            <div className="flex h-10 flex-col justify-center text-sm">
+                                {eventMutation.isError && (
+                                    <p className="text-red-500">
+                                        There was an error submitting. Please
+                                        try again
+                                    </p>
+                                )}
+                                {eventMutation.isSuccess && (
+                                    <p className="text-green-500">
+                                        Event submitted successfully!
+                                    </p>
+                                )}
                             </div>
-                            <Button type="submit" disabled={isSubmitting}>
+                            <Button
+                                type="submit"
+                                disabled={isSubmitting}
+                                isLoading={isSubmitting}
+                            >
                                 Submit
                             </Button>
                         </div>

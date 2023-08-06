@@ -13,9 +13,6 @@ export default {
                     '100%': { transform: 'rotate(360deg)' }
                 }
             }
-        },
-        animation: {
-            spin: 'spin 1s linear infinite'
         }
     },
     plugins: []
