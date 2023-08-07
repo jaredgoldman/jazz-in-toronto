@@ -6,8 +6,8 @@ export default function Loading() {
             <Image
                 className="animate-spin"
                 src="/images/spinner.png"
-                width={125}
-                height={125}
+                width={100}
+                height={100}
                 alt="loading"
             />
         </div>

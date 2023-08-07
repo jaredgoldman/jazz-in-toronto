@@ -1,9 +1,9 @@
 // Libraries
-import puppeteer from 'puppeteer'
 import { cheerioJsonMapper, type JsonTemplate } from 'cheerio-json-mapper'
 // types
 import { type Venue, type PartialEvent } from '~/types/data'
-import { Page } from 'puppeteer'
+import chromium from 'chrome-aws-lambda'
+import playwright from 'playwright-core'
 // Utils
 import { wait } from '~/utils/shared'
 import { type RexEvent, type VenueEvents } from './types'
@@ -12,7 +12,7 @@ import rexJson from './templates/rex.json'
 
 export default class ScraperService {
     private venue: Venue
-    private page?: Page
+    private page?: any
     private initialized = false
 
     constructor(venue: Venue) {
@@ -20,7 +20,6 @@ export default class ScraperService {
             throw new Error('No website or events path provided')
         }
         this.venue = venue
-        this.page = new Page()
     }
 
     public async init(): Promise<void> {
@@ -46,9 +45,19 @@ export default class ScraperService {
 
     private async loadPage(): Promise<void> {
         const url = `${this.venue.website}${this.venue?.eventsPath || ''}`
-        const browser = await puppeteer.launch()
+        const browser = await playwright.chromium.launch({
+            args: chromium.args,
+            executablePath:
+                process.env.NODE_ENV !== 'development'
+                    ? await chromium.executablePath
+                    : '/usr/bin/chromium',
+            headless:
+                process.env.NODE_ENV !== 'development'
+                    ? chromium.headless
+                    : true
+        })
         const page = await browser.newPage()
-        await page.setViewport({ width: 1920, height: 1080 })
+        // await page.setViewport({ width: 1920, height: 1080 })
         await page.goto(url, {
             waitUntil: 'domcontentloaded'
         })
