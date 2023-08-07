@@ -60,6 +60,7 @@ export const getStaticProps: GetStaticProps<{
 export default function About({
     data
 }: InferGetStaticPropsType<typeof getStaticProps>): JSX.Element {
+    console.log('DATA', data)
     const aboutData = data?.about?.data?.attributes || null
     const teamImagePath = aboutData?.teamImage?.data?.attributes?.url || null
     const imageCollagePath =
@@ -85,7 +86,7 @@ export default function About({
                         })}
                         {teamImagePath && (
                             <Image
-                                src={`${env.NEXT_PUBLIC_CMS_API_URL}${teamImagePath}`}
+                                src={teamImagePath}
                                 height={200}
                                 width={200}
                                 alt="Jazz In Toronto team"
@@ -112,7 +113,7 @@ export default function About({
                         )}
                         {imageCollagePath && (
                             <Image
-                                src={`${env.NEXT_PUBLIC_CMS_API_URL}${imageCollagePath}`}
+                                src={imageCollagePath}
                                 height={200}
                                 width={200}
                                 alt="Jazz In Toronto team"
