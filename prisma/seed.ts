@@ -6,7 +6,7 @@ const bandNameGenerator = new BandNameGenerator()
 
 const seed = async () => {
     // create 100 bands
-    const bands = Array.from({ length: 100 }).map((_, i) => ({
+    const bands = Array.from({ length: 50 }).map((_, i) => ({
         name: bandNameGenerator.generateBandName(),
         genre: 'jazz',
         photoPath: 'https://picsum.photos/200/300',
@@ -21,7 +21,7 @@ const seed = async () => {
 
     const oneDay = 60 * 60 * 24 * 1000
     // create 100 days with 100 events
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 10; i++) {
         const events = bandsData.map((band, j) => {
             return {
                 name: `Event ${j + 1}`,
@@ -38,12 +38,6 @@ const seed = async () => {
 
         await prisma.event.createMany({ data: events })
     }
-    await prisma.admin.create({
-        data: {
-            email: 'test@test.com',
-            password: 'test'
-        }
-    })
 }
 
 const generateVenues = async () => {
