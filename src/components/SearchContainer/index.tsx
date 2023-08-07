@@ -1,6 +1,7 @@
 // Components
 import SearchBar from './components/SearchBar'
 import SearchTable from './components/SearchTable'
+import Loading from '../Loading'
 // Types
 import { type Items, type Item } from '~/types/data'
 // Hooks
@@ -44,7 +45,7 @@ export default function SearchContainer({
                     featuredItem={featuredItem}
                 />
             ) : (
-                <div>Loading...</div>
+                <Loading />
             )}
         </div>
     )

@@ -1,6 +1,7 @@
 // Componentsj
 import AdminLayout from '~/layouts/AdminLayout'
 import SearchContainer from '~/components/SearchContainer'
+import Loading from '~/components/Loading'
 // Utils
 import { api } from '~/utils/api'
 import { DataType } from '~/types/enums'
@@ -23,7 +24,7 @@ export default function AdminBands() {
                         itemType={DataType.BAND}
                     />
                 )}
-                {isLoading && <div>Loading...</div>}
+                {isLoading && <Loading />}
             </>
         </AdminLayout>
     )

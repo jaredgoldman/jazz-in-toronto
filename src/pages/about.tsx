@@ -4,6 +4,7 @@ import { api } from '~/utils/api'
 import Image from 'next/image'
 import { env } from '~/env.mjs'
 import Button from '~/components/Button'
+import Loading from '~/components/Loading'
 
 export default function About(): JSX.Element {
     const { data } = api.cms.about.useQuery()
@@ -68,7 +69,7 @@ export default function About(): JSX.Element {
                     </div>
                 </>
             ) : (
-                <div>Loading...</div>
+                <Loading />
             )}
         </RootLayout>
     )

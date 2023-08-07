@@ -2,6 +2,7 @@ import FeaturedVenue from './FeaturedVenue'
 import FeaturedEvent from './FeaturedEvent'
 import FeaturedBand from './FeaturedBand'
 import { api } from '~/utils/api'
+import Loading from '../Loading'
 
 export default function Featured() {
     const { data: featuredItems, isLoading } =
@@ -22,7 +23,7 @@ export default function Featured() {
                     )}
                 </div>
             ) : (
-                <div>Loading...</div>
+                <Loading />
             )}
         </div>
     )

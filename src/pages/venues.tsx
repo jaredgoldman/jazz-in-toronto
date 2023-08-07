@@ -1,6 +1,7 @@
 // Components
 import RootLayout from '~/layouts/RootLayout'
 import VenueCard from '~/components/VenueCard/VenueCard'
+import Loading from '~/components/Loading'
 // Uti;s
 import { api } from '~/utils/api'
 
@@ -9,7 +10,7 @@ export default function Venues(): JSX.Element {
 
     const venueCards =
         !venues || isLoading ? (
-            <div>Loading...</div>
+            <Loading />
         ) : (
             venues.map((venue) => {
                 return <VenueCard key={venue.id} venue={venue} />

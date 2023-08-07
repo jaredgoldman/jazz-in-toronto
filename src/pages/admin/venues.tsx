@@ -4,6 +4,7 @@ import SearchContainer from '~/components/SearchContainer'
 // Utils
 import { api } from '~/utils/api'
 import { DataType } from '~/types/enums'
+import Loading from '~/components/Loading'
 
 export default function AdminVenues() {
     const { data: events, isLoading: venuesLoading } =
@@ -23,7 +24,7 @@ export default function AdminVenues() {
                         itemType={DataType.VENUE}
                     />
                 )}
-                {isLoading && <div>Loading...</div>}
+                {isLoading && <Loading />}
             </>
         </AdminLayout>
     )

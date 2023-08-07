@@ -10,6 +10,7 @@ import EventScraper from '~/components/Forms/EventScraper'
 import { DataType } from '~/types/enums'
 // Utils
 import { api } from '~/utils/api'
+import Loading from '~/components/Loading'
 
 enum View {
     Search = 'Search',
@@ -66,7 +67,7 @@ export default function AdminEvents(): JSX.Element {
                         setSearchDate={setSearchDate}
                     />
                 )}
-                {isLoading && <div>Loading...</div>}
+                {isLoading && <Loading />}
                 {view === View.Scrape && venues && (
                     <EventScraper venues={venues} />
                 )}

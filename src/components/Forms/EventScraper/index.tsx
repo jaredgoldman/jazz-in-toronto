@@ -11,6 +11,7 @@ import { type Venue } from '~/types/data'
 import { api } from '~/utils/api'
 import { DataType } from '~/types/enums'
 import DatePickerField from '../Fields/DatePicker'
+import Loading from '~/components/Loading'
 
 interface Props {
     venues: Venue[]
@@ -92,7 +93,7 @@ export default function EventScraper({ venues }: Props): JSX.Element {
                                 Submit
                             </Button>
                         </div>
-                        {isLoading && <div>Loading...</div>}
+                        {isLoading && <Loading />}
                         {isSuccess && data && (
                             <>
                                 <h2 className="mb-3 mt-5">Results</h2>

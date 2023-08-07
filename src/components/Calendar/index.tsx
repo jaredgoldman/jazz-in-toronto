@@ -8,6 +8,7 @@ import useCalendar from './hooks/useCalendar'
 // Utils
 import { api } from '~/utils/api'
 import { daysOfTheWeek } from '~/utils/constants'
+import Loading from '../Loading'
 
 export default function Calendar(): JSX.Element {
     const [selectedDate, setSelectedDate] = useState(new Date())
@@ -66,7 +67,7 @@ export default function Calendar(): JSX.Element {
             </div>
             <div>
                 {isLoading ? (
-                    <div>loading...</div>
+                    <Loading />
                 ) : (
                     <table className="min-w-full rounded-md border border-gray-300 bg-white">
                         <thead className="bg-blue-500 text-white">

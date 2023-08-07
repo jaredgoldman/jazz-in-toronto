@@ -13,6 +13,7 @@ import { api } from '~/utils/api'
 // Hooks
 import usePostImages from './hooks/usePostImages'
 import { useUploadThing } from '~/hooks/useUploadThing'
+import Loading from '~/components/Loading'
 
 interface Values {
     date: Date
@@ -116,7 +117,9 @@ export default function PostGenerator(): JSX.Element {
                                     />
                                 </div>
                             </div>
-                        ) : <div>Loading...</div>}
+                        ) : (
+                            <Loading />
+                        )}
                         <div className="flex w-full flex-col items-center">
                             <div className="flex h-10 flex-col justify-center text-sm">
                                 {error && (
