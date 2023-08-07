@@ -29,6 +29,11 @@ const config = {
             {
                 protocol: 'https',
                 hostname: 'picsum.photos'
+            },
+            {
+                protocol: 'http',
+                hostname: '127.0.0.1',
+                pathname: '/uploads/**'
             }
         ]
     }

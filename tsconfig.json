@@ -22,7 +22,8 @@
             "~/types/*": ["./src/types/*"],
             "~/components/*": ["./src/components/*"],
             "~/types": ["./src/types"],
-            "~/utils": ["./src/utils"]
+            "~/utils": ["./src/utils"],
+            "~/gql": ["./src/gql"]
         }
     },
     "include": [

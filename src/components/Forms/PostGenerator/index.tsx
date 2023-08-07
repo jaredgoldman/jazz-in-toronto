@@ -94,7 +94,7 @@ export default function PostGenerator(): JSX.Element {
                             }}
                         />
                         <Input name="caption" label="Caption" />
-                        {postImages.length && !postMutation.isSuccess && (
+                        {postImages.length && !postMutation.isSuccess ? (
                             <div className="my-3 flex w-full justify-center">
                                 <div className="flex">
                                     {postImages.map((postImage, index) => {
@@ -116,7 +116,7 @@ export default function PostGenerator(): JSX.Element {
                                     />
                                 </div>
                             </div>
-                        )}
+                        ) : <div>Loading...</div>}
                         <div className="flex w-full flex-col items-center">
                             <div className="flex h-10 flex-col justify-center text-sm">
                                 {error && (

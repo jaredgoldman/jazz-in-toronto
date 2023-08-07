@@ -30,7 +30,7 @@ export const env = createEnv({
      * `NEXT_PUBLIC_`.
      */
     client: {
-        // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
+        NEXT_PUBLIC_CMS_API_URL: z.string()
     },
 
     /**
@@ -52,7 +52,8 @@ export const env = createEnv({
         UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
         UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
         CMS_API_KEY: process.env.CMS_API_KEY,
-        CMS_API_URL: process.env.CMS_API_URL
+        CMS_API_URL: process.env.CMS_API_URL,
+        NEXT_PUBLIC_CMS_API_URL: process.env.NEXT_PUBLIC_CMS_API_URL
     },
     /**
      * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
