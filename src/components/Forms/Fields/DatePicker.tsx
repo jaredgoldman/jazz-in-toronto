@@ -8,7 +8,7 @@ import {
     ErrorMessage
 } from 'formik'
 import { ModalContext } from '~/components/Modal/context/ModalContext'
-import { ModalContextType } from '~/components/Modal/types'
+import { type ModalContextType } from '~/components/Modal/types'
 import 'react-datepicker/dist/react-datepicker.css'
 
 interface Props {

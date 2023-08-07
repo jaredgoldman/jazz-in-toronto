@@ -18,6 +18,8 @@ interface Props {
     buttonClassName?: string
     showPreview?: boolean
     photoPath?: string
+    itemId?: string
+    onDeletePhoto?: () => Promise<void>
 }
 
 // Pass component through Formik so it's value is represened in Formik state
@@ -28,7 +30,9 @@ export default function UploadField({
     className,
     buttonClassName,
     showPreview,
-    photoPath
+    photoPath,
+    itemId,
+    onDeletePhoto
 }: Props) {
     return (
         <div>
@@ -42,7 +46,9 @@ export default function UploadField({
                     className,
                     buttonClassName,
                     showPreview,
-                    photoPath
+                    photoPath,
+                    onDeletePhoto,
+                    itemId
                 }}
             />
             <ErrorMessage name={name} />
@@ -64,20 +70,25 @@ const Upload = ({
         className = 'flex flex-col mb-5',
         buttonClassName = 'w-1/2 border-2 dark:border-white',
         showPreview = true,
-        photoPath
+        photoPath,
+        onDeletePhoto
     }
 }: UploadProps) => {
-    const [fileData, setFileData] = useState<FileData | undefined>()
+    const [src, setSrc] = useState<string>(photoPath || '')
+
     const onSaveFile = async (fileData: FileData): Promise<void> => {
-        setFileData(fileData)
+        setSrc(fileData.dataURL)
         await form.setFieldValue(name, fileData)
     }
 
-    const removeFile = () => {
-        setFileData(undefined)
+    const removeFile = async () => {
+        // If a photoPath and updatemutation func were provided
+        // we're editing and we can call the mutation to remove the photo
+        if (photoPath && onDeletePhoto) {
+            await onDeletePhoto()
+        }
+        setSrc('')
     }
-
-    const src = photoPath || fileData?.dataURL
 
     return (
         <div className={className}>
@@ -90,14 +101,12 @@ const Upload = ({
                 />
                 {showPreview && src && (
                     <div className="relative h-20 w-20 object-contain">
-                        {!photoPath && (
-                            <Button
-                                onClick={removeFile}
-                                className="absolute right-0 top-0"
-                            >
-                                X
-                            </Button>
-                        )}
+                        <Button
+                            onClick={() => void removeFile()}
+                            className="absolute right-1 top-1"
+                        >
+                            X
+                        </Button>
                         <Image
                             src={src}
                             alt="Uploaded image"

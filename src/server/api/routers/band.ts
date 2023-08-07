@@ -64,6 +64,15 @@ export const bandRouter = createTRPCRouter({
             })
         }),
 
+    deletePhoto: protectedProcedure
+        .input(z.object({ id: z.string().cuid() }))
+        .mutation(({ ctx, input }) => {
+            return ctx.prisma.band.update({
+                where: { id: input.id },
+                data: { photoPath: null }
+            })
+        }),
+
     getFeatured: publicProcedure.query(({ ctx }) => {
         return ctx.prisma.band.findFirst({
             where: { featured: true }

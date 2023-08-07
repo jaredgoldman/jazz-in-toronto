@@ -1,5 +1,3 @@
-// Libraries
-import { useState, useRef, useEffect } from 'react'
 // Components
 import { Form, Formik } from 'formik'
 import { DatePicker, Input, Select } from '../Fields'
@@ -7,10 +5,9 @@ import { ModalForms } from '~/components/Modal/types'
 import Button from '~/components/Button'
 import FormLayout from '~/layouts/FormLayout'
 // Types
-import { type FormikContextType } from 'formik'
 import { type EventWithBandVenue } from '~/types/data'
-// Utils
-import { api } from '~/utils/api'
+// Hooks
+import useEventForm from './hooks/useEventForm'
 
 export interface Values {
     name: string
@@ -36,33 +33,16 @@ interface Props {
     currentValues?: EventWithBandVenue
 }
 export default function EventForm({ currentValues }: Props): JSX.Element {
-    const formikRef = useRef<FormikContextType<Values>>(null)
-    const { data: venueData } = api.venue.getAll.useQuery()
-    const { data: bandData } = api.band.getAll.useQuery()
-
-    const eventMutation = api.event.create.useMutation()
-
-    useEffect(() => {
-        if (eventMutation.isSuccess && formikRef.current) {
-            formikRef.current?.setSubmitting(false)
-        }
-    }, [eventMutation.isSuccess, formikRef])
-
-    const initialValues = currentValues
-        ? {
-              ...currentValues,
-              instagramHandle: currentValues.instagramHandle || undefined,
-              website: currentValues.website || undefined
-          }
-        : {
-              name: '',
-              startDate: new Date(),
-              endDate: new Date(),
-              bandId: '',
-              venueId: '',
-              instagramHandle: '',
-              website: ''
-          }
+    const {
+        eventMutation,
+        editEventMutation,
+        venueData,
+        bandData,
+        initialValues,
+        error,
+        isEditing,
+        setError
+    } = useEventForm(currentValues)
 
     return (
         <FormLayout>
@@ -70,7 +50,6 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                 {currentValues ? 'Edit gig' : 'Add your gig here!'}
             </h1>
             <Formik
-                innerRef={formikRef}
                 initialValues={initialValues}
                 validate={(values) => {
                     const errors: Errors = {}
@@ -92,8 +71,22 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
 
                     return errors
                 }}
-                onSubmit={(values) => {
-                    eventMutation.mutate(values)
+                onSubmit={async (values, { setSubmitting }) => {
+                    try {
+                        if (isEditing && currentValues && editEventMutation) {
+                            await editEventMutation.mutateAsync({
+                                id: currentValues?.id,
+                                ...values
+                            })
+                        } else if (eventMutation) {
+                            await eventMutation.mutateAsync(values)
+                        }
+                    } catch (e) {
+                        setSubmitting(false)
+                        setError(
+                            'There was an error submitting. Please try again'
+                        )
+                    }
                 }}
             >
                 {({ isSubmitting }) => (
@@ -139,18 +132,18 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                             label="Website"
                         />
                         <div className="flex w-full flex-col items-center">
-                            <div className="flex h-10 flex-col justify-center text-sm">
-                                {eventMutation.isError && (
-                                    <p className="text-red-500">
-                                        There was an error submitting. Please
-                                        try again
-                                    </p>
+                            <div className="flex h-10 flex-col justify-center text-sm text-red-500">
+                                {error && (
+                                    <p className="text-red-500">{error}</p>
                                 )}
-                                {eventMutation.isSuccess && (
-                                    <p className="text-green-500">
-                                        Event submitted successfully!
-                                    </p>
-                                )}
+                                {eventMutation.isSuccess ||
+                                    (editEventMutation.isSuccess && (
+                                        <p className="text-green-500">
+                                            {`Event ${
+                                                isEditing ? 'edited' : 'added'
+                                            } successfully!`}
+                                        </p>
+                                    ))}
                             </div>
                             <Button
                                 type="submit"

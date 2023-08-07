@@ -1,5 +1,3 @@
-// Libararies
-import { useRef, useState } from 'react'
 // Components
 import { Form, Formik } from 'formik'
 import Button from '~/components/Button'
@@ -8,11 +6,8 @@ import Upload from '../Fields/Upload'
 import FormLayout from '~/layouts/FormLayout'
 // Types
 import { type Band } from '~/types/data'
-import { type FormikContextType } from 'formik'
 // hooks
-import { useUploadThing } from '~/hooks/useUploadThing'
-// Utils
-import { api } from '~/utils/api'
+import useBandForm from './hooks/useBandForm'
 
 export interface Values {
     name: string
@@ -39,56 +34,16 @@ interface Props {
 }
 
 export default function BandForm({ currentValues }: Props): JSX.Element {
-    const [error, setError] = useState<string>('')
-    // Abstract form context out of component so we can submit when
-    // file uplaod is complete
-    const formikRef = useRef<FormikContextType<Values>>(null)
-    const bandMutation = api.band.create.useMutation()
-
-    const initialValues: Values = currentValues
-        ? {
-              name: currentValues.name,
-              instagramHandle: currentValues.instagramHandle || undefined,
-              genre: currentValues.genre || undefined,
-              website: currentValues.website || undefined,
-              photoPath: currentValues.photoPath || undefined
-          }
-        : {
-              name: '',
-              instagramHandle: '',
-              genre: '',
-              website: '',
-              photoPath: '',
-              fileData: undefined
-          }
-
-    // Handle file uploads and form submission
-    const { startUpload } = useUploadThing({
-        endpoint: 'uploadImage',
-        onClientUploadComplete: (uploadedFileData) => {
-            if (uploadedFileData && formikRef.current?.values) {
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                const { fileData, ...rest } = formikRef.current?.values
-                const newValues = {
-                    ...rest,
-                    photoPath: uploadedFileData[0]?.fileUrl
-                }
-                try {
-                    bandMutation.mutate(newValues)
-                } catch {
-                    setError(
-                        'There was an error uploading your data. Please try again.'
-                    )
-                }
-                formikRef.current?.setSubmitting(false)
-            }
-        },
-        onUploadError: () => {
-            setError(
-                'There was an error uploading your image data. Is your file too large?'
-            )
-        }
-    })
+    const {
+        initialValues,
+        bandMutation,
+        editBandMutation,
+        handleDeletePhoto,
+        startUpload,
+        isEditing,
+        error,
+        setError
+    } = useBandForm(currentValues)
 
     return (
         <FormLayout>
@@ -96,7 +51,6 @@ export default function BandForm({ currentValues }: Props): JSX.Element {
                 {currentValues ? `Edit band` : 'Add your band to our database'}
             </h1>
             <Formik
-                innerRef={formikRef}
                 initialValues={initialValues}
                 validate={(values) => {
                     const errors: Errors = {}
@@ -105,10 +59,36 @@ export default function BandForm({ currentValues }: Props): JSX.Element {
                     }
                     return errors
                 }}
-                onSubmit={async (values) => {
-                    // Start upload for now
-                    if (values?.fileData?.file) {
-                        await startUpload([values.fileData.file])
+                onSubmit={async (values, { setSubmitting }) => {
+                    try {
+                        setError('')
+                        let newValues = values
+                        // if we have fileData in form Input
+                        // upload it first
+                        if (values?.fileData?.file) {
+                            const res = await startUpload([
+                                values.fileData.file
+                            ])
+                            if (res) {
+                                newValues = {
+                                    ...values,
+                                    photoPath: res[0]?.fileUrl
+                                }
+                            }
+                        }
+                        if (isEditing && currentValues) {
+                            await editBandMutation.mutateAsync({
+                                id: currentValues?.id,
+                                ...newValues
+                            })
+                        } else {
+                            await bandMutation.mutateAsync(newValues)
+                        }
+                    } catch (e) {
+                        setSubmitting(false)
+                        setError(
+                            'There was an error adding your band. Please try again.'
+                        )
                     }
                 }}
             >
@@ -120,6 +100,7 @@ export default function BandForm({ currentValues }: Props): JSX.Element {
                             name="fileData"
                             label="Upload a band photo"
                             photoPath={initialValues.photoPath}
+                            onDeletePhoto={handleDeletePhoto}
                         />
                         <Input
                             name="instagramHandle"
@@ -135,11 +116,14 @@ export default function BandForm({ currentValues }: Props): JSX.Element {
                                 {error && (
                                     <p className="text-red-500">{error}</p>
                                 )}
-                                {bandMutation.isSuccess && (
-                                    <p className="text-green-500">
-                                        Band added successfully!
-                                    </p>
-                                )}
+                                {bandMutation.isSuccess ||
+                                    (editBandMutation.isSuccess && (
+                                        <p className="text-green-500">
+                                            {`Band ${
+                                                isEditing ? 'edited' : 'added'
+                                            } successfully!`}
+                                        </p>
+                                    ))}
                             </div>
                             <Button
                                 type="submit"

@@ -72,6 +72,15 @@ export const venueRouter = createTRPCRouter({
             })
         }),
 
+    deletePhoto: protectedProcedure
+        .input(z.object({ id: z.string().cuid() }))
+        .mutation(({ ctx, input }) => {
+            return ctx.prisma.venue.update({
+                where: { id: input.id },
+                data: { photoPath: null }
+            })
+        }),
+
     getFeatured: publicProcedure.query(({ ctx }) => {
         return ctx.prisma.venue.findFirst({
             where: { featured: true }
