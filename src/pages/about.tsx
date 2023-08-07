@@ -1,18 +1,70 @@
 // Components
 import RootLayout from '~/layouts/RootLayout'
-import { api } from '~/utils/api'
 import Image from 'next/image'
-import { env } from '~/env.mjs'
 import Button from '~/components/Button'
 import Loading from '~/components/Loading'
+import { graphQlWithAuth } from '~/utils/gql'
+import { graphql } from '../gql'
+import { type AboutUsQuery } from '~/gql/graphql'
+import { type GetStaticProps, type InferGetStaticPropsType } from 'next'
+import { env } from '~/env.mjs'
 
-export default function About(): JSX.Element {
-    const { data } = api.cms.about.useQuery()
+const query = graphql(`
+    query aboutUs {
+        about {
+            data {
+                attributes {
+                    heading
+                    description
+                    teamHeading
+                    staffMembers {
+                        data {
+                            attributes {
+                                position
+                                name
+                            }
+                        }
+                    }
+                    teamImage {
+                        data {
+                            attributes {
+                                url
+                            }
+                        }
+                    }
+                    supportHeading
+                    supportDescription
+                    paypalProfileUrl
+                    eTransferAddress
+                    imageCollage {
+                        data {
+                            attributes {
+                                url
+                            }
+                        }
+                    }
+                    ctaText
+                }
+            }
+        }
+    }
+`)
 
+export const getStaticProps: GetStaticProps<{
+    data: AboutUsQuery
+}> = async () => {
+    const data = await graphQlWithAuth<AboutUsQuery>(query)
+    return { props: { data } }
+}
+
+export default function About({
+    data
+}: InferGetStaticPropsType<typeof getStaticProps>): JSX.Element {
     const aboutData = data?.about?.data?.attributes || null
     const teamImagePath = aboutData?.teamImage?.data?.attributes?.url || null
     const imageCollagePath =
         aboutData?.imageCollage?.data?.attributes?.url || null
+
     return (
         <RootLayout>
             {aboutData ? (

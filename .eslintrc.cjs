@@ -14,6 +14,7 @@ const config = {
             }
         }
     ],
+    ignorePatterns: ['node_modules', 'src/gql/**/*.ts'],
     parser: '@typescript-eslint/parser',
     parserOptions: {
         project: path.join(__dirname, 'tsconfig.json')
