@@ -7,7 +7,6 @@ import { graphQlWithAuth } from '~/utils/gql'
 import { graphql } from '../gql'
 import { type AboutUsQuery } from '~/gql/graphql'
 import { type GetStaticProps, type InferGetStaticPropsType } from 'next'
-import { env } from '~/env.mjs'
 
 const query = graphql(`
     query aboutUs {

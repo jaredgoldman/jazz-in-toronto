@@ -12,7 +12,7 @@ import rexJson from './templates/rex.json'
 
 export default class ScraperService {
     private venue: Venue
-    private page?: any
+    private page?: playwright.Page
     private initialized = false
 
     constructor(venue: Venue) {
