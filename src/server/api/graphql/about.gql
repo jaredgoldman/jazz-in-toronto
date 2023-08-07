@@ -1,0 +1,40 @@
+ about {
+    data {
+      attributes {
+        Heading
+        Description
+        staff_members {
+          data {
+            attributes {
+              Name
+              Position
+            }
+          }
+        }
+        Team {
+          Heading
+          Image {
+            data {
+              attributes {
+                url
+              }
+            }
+          }
+        }
+        Support {
+          Heading
+          Description
+          Paypal
+          Email
+          CTA
+          Images {
+            data {
+               attributes {
+                url
+              }
+            }
+          }
+        }
+      }
+    }
+  }

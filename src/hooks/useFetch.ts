@@ -57,7 +57,10 @@ function useFetch<T = unknown>(url?: string, options?: RequestInit): State<T> {
             }
 
             try {
-                const response = await fetch(url, options)
+                const response = await fetch(url, {
+                    method: options?.method ? options.method : 'GET',
+                    ...options
+                })
                 if (!response.ok) {
                     throw new Error(response.statusText)
                 }
