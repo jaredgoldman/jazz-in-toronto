@@ -2,7 +2,6 @@
 import { cheerioJsonMapper, type JsonTemplate } from 'cheerio-json-mapper'
 // types
 import { type Venue, type PartialEvent } from '~/types/data'
-import chromium from 'chrome-aws-lambda'
 import playwright from 'playwright-core'
 // Utils
 import { wait } from '~/utils/shared'
@@ -46,15 +45,8 @@ export default class ScraperService {
     private async loadPage(): Promise<void> {
         const url = `${this.venue.website}${this.venue?.eventsPath || ''}`
         const browser = await playwright.chromium.launch({
-            args: chromium.args,
-            executablePath:
-                process.env.NODE_ENV !== 'development'
-                    ? await chromium.executablePath
-                    : '/usr/bin/chromium',
-            headless:
-                process.env.NODE_ENV !== 'development'
-                    ? chromium.headless
-                    : true
+            executablePath: playwright.chromium.executablePath(),
+            headless: true
         })
         const page = await browser.newPage()
         // await page.setViewport({ width: 1920, height: 1080 })
