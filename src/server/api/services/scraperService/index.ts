@@ -4,7 +4,7 @@ import { cheerioJsonMapper, type JsonTemplate } from 'cheerio-json-mapper'
 import { type Venue, type PartialEvent } from '~/types/data'
 import playwright from 'playwright-core'
 // Utils
-import chromium from '@sparticuz/chromium'
+import chromium from '@sparticuz/chromium-min'
 import { wait } from '~/utils/shared'
 import { type RexEvent, type VenueEvents } from './types'
 // Data
@@ -47,8 +47,9 @@ export default class ScraperService {
         const url = `${this.venue.website}${this.venue?.eventsPath || ''}`
         const browser = await playwright.chromium.launch({
             args: chromium.args,
-            executablePath: await chromium.executablePath,
-            headless: chromium.headless
+            executablePath: await chromium.executablePath(
+                'https://jazz-in-toronto.s3.us-east-2.amazonaws.com/chromium-v115.0.0-pack.tar'
+            )
         })
         const page = await browser.newPage()
         // await page.setViewport({ width: 1920, height: 1080 })

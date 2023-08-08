@@ -25,6 +25,7 @@
         "@graphql-typed-document-node/core": "^3.2.0",
         "@next-auth/prisma-adapter": "^1.0.5",
         "@prisma/client": "^4.16.2",
+        "@sparticuz/chromium-min": "^115.0.0",
         "@t3-oss/env-nextjs": "^0.3.1",
         "@tanstack/react-query": "^4.29.7",
         "@trpc/client": "^10.26.0",
@@ -54,7 +55,6 @@
     "devDependencies": {
         "@graphql-codegen/cli": "5.0.0",
         "@graphql-codegen/client-preset": "4.1.0",
-        "@sparticuz/chromium": "^106.0.2",
         "@types/eslint": "^8.37.0",
         "@types/node": "^18.16.0",
         "@types/prettier": "^2.7.2",
