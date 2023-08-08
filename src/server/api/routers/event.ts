@@ -7,6 +7,7 @@ import {
 } from '~/server/api/trpc'
 // Utils
 import addDays from 'date-fns/addDays'
+import { Logger } from '~/server/utils/logger'
 // Services
 import ScraperService from '../services/scraperService'
 import PostService from '../services/postService'
@@ -121,13 +122,19 @@ export const eventRouter = createTRPCRouter({
     getVenueEvents: protectedProcedure
         .input(z.object({ venueId: z.string().cuid(), date: z.date() }))
         .mutation(async ({ ctx, input }) => {
+            Logger.info('Attempting to scrape venue events for', input)
+
             const venue = await ctx.prisma.venue.findUnique({
                 where: { id: input.venueId }
             })
             if (venue) {
+                Logger.info('Found venue', venue)
                 const scraper = new ScraperService(venue)
+                Logger.info('Scraper called')
                 await scraper.init()
+                Logger.info('Scraper initialized, about to scrape events')
                 const events = await scraper.getEvents(input.date)
+                Logger.info('Scraped events for venue', events)
                 const processedEvents = []
                 if (events) {
                     //  Tranform partialEvent to Event
