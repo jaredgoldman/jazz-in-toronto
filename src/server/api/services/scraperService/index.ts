@@ -61,9 +61,13 @@ export default class ScraperService {
             console.log('executablePath: ', env.CHROME_EXECUTABLE_PATH)
             console.log("Browser launched, navigating to venue's events page")
             const page = await browser.newPage()
-            console.log('page created', page)
+            console.log('page created')
             // await page.setViewport({ width: 1920, height: 1080 })
-            await page.goto(url)
+            await page.goto(url, {
+                waitUntil: 'networkidle2',
+                timeout: 0
+            })
+            console.log('JSON', rexJson)
             console.log('Page loaded, waiting for any additional js to load')
             // wait for any additional js to load
             // TODO: Wait for certain selector
@@ -71,7 +75,7 @@ export default class ScraperService {
             console.log('Page loaded, setting page')
             this.page = page
         } catch (e) {
-            console.log('Error loading page to scrape', e)
+            console.error('Error loading page to scrape', e)
         }
     }
 

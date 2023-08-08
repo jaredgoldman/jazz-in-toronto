@@ -11,6 +11,11 @@ import { cmsRouter } from './routers/cms'
  *
  * All routers added in /api/routers should be manually added here.
  */
+
+export const config = {
+    runtime: 'edge'
+}
+
 export const appRouter = createTRPCRouter({
     event: eventRouter,
     venue: venueRouter,
