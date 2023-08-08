@@ -58,9 +58,7 @@ export default class ScraperService {
             console.log("Browser launched, navigating to venue's events page")
             const page = await browser.newPage()
             // await page.setViewport({ width: 1920, height: 1080 })
-            await page.goto(url, {
-                waitUntil: 'domcontentloaded'
-            })
+            await page.goto(url)
             console.log('Page loaded, waiting for any additional js to load')
             // wait for any additional js to load
             // TODO: Wait for certain selector
