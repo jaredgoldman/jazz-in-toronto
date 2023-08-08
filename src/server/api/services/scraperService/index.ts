@@ -50,7 +50,7 @@ export default class ScraperService {
             const url = `${this.venue.website}${this.venue?.eventsPath || ''}`
             console.log("Loading page for venue's events", url)
             const browser = await playwright.chromium.launch({
-                args: chromium.args,
+                args: ['--no-sandbox', '--disable-setuid-sandbox', '--single-process'],
                 executablePath: await chromium.executablePath(
                     env.CHROME_EXECUTABLE_PATH
                 )
