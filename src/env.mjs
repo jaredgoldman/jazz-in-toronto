@@ -21,7 +21,8 @@ export const env = createEnv({
         UPLOADTHING_SECRET: z.string(),
         UPLOADTHING_APP_ID: z.string(),
         CMS_API_KEY: z.string(),
-        CMS_API_URL: z.string()
+        CMS_API_URL: z.string(),
+        CHROME_EXECUTABLE_PATH: z.string()
     },
 
     /**
@@ -53,7 +54,8 @@ export const env = createEnv({
         UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
         CMS_API_KEY: process.env.CMS_API_KEY,
         CMS_API_URL: process.env.CMS_API_URL,
-        NEXT_PUBLIC_CMS_API_URL: process.env.NEXT_PUBLIC_CMS_API_URL
+        NEXT_PUBLIC_CMS_API_URL: process.env.NEXT_PUBLIC_CMS_API_URL,
+        CHROME_EXECUTABLE_PATH: process.env.CHROME_EXECUTABLE_PATH
     },
     /**
      * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

@@ -45,17 +45,7 @@ export default function EventScraper({ venues }: Props): JSX.Element {
                 }}
                 onSubmit={(values, { setSubmitting }) => {
                     try {
-                        const { venueId, date } = values
-                        console.log({
-                            venueId,
-                            date
-                        })
-                        if (venueId) {
-                            mutate({
-                                venueId,
-                                date
-                            })
-                        }
+                        mutate(values)
                         setSubmitting(false)
                     } catch (e) {
                         setError(

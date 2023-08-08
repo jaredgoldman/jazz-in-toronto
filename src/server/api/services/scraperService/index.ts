@@ -8,6 +8,7 @@ import chromium from '@sparticuz/chromium-min'
 import { wait } from '~/utils/shared'
 import { type RexEvent, type VenueEvents } from './types'
 // Data
+import rexJson from './templates/rex.json'
 
 export default class ScraperService {
     private venue: Venue
@@ -66,43 +67,15 @@ export default class ScraperService {
     }
 
     private async scrapeRexEvents(date: Date): Promise<PartialEvent[]> {
-        const cheerioJson = {
-            $: 'body > .site-wrapper > main > .sections > .page-section > .content-wrapper > .content > .sqs-layout > .sqs-row > .span-7 > .sqs-block > .sqs-block-content > .yui3-widget > .yui3-squarespacecalendar-content > .yui3-calendar-pane',
-            monthAndYear:
-                '> .yui3-calendar-header > h1 > .yui3-calendar-header-label',
-            monthlyEvents: {
-                $: '> .yui3-u-1 > .yui3-calendar-grid > tbody',
-                dailyEvents: [
-                    {
-                        $: '> tr > .yui3-calendar-day',
-                        date: {
-                            $: '> .marker',
-                            day: '> .marker-dayname',
-                            date: '> .marker-daynum'
-                        },
-                        sets: {
-                            $: '> .itemlist',
-                            each: [
-                                {
-                                    $: '> .item > .item-link',
-                                    time: '> .item-time',
-                                    name: '> .item-title'
-                                }
-                            ]
-                        }
-                    }
-                ]
-            }
-        }
-
         if (!this.page) {
             throw new Error('No page loaded')
         }
+        console.log('REX JSON', rexJson)
         const monthIndex = date.getMonth()
         const currentMonthIndex = new Date().getMonth()
 
         const nextMonthButton = await this.page.waitForSelector(
-            `${cheerioJson.$} > .yui3-calendar-header > .yui3-calendarnav-nextmonth`
+            `${rexJson['$']} > .yui3-calendar-header > .yui3-calendarnav-nextmonth`
         )
 
         // If the month is in the future, we need to click the next month button
@@ -119,7 +92,7 @@ export default class ScraperService {
         const {
             monthAndYear,
             monthlyEvents: { dailyEvents }
-        } = await this.mapEvents<VenueEvents<RexEvent>>(html, cheerioJson)
+        } = await this.mapEvents<VenueEvents<RexEvent>>(html, rexJson)
 
         if (!dailyEvents.length) {
             throw new Error('Error getting daily events')
