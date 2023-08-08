@@ -118,7 +118,7 @@ export const eventRouter = createTRPCRouter({
             })
         }),
 
-    getVenueEvents: publicProcedure
+    getVenueEvents: protectedProcedure
         .input(z.object({ venueId: z.string().cuid(), date: z.date() }))
         .mutation(async ({ ctx, input }) => {
             const venue = await ctx.prisma.venue.findUnique({
