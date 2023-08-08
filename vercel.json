@@ -1,6 +1,6 @@
 {
     "functions": {
-        "src/server/**/*.ts": {
+        "src/server/api/routers/**/*.ts": {
             "maxDuration": 60
         }
     }
