@@ -1,6 +1,6 @@
 {
     "functions": {
-        "api/routers/*": {
+        "api/routers/event.ts": {
             "maxDuration": 60
         }
     }
