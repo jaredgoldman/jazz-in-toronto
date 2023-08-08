@@ -16,7 +16,7 @@ const pinoLogger = pino(
             ignore: 'pid,hostname',
             translateTime: 'yyyy-mm-dd HH:MM:ss.l'
         }
-    })
+    }) as pino.DestinationStream
 )
 
 const httpLogger = pinoHttp({
@@ -33,21 +33,21 @@ const httpLogger = pinoHttp({
 })
 
 export class Logger {
-    public static info(message: string, data?: any) {
+    public static info(message: string, data?: unknown) {
         pinoLogger.info(message, data)
     }
-    public static warn(message: string, data?: any) {
+    public static warn(message: string, data?: unknown) {
         pinoLogger.warn(message, data)
     }
-    public static error(message: string, data?: any) {
+    public static error(message: string, data?: unknown) {
         pinoLogger.error(message, data)
     }
-    public static debug(message: string, data?: any) {
+    public static debug(message: string, data?: unknown) {
         pinoLogger.debug(message, data)
     }
 }
 
-export const initLog = async (): Promise<string> => {
+export const initLog = (): string => {
     return 'Database connection has been established successfully.'
 }
 
