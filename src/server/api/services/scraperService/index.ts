@@ -10,7 +10,6 @@ import { type RexEvent, type VenueEvents } from './types'
 import { env } from '~/env.mjs'
 // Data
 import rexJson from './templates/rex.json'
-import { env } from '~/env.mjs'
 
 export default class ScraperService {
     private venue: Venue
