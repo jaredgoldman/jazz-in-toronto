@@ -1,6 +1,6 @@
 {
     "functions": {
-        "api/trpc/*": {
+        "api/routers/*": {
             "maxDuration": 60
         }
     }
