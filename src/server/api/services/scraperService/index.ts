@@ -48,15 +48,20 @@ export default class ScraperService {
     private async loadPage(): Promise<void> {
         try {
             const url = `${this.venue.website}${this.venue?.eventsPath || ''}`
-            console.log("Loading page for venue's events", url)
             const browser = await playwright.chromium.launch({
-                args: ['--no-sandbox', '--disable-setuid-sandbox', '--single-process'],
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--single-process'
+                ],
                 executablePath: await chromium.executablePath(
                     env.CHROME_EXECUTABLE_PATH
                 )
             })
+            console.log('executablePath: ', env.CHROME_EXECUTABLE_PATH)
             console.log("Browser launched, navigating to venue's events page")
             const page = await browser.newPage()
+            console.log('page created', page)
             // await page.setViewport({ width: 1920, height: 1080 })
             await page.goto(url)
             console.log('Page loaded, waiting for any additional js to load')
