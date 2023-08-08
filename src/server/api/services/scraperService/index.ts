@@ -47,26 +47,30 @@ export default class ScraperService {
     }
 
     private async loadPage(): Promise<void> {
-        const url = `${this.venue.website}${this.venue?.eventsPath || ''}`
-        console.log("Loading page for venue's events", url)
-        const browser = await playwright.chromium.launch({
-            args: chromium.args,
-            executablePath: await chromium.executablePath(
-                env.CHROME_EXECUTABLE_PATH
-            )
-        })
-        console.log("Browser launched, navigating to venue's events page")
-        const page = await browser.newPage()
-        // await page.setViewport({ width: 1920, height: 1080 })
-        await page.goto(url, {
-            waitUntil: 'domcontentloaded'
-        })
-        console.log('Page loaded, waiting for any additional js to load')
-        // wait for any additional js to load
-        // TODO: Wait for certain selector
-        await wait(1000)
-        console.log('Page loaded, setting page')
-        this.page = page
+        try {
+            const url = `${this.venue.website}${this.venue?.eventsPath || ''}`
+            console.log("Loading page for venue's events", url)
+            const browser = await playwright.chromium.launch({
+                args: chromium.args,
+                executablePath: await chromium.executablePath(
+                    env.CHROME_EXECUTABLE_PATH
+                )
+            })
+            console.log("Browser launched, navigating to venue's events page")
+            const page = await browser.newPage()
+            // await page.setViewport({ width: 1920, height: 1080 })
+            await page.goto(url, {
+                waitUntil: 'domcontentloaded'
+            })
+            console.log('Page loaded, waiting for any additional js to load')
+            // wait for any additional js to load
+            // TODO: Wait for certain selector
+            await wait(1000)
+            console.log('Page loaded, setting page')
+            this.page = page
+        } catch (e) {
+            console.log('Error loading page to scrape', e)
+        }
     }
 
     private async mapEvents<T>(html: string, json: JsonTemplate): Promise<T> {
