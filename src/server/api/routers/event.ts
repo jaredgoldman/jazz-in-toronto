@@ -7,7 +7,6 @@ import {
 } from '~/server/api/trpc'
 // Utils
 import addDays from 'date-fns/addDays'
-import logger from '~/server/utils/logger'
 // Services
 import ScraperService from '../services/scraperService'
 import PostService from '../services/postService'
