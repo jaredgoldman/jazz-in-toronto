@@ -2,7 +2,7 @@
 import { cheerioJsonMapper, type JsonTemplate } from 'cheerio-json-mapper'
 // types
 import { type Venue, type PartialEvent } from '~/types/data'
-import playwright from 'playwright-core'
+import puppeterr, { Page } from 'puppeteer-core'
 // Utils
 import chromium from '@sparticuz/chromium-min'
 import { wait } from '~/utils/shared'
@@ -13,7 +13,7 @@ import rexJson from './templates/rex.json'
 
 export default class ScraperService {
     private venue: Venue
-    private page?: playwright.Page
+    private page?: Page
     private initialized = false
 
     constructor(venue: Venue) {
@@ -48,7 +48,7 @@ export default class ScraperService {
     private async loadPage(): Promise<void> {
         try {
             const url = `${this.venue.website}${this.venue?.eventsPath || ''}`
-            const browser = await playwright.chromium.launch({
+            const browser = await puppeterr.launch({
                 args: [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
