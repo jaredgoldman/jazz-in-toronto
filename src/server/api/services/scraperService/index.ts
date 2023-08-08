@@ -67,10 +67,10 @@ export default class ScraperService {
     }
 
     private async scrapeRexEvents(date: Date): Promise<PartialEvent[]> {
-        const json = JSON.stringify(rexJson)
         if (!this.page) {
             throw new Error('No page loaded')
         }
+        console.log('REX JSON', rexJson)
         const monthIndex = date.getMonth()
         const currentMonthIndex = new Date().getMonth()
 
@@ -92,7 +92,7 @@ export default class ScraperService {
         const {
             monthAndYear,
             monthlyEvents: { dailyEvents }
-        } = await this.mapEvents<VenueEvents<RexEvent>>(json, rexJson)
+        } = await this.mapEvents<VenueEvents<RexEvent>>(html, rexJson)
 
         if (!dailyEvents.length) {
             throw new Error('Error getting daily events')
