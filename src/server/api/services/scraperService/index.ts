@@ -7,8 +7,10 @@ import playwright from 'playwright-core'
 import chromium from '@sparticuz/chromium-min'
 import { wait } from '~/utils/shared'
 import { type RexEvent, type VenueEvents } from './types'
+import { env } from '~/env.mjs'
 // Data
 import rexJson from './templates/rex.json'
+import { env } from '~/env.mjs'
 
 export default class ScraperService {
     private venue: Venue
@@ -23,6 +25,7 @@ export default class ScraperService {
     }
 
     public async init(): Promise<void> {
+        console.log('Initializing scraper for venue', this.venue)
         await this.loadPage()
         this.initialized = true
     }
@@ -45,20 +48,24 @@ export default class ScraperService {
 
     private async loadPage(): Promise<void> {
         const url = `${this.venue.website}${this.venue?.eventsPath || ''}`
+        console.log("Loading page for venue's events", url)
         const browser = await playwright.chromium.launch({
             args: chromium.args,
             executablePath: await chromium.executablePath(
-                'https://jazz-in-toronto.s3.us-east-2.amazonaws.com/chromium-v115.0.0-pack.tar'
+                env.CHROME_EXECUTABLE_PATH
             )
         })
+        console.log("Browser launched, navigating to venue's events page")
         const page = await browser.newPage()
         // await page.setViewport({ width: 1920, height: 1080 })
         await page.goto(url, {
             waitUntil: 'domcontentloaded'
         })
+        console.log('Page loaded, waiting for any additional js to load')
         // wait for any additional js to load
         // TODO: Wait for certain selector
         await wait(1000)
+        console.log('Page loaded, setting page')
         this.page = page
     }
 
@@ -70,7 +77,6 @@ export default class ScraperService {
         if (!this.page) {
             throw new Error('No page loaded')
         }
-        console.log('REX JSON', rexJson)
         const monthIndex = date.getMonth()
         const currentMonthIndex = new Date().getMonth()
 
