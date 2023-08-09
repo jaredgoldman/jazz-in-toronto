@@ -12,19 +12,24 @@ interface ButtonProps {
     link?: string
 }
 
+interface ButtonElementProps {
+    children: ReactNode
+    className: string
+}
+
 export default function Button({
     children,
-    className = 'border-2 border-black dark:border-white dark:bg-gray p-1 min-w-[4.2rem] min-h-[2.25rem] flex justify-center items-center',
+    className,
     onClick,
     type = 'button',
     disabled = false,
     isLoading = false,
     link
 }: ButtonProps): JSX.Element {
-    const ButtonElement = ({ children }: { children: ReactNode }) => {
+    const ButtonElement = ({ children, className }: ButtonElementProps) => {
         if (link) {
             return (
-                <Link href={link}>
+                <Link href={link} legacyBehavior>
                     <a className={className}>{children}</a>
                 </Link>
             )
@@ -42,7 +47,9 @@ export default function Button({
     }
 
     return (
-        <ButtonElement>
+        <ButtonElement
+            className={`${className} dark:bg-gray flex min-h-[2.25rem] min-w-[4.2rem] items-center justify-center border-2 border-black p-1 dark:border-white`}
+        >
             {isLoading ? (
                 <Image
                     className="animate-spin"

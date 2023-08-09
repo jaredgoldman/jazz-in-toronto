@@ -27,11 +27,12 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
         onAddVenue,
         onAddBand,
         added,
-        formikRef
+        formikRef,
+        isLoading
     } = useEventForm(currentValues)
 
     return (
-        <FormLayout>
+        <FormLayout isLoading={isLoading}>
             <h1 className="text-bold mb-5 text-center">
                 {currentValues ? 'Edit gig' : 'Add your gig here!'}
             </h1>

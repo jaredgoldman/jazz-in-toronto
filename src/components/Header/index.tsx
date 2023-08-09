@@ -17,7 +17,7 @@ export default function Header({
 }: Props): JSX.Element {
     const { data: session } = useSession()
     return (
-        <header className="w-full flex-col items-center text-center">
+        <header className="mb-5 w-full flex-col items-center bg-gray-800 text-center">
             {headerType === HeaderType.Admin && session && (
                 <Button
                     className="white absolute right-2 top-2 border p-1"
@@ -27,17 +27,17 @@ export default function Header({
                 </Button>
             )}
 
-            <div className="m-8">
-                <Link className="text-2xl font-bold" href="/">
+            <div className="mx-auto w-3/4 justify-center border-b-2 border-white pb-4 pt-8">
+                <Link className="text-3xl font-bold" href="/">
                     JAZZINTORONTO
                 </Link>
+                <h2 className="m-auto mb-2 w-1/2 text-center">
+                    Connecting Toronto&apos;s Jazz Musicians, Audiences, Venues
+                    and Presenters
+                </h2>
             </div>
-            <h2>
-                Connections Toronto&apos;s Jazz Musicians, Audiences, Venues and
-                Presenters
-            </h2>
             {showLinks && (
-                <nav className="flex justify-center ">
+                <nav className="flex justify-center">
                     <ul className="flex ">
                         {headerType === HeaderType.Public && (
                             <>

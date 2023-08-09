@@ -5,6 +5,7 @@ import { createServerSideHelpers } from '@trpc/react-query/server'
 import { appRouter } from '~/server/api/root'
 import superjson from 'superjson'
 import { prisma } from '~/server/db'
+import Button from '~/components/Button'
 
 export async function getStaticProps() {
     const helpers = createServerSideHelpers({
@@ -28,10 +29,24 @@ export async function getStaticProps() {
 export default function Home() {
     return (
         <RootLayout>
-            <div>
-                <h1 className="mb-4 text-center text-3xl font-bold">
-                    Follow us on Instagram
+            <div className="mb-1 flex flex-col items-center">
+                <h1 className="mb-4 text-center text-2xl font-bold">
+                    Follow us!
                 </h1>
+                <div className="flex w-1/4 justify-between">
+                    <Button
+                        className="my-6 bg-blue-500 px-4"
+                        link="https://www.instagram.com/jazzintoronto/ "
+                    >
+                        instagram
+                    </Button>
+                    <Button
+                        className="my-6 bg-yellow-500 px-4"
+                        link="https://www.facebook.com/jazzintoronto/ "
+                    >
+                        Facebook
+                    </Button>
+                </div>
             </div>
             <Featured />
         </RootLayout>

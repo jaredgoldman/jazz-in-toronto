@@ -31,13 +31,21 @@ export default function useEventForm(currentValues?: EventWithBandVenue) {
         band: false,
         venue: false
     })
-    const { data: venueData, refetch: refetchVenues } =
-        api.venue.getAll.useQuery()
-    const { data: bandData, refetch: refetchBands } = api.band.getAll.useQuery()
+    const {
+        data: venueData,
+        refetch: refetchVenues,
+        isLoading: venuesLoading
+    } = api.venue.getAll.useQuery()
+    const {
+        data: bandData,
+        refetch: refetchBands,
+        isLoading: bandsLoading
+    } = api.band.getAll.useQuery()
 
     const eventMutation = api.event.create.useMutation()
     const editEventMutation = api.event.update.useMutation()
 
+    const isLoading = venuesLoading || bandsLoading
     const isEditing = !!currentValues
     const initialValues: Values = currentValues
         ? {
@@ -122,6 +130,7 @@ export default function useEventForm(currentValues?: EventWithBandVenue) {
         added,
         onAddBand,
         onAddVenue,
-        formikRef
+        formikRef,
+        isLoading
     }
 }

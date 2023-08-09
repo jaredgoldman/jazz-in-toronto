@@ -11,7 +11,7 @@ export default function Featured() {
         <Container className="max-w-5xl flex-grow">
             {featuredItems && !isLoading ? (
                 <>
-                    <h1 className="mb-4 w-full text-center text-3xl font-bold">
+                    <h1 className="mb-4 w-full text-center text-2xl font-bold">
                         Our Faves
                     </h1>
                     <div className="flex sm:flex-col md:flex-row">
