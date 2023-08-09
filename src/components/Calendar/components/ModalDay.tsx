@@ -9,6 +9,7 @@ interface Props {
 }
 
 export default function ModalDay({ dailyEvents: { date, events } }: Props) {
+    console.log('DAILY EVENTS', events)
     const readableDate = new Intl.DateTimeFormat('en-US', {
         dateStyle: 'full'
     }).format(date)
@@ -16,7 +17,7 @@ export default function ModalDay({ dailyEvents: { date, events } }: Props) {
     const venueEvents = Object.entries(events).map(([venueName, events]) => {
         return (
             <>
-                <tr className="m-2 " key={venueName}>
+                <tr className="m-2 bg-black w-full" key={venueName}>
                     <td>{venueName}</td>
                 </tr>
                 {events.map((event: EventWithBandVenue) => {
@@ -36,10 +37,10 @@ export default function ModalDay({ dailyEvents: { date, events } }: Props) {
 
     return (
         <div className="mb-2">
-            <div className="mb-2">{`Events on ${readableDate}`}</div>
-            <div className="h-[60vh] overflow-y-auto">
-                <table>
-                    <tbody>{venueEvents}</tbody>
+            <div className="mb-2 text-center">{`Events on ${readableDate}`}</div>
+            <div className="h-[60vh] overflow-y-auto border-black border-2 mb-7">
+                <table className='w-full'>
+                    <tbody className="w-full">{venueEvents}</tbody>
                 </table>
             </div>
         </div>

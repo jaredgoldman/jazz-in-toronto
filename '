@@ -16,39 +16,29 @@ interface Props {
 }
 
 export default function CalendarDay({ dailyEvents }: Props) {
-    const [dayText, setDayText] = useState<string | number>(
-        dailyEvents.date.getDate()
-    )
+    const [dayText, setDayText] = useState<string | number>(dailyEvents.date.getDay())
     const { handleModal } = useContext(ModalContext) as ModalContextType
 
     const onHover = () => {
-        if (!dailyEvents.numOfEvents) return
-        setDayText(`${dailyEvents.numOfEvents} events`)
+       setDayText(`${dailyEvents.numOfEvents} events`)
     }
-
     const onLeave = () => {
-        if (!dailyEvents.numOfEvents) return
         setDayText(dailyEvents.date.getDate())
     }
     // Can we lazy load this?
     const modalDay = <ModalDay dailyEvents={dailyEvents} />
-    const pointer = dailyEvents.numOfEvents ? 'cursor-pointer' : 'cursor-default'
 
     return (
         <td
             onMouseOver={onHover}
             onMouseOut={onLeave}
-            className="h-[5rem] min-w-[7rem]"
-        >
+            className="h-[5rem] min-w-[7rem] border-2 border-black dark:border-gray-200">
             {dailyEvents.placeholder ? (
                 <div></div>
             ) : (
                 <Button
-                    className={`h-full w-full hover:bg-gray-200 border-none text-white hover:text-black ${pointer}`}
-                    onClick={() => {
-                        if (!dailyEvents.numOfEvents) return
-                        handleModal(modalDay)
-                    }}
+                    className=" h-full w-full hover:bg-gray-200 dark:hover:bg-gray-200"
+                    onClick={() => handleModal(modalDay)}
                 >
                     <div>{dayText}</div>
                 </Button>

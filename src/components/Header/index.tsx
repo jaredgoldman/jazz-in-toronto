@@ -17,7 +17,7 @@ export default function Header({
 }: Props): JSX.Element {
     const { data: session } = useSession()
     return (
-        <header className="mb-5 w-full flex-col items-center bg-gray-800 text-center">
+        <header className="mb-5 w-full flex-col items-center bg-gray-800 pb-2 text-center">
             {headerType === HeaderType.Admin && session && (
                 <Button
                     className="white absolute right-2 top-2 border p-1"

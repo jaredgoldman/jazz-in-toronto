@@ -44,9 +44,10 @@ export default function Calendar(): JSX.Element {
                 <tr className="text-center text-gray-900" key={i}>
                     {rowDays.map((dailyEvents, i) => {
                         return (
-                            <td key={`${currentMonthName}-${i + 1}`}>
-                                <CalendarDay dailyEvents={dailyEvents} />
-                            </td>
+                            <CalendarDay
+                                key={`${currentMonthName} - ${i + 1}`}
+                                dailyEvents={dailyEvents}
+                            />
                         )
                     })}
                 </tr>
@@ -59,30 +60,37 @@ export default function Calendar(): JSX.Element {
     const eventRows = mapEventsToCalendarRows()
 
     return (
-        <main>
-            <h1 className="text-center">{`Events in ${currentMonthName}, ${currentYear}`}</h1>
-            <div className="flex w-full justify-center">
-                <Button onClick={() => changeMonth(-1)}>Previous</Button>
-                <Button onClick={() => changeMonth(1)}>Next</Button>
-            </div>
-            <div>
-                {isLoading ? (
-                    <Loading />
-                ) : (
-                    <table className="min-w-full rounded-md border border-gray-300 bg-white">
-                        <thead className="bg-blue-500 text-white">
-                            <tr>
-                                {daysOfTheWeek.map((day) => (
-                                    <td className="px-4 py-2 text-sm" key={day}>
-                                        {day}
-                                    </td>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>{eventRows}</tbody>
-                    </table>
-                )}
-            </div>
+        <main className="flex flex-col items-center">
+            {isLoading ? (
+                <Loading />
+            ) : (
+                <>
+                    <h1 className="text-center">{`Events on ${currentMonthName}, ${currentYear}`}</h1>
+                    <div className="my-8 flex w-1/5 justify-between">
+                        <Button onClick={() => changeMonth(-1)}>
+                            Previous
+                        </Button>
+                        <Button onClick={() => changeMonth(1)}>Next</Button>
+                    </div>
+                    <div>
+                        <table className="mb-14 min-w-full border-collapse">
+                            <thead className="text-white border-shite border-b-2">
+                                <tr>
+                                    {daysOfTheWeek.map((day) => (
+                                        <td
+                                            className="px-5 py-2 text-sm text-center"
+                                            key={day}
+                                        >
+                                            {day}
+                                        </td>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>{eventRows}</tbody>
+                        </table>
+                    </div>
+                </>
+            )}
         </main>
     )
 }
