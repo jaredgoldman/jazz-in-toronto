@@ -1,5 +1,5 @@
 // Libraries
-import { useContext } from 'react'
+import { useContext, type MouseEvent } from 'react'
 // Context
 import { ModalContext } from './context/ModalContext'
 // Types
@@ -9,9 +9,20 @@ export default function Modal(): JSX.Element | null {
     const { showModal, modalContent, closeModal } = useContext(
         ModalContext
     ) as ModalContextType
+
+    const handleOutsideClick = (event: MouseEvent<HTMLDivElement>) => {
+        if (event.target === event.currentTarget) {
+            closeModal()
+        }
+    }
+
     if (showModal) {
         return (
-            <div className="z-100 fixed inset-0 flex items-center justify-center bg-black/50">
+            <div
+                className="z-100 fixed inset-0 flex items-center justify-center bg-black/50"
+                id="overlay"
+                onClick={handleOutsideClick}
+            >
                 <div className="border-white-2 relative box-border max-h-[80vh] w-2/3 overflow-y-hidden border bg-black">
                     <div className="m-2" onClick={() => closeModal()}>
                         X
