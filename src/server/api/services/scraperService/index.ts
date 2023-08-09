@@ -2,7 +2,7 @@
 import { cheerioJsonMapper, type JsonTemplate } from 'cheerio-json-mapper'
 // types
 import { type Venue, type PartialEvent } from '~/types/data'
-import puppeterr, { Page } from 'puppeteer-core'
+import puppeterr, { type Page } from 'puppeteer-core'
 // Utils
 import chromium from '@sparticuz/chromium-min'
 import { wait } from '~/utils/shared'
@@ -10,6 +10,7 @@ import { type RexEvent, type VenueEvents } from './types'
 import { env } from '~/env.mjs'
 // Data
 import rexJson from './templates/rex.json'
+import { TRPCError } from '@trpc/server'
 
 export default class ScraperService {
     private venue: Venue
@@ -18,7 +19,10 @@ export default class ScraperService {
 
     constructor(venue: Venue) {
         if (!venue.website || !venue.eventsPath) {
-            throw new Error('No website or events path provided')
+            throw new TRPCError({
+                message: 'No website or events path provided',
+                code: 'BAD_REQUEST'
+            })
         }
         this.venue = venue
     }
@@ -31,17 +35,29 @@ export default class ScraperService {
 
     public async getEvents(date: Date): Promise<PartialEvent[]> {
         if (!this.initialized) {
-            throw new Error('Scraper not initialized')
+            throw new TRPCError({
+                message: 'Scraper not initialized',
+                code: 'BAD_REQUEST'
+            })
         }
         switch (this.venue.name.toLowerCase()) {
             case 'the rex':
                 return await this.scrapeRexEvents(date)
             case 'jazz bistro':
-            // return this.scrapeJazzBistroEvents(content)
+                throw new TRPCError({
+                    message: 'Venue not yet supported',
+                    code: 'BAD_REQUEST'
+                })
             case 'drom taberna':
-            // return this.scrapeDromTabernaEvents(content)
+                throw new TRPCError({
+                    message: 'Venue not yet supported',
+                    code: 'BAD_REQUEST'
+                })
             default:
-                throw new Error("Venue doesn't exist or is not crawlable")
+                throw new TRPCError({
+                    message: "Venue doesn't exist or is not crawlable",
+                    code: 'BAD_REQUEST'
+                })
         }
     }
 
@@ -58,21 +74,15 @@ export default class ScraperService {
                     env.CHROME_EXECUTABLE_PATH
                 )
             })
-            console.log('executablePath: ', env.CHROME_EXECUTABLE_PATH)
-            console.log("Browser launched, navigating to venue's events page")
+
             const page = await browser.newPage()
-            console.log('page created')
-            // await page.setViewport({ width: 1920, height: 1080 })
             await page.goto(url, {
                 waitUntil: 'networkidle2',
                 timeout: 0
             })
-            console.log('JSON', rexJson)
-            console.log('Page loaded, waiting for any additional js to load')
             // wait for any additional js to load
             // TODO: Wait for certain selector
             await wait(1000)
-            console.log('Page loaded, setting page')
             this.page = page
         } catch (e) {
             console.error('Error loading page to scrape', e)
@@ -101,7 +111,7 @@ export default class ScraperService {
             }
         }
 
-        await wait(500)
+        await wait(100)
 
         const html = await this.page.content()
 
@@ -166,11 +176,4 @@ export default class ScraperService {
         })
         return processedEvents
     }
-
-    // private async scrapeJazzBistroEvents(
-    //     content: string
-    // ): Promise<PartialEvent> {}
-    // private async scrapeDromTabernaEvents(
-    //     content: string
-    // ): Promise<PartialEvent> {}
 }

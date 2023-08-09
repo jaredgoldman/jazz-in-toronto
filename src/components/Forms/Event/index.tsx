@@ -9,29 +9,10 @@ import { type EventWithBandVenue } from '~/types/data'
 // Hooks
 import useEventForm from './hooks/useEventForm'
 
-export interface Values {
-    name: string
-    startDate: Date
-    endDate: Date
-    bandId: string
-    instagramHandle?: string
-    website?: string
-    venueId: string
-}
-
-interface Errors {
-    name?: string
-    startDate?: string
-    endDate?: string
-    bandId?: string
-    instagramHandle?: string
-    website?: string
-    venueId?: string
-}
-
 interface Props {
     currentValues?: EventWithBandVenue
 }
+
 export default function EventForm({ currentValues }: Props): JSX.Element {
     const {
         eventMutation,
@@ -41,7 +22,12 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
         initialValues,
         error,
         isEditing,
-        setError
+        onSubmit,
+        validate,
+        onAddVenue,
+        onAddBand,
+        added,
+        formikRef
     } = useEventForm(currentValues)
 
     return (
@@ -51,43 +37,9 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
             </h1>
             <Formik
                 initialValues={initialValues}
-                validate={(values) => {
-                    const errors: Errors = {}
-                    if (!values.name) {
-                        errors.name = 'Required'
-                    }
-                    if (!values.venueId) {
-                        errors.venueId = 'Required'
-                    }
-                    if (!values.bandId) {
-                        errors.bandId = 'Required'
-                    }
-                    if (!values.startDate) {
-                        errors.startDate = 'Required'
-                    }
-                    if (!values.endDate) {
-                        errors.endDate = 'Required'
-                    }
-
-                    return errors
-                }}
-                onSubmit={async (values, { setSubmitting }) => {
-                    try {
-                        if (isEditing && currentValues && editEventMutation) {
-                            await editEventMutation.mutateAsync({
-                                id: currentValues?.id,
-                                ...values
-                            })
-                        } else if (eventMutation) {
-                            await eventMutation.mutateAsync(values)
-                        }
-                    } catch (e) {
-                        setSubmitting(false)
-                        setError(
-                            'There was an error submitting. Please try again'
-                        )
-                    }
-                }}
+                validate={validate}
+                onSubmit={onSubmit}
+                innerRef={formikRef}
             >
                 {({ isSubmitting }) => (
                     <Form className="flex flex-col">
@@ -98,6 +50,11 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                                 label="Venue"
                                 optionData={venueData}
                                 modalForm={ModalForms.Venue}
+                                onAdd={onAddVenue}
+                                buttonText={
+                                    added.venue ? 'Venue added!' : 'Add a venue'
+                                }
+                                buttonDisabled={added.venue}
                             />
                         )}
                         {bandData && (
@@ -106,6 +63,11 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                                 label="Band"
                                 optionData={bandData}
                                 modalForm={ModalForms.Band}
+                                onAdd={onAddBand}
+                                buttonText={
+                                    added.band ? 'Band added!' : 'Add a band'
+                                }
+                                buttonDisabled={added.band}
                             />
                         )}
                         <DatePicker

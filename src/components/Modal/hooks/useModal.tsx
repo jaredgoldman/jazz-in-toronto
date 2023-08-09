@@ -21,9 +21,12 @@ export default function useModal(): ModalContextType {
         }
     }
 
+    const closeModal = () => setShowModal(false)
+
     const handleModalForm = (
         formType: ModalForms,
-        itemData?: EventWithBandVenue | Band | Venue
+        itemData?: EventWithBandVenue | Band | Venue,
+        onAdd?: (value: Band | Venue) => Promise<void>
     ) => {
         let form
         switch (formType) {
@@ -31,6 +34,8 @@ export default function useModal(): ModalContextType {
                 form = (
                     <BandForm
                         currentValues={isBand(itemData) ? itemData : undefined}
+                        closeModal={closeModal}
+                        onAdd={onAdd}
                     />
                 )
                 break
@@ -38,6 +43,8 @@ export default function useModal(): ModalContextType {
                 form = (
                     <VenueForm
                         currentValues={isVenue(itemData) ? itemData : undefined}
+                        closeModal={closeModal}
+                        onAdd={onAdd}
                     />
                 )
                 break
@@ -52,8 +59,6 @@ export default function useModal(): ModalContextType {
         setShowModal(true)
         setModalContent(form)
     }
-
-    const closeModal = () => setShowModal(false)
 
     return { showModal, handleModal, modalContent, handleModalForm, closeModal }
 }

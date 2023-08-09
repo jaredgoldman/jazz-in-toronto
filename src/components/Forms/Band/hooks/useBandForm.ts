@@ -2,9 +2,34 @@ import { useState } from 'react'
 import { api } from '~/utils/api'
 import { useUploadThing } from '~/hooks/useUploadThing'
 import { type Band } from '~/types/data'
-import { type Values } from '../index'
+import { type FormikHelpers } from 'formik'
+import { env } from '~/env.mjs'
 
-export default function useBandForm(currentValues: Band | undefined) {
+export interface Values {
+    name: string
+    genre?: string
+    photoPath?: string
+    instagramHandle: string | undefined
+    website?: string
+    fileData?: {
+        file: File
+        dataURL: string
+    }
+}
+
+interface Errors {
+    name?: string
+    genre?: string
+    photoPath?: string
+    instagramHandle?: string
+    website?: string
+}
+
+export default function useBandForm(
+    currentValues: Band | undefined,
+    closeModal?: () => void,
+    onAdd?: (values: Band) => Promise<void>
+) {
     // State
     const [error, setError] = useState<string>('')
     // Mutations
@@ -48,11 +73,60 @@ export default function useBandForm(currentValues: Band | undefined) {
     const { startUpload } = useUploadThing({
         endpoint: 'uploadImage',
         onUploadError: () => {
-            setError(
-                'There was an error uploading your image data. Is your file too large?'
-            )
+            setError('There was an error uploading your image data')
         }
     })
+
+    const onSubmit = async (values: Values, actions: FormikHelpers<Values>) => {
+        try {
+            setError('')
+            let newValues = values
+            let addedBand
+            // if we have fileData in form Input
+            // upload it first
+            if (values?.fileData?.file) {
+                // First ensure file is not too large
+                if (values.fileData.file.size > env.NEXT_PUBLIC_MAX_FILE_SIZE) {
+                    setError(
+                        'File size is too large. Please upload a file smaller than 5MB.'
+                    )
+                    actions.setSubmitting(false)
+                    return
+                }
+                const res = await startUpload([values.fileData.file])
+                if (res) {
+                    newValues = {
+                        ...values,
+                        photoPath: res[0]?.fileUrl
+                    }
+                }
+            }
+            if (isEditing && currentValues) {
+                addedBand = await editBandMutation.mutateAsync({
+                    id: currentValues?.id,
+                    ...newValues
+                })
+            } else {
+                addedBand = await bandMutation.mutateAsync(newValues)
+            }
+            actions.setSubmitting(false)
+            // XXX: simplify this process, we shouldn't have to prop drill like this
+            // maybe pull the modal context into this form?
+            onAdd && (await onAdd(addedBand))
+            closeModal && closeModal()
+        } catch (e) {
+            actions.setSubmitting(false)
+            setError('There was an error adding your band. Please try again.')
+        }
+    }
+
+    const validate = (values: Values) => {
+        const errors: Errors = {}
+        if (!values.name) {
+            errors.name = 'Required'
+        }
+        return errors
+    }
 
     return {
         initialValues,
@@ -62,6 +136,8 @@ export default function useBandForm(currentValues: Band | undefined) {
         handleDeletePhoto,
         startUpload,
         error,
-        setError
+        setError,
+        onSubmit,
+        validate
     }
 }

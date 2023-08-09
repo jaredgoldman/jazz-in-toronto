@@ -10,41 +10,27 @@ import { type Venue } from '~/types/data'
 // Hooks
 import useVenueForm from './hooks/useVenueForm'
 
-export interface Values {
-    name: string
-    address: string
-    latitude: number
-    longitude: number
-    city: string
-    website: string
-    instagramHandle?: string
-    photoPath?: string
-    fileData?: {
-        file: File
-        dataURL: string
-    }
-}
-
-interface Errors {
-    name?: string
-    location?: string
-}
-
 interface Props {
     currentValues?: Venue
+    closeModal?: () => void
+    onAdd?: (value: Venue) => Promise<void>
 }
 
-export default function VenueForm({ currentValues }: Props): JSX.Element {
+export default function VenueForm({
+    currentValues,
+    closeModal,
+    onAdd
+}: Props): JSX.Element {
     const {
         initialValues,
         venueMutation,
         editVenueMutation,
         handleDeletePhoto,
-        startUpload,
         isEditing,
         error,
-        setError
-    } = useVenueForm(currentValues)
+        onSubmit,
+        validate
+    } = useVenueForm(currentValues, closeModal, onAdd)
 
     return (
         <FormLayout>
@@ -53,48 +39,8 @@ export default function VenueForm({ currentValues }: Props): JSX.Element {
             </h1>
             <Formik
                 initialValues={initialValues}
-                validate={(values) => {
-                    const errors: Errors = {}
-                    if (!values.name) {
-                        errors.name = 'Required'
-                    }
-                    if (!values.latitude || !values.longitude || !values.city) {
-                        errors.location = 'Please enter a valid location'
-                    }
-                    return errors
-                }}
-                onSubmit={async (values, { setSubmitting }) => {
-                    try {
-                        setError('')
-                        let newValues = values
-                        // if we have fileData in form Input
-                        // upload it first
-                        if (values?.fileData?.file) {
-                            const res = await startUpload([
-                                values.fileData.file
-                            ])
-                            if (res) {
-                                newValues = {
-                                    ...values,
-                                    photoPath: res[0]?.fileUrl
-                                }
-                            }
-                        }
-                        if (isEditing && currentValues) {
-                            await editVenueMutation.mutateAsync({
-                                id: currentValues?.id,
-                                ...newValues
-                            })
-                        } else {
-                            await venueMutation.mutateAsync(newValues)
-                        }
-                    } catch (e) {
-                        setSubmitting(false)
-                        setError(
-                            'There was an error adding your band. Please try again.'
-                        )
-                    }
-                }}
+                validate={validate}
+                onSubmit={onSubmit}
             >
                 {({ isSubmitting }) => (
                     <Form className="flex flex-col">

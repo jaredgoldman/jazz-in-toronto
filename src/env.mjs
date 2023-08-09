@@ -23,9 +23,8 @@ export const env = createEnv({
         CMS_API_KEY: z.string(),
         CMS_API_URL: z.string(),
         CHROME_EXECUTABLE_PATH: z.string(),
-        LOG_LEVEL: z
-            .enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal'])
-            .optional()
+        MAX_FILE_SIZE: z.number(),
+        MAX_FILE_SIZE_READABLE: z.enum(['2KB', '2MB', '2GB'])
     },
 
     /**
@@ -34,7 +33,8 @@ export const env = createEnv({
      * `NEXT_PUBLIC_`.
      */
     client: {
-        NEXT_PUBLIC_CMS_API_URL: z.string()
+        NEXT_PUBLIC_CMS_API_URL: z.string(),
+        NEXT_PUBLIC_MAX_FILE_SIZE: z.number()
     },
 
     /**
@@ -59,7 +59,9 @@ export const env = createEnv({
         CMS_API_URL: process.env.CMS_API_URL,
         NEXT_PUBLIC_CMS_API_URL: process.env.NEXT_PUBLIC_CMS_API_URL,
         CHROME_EXECUTABLE_PATH: process.env.CHROME_EXECUTABLE_PATH,
-        LOG_LEVEL: process.env.LOG_LEVEL
+        MAX_FILE_SIZE: Number(process.env.MAX_FILE_SIZE),
+        MAX_FILE_SIZE_READABLE: process.env.MAX_FILE_SIZE_READABLE,
+        NEXT_PUBLIC_MAX_FILE_SIZE: Number(process.env.NEXT_PUBLIC_MAX_FILE_SIZE)
     },
     /**
      * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

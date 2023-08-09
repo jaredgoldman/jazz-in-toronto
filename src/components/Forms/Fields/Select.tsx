@@ -19,6 +19,9 @@ interface SelectProps {
     className?: string
     fieldClassName?: string
     errorMessage?: string
+    onAdd?: (value: Band | Venue) => Promise<void>
+    buttonText?: string
+    buttonDisabled?: boolean
 }
 
 export default function Select({
@@ -27,7 +30,10 @@ export default function Select({
     optionData,
     modalForm,
     className = 'flex flex-col mb-5',
-    fieldClassName = 'flex items-center border-2 border-black mb-2 text-black'
+    fieldClassName = 'flex items-center border-2 border-black mb-2 text-black',
+    onAdd,
+    buttonText = `Add an item`,
+    buttonDisabled = false
 }: SelectProps): JSX.Element {
     const { handleModalForm } = useContext(ModalContext) as ModalContextType
     const mappedOptions = optionData.map((option) => {
@@ -55,8 +61,13 @@ export default function Select({
                 </Field>
                 {modalForm && (
                     <Button
-                        onClick={() => handleModalForm(modalForm)}
-                    >{`Add new ${modalForm.toLowerCase()}`}</Button>
+                        onClick={() =>
+                            handleModalForm(modalForm, undefined, onAdd)
+                        }
+                        disabled={buttonDisabled}
+                    >
+                        {buttonText}
+                    </Button>
                 )}
             </div>
             <ErrorMessage name={name} component="div" />

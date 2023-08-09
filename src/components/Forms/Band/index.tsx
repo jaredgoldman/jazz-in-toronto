@@ -9,41 +9,27 @@ import { type Band } from '~/types/data'
 // hooks
 import useBandForm from './hooks/useBandForm'
 
-export interface Values {
-    name: string
-    genre?: string
-    photoPath?: string
-    instagramHandle: string | undefined
-    website?: string
-    fileData?: {
-        file: File
-        dataURL: string
-    }
-}
-
-interface Errors {
-    name?: string
-    genre?: string
-    photoPath?: string
-    instagramHandle?: string
-    website?: string
-}
-
 interface Props {
     currentValues?: Band
+    closeModal?: () => void
+    onAdd?: (value: Band) => Promise<void>
 }
 
-export default function BandForm({ currentValues }: Props): JSX.Element {
+export default function BandForm({
+    currentValues,
+    closeModal,
+    onAdd
+}: Props): JSX.Element {
     const {
         initialValues,
         bandMutation,
         editBandMutation,
         handleDeletePhoto,
-        startUpload,
         isEditing,
         error,
-        setError
-    } = useBandForm(currentValues)
+        onSubmit,
+        validate
+    } = useBandForm(currentValues, closeModal, onAdd)
 
     return (
         <FormLayout>
@@ -52,45 +38,8 @@ export default function BandForm({ currentValues }: Props): JSX.Element {
             </h1>
             <Formik
                 initialValues={initialValues}
-                validate={(values) => {
-                    const errors: Errors = {}
-                    if (!values.name) {
-                        errors.name = 'Required'
-                    }
-                    return errors
-                }}
-                onSubmit={async (values, { setSubmitting }) => {
-                    try {
-                        setError('')
-                        let newValues = values
-                        // if we have fileData in form Input
-                        // upload it first
-                        if (values?.fileData?.file) {
-                            const res = await startUpload([
-                                values.fileData.file
-                            ])
-                            if (res) {
-                                newValues = {
-                                    ...values,
-                                    photoPath: res[0]?.fileUrl
-                                }
-                            }
-                        }
-                        if (isEditing && currentValues) {
-                            await editBandMutation.mutateAsync({
-                                id: currentValues?.id,
-                                ...newValues
-                            })
-                        } else {
-                            await bandMutation.mutateAsync(newValues)
-                        }
-                    } catch (e) {
-                        setSubmitting(false)
-                        setError(
-                            'There was an error adding your band. Please try again.'
-                        )
-                    }
-                }}
+                validate={validate}
+                onSubmit={onSubmit}
             >
                 {({ isSubmitting }) => (
                     <Form className="flex flex-col">

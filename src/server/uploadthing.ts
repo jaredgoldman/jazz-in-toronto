@@ -2,11 +2,14 @@ import { getServerSession } from 'next-auth'
 import { createUploadthing } from 'uploadthing/next-legacy'
 import type { FileRouter } from 'uploadthing/next-legacy'
 import { authOptions } from './auth'
+import { env } from '~/env.mjs'
 
 const f = createUploadthing()
 
 export const uploadRouter = {
-    uploadPosts: f({ image: { maxFileSize: '2MB', maxFileCount: 8 } })
+    uploadPosts: f({
+        image: { maxFileSize: env.MAX_FILE_SIZE_READABLE, maxFileCount: 8 }
+    })
         .middleware(async ({ req, res }) => {
             const auth = await getServerSession(req, res, authOptions)
 
@@ -20,7 +23,6 @@ export const uploadRouter = {
             }
         })
         .onUploadComplete(({ metadata, file }) => {
-            console.log('UPLOAD COMPLETE - DO SOMETHING WITH THIS CODEBLOCK')
             console.log({
                 metadata,
                 file
@@ -28,9 +30,8 @@ export const uploadRouter = {
             return
         }),
     uploadImage: f({
-        image: { maxFileSize: '2MB' }
+        image: { maxFileSize: env.MAX_FILE_SIZE_READABLE }
     }).onUploadComplete(({ metadata, file }) => {
-        console.log('UPLOAD COMPLETE - DO SOMETHING WITH THIS CODEBLOCK')
         console.log({
             metadata,
             file
