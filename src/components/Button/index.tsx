@@ -14,12 +14,12 @@ interface ButtonProps {
 
 interface ButtonElementProps {
     children: ReactNode
-    className: string
+    className?: string
 }
 
 export default function Button({
     children,
-    className,
+    className = '',
     onClick,
     type = 'button',
     disabled = false,
