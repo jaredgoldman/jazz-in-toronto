@@ -33,6 +33,7 @@ model Band {
   website         String?
   events          Event[]
   active          Boolean  @default(true)
+  description     String?
 
   @@index([featured])
 }
@@ -54,6 +55,7 @@ model Venue {
   longitude       Float
   crawlable       Boolean  @default(false)
   eventsPath      String?
+  description     String?
 
   @@index([featured])
 }
@@ -73,6 +75,7 @@ model Event {
   bandId          String
   venueId         String
   cancelled       Boolean  @default(false)
+  description     String?
 
   @@index([featured])
 }

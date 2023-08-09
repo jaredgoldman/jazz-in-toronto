@@ -1,4 +1,6 @@
 import Image from 'next/image'
+import { ReactNode } from 'react'
+import Link from 'next/link'
 
 interface ButtonProps {
     children: string
@@ -7,6 +9,7 @@ interface ButtonProps {
     type?: 'button' | 'submit' | 'reset'
     disabled?: boolean
     isLoading?: boolean
+    link?: string
 }
 
 export default function Button({
@@ -15,15 +18,31 @@ export default function Button({
     onClick,
     type = 'button',
     disabled = false,
-    isLoading = false
+    isLoading = false,
+    link
 }: ButtonProps): JSX.Element {
+    const ButtonElement = ({ children }: { children: ReactNode }) => {
+        if (link) {
+            return (
+                <Link href={link}>
+                    <a className={className}>{children}</a>
+                </Link>
+            )
+        }
+        return (
+            <button
+                className={className}
+                onClick={onClick}
+                type={type}
+                disabled={disabled}
+            >
+                {children}
+            </button>
+        )
+    }
+
     return (
-        <button
-            className={className}
-            onClick={onClick}
-            type={type}
-            disabled={disabled}
-        >
+        <ButtonElement>
             {isLoading ? (
                 <Image
                     className="animate-spin"
@@ -35,6 +54,6 @@ export default function Button({
             ) : (
                 children
             )}
-        </button>
+        </ButtonElement>
     )
 }

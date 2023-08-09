@@ -3,28 +3,31 @@ import Image from 'next/image'
 
 interface Props {
     title: string
-    content: string
+    content?: string
     image?: string | null
-    link?: string
+    link?: string | null
     className?: string
 }
-const FeaturedCard = ({ title, content, image, link, className }: Props) => {
+
+const FeaturedCard = ({
+    title,
+    content = 'This is a short sample description for a featured card. Come check out our band/event/venue',
+    image,
+    link,
+    className
+}: Props) => {
     return (
-        <Container className={`m-4 rounded-lg p-4 shadow-md ${className}`}>
-            <h2 className="mb-2 text-2xl font-bold">{title}</h2>
-            {image && (
-                <div className="h-48 object-contain">
-                    <Image
-                        className="h-48 w-full rounded-t-lg object-cover"
-                        src={image}
-                        height={100}
-                        width={100}
-                        alt={title}
-                    />
-                </div>
-            )}
-            <div className="p-4">
-                <p className="text-gray-700">{content}</p>
+        <Container
+            style={{
+                backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(1,1,1,1) 95%), url(${
+                    image ? image : 'none'
+                })`
+            }}
+            className={`m-4 h-64 rounded-lg shadow-md ${className} flex flex-col justify-end bg-cover bg-center`}
+        >
+            <div className="flex flex-col p-4">
+                <h2 className="text-1xl mb-2 font-bold">{title}</h2>
+                <p className="text-white-700">{content}</p>
                 {link && (
                     <a
                         href={link}

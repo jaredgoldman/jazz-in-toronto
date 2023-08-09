@@ -1,43 +1,46 @@
 import FeaturedCard from './FeaturedCard'
 import { api } from '~/utils/api'
 import Loading from '../Loading'
+import Container from '../Container'
 
 export default function Featured() {
     const { data: featuredItems, isLoading } =
         api.featured.getFeatured.useQuery()
 
     return (
-        <div className="flex-grow">
-            <h1 className="mb-4 w-full text-center text-3xl font-bold">
-                Featured
-            </h1>
+        <Container className="max-w-5xl flex-grow">
             {featuredItems && !isLoading ? (
-                <div className="flex">
-                    {featuredItems?.venue && (
-                        <FeaturedCard
-                            title="Featured Venue"
-                            image={featuredItems?.venue?.photoPath}
-                            content={featuredItems.venue.name}
-                        />
-                    )}
-                    {featuredItems?.event && (
-                        <FeaturedCard
-                            title="Featured Event"
-                            image={featuredItems.event.band.photoPath}
-                            content={featuredItems.event.name}
-                        />
-                    )}
-                    {featuredItems?.band && (
-                        <FeaturedCard
-                            title="Featured Band "
-                            image={featuredItems.band.photoPath}
-                            content={featuredItems.band.name}
-                        />
-                    )}
-                </div>
+                <>
+                    <h1 className="mb-4 w-full text-center text-3xl font-bold">
+                        Our Faves
+                    </h1>
+                    <div className="flex sm:flex-col md:flex-row">
+                        {featuredItems?.venue && (
+                            <FeaturedCard
+                                image={featuredItems.venue?.photoPath}
+                                title={featuredItems.venue.name}
+                                link={featuredItems.venue?.website}
+                            />
+                        )}
+                        {featuredItems?.event && (
+                            <FeaturedCard
+                                image={featuredItems.event.band.photoPath}
+                                title={featuredItems.event.name}
+                                link={featuredItems.event?.website}
+                            />
+                        )}
+                        {featuredItems?.band && (
+                            <FeaturedCard
+                                image={featuredItems.band.photoPath}
+                                title={featuredItems.band.name}
+                                link={featuredItems.band?.website}
+                            />
+                        )}
+                    </div>
+                </>
             ) : (
                 <Loading />
             )}
-        </div>
+        </Container>
     )
 }

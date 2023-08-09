@@ -28,6 +28,11 @@ export async function getStaticProps() {
 export default function Home() {
     return (
         <RootLayout>
+            <div>
+                <h1 className="mb-4 text-center text-3xl font-bold">
+                    Follow us on Instagram
+                </h1>
+            </div>
             <Featured />
         </RootLayout>
     )
