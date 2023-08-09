@@ -1,6 +1,4 @@
-import FeaturedVenue from './FeaturedVenue'
-import FeaturedEvent from './FeaturedEvent'
-import FeaturedBand from './FeaturedBand'
+import FeaturedCard from './FeaturedCard'
 import { api } from '~/utils/api'
 import Loading from '../Loading'
 
@@ -10,16 +8,31 @@ export default function Featured() {
 
     return (
         <div className="flex-grow">
+            <h1 className="mb-4 w-full text-center text-3xl font-bold">
+                Featured
+            </h1>
             {featuredItems && !isLoading ? (
                 <div className="flex">
                     {featuredItems?.venue && (
-                        <FeaturedVenue venue={featuredItems.venue} />
+                        <FeaturedCard
+                            title="Featured Venue"
+                            image={featuredItems?.venue?.photoPath}
+                            content={featuredItems.venue.name}
+                        />
                     )}
                     {featuredItems?.event && (
-                        <FeaturedEvent event={featuredItems.event} />
+                        <FeaturedCard
+                            title="Featured Event"
+                            image={featuredItems.event.band.photoPath}
+                            content={featuredItems.event.name}
+                        />
                     )}
                     {featuredItems?.band && (
-                        <FeaturedBand band={featuredItems.band} />
+                        <FeaturedCard
+                            title="Featured Band "
+                            image={featuredItems.band.photoPath}
+                            content={featuredItems.band.name}
+                        />
                     )}
                 </div>
             ) : (
