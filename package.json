@@ -48,6 +48,7 @@
         "react-datepicker": "^4.15.0",
         "react-dom": "18.2.0",
         "react-dropzone": "^14.2.3",
+        "server": "link:@trpc/react-query/server",
         "superjson": "1.12.2",
         "uploadthing": "^5.2.1",
         "use-places-autocomplete": "^4.0.0",

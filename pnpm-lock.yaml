@@ -79,6 +79,9 @@ dependencies:
   react-dropzone:
     specifier: ^14.2.3
     version: 14.2.3(react@18.2.0)
+  server:
+    specifier: link:@trpc/react-query/server
+    version: link:@trpc/react-query/server
   superjson:
     specifier: 1.12.2
     version: 1.12.2
