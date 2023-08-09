@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { type ReactNode } from 'react'
 
 interface Props {
     children: ReactNode
@@ -8,7 +8,7 @@ interface Props {
 
 export default function Container({
     children,
-    className,
+    className = '',
     style
 }: Props): JSX.Element {
     return (

@@ -1,5 +1,4 @@
 import Container from '../Container'
-import Image from 'next/image'
 
 interface Props {
     title: string
@@ -14,7 +13,7 @@ const FeaturedCard = ({
     content = 'This is a short sample description for a featured card. Come check out our band/event/venue',
     image,
     link,
-    className
+    className = ''
 }: Props) => {
     return (
         <Container
