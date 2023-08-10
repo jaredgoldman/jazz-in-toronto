@@ -20,7 +20,7 @@ export default function AdminLayout({
     const { data: session } = useSession()
     return (
         <ModalProvider>
-            <main className="mt-5 flex min-h-screen flex-col items-center font-body">
+            <main className="flex min-h-screen flex-col items-center font-body">
                 <Header
                     headerType={HeaderType.Admin}
                     showLinks={showHeaderLinks}
