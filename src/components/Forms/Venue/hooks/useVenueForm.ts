@@ -4,6 +4,7 @@ import { api } from '~/utils/api'
 import { type Venue } from '~/types/data'
 import { type FormikHelpers } from 'formik'
 import { env } from '~/env.mjs'
+import { Area } from '@prisma/client'
 
 export interface Values {
     name: string
@@ -18,11 +19,15 @@ export interface Values {
         file: File
         dataURL: string
     }
+    phoneNumber: string
+    area: Area
 }
 
 interface Errors {
     name?: string
     location?: string
+    phoneNumber?: string
+    area?: string
 }
 
 export default function useVenueForm(
@@ -53,7 +58,9 @@ export default function useVenueForm(
               address: '',
               instagramHandle: '',
               website: '',
-              fileData: undefined
+              fileData: undefined,
+              phoneNumber: '',
+              area: Area.DOWNTOWN
           }
 
     const handleDeletePhoto = async () => {
@@ -82,7 +89,11 @@ export default function useVenueForm(
     const onSubmit = async (values: Values, actions: FormikHelpers<Values>) => {
         try {
             setError('')
-            let newValues = values
+            // Make coapy of values and conver phoneNumber to string
+            let newValues = {
+                ...values,
+                phoneNumber: values.phoneNumber.toString()
+            }
             let addedVenue
             // if we have fileData in form Input
             // upload it first
@@ -128,6 +139,10 @@ export default function useVenueForm(
         }
         if (!values.latitude || !values.longitude || !values.city) {
             errors.location = 'Please enter a valid location'
+        }
+        const phoneRegex = /^\d{3}-?\d{3}-?\d{4}$/
+        if (!values.phoneNumber || !phoneRegex.test(values.phoneNumber)) {
+            errors.phoneNumber = 'Please enter a valid phone number'
         }
         return errors
     }

@@ -3,6 +3,7 @@ import RootLayout from '~/layouts/RootLayout'
 import Image from 'next/image'
 import Button from '~/components/Button'
 import Loading from '~/components/Loading'
+import Container from '~/components/Container'
 import { graphQlWithAuth } from '~/utils/gql'
 import { graphql } from '../gql'
 import { type AboutUsQuery } from '~/gql/graphql'
@@ -68,58 +69,102 @@ export default function About({
     return (
         <RootLayout>
             {aboutData ? (
-                <>
-                    <div>
-                        <h1>{aboutData?.heading}</h1>
-                        <p>{aboutData?.description}</p>
+                <Container className="flex w-1/2 max-w-[40rem] flex-col items-center">
+                    <h1 className="mb-10 text-center text-4xl font-bold">
+                        {aboutData?.heading}
+                    </h1>
+                    <p className="mb-5 text-left text-sm">
+                        {aboutData?.description}
+                    </p>
+                    <div className="justify-left mb-5 flex w-full items-center">
+                        <div className="flex-1 border-b"></div>
+                        <h2 className="px-4 text-center text-2xl ">
+                            {aboutData?.teamHeading}
+                        </h2>
+                        <div className="flex-1 border-b"></div>
                     </div>
-                    <div>
-                        <h2>{aboutData?.teamHeading}</h2>
+                    <div className="mb-5 grid w-full grid-cols-2 grid-rows-2 gap-x-10 gap-y-5 text-sm">
                         {aboutData?.staffMembers?.data?.map((member) => {
                             return (
-                                <div key={member.attributes?.name}>
-                                    <h3>{member.attributes?.position}</h3>
+                                <div className="" key={member.attributes?.name}>
+                                    <h3 className="font-bold">
+                                        {member.attributes?.position}
+                                    </h3>
                                     <p>{member.attributes?.name}</p>
                                 </div>
                             )
                         })}
-                        {teamImagePath && (
+                    </div>
+                    {teamImagePath && (
+                        <div className="mb-10">
                             <Image
                                 src={teamImagePath}
-                                height={200}
-                                width={200}
+                                width={800}
+                                height={500}
                                 alt="Jazz In Toronto team"
                             />
-                        )}
-                    </div>
-                    <div>
-                        <h2>{aboutData?.supportHeading}</h2>
-                        <p>{aboutData?.supportDescription}</p>
-                        <div>
-                            {aboutData?.paypalProfileUrl && (
-                                <a href={aboutData?.paypalProfileUrl}>
-                                    Donate on paypal
-                                </a>
-                            )}
-                            {aboutData?.eTransferAddress && (
-                                <a href={aboutData?.eTransferAddress}>
-                                    Donate via etransfer
-                                </a>
-                            )}
                         </div>
-                        {aboutData?.ctaText && (
-                            <Button>{aboutData?.ctaText}</Button>
-                        )}
+                    )}
+                    <div>
+                        <div className="justify-left mb-5 flex w-full items-center">
+                            <div className="flex-1 border-b"></div>
+                            <h2 className="px-4 text-center text-2xl ">
+                                {aboutData?.supportHeading}
+                            </h2>
+                            <div className="flex-1 border-b"></div>
+                        </div>
+                        <p className="text-left text-sm">
+                            {aboutData?.supportDescription}
+                        </p>
+                        <div>
+                            <div className="my-10 flex max-w-[35rem] justify-between">
+                                {aboutData?.paypalProfileUrl && (
+                                    <div className="flex flex-col">
+                                        <div>Paypal</div>
+                                        <a
+                                            className="text-blue-500"
+                                            href={`https://${aboutData?.paypalProfileUrl}`}
+                                        >
+                                            {aboutData?.paypalProfileUrl}
+                                        </a>
+                                    </div>
+                                )}
+                                {aboutData?.eTransferAddress && (
+                                    <div className="flex flex-col">
+                                        <div>ETransfer</div>
+                                        <a
+                                            className="text-blue-500"
+                                            href={`mailto:${aboutData?.eTransferAddress}`}
+                                        >
+                                            {aboutData?.eTransferAddress}
+                                        </a>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        <div className="mb-10 flex w-full justify-center">
+                            {aboutData?.ctaText &&
+                                aboutData?.paypalProfileUrl && (
+                                    <Button
+                                        className="font-bold"
+                                        link={`https://${aboutData?.paypalProfileUrl}`}
+                                    >
+                                        {aboutData?.ctaText}
+                                    </Button>
+                                )}
+                        </div>
                         {imageCollagePath && (
-                            <Image
-                                src={imageCollagePath}
-                                height={200}
-                                width={200}
-                                alt="Jazz In Toronto team"
-                            />
+                            <div className="mb-10 flex justify-center">
+                                <Image
+                                    src={imageCollagePath}
+                                    height={1000}
+                                    width={1000}
+                                    alt="Jazz In Toronto team"
+                                />
+                            </div>
                         )}
                     </div>
-                </>
+                </Container>
             ) : (
                 <Loading />
             )}

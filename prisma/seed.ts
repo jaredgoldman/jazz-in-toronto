@@ -1,4 +1,4 @@
-import { Venue } from '@prisma/client'
+import { Area, Venue } from '@prisma/client'
 import { prisma } from '../src/server/db'
 import { BandNameGenerator } from './bandNameGenerator'
 
@@ -48,11 +48,14 @@ const generateVenues = async () => {
             city: 'Toronto',
             photoPath: 'https://picsum.photos/200/300',
             instagramHandle: '@therextoronto',
-            website: 'https://therex.ca/',
+            website: 'therex.ca',
             latitude: 43.6509,
             longitude: -79.3883,
             crawlable: true,
-            eventsPath: 'events'
+            eventsPath: '/events',
+            phoneNumber: '416-598-2475',
+            facebookLink: 'https://www.facebook.com/therextoronto',
+            area: Area.DOWNTOWN
         }
     })
     await prisma.venue.create({
@@ -62,11 +65,14 @@ const generateVenues = async () => {
             city: 'Toronto',
             photoPath: 'https://picsum.photos/200/300',
             instagramHandle: '@dromtaberna',
-            website: 'https://dromtaberna.com/',
+            website: 'dromtaberna.com',
             latitude: 43.6479,
             longitude: -79.4004,
             crawlable: true,
-            eventsPath: 'events-9O8Cm'
+            eventsPath: '/events-9O8Cm',
+            phoneNumber: '416-598-2475',
+            facebookLink: 'https://www.facebook.com/dromtaberna',
+            area: Area.KENSINGTON
         }
     })
     await prisma.venue.create({
@@ -76,11 +82,14 @@ const generateVenues = async () => {
             city: 'Toronto',
             photoPath: 'https://picsum.photos/200/300',
             instagramHandle: '@jazzbistroto',
-            website: 'https://jazzbistro.ca/',
+            website: 'jazzbistro.ca',
             latitude: 43.6559,
             longitude: -79.3794,
             crawlable: true,
-            eventsPath: 'performance_calendar'
+            eventsPath: '/performance_calendar',
+            phoneNumber: '416-363-5299',
+            facebookLink: 'https://www.facebook.com/JazzBistroTO',
+            area: Area.DOWNTOWN
         }
     })
 }

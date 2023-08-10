@@ -5,6 +5,7 @@ import { Input } from '../Fields'
 import Button from '~/components/Button'
 import Upload from '../Fields/Upload'
 import FormLayout from '~/layouts/FormLayout'
+import Number from '../Fields/Number'
 // Types
 import { type Venue } from '~/types/data'
 // Hooks
@@ -33,7 +34,7 @@ export default function VenueForm({
     } = useVenueForm(currentValues, closeModal, onAdd)
 
     return (
-        <FormLayout>
+        <FormLayout isModal={!!closeModal}>
             <h1 className="mb-5">
                 {currentValues ? 'Edit venue' : 'Add your venue here!'}
             </h1>
@@ -44,7 +45,11 @@ export default function VenueForm({
             >
                 {({ isSubmitting }) => (
                     <Form className="flex flex-col">
-                        <Input name="name" label="Venue Name" />
+                        <Input
+                            name="name"
+                            label="Venue Name"
+                            placerHolder="Enter your venue's name"
+                        />
                         <PlacesAutocomplete name="location" label="Address" />
                         <Upload
                             name="fileData"
@@ -52,10 +57,19 @@ export default function VenueForm({
                             photoPath={initialValues.photoPath}
                             onDeletePhoto={handleDeletePhoto}
                         />
-                        <Input name="instagramHandle" label="instagramHandle" />
-                        <Input name="website" label="Venue Website" />
+                        <Number name="phoneNumber" />
+                        <Input
+                            name="instagramHandle"
+                            label="Instagram Handle"
+                            placerHolder="Enter your instagram hande"
+                        />
+                        <Input
+                            name="website"
+                            label="Venue Website"
+                            placerHolder="Enter your venue's website"
+                        />
                         <div className="flex w-full flex-col items-center">
-                            <div className="flex h-10 flex-col justify-center text-sm text-red-500">
+                            <div className="flex flex-col justify-center text-sm text-red-500">
                                 {error && (
                                     <p className="text-red-500">{error}</p>
                                 )}

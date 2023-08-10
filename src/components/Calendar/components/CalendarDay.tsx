@@ -6,8 +6,6 @@ import Button from '~/components/Button'
 // Types
 import { type DailyEventData } from '../types'
 import { type ModalContextType } from '~/components/Modal/types'
-// Utils
-import { nthNumber } from '~/utils/date'
 // Context
 import { ModalContext } from '~/components/Modal/context/ModalContext'
 
@@ -32,7 +30,9 @@ export default function CalendarDay({ dailyEvents }: Props) {
     }
     // Can we lazy load this?
     const modalDay = <ModalDay dailyEvents={dailyEvents} />
-    const pointer = dailyEvents.numOfEvents ? 'cursor-pointer' : 'cursor-default'
+    const pointer = dailyEvents.numOfEvents
+        ? 'cursor-pointer'
+        : 'cursor-default'
 
     return (
         <td
@@ -44,9 +44,10 @@ export default function CalendarDay({ dailyEvents }: Props) {
                 <div></div>
             ) : (
                 <Button
-                    className={`h-full w-full hover:bg-gray-200 border-none text-white hover:text-black ${pointer}`}
+                    className={`h-full w-full border-none text-white hover:bg-gray-200 hover:text-black ${pointer}`}
                     onClick={() => {
                         if (!dailyEvents.numOfEvents) return
+                        onLeave()
                         handleModal(modalDay)
                     }}
                 >

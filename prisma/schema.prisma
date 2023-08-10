@@ -48,7 +48,9 @@ model Venue {
   photoPath       String?
   featured        Boolean  @default(false)
   instagramHandle String?
+  facebookLink    String?
   website         String
+  phoneNumber     String
   events          Event[]
   active          Boolean  @default(true)
   latitude        Float
@@ -56,8 +58,21 @@ model Venue {
   crawlable       Boolean  @default(false)
   eventsPath      String?
   description     String?
+  area            Area
 
   @@index([featured])
+}
+
+enum Area {
+  JUNCTION
+  LITTLE_PORTUGAL
+  ANNEX
+  KENSINGTON
+  DOWNTOWN
+  RIVERDALE
+  BEACHES
+  NORTH_YORK
+  DAVISVILLE
 }
 
 model Event {

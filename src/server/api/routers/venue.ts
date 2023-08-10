@@ -19,7 +19,19 @@ export const venueRouter = createTRPCRouter({
                 featured: z.boolean().optional(),
                 instagramHandle: z.string().optional(),
                 website: z.string(),
-                active: z.boolean().optional()
+                active: z.boolean().optional(),
+                phoneNumber: z.string(),
+                area: z.enum([
+                    'JUNCTION',
+                    'LITTLE_PORTUGAL',
+                    'ANNEX',
+                    'KENSINGTON',
+                    'DOWNTOWN',
+                    'RIVERDALE',
+                    'BEACHES',
+                    'NORTH_YORK',
+                    'DAVISVILLE'
+                ])
             })
         )
         .mutation(({ ctx, input }) => {

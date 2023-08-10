@@ -29,11 +29,11 @@ export async function getStaticProps() {
 export default function Home() {
     return (
         <RootLayout>
-            <div className="mb-1 flex flex-col items-center">
+            <div className="mb-1 flex w-full flex-col items-center">
                 <h1 className="mb-4 text-center text-2xl font-bold">
                     Follow us!
                 </h1>
-                <div className="flex w-1/4 justify-between">
+                <div className="flex w-1/2 max-w-[20rem] justify-evenly">
                     <Button
                         className="my-6 bg-blue-500 px-4"
                         link="https://www.instagram.com/jazzintoronto/ "

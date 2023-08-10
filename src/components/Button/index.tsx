@@ -51,7 +51,7 @@ export default function Button({
 
     return (
         <ButtonElement
-            innerClassName={`${className} dark:bg-gray flex min-w-[4.2rem] items-center justify-center border-2 border-black p-1 dark:border-white`}
+            innerClassName={`${className} min-w-[6rem] dark:bg-gray flex items-center justify-center border-2 border-black p-1 dark:border-white`}
         >
             {isLoading ? (
                 <Image

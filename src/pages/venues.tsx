@@ -19,7 +19,14 @@ export default function Venues(): JSX.Element {
 
     return (
         <RootLayout>
-            <main>{venueCards}</main>
+            <div>
+                <div className="flex items-center justify-center">
+                    <div className="flex-1 border-b"></div>
+                    <h1 className="px-4 text-center text-xl">Venue listings</h1>
+                    <div className="flex-1 border-b"></div>
+                </div>
+                {venueCards}
+            </div>
         </RootLayout>
     )
 }

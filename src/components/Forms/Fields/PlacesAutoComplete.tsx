@@ -1,6 +1,11 @@
 /* eslint-disable */
 // Components
-import { type FieldProps, Field, ErrorMessage } from 'formik'
+import {
+    Field,
+    ErrorMessage,
+    type FieldInputProps,
+    type FormikProps
+} from 'formik'
 // Libraries
 import usePlacesAutocomplete, {
     getGeocode,
@@ -8,19 +13,21 @@ import usePlacesAutocomplete, {
 } from 'use-places-autocomplete'
 import useOnclickOutside from 'react-cool-onclickoutside'
 
-interface PlacesAutoCompleteProps {
+interface Props {
     label: string
     name: string
     className?: string
     fieldClassName?: string
+    placeHolder?: string
 }
 
 export default function PlacesAutoCompleteField({
     label,
     name,
     className = 'flex-col mb-5',
-    fieldClassName = 'border-2 border-black'
-}: PlacesAutoCompleteProps): JSX.Element {
+    fieldClassName = 'border-2 border-black',
+    placeHolder = "Enter your venue's location"
+}: Props): JSX.Element {
     return (
         <div className={className}>
             <label>{label}</label>
@@ -28,13 +35,25 @@ export default function PlacesAutoCompleteField({
                 className={fieldClassName}
                 name={name}
                 component={PlacesAutocomplete}
+                props={{ placeHolder }}
             />
             <ErrorMessage name={name} component="div" />
         </div>
     )
 }
 
-const PlacesAutocomplete = ({ form }: FieldProps<Date, Date>): JSX.Element => {
+interface PlacesAutoCompleteProps {
+    form: FormikProps<string>
+    field: FieldInputProps<string>
+    props: {
+        placeHolder: string
+    }
+}
+
+const PlacesAutocomplete = ({
+    form,
+    props
+}: PlacesAutoCompleteProps): JSX.Element => {
     const {
         ready,
         value,
@@ -103,11 +122,11 @@ const PlacesAutocomplete = ({ form }: FieldProps<Date, Date>): JSX.Element => {
     return (
         <div ref={ref}>
             <input
-                className="text-black"
+                className="w-full text-black"
                 value={value}
                 onChange={handleInput}
                 disabled={!ready}
-                placeholder="Where are you going?"
+                placeholder={props.placeHolder}
             />
             {/* We can use the "status" to decide whether we should display the dropdown or not */}
             {status === 'OK' && <ul>{renderSuggestions()}</ul>}

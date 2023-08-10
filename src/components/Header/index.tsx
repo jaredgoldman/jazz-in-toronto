@@ -37,8 +37,8 @@ export default function Header({
                 </h2>
             </div>
             {showLinks && (
-                <nav className="flex justify-center">
-                    <ul className="flex ">
+                <nav className="mt-2 flex justify-center">
+                    <ul className="flex text-sm">
                         {headerType === HeaderType.Public && (
                             <>
                                 <li className="p-2">

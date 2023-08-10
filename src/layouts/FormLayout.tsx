@@ -4,10 +4,20 @@ import Loading from '~/components/Loading'
 interface Props {
     children: ReactNode
     isLoading?: boolean
+    isModal?: boolean
 }
 
-export default function FormLayout({ children, isLoading }: Props) {
+export default function FormLayout({
+    children,
+    isLoading,
+    isModal = false
+}: Props) {
+    const padding = isModal ? 'p-5' : ''
     return (
-        <div className="mb-6 w-full">{isLoading ? <Loading /> : children}</div>
+        <div
+            className={`mb-6 flex w-full max-w-[40rem] flex-col items-center ${padding}`}
+        >
+            {isLoading ? <Loading /> : children}
+        </div>
     )
 }

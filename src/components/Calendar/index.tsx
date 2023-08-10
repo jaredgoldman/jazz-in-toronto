@@ -66,7 +66,8 @@ export default function Calendar(): JSX.Element {
             ) : (
                 <>
                     <h1 className="text-center">{`Events on ${currentMonthName}, ${currentYear}`}</h1>
-                    <div className="my-8 flex w-1/5 justify-between">
+                    <div className="my-8 flex w-1/2 justify-evenly">
+                        {' '}
                         <Button onClick={() => changeMonth(-1)}>
                             Previous
                         </Button>
@@ -74,11 +75,11 @@ export default function Calendar(): JSX.Element {
                     </div>
                     <div>
                         <table className="mb-14 min-w-full border-collapse">
-                            <thead className="text-white border-shite border-b-2">
+                            <thead className="border-shite border-b-2 text-white">
                                 <tr>
                                     {daysOfTheWeek.map((day) => (
                                         <td
-                                            className="px-5 py-2 text-sm text-center"
+                                            className="px-5 py-2 text-center text-sm"
                                             key={day}
                                         >
                                             {day}

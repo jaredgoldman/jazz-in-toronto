@@ -63,7 +63,9 @@ export default class ScraperService {
 
     private async loadPage(): Promise<void> {
         try {
-            const url = `${this.venue.website}${this.venue?.eventsPath || ''}`
+            const url = `https://${this.venue.website}/${
+                this.venue?.eventsPath || ''
+            }`
             const browser = await puppeterr.launch({
                 args: [
                     '--no-sandbox',

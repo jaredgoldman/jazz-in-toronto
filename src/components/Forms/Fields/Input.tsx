@@ -22,7 +22,7 @@ export default function Input({
             <Field
                 name={name}
                 className={fieldClassName}
-                placerHolder={placerHolder}
+                placeHolder={placerHolder}
             />
             <ErrorMessage name={name} />
         </div>

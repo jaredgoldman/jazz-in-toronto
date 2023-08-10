@@ -23,12 +23,12 @@ export default function Modal(): JSX.Element | null {
                 id="overlay"
                 onClick={handleOutsideClick}
             >
-                <div className="rounded-md relative box-border max-h-[80vh] w-2/3 overflow-y-hidden bg-gray-800">
-                    <div className="m-2" onClick={() => closeModal()}>
+                <div className="relative box-border max-h-[80vh] w-2/3 overflow-y-hidden rounded-md bg-gray-800">
+                    <div className="my-2 ml-3" onClick={() => closeModal()}>
                         X
                     </div>
-                    <div className="flex w-full justify-center">
-                        <div className="w-1/2">{modalContent}</div>
+                    <div>
+                        <div className="w-full">{modalContent}</div>
                     </div>
                 </div>
             </div>

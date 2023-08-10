@@ -23,7 +23,7 @@ export default function RootLayout({ children }: Props): JSX.Element {
             <ModalProvider>
                 <main className="flex min-h-screen flex-col items-center font-body">
                     <Header headerType={HeaderType.Public} />
-                    <div className="mt-4 flex flex-grow flex-col">
+                    <div className="mt-4 flex w-full flex-grow flex-col items-center">
                         {children}
                     </div>
                     <Footer />
