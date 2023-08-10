@@ -1,4 +1,4 @@
-import { Area, Venue } from '@prisma/client'
+import { Venue } from '@prisma/client'
 import { prisma } from '../src/server/db'
 import { BandNameGenerator } from './bandNameGenerator'
 
