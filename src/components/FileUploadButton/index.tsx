@@ -4,7 +4,6 @@ import { type FileData } from '~/types/data'
 
 interface Props {
     onUpload: (data: FileData) => Promise<void> | void
-    className?: string
     label: string
     name?: string
 }
@@ -17,12 +16,7 @@ const trimFileName = (originalFile: File) => {
     })
 }
 
-const FileUploadButton = ({
-    onUpload,
-    label,
-    className,
-    name = 'file'
-}: Props) => {
+const FileUploadButton = ({ onUpload, label, name = 'file' }: Props) => {
     const [selectedFile, setSelectedFile] = useState<FileData | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -62,11 +56,10 @@ const FileUploadButton = ({
             ></input>
             <Button
                 type="button"
-                className={className}
                 onClick={handleButtonClick}
                 isLoading={isLoading}
                 disabled={isLoading}
-                className="w-1/3"
+                size="sm"
             >
                 {label}
             </Button>

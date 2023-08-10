@@ -2,7 +2,6 @@
 import { useContext, useState } from 'react'
 // Compoments
 import ModalDay from './ModalDay'
-import Button from '~/components/Button'
 // Types
 import { type DailyEventData } from '../types'
 import { type ModalContextType } from '~/components/Modal/types'
@@ -28,11 +27,9 @@ export default function CalendarDay({ dailyEvents }: Props) {
         if (!dailyEvents.numOfEvents) return
         setDayText(dailyEvents.date.getDate())
     }
+
     // Can we lazy load this?
     const modalDay = <ModalDay dailyEvents={dailyEvents} />
-    const pointer = dailyEvents.numOfEvents
-        ? 'cursor-pointer'
-        : 'cursor-default'
 
     return (
         <td
@@ -43,8 +40,8 @@ export default function CalendarDay({ dailyEvents }: Props) {
             {dailyEvents.placeholder ? (
                 <div></div>
             ) : (
-                <Button
-                    className={`h-full w-full border-none text-white hover:bg-gray-200 hover:text-black ${pointer}`}
+                <div
+                    className="flex h-full w-full items-center justify-center text-gray-300 hover:cursor-pointer hover:text-white"
                     onClick={() => {
                         if (!dailyEvents.numOfEvents) return
                         onLeave()
@@ -52,7 +49,7 @@ export default function CalendarDay({ dailyEvents }: Props) {
                     }}
                 >
                     <div>{dayText}</div>
-                </Button>
+                </div>
             )}
         </td>
     )

@@ -19,12 +19,7 @@ export default function Header({
     return (
         <header className="mb-5 w-full flex-col items-center bg-gray-800 pb-2 text-center">
             {headerType === HeaderType.Admin && session && (
-                <Button
-                    className="white absolute right-2 top-2 border p-1"
-                    onClick={() => void signOut()}
-                >
-                    Sign Out
-                </Button>
+                <Button onClick={() => void signOut()}>Sign Out</Button>
             )}
 
             <div className="mx-auto w-3/4 justify-center border-b-2 border-white pb-4 pt-8">
@@ -42,7 +37,7 @@ export default function Header({
                         {headerType === HeaderType.Public && (
                             <>
                                 <li className="p-2">
-                                    <Link href="/book">Book Your Gig</Link>
+                                    <Link href="/book">Add Your Gig</Link>
                                 </li>
                                 <li className="p-2">
                                     <Link href="/listings">Listings</Link>

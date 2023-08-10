@@ -1,21 +1,30 @@
 import { type ReactNode } from 'react'
 import Loading from '~/components/Loading'
+import classnames from 'classnames'
 
 interface Props {
     children: ReactNode
     isLoading?: boolean
-    isModal?: boolean
+    padding?: 'sm' | 'md' | 'lg'
+    width?: 'sm' | 'md' | 'lg'
 }
 
 export default function FormLayout({
     children,
     isLoading,
-    isModal = false
+    padding = 'md',
+    width = 'sm'
 }: Props) {
-    const padding = isModal ? 'p-5' : ''
     return (
         <div
-            className={`mb-6 flex w-full max-w-[30rem] flex-col items-center ${padding}`}
+            className={classnames(`mb-6 flex w-full flex-col items-center`, {
+                'px-3': padding === 'sm',
+                'px-7': padding === 'md',
+                'px-10': padding === 'lg',
+                'max-w-sm': width === 'sm',
+                'max-w-md': width === 'md',
+                'max-w-lg': width === 'lg'
+            })}
         >
             {isLoading ? <Loading /> : children}
         </div>

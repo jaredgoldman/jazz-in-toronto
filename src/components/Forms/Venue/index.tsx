@@ -34,7 +34,7 @@ export default function VenueForm({
     } = useVenueForm(currentValues, closeModal, onAdd)
 
     return (
-        <FormLayout isModal={!!closeModal}>
+        <FormLayout padding="lg">
             <h1 className="mb-5">
                 {currentValues ? 'Edit venue' : 'Add your venue here!'}
             </h1>
@@ -48,7 +48,7 @@ export default function VenueForm({
                         <Input
                             name="name"
                             label="Venue Name"
-                            placerHolder="Enter your venue's name"
+                            placeHolder="Enter your venue's name"
                         />
                         <PlacesAutocomplete name="location" label="Address" />
                         <Upload
@@ -61,12 +61,12 @@ export default function VenueForm({
                         <Input
                             name="instagramHandle"
                             label="Instagram Handle"
-                            placerHolder="Enter your instagram hande"
+                            placeHolder="Enter your instagram hande"
                         />
                         <Input
                             name="website"
                             label="Venue Website"
-                            placerHolder="Enter your venue's website"
+                            placeHolder="Enter your venue's website"
                         />
                         <div className="flex w-full flex-col items-center">
                             <div className="flex flex-col justify-center text-sm text-red-500">

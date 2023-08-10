@@ -40,7 +40,7 @@ export default function Select({
             label: option.name
         }
     })
-    console.log('ERROR', error)
+
     return (
         <div className={`flex flex-col`}>
             <label className="mb-1">{label}</label>
@@ -48,7 +48,9 @@ export default function Select({
                 <Field
                     name={name}
                     as="select"
-                    className={classnames({ 'mb-5': modalForm && !error })}
+                    className={classnames('text-black', {
+                        'mb-5': modalForm && !error
+                    })}
                 >
                     <option value="" disabled selected>
                         Select a {label}

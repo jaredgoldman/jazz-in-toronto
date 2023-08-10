@@ -146,7 +146,8 @@ export default function About({
                             {aboutData?.ctaText &&
                                 aboutData?.paypalProfileUrl && (
                                     <Button
-                                        className="font-bold"
+                                        roundedBorder={false}
+                                        size="xl"
                                         link={`https://${aboutData?.paypalProfileUrl}`}
                                     >
                                         {aboutData?.ctaText}

@@ -35,8 +35,8 @@ export default function UploadField({
     onDeletePhoto
 }: Props) {
     return (
-        <div>
-            <label className="mb-1">{label}</label>
+        <div className="flex flex-col items-center">
+            <label className="mb-2">{label}</label>
             <Field
                 name={name}
                 component={Upload}
@@ -67,8 +67,6 @@ const Upload = ({
     props: {
         name = 'file',
         buttonLabel = 'Upload',
-        className = 'flex flex-col mb-5',
-        buttonClassName = 'w-1/2 border-2 dark:border-white',
         showPreview = true,
         photoPath,
         onDeletePhoto
@@ -91,28 +89,33 @@ const Upload = ({
     }
 
     return (
-        <div className={className}>
-            <div className="flex">
-                <FileUploadButton
-                    className={buttonClassName}
-                    onUpload={onSaveFile}
-                    label={buttonLabel}
-                    name={name}
-                />
+        <div className="mb-3 flex w-full flex-col items-center">
+            <div className="flex w-full flex-col items-center">
+                {!src && (
+                    <FileUploadButton
+                        onUpload={onSaveFile}
+                        label={buttonLabel}
+                        name={name}
+                    />
+                )}
                 {showPreview && src && (
-                    <div className="relative h-20 w-20 object-contain">
-                        <Button
-                            onClick={() => void removeFile()}
-                            className="absolute right-1 top-1"
-                        >
-                            X
-                        </Button>
-                        <Image
-                            src={src}
-                            alt="Uploaded image"
-                            width={200}
-                            height={200}
-                        />
+                    <div className="flex w-full items-center justify-evenly">
+                        <div className="relative">
+                            <Button
+                                absolutePosition="absolute top-0 left-0"
+                                size="xs"
+                                onClick={() => void removeFile()}
+                            >
+                                X
+                            </Button>
+                            <Image
+                                className="m-3"
+                                src={src}
+                                height={40}
+                                width={40}
+                                alt="Uploaded image"
+                            />
+                        </div>
                     </div>
                 )}
             </div>

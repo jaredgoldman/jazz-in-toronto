@@ -64,7 +64,7 @@ const DatePicker = ({ form, field, props }: DatePickerProps): JSX.Element => {
 
     return (
         <ReactDatePicker
-            className={`datepicker relative w-full border-2 border-b`}
+            className={`w-full border-2 border-b text-black`}
             selected={startDate}
             {...props}
             onChange={(date: Date) => setStartDate(new Date(date))}

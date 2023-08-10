@@ -10,11 +10,13 @@ interface ButtonProps {
     disabled?: boolean
     isLoading?: boolean
     link?: string
-    size?: 'sm' | 'md' | 'lg'
+    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
     bgColor?: string
     textColor?: string
     borderColor?: string
     hoverBgColor?: string
+    absolutePosition?: string
+    roundedBorder?: boolean
 }
 
 interface ButtonElementProps {
@@ -33,7 +35,9 @@ export default function Button({
     bgColor = 'black',
     textColor = 'white',
     borderColor = 'white',
-    hoverBgColor = 'hover:bg-gray-800'
+    hoverBgColor = 'hover:bg-gray-800',
+    absolutePosition,
+    roundedBorder = true
 }: ButtonProps): JSX.Element {
     const ButtonElement = ({
         children,
@@ -61,13 +65,17 @@ export default function Button({
     return (
         <ButtonElement
             innerClassName={classnames(
-                `flex items-center rounded-3xl justify-center border-2 p-1 border-${borderColor} bg-${bgColor} text-${textColor} ${hoverBgColor}`,
+                `flex items-center justify-center border-2 p-1 align-middle border-${borderColor} bg-${bgColor} text-${textColor} ${hoverBgColor} ${absolutePosition}`,
                 {
                     'cursor-default': disabled,
                     'cursor-pointer': !disabled,
-                    'w-11': size === 'sm',
-                    'w-24': size === 'md',
-                    'w-40': size === 'lg'
+                    'w-6': size === 'xs',
+                    'h-6': size === 'xs',
+                    'w-24': size === 'sm',
+                    'w-36': size === 'md',
+                    'w-40': size === 'lg',
+                    'w-56': size === 'xl',
+                    'rounded-3xl': roundedBorder
                 }
             )}
         >

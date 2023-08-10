@@ -32,8 +32,8 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
     } = useEventForm(currentValues)
 
     return (
-        <FormLayout isLoading={isLoading}>
-            <h1 className="text-bold mb-5 text-center">
+        <FormLayout isLoading={isLoading} width="md">
+            <h1 className="text-bold mb-5 text-center text-2xl">
                 {currentValues ? 'Edit gig' : 'Add your gig here!'}
             </h1>
             <Formik
@@ -43,8 +43,12 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                 innerRef={formikRef}
             >
                 {({ isSubmitting }) => (
-                    <Form className="flex flex-col">
-                        <Input name="name" label="Event Name" />
+                    <Form className="flex w-full flex-col">
+                        <Input
+                            name="name"
+                            label="Event Name"
+                            placeHolder="Add the name of your event"
+                        />
                         {venueData && (
                             <Select
                                 name="venueId"
@@ -90,8 +94,13 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                         <Input
                             name="instagramHandle"
                             label="Instagram Handle"
+                            placeHolder="Add your IG handle"
                         />
-                        <Input name="website" label="Website" />
+                        <Input
+                            name="website"
+                            label="Website"
+                            placeHolder="Add your website"
+                        />
                         <div className="flex w-full flex-col items-center">
                             <Button
                                 type="submit"
