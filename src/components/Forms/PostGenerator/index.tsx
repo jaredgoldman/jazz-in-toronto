@@ -6,6 +6,7 @@ import Button from '~/components/Button'
 import { DatePicker } from '../Fields'
 import FileUploadButton from '~/components/FileUploadButton'
 import { Input } from '../Fields'
+import FormLayout from '~/layouts/FormLayout'
 // Types
 import { type FormikContextType } from 'formik'
 // Utils
@@ -65,7 +66,7 @@ export default function PostGenerator(): JSX.Element {
     }
 
     return (
-        <div className="w-full">
+        <FormLayout>
             <h1 className="mb-5">Event Scraper</h1>
             <Formik
                 innerRef={formikRef}
@@ -138,6 +139,6 @@ export default function PostGenerator(): JSX.Element {
                     </Form>
                 )}
             </Formik>
-        </div>
+        </FormLayout>
     )
 }
