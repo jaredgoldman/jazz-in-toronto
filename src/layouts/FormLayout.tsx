@@ -15,7 +15,7 @@ export default function FormLayout({
     const padding = isModal ? 'p-5' : ''
     return (
         <div
-            className={`mb-6 flex w-full max-w-[40rem] flex-col items-center ${padding}`}
+            className={`mb-6 flex w-full max-w-[30rem] flex-col items-center ${padding}`}
         >
             {isLoading ? <Loading /> : children}
         </div>

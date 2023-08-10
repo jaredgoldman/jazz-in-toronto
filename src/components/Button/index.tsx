@@ -1,15 +1,20 @@
 import Image from 'next/image'
 import React, { type ReactNode } from 'react'
 import Link from 'next/link'
+import classnames from 'classnames'
 
 interface ButtonProps {
     children: ReactNode
-    className?: string
     onClick?: () => void
     type?: 'button' | 'submit' | 'reset'
     disabled?: boolean
     isLoading?: boolean
     link?: string
+    size?: 'sm' | 'md' | 'lg'
+    bgColor?: string
+    textColor?: string
+    borderColor?: string
+    hoverBgColor?: string
 }
 
 interface ButtonElementProps {
@@ -19,12 +24,16 @@ interface ButtonElementProps {
 
 export default function Button({
     children,
-    className = '',
     onClick,
     type = 'button',
     disabled = false,
     isLoading = false,
-    link
+    link,
+    size = 'lg',
+    bgColor = 'black',
+    textColor = 'white',
+    borderColor = 'white',
+    hoverBgColor = 'hover:bg-gray-800'
 }: ButtonProps): JSX.Element {
     const ButtonElement = ({
         children,
@@ -51,7 +60,16 @@ export default function Button({
 
     return (
         <ButtonElement
-            innerClassName={`${className} min-w-[6rem] dark:bg-gray flex items-center justify-center border-2 border-black p-1 dark:border-white`}
+            innerClassName={classnames(
+                `flex items-center rounded-3xl justify-center border-2 p-1 border-${borderColor} bg-${bgColor} text-${textColor} ${hoverBgColor}`,
+                {
+                    'cursor-default': disabled,
+                    'cursor-pointer': !disabled,
+                    'w-11': size === 'sm',
+                    'w-24': size === 'md',
+                    'w-40': size === 'lg'
+                }
+            )}
         >
             {isLoading ? (
                 <Image

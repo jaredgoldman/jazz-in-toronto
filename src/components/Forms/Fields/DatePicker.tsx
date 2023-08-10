@@ -1,5 +1,5 @@
 // Libraries
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useState } from 'react'
 import ReactDatePicker, { type ReactDatePickerProps } from 'react-datepicker'
 import {
     type FieldInputProps,
@@ -7,8 +7,7 @@ import {
     Field,
     ErrorMessage
 } from 'formik'
-import { ModalContext } from '~/components/Modal/context/ModalContext'
-import { type ModalContextType } from '~/components/Modal/types'
+
 import 'react-datepicker/dist/react-datepicker.css'
 
 interface Props {
@@ -52,7 +51,6 @@ interface DatePickerProps {
 }
 
 const DatePicker = ({ form, field, props }: DatePickerProps): JSX.Element => {
-    const { showModal } = useContext(ModalContext) as ModalContextType
     const [startDate, setStartDate] = useState<Date | null>(new Date())
     useEffect(() => {
         const setStartDateFromField = async () => {
@@ -64,12 +62,9 @@ const DatePicker = ({ form, field, props }: DatePickerProps): JSX.Element => {
         void setStartDateFromField()
     }, [startDate, form, field.name, field.value, props])
 
-    // XXX: Solution to stop React DatePicker input filed from rendering above form
-    const zIndex = showModal ? 'z-[-10]' : 'z-0'
-
     return (
         <ReactDatePicker
-            className={`relative ${zIndex} w-full border-2 border-black text-black`}
+            className={`datepicker relative w-full border-2 border-b`}
             selected={startDate}
             {...props}
             onChange={(date: Date) => setStartDate(new Date(date))}

@@ -127,13 +127,9 @@ export const eventRouter = createTRPCRouter({
                 where: { id: input.venueId }
             })
             if (venue) {
-                console.log('Found venue', venue)
                 const scraper = new ScraperService(venue)
-                console.log('Scraper called')
                 await scraper.init()
-                console.log('Scraper initialized, about to scrape events')
                 const events = await scraper.getEvents(input.date)
-                console.log('Scraped events for venue', events)
                 const processedEvents = []
                 if (events) {
                     //  Tranform partialEvent to Event

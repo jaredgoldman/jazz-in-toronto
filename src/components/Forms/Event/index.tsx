@@ -55,6 +55,7 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                                 buttonText={
                                     added.venue ? 'Venue added!' : 'Add a venue'
                                 }
+                                error={formikRef?.current?.errors.venueId}
                                 buttonDisabled={added.venue}
                             />
                         )}
@@ -68,6 +69,7 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                                 buttonText={
                                     added.band ? 'Band added!' : 'Add a band'
                                 }
+                                error={formikRef?.current?.errors.bandId}
                                 buttonDisabled={added.band}
                             />
                         )}
@@ -89,12 +91,15 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                             name="instagramHandle"
                             label="Instagram Handle"
                         />
-                        <Input
-                            className="flex flex-col"
-                            name="website"
-                            label="Website"
-                        />
+                        <Input name="website" label="Website" />
                         <div className="flex w-full flex-col items-center">
+                            <Button
+                                type="submit"
+                                disabled={isSubmitting}
+                                isLoading={isSubmitting}
+                            >
+                                Submit
+                            </Button>
                             <div className="flex h-10 flex-col justify-center text-sm text-red-500">
                                 {error && (
                                     <p className="text-red-500">{error}</p>
@@ -108,13 +113,6 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                                         </p>
                                     ))}
                             </div>
-                            <Button
-                                type="submit"
-                                disabled={isSubmitting}
-                                isLoading={isSubmitting}
-                            >
-                                Submit
-                            </Button>
                         </div>
                     </Form>
                 )}

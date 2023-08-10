@@ -30,20 +30,14 @@ export default function Home() {
     return (
         <RootLayout>
             <div className="mb-1 flex w-full flex-col items-center">
-                <h1 className="mb-4 text-center text-2xl font-bold">
+                <h1 className="mb-10 text-center text-2xl font-bold">
                     Follow us!
                 </h1>
-                <div className="flex w-1/2 max-w-[20rem] justify-evenly">
-                    <Button
-                        className="my-6 bg-blue-500 px-4"
-                        link="https://www.instagram.com/jazzintoronto/ "
-                    >
+                <div className="mb-7 flex w-1/2 max-w-sm justify-evenly">
+                    <Button link="https://www.instagram.com/jazzintoronto/ ">
                         instagram
                     </Button>
-                    <Button
-                        className="my-6 bg-yellow-500 px-4"
-                        link="https://www.facebook.com/jazzintoronto/ "
-                    >
+                    <Button link="https://www.facebook.com/jazzintoronto/ ">
                         Facebook
                     </Button>
                 </div>

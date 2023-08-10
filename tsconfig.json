@@ -23,7 +23,8 @@
             "~/components/*": ["./src/components/*"],
             "~/types": ["./src/types"],
             "~/utils": ["./src/utils"],
-            "~/gql": ["./src/gql"]
+            "~/gql": ["./src/gql"],
+            "~/styles": ["./src/styles/"]
         }
     },
     "include": [

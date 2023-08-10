@@ -37,6 +37,9 @@ dependencies:
   cheerio-json-mapper:
     specifier: ^1.0.3
     version: 1.0.3
+  classnames:
+    specifier: ^2.3.2
+    version: 2.3.2
   date-fns:
     specifier: ^2.30.0
     version: 2.30.0

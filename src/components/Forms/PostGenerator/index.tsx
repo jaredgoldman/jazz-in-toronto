@@ -1,5 +1,5 @@
 // Libraries
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 // Components
 import { Formik, Form } from 'formik'
 import Button from '~/components/Button'
@@ -31,9 +31,10 @@ export default function PostGenerator(): JSX.Element {
     const [error, setError] = useState<string>('')
     const [date, setDate] = useState<Date>(new Date())
     const postMutation = api.event.post.useMutation()
-    const { data: events } = api.event.getAllByDay.useQuery({
-        date
-    })
+    const { data: events, isLoading: eventsLoading } =
+        api.event.getAllByDay.useQuery({
+            date
+        })
 
     // Handle file uploads and form submission
     const { startUpload } = useUploadThing({
@@ -58,13 +59,21 @@ export default function PostGenerator(): JSX.Element {
         }
     })
 
-    const { postImages, addPostImage, files } = usePostImages(events, date)
+    const { postImages, addPostImage, files, isLoading } = usePostImages(
+        events,
+        date
+    )
+
+    useEffect(() => {
+        console.log(isLoading)
+    }, [isLoading])
 
     const initialValues = {
         date: new Date(),
         caption: ''
     }
 
+    console.log('POST IMAGES', postImages)
     return (
         <FormLayout>
             <h1 className="mb-5">Event Scraper</h1>
@@ -96,7 +105,8 @@ export default function PostGenerator(): JSX.Element {
                             }}
                         />
                         <Input name="caption" label="Caption" />
-                        {postImages.length && !postMutation.isSuccess ? (
+                        {isLoading ? <Loading /> : null}
+                        {postImages.length ? (
                             <div className="my-3 flex w-full justify-center">
                                 <div className="flex">
                                     {postImages.map((postImage, index) => {
@@ -118,8 +128,11 @@ export default function PostGenerator(): JSX.Element {
                                     />
                                 </div>
                             </div>
-                        ) : (
-                            <Loading />
+                        ) : null}
+                        {!events?.length && (
+                            <div className="w-full text-center text-gray-500">
+                                No events scheduled for this day
+                            </div>
                         )}
                         <div className="flex w-full flex-col items-center">
                             <div className="flex h-10 flex-col justify-center text-sm">

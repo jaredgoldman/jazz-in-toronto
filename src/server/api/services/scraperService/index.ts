@@ -63,9 +63,10 @@ export default class ScraperService {
 
     private async loadPage(): Promise<void> {
         try {
-            const url = `https://${this.venue.website}/${
+            const url = `https://${this.venue.website}${
                 this.venue?.eventsPath || ''
             }`
+            console.log('URL', url)
             const browser = await puppeterr.launch({
                 args: [
                     '--no-sandbox',
@@ -79,8 +80,7 @@ export default class ScraperService {
 
             const page = await browser.newPage()
             await page.goto(url, {
-                waitUntil: 'networkidle2',
-                timeout: 0
+                waitUntil: 'domcontentloaded'
             })
             // wait for any additional js to load
             // TODO: Wait for certain selector
@@ -99,21 +99,21 @@ export default class ScraperService {
         if (!this.page) {
             throw new Error('No page loaded')
         }
-        const monthIndex = date.getMonth()
-        const currentMonthIndex = new Date().getMonth()
+        // const monthIndex = date.getMonth()
+        // const currentMonthIndex = new Date().getMonth()
 
-        const nextMonthButton = await this.page.waitForSelector(
-            `${rexJson['$']} > .yui3-calendar-header > .yui3-calendarnav-nextmonth`
-        )
-
-        // If the month is in the future, we need to click the next month button
-        if (nextMonthButton) {
-            for (let i = 0; i < monthIndex - currentMonthIndex; i++) {
-                await nextMonthButton.click()
-            }
-        }
-
-        await wait(100)
+        // const nextMonthButton = await this.page.waitForSelector(
+        //     `${rexJson['$']} > .yui3-calendar-header > .yui3-calendarnav-nextmonth`
+        // )
+        //
+        // // If the month is in the future, we need to click the next month button
+        // if (nextMonthButton) {
+        //     for (let i = 0; i < monthIndex - currentMonthIndex; i++) {
+        //         await nextMonthButton.click()
+        //     }
+        // }
+        //
+        // await wait(500)
 
         const html = await this.page.content()
 

@@ -37,7 +37,7 @@ export default function AdminEvents(): JSX.Element {
     return (
         <AdminLayout>
             <>
-                <div className="flex w-1/5 justify-between">
+                <div className="mb-8 flex w-1/5 min-w-[20rem] justify-between">
                     <Button
                         onClick={() => setView(View.Search)}
                         disabled={view === View.Search}

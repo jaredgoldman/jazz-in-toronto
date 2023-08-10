@@ -10,15 +10,14 @@ import {
 // Context
 import { useContext } from 'react'
 import { ModalContext } from '~/components/Modal/context/ModalContext'
+import classnames from 'classnames'
 
 interface SelectProps {
     label: string
     name: string
     optionData: Venue[] | Band[]
     modalForm?: ModalForms
-    className?: string
-    fieldClassName?: string
-    errorMessage?: string
+    error?: string
     onAdd?: (value: Band | Venue) => Promise<void>
     buttonText?: string
     buttonDisabled?: boolean
@@ -29,8 +28,7 @@ export default function Select({
     name,
     optionData,
     modalForm,
-    className = 'flex flex-col mb-5',
-    fieldClassName = 'flex items-center border-2 border-black mb-2 text-black',
+    error,
     onAdd,
     buttonText = `Add an item`,
     buttonDisabled = false
@@ -42,12 +40,16 @@ export default function Select({
             label: option.name
         }
     })
-
+    console.log('ERROR', error)
     return (
-        <div className={className}>
+        <div className={`flex flex-col`}>
             <label className="mb-1">{label}</label>
             <div className="flex flex-col">
-                <Field className={fieldClassName} name={name} as="select">
+                <Field
+                    name={name}
+                    as="select"
+                    className={classnames({ 'mb-5': modalForm && !error })}
+                >
                     <option value="" disabled selected>
                         Select a {label}
                     </option>
@@ -59,18 +61,24 @@ export default function Select({
                         )
                     })}
                 </Field>
+                <ErrorMessage
+                    className={classnames({ 'mb-5': modalForm && !error })}
+                    name={name}
+                    component="div"
+                />
                 {modalForm && (
-                    <Button
-                        onClick={() =>
-                            handleModalForm(modalForm, undefined, onAdd)
-                        }
-                        disabled={buttonDisabled}
-                    >
-                        {buttonText}
-                    </Button>
+                    <div className="flex w-full justify-center">
+                        <Button
+                            onClick={() =>
+                                handleModalForm(modalForm, undefined, onAdd)
+                            }
+                            disabled={buttonDisabled}
+                        >
+                            {buttonText}
+                        </Button>
+                    </div>
                 )}
             </div>
-            <ErrorMessage name={name} component="div" />
         </div>
     )
 }

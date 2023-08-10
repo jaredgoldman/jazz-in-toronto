@@ -74,7 +74,7 @@ export default function Calendar(): JSX.Element {
                         <Button onClick={() => changeMonth(1)}>Next</Button>
                     </div>
                     <div>
-                        <table className="mb-14 min-w-full border-collapse">
+                        <table className="mb-14 min-w-full border-collapse overflow-x-auto">
                             <thead className="border-shite border-b-2 text-white">
                                 <tr>
                                     {daysOfTheWeek.map((day) => (

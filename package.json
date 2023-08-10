@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "build": "next build",
-        "dev": "next dev && pnpm run codegen",
+        "dev": "next dev",
         "lint": "next lint",
         "start": "next start",
         "test": "vitest",
@@ -34,6 +34,7 @@
         "@trpc/server": "^10.26.0",
         "@uploadthing/react": "^5.2.0",
         "cheerio-json-mapper": "^1.0.3",
+        "classnames": "^2.3.2",
         "date-fns": "^2.30.0",
         "formik": "^2.4.2",
         "graphql": "^16.7.1",

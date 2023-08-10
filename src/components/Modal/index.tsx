@@ -19,7 +19,7 @@ export default function Modal(): JSX.Element | null {
     if (showModal) {
         return (
             <div
-                className="z-100 fixed inset-0 flex items-center justify-center bg-black/50"
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
                 id="overlay"
                 onClick={handleOutsideClick}
             >
@@ -28,7 +28,9 @@ export default function Modal(): JSX.Element | null {
                         X
                     </div>
                     <div>
-                        <div className="w-full">{modalContent}</div>
+                        <div className="flex w-full justify-center">
+                            {modalContent}
+                        </div>
                     </div>
                 </div>
             </div>

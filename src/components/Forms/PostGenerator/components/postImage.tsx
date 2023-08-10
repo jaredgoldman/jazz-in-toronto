@@ -60,7 +60,7 @@ export default function PostImage({
             )}
             <div className="relative flex overflow-x-auto whitespace-nowrap">
                 {src && (
-                    <div className="relative w-20 object-contain">
+                    <div className="relative object-contain">
                         {removePostImage && (
                             <button
                                 className="absolute right-0 top-0"
@@ -73,7 +73,6 @@ export default function PostImage({
                             src={src}
                             width={width}
                             height={height}
-                            className="h-full w-full"
                             alt="post"
                         />
                     </div>

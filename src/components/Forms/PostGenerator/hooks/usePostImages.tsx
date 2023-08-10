@@ -10,6 +10,7 @@ export default function usePostImages(
     // Files for uploadthingd
     const [files, setFiles] = useState<{ [key: string]: File }>({})
     // Files for rendering in the Post generator
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const [postImages, setPostImages] = useState<JSX.Element[]>([])
     const eventLength = events?.length || 0
     const postImageEventsNeeded = Math.ceil(eventLength / eventsPerCanvas)
@@ -51,6 +52,7 @@ export default function usePostImages(
 
         // don't re-run if we've mapped events
         if (events && events.length && !hasRun.current) {
+            setIsLoading(true)
             const eventsCopy = events ? [...events] : []
             const images: JSX.Element[] = []
             for (let i = 0; i < postImageEventsNeeded; i++) {
@@ -68,13 +70,27 @@ export default function usePostImages(
             }
             setPostImages((prevImages) => [...prevImages, ...images])
             hasRun.current = true
+            setIsLoading(false)
         }
-    }, [events, date, eventsPerCanvas, postImageEventsNeeded, files])
+    }, [
+        events,
+        date,
+        eventsPerCanvas,
+        postImageEventsNeeded,
+        files,
+        hasRun.current
+    ])
+
+    useEffect(() => {
+        setPostImages([])
+        hasRun.current = false
+    }, [date])
 
     return {
         addPostImage,
         removePostImage,
         postImages,
-        files
+        files,
+        isLoading
     }
 }

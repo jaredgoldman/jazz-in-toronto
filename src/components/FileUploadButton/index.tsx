@@ -66,6 +66,7 @@ const FileUploadButton = ({
                 onClick={handleButtonClick}
                 isLoading={isLoading}
                 disabled={isLoading}
+                className="w-1/3"
             >
                 {label}
             </Button>
