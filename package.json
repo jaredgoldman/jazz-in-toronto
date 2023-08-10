@@ -13,6 +13,7 @@
         "db:reset": "NODE_ENV=development prisma migrate reset --force --skip-seed && pnpm run db:push && pnpm run db:seed",
         "db:clear": "NODE_ENV=development prisma migrate reset --force --skip-seed",
         "db:seed": "NODE_ENV=development prisma db seed",
+        "db:generate": "prisma generate",
         "schema:format": "prisma format",
         "prepare": "husky install",
         "codegen": "graphql-codegen --config codegen.ts"
