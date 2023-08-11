@@ -70,6 +70,7 @@ export default function Button({
                     'cursor-default': disabled,
                     'cursor-pointer': !disabled,
                     'w-6': size === '2xs',
+                    'h-6': size === '2xs',
                     'h-16': size === 'xs',
                     'w-24': size === 'sm',
                     'w-36': size === 'md',

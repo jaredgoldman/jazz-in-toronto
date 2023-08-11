@@ -1,11 +1,13 @@
 import { type ChangeEvent, useState, useRef, useEffect } from 'react'
-import Button from '../Button'
 import { type FileData } from '~/types/data'
+import classnames from 'classnames'
 
 interface Props {
     onUpload: (data: FileData) => Promise<void> | void
     label: string
     name?: string
+    buttonComponent?: JSX.Element
+    isPostUpload?: boolean
 }
 
 const trimFileName = (originalFile: File) => {
@@ -54,15 +56,12 @@ const FileUploadButton = ({ onUpload, label, name = 'file' }: Props) => {
                 ref={fileInputRef}
                 name={name}
             ></input>
-            <Button
-                type="button"
+            <div
+                className="flex h-full w-[500px] items-center justify-center bg-white"
                 onClick={handleButtonClick}
-                isLoading={isLoading}
-                disabled={isLoading}
-                size="sm"
             >
                 {label}
-            </Button>
+            </div>
         </>
     )
 }

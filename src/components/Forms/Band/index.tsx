@@ -55,11 +55,7 @@ export default function BandForm({
                             name="instagramHandle"
                             label="Instagram Handle"
                         />
-                        <Input
-                            name="website"
-                            label="Website"
-                            className="flex flex-col"
-                        />
+                        <Input name="website" label="Website" />
                         <div className="flex w-full flex-col items-center">
                             <div className="flex h-10 flex-col justify-center text-sm text-red-500">
                                 {error && (

@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState, useCallback, type RefObject } from 'react'
 import { type EventWithBandVenue } from '~/types/data'
-import { daysOfTheWeek } from '~/utils/constants'
+import { getDaysOfTheWeek, getdaysOfTheWeek } from '~/utils/constants'
 import getDay from 'date-fns/getDay'
 import { getFormattedTime } from '~/utils/date'
 
@@ -65,7 +65,7 @@ export default function useCanvas({
                 // Draw the date rect
                 if (date) {
                     // Set text properties
-                    const day = daysOfTheWeek[getDay(date)] as string
+                    const day = getDaysOfTheWeek('long')[getDay(date)] as string
                     const formattedDate = new Intl.DateTimeFormat('en-US', {
                         dateStyle: 'long'
                     }).format(date)
@@ -143,7 +143,7 @@ export default function useCanvas({
 
     useEffect(() => {
         const createCanvas = async () => {
-            const canvas = canvasRef.current
+            const canvas = document.createElement('canvas')
             // If not events, return as imgSrc is provided from another source
             if (canvas && events && index) {
                 const ctx = canvas.getContext('2d')

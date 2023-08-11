@@ -49,7 +49,7 @@ export default function PostImage({
 
     // We have to render the canvas to get the dataURL/Blob/File
     return (
-        <div className="m-2">
+        <div className="mx-2">
             {canvasRef && (
                 <canvas
                     className="hidden"
@@ -58,9 +58,9 @@ export default function PostImage({
                     height={height}
                 ></canvas>
             )}
-            <div className="relative flex overflow-x-auto whitespace-nowrap">
+            <div>
                 {src && (
-                    <div className="relative object-contain">
+                    <div>
                         {removePostImage && (
                             <button
                                 className="absolute right-0 top-0"
@@ -69,12 +69,7 @@ export default function PostImage({
                                 X
                             </button>
                         )}
-                        <Image
-                            src={src}
-                            width={width}
-                            height={height}
-                            alt="post"
-                        />
+                        <Image src={src} width={500} height={500} alt="post" />
                     </div>
                 )}
             </div>

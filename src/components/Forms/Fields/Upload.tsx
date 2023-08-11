@@ -103,7 +103,7 @@ const Upload = ({
                         <div className="relative">
                             <Button
                                 absolutePosition="absolute top-0 left-0"
-                                size="xs"
+                                size="2xs"
                                 onClick={() => void removeFile()}
                             >
                                 X
@@ -111,8 +111,8 @@ const Upload = ({
                             <Image
                                 className="m-3"
                                 src={src}
-                                height={40}
-                                width={40}
+                                height={50}
+                                width={50}
                                 alt="Uploaded image"
                             />
                         </div>

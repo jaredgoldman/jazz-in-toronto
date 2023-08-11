@@ -63,10 +63,6 @@ export default function PostGenerator(): JSX.Element {
         date
     )
 
-    useEffect(() => {
-        console.log(isLoading)
-    }, [isLoading])
-
     const initialValues = {
         date: new Date(),
         caption: ''
@@ -105,25 +101,20 @@ export default function PostGenerator(): JSX.Element {
                         />
                         <Input name="caption" label="Caption" />
                         {isLoading ? <Loading /> : null}
-                        {postImages.length ? (
+                        {postImages.length && !isLoading ? (
                             <div className="my-3 flex w-full justify-center">
                                 <div className="flex">
                                     {postImages.map((postImage, index) => {
                                         return (
-                                            <div
-                                                className="flex items-center justify-center "
-                                                key={index}
-                                            >
-                                                {postImage}
-                                            </div>
+                                            <div key={index}>{postImage}</div>
                                         )
                                     })}
                                     <FileUploadButton
                                         onUpload={({ file, dataURL }) => {
                                             addPostImage(file, dataURL)
                                         }}
-                                        className="border-white hover:border"
                                         label="+"
+                                        isPostUpload={true}
                                     />
                                 </div>
                             </div>
