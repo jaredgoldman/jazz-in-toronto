@@ -35,22 +35,14 @@ export default function CalendarDay({ dailyEvents }: Props) {
         <td
             onMouseOver={onHover}
             onMouseOut={onLeave}
-            className="h-[5rem] min-w-[7rem]"
+            onClick={() => {
+                if (!dailyEvents.numOfEvents) return
+                onLeave()
+                handleModal(modalDay)
+            }}
+            className="w-1/7 w-[5rem] py-5 text-center"
         >
-            {dailyEvents.placeholder ? (
-                <div></div>
-            ) : (
-                <div
-                    className="flex h-full w-full items-center justify-center text-gray-300 hover:cursor-pointer hover:text-white"
-                    onClick={() => {
-                        if (!dailyEvents.numOfEvents) return
-                        onLeave()
-                        handleModal(modalDay)
-                    }}
-                >
-                    <div>{dayText}</div>
-                </div>
-            )}
+            {dailyEvents.placeholder ? null : dayText}
         </td>
     )
 }

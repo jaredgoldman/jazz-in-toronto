@@ -8,13 +8,13 @@ export default function Featured() {
         api.featured.getFeatured.useQuery()
 
     return (
-        <Container className="max-w-5xl flex-grow">
-            {featuredItems && !isLoading ? (
-                <>
-                    <h1 className="mb-4 w-full text-center text-2xl font-bold">
-                        Our Faves
-                    </h1>
-                    <div className="flex sm:flex-col md:flex-row">
+        <div>
+            <h1 className="mb-4 w-full text-center text-2xl font-bold">
+                Our Faves
+            </h1>
+            <Container justify="center">
+                {featuredItems && !isLoading ? (
+                    <div className="mb-5">
                         {featuredItems?.venue && (
                             <FeaturedCard
                                 image={featuredItems.venue?.photoPath}
@@ -37,10 +37,10 @@ export default function Featured() {
                             />
                         )}
                     </div>
-                </>
-            ) : (
-                <Loading />
-            )}
-        </Container>
+                ) : (
+                    <Loading />
+                )}
+            </Container>
+        </div>
     )
 }

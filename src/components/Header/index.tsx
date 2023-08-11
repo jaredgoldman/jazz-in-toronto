@@ -19,14 +19,20 @@ export default function Header({
     return (
         <header className="mb-5 w-full flex-col items-center bg-gray-800 pb-2 text-center">
             {headerType === HeaderType.Admin && session && (
-                <Button onClick={() => void signOut()}>Sign Out</Button>
+                <Button
+                    absolutePosition="absolute top-2 left-1"
+                    size="sm"
+                    onClick={() => void signOut()}
+                >
+                    Sign Out
+                </Button>
             )}
 
             <div className="mx-auto w-3/4 justify-center border-b-2 border-white pb-4 pt-8">
                 <Link className="text-3xl font-bold" href="/">
                     JAZZINTORONTO
                 </Link>
-                <h2 className="m-auto mb-2 w-1/2 text-center">
+                <h2 className="m-auto mb-2 text-center lg:w-1/2">
                     Connecting Toronto&apos;s Jazz Musicians, Audiences, Venues
                     and Presenters
                 </h2>

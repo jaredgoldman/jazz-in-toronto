@@ -5,24 +5,22 @@ interface Props {
     content?: string
     image?: string | null
     link?: string | null
-    className?: string
 }
 
 const FeaturedCard = ({
     title,
     content = 'This is a short sample description for a featured card. Come check out our band/event/venue',
     image,
-    link,
-    className = ''
+    link
 }: Props) => {
     return (
         <Container
+            width="md"
             style={{
                 backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(1,1,1,1) 95%), url(${
                     image ? image : 'none'
                 })`
             }}
-            className={`m-4 h-64 rounded-lg shadow-md ${className} flex flex-col justify-end bg-cover bg-center`}
         >
             <div className="flex flex-col p-4">
                 <h2 className="text-1xl mb-2 font-bold">{title}</h2>

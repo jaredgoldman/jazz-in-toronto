@@ -33,11 +33,17 @@ export default function Home() {
                 <h1 className="mb-10 text-center text-2xl font-bold">
                     Follow us!
                 </h1>
-                <div className="mb-7 flex w-1/2 max-w-sm justify-evenly">
-                    <Button link="https://www.instagram.com/jazzintoronto/ ">
+                <div className="mb-7 flex w-3/4 max-w-lg justify-evenly lg:w-1/2">
+                    <Button
+                        size="sm"
+                        link="https://www.instagram.com/jazzintoronto/ "
+                    >
                         instagram
                     </Button>
-                    <Button link="https://www.facebook.com/jazzintoronto/ ">
+                    <Button
+                        size="sm"
+                        link="https://www.facebook.com/jazzintoronto/ "
+                    >
                         Facebook
                     </Button>
                 </div>

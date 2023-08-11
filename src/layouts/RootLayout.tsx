@@ -6,7 +6,6 @@ import Footer from '~/components/Footer'
 import { HeaderType } from '~/components/Header/types'
 import { type ReactNode } from 'react'
 // Context
-import { ModalProvider } from '~/components/Modal/context/ModalContext'
 
 interface Props {
     children: ReactNode | string
@@ -20,15 +19,13 @@ export default function RootLayout({ children }: Props): JSX.Element {
                 <meta name="description" content="Jazz In Toronto" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <ModalProvider>
-                <main className="flex min-h-screen flex-col items-center font-body">
-                    <Header headerType={HeaderType.Public} />
-                    <div className="mt-4 flex w-full flex-grow flex-col items-center">
-                        {children}
-                    </div>
-                    <Footer />
-                </main>
-            </ModalProvider>
+            <main className="flex min-h-screen flex-col items-center font-body">
+                <Header headerType={HeaderType.Public} />
+                <div className="mt-4 flex w-full flex-grow flex-col items-center">
+                    {children}
+                </div>
+                <Footer />
+            </main>
         </>
     )
 }

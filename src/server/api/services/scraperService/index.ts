@@ -99,21 +99,21 @@ export default class ScraperService {
         if (!this.page) {
             throw new Error('No page loaded')
         }
-        // const monthIndex = date.getMonth()
-        // const currentMonthIndex = new Date().getMonth()
+        const monthIndex = date.getMonth()
+        const currentMonthIndex = new Date().getMonth()
 
-        // const nextMonthButton = await this.page.waitForSelector(
-        //     `${rexJson['$']} > .yui3-calendar-header > .yui3-calendarnav-nextmonth`
-        // )
+        const nextMonthButton = await this.page.waitForSelector(
+            `${rexJson['$']} > .yui3-calendar-header > .yui3-calendarnav-nextmonth`
+        )
         //
         // // If the month is in the future, we need to click the next month button
-        // if (nextMonthButton) {
-        //     for (let i = 0; i < monthIndex - currentMonthIndex; i++) {
-        //         await nextMonthButton.click()
-        //     }
-        // }
-        //
-        // await wait(500)
+        if (nextMonthButton) {
+            for (let i = 0; i < monthIndex - currentMonthIndex; i++) {
+                await nextMonthButton.click()
+            }
+        }
+
+        await wait(500)
 
         const html = await this.page.content()
 

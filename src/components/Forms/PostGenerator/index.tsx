@@ -31,10 +31,9 @@ export default function PostGenerator(): JSX.Element {
     const [error, setError] = useState<string>('')
     const [date, setDate] = useState<Date>(new Date())
     const postMutation = api.event.post.useMutation()
-    const { data: events, isLoading: eventsLoading } =
-        api.event.getAllByDay.useQuery({
-            date
-        })
+    const { data: events } = api.event.getAllByDay.useQuery({
+        date
+    })
 
     // Handle file uploads and form submission
     const { startUpload } = useUploadThing({

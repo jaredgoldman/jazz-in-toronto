@@ -71,7 +71,7 @@ export default function VenueCard({ venue }: Props): JSX.Element {
     const { withAt, withoutAt } = processIGHandle(venue?.instagramHandle)
 
     return (
-        <Container className="mb-10 mb-4 flex border-2 border-black p-1">
+        <Container maxWidth="full">
             <div className="relative h-[10rem] w-[10rem] object-contain">
                 {venue.photoPath && (
                     <Image
@@ -86,7 +86,7 @@ export default function VenueCard({ venue }: Props): JSX.Element {
                 <div className="mb-7 text-xs">
                     <div>{venue.address}</div>
                     <div>{venue.phoneNumber}</div>
-                    <div className="flex">
+                    <div className="flex flex-col sm:flex-row">
                         {venue.instagramHandle && (
                             <span>
                                 IG:{' '}
@@ -99,7 +99,7 @@ export default function VenueCard({ venue }: Props): JSX.Element {
                             </span>
                         )}
                         {venue.facebookLink && (
-                            <span className="ml-2">
+                            <span className="sm:ml-2 ">
                                 FB:{' '}
                                 <Link
                                     className="text-blue-500"

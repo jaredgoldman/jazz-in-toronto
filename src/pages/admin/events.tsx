@@ -41,18 +41,24 @@ export default function AdminEvents(): JSX.Element {
                     <Button
                         onClick={() => setView(View.Search)}
                         disabled={view === View.Search}
+                        roundedBorder={false}
+                        size="sm"
                     >
                         Search
                     </Button>
                     <Button
                         onClick={() => setView(View.Scrape)}
                         disabled={view === View.Scrape}
+                        roundedBorder={false}
+                        size="sm"
                     >
                         Crawl
                     </Button>
                     <Button
                         onClick={() => setView(View.Post)}
                         disabled={view === View.Post}
+                        roundedBorder={false}
+                        size="sm"
                     >
                         Post
                     </Button>

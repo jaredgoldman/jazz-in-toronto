@@ -10,7 +10,7 @@ interface ButtonProps {
     disabled?: boolean
     isLoading?: boolean
     link?: string
-    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+    size?: '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
     bgColor?: string
     textColor?: string
     borderColor?: string
@@ -36,7 +36,7 @@ export default function Button({
     textColor = 'white',
     borderColor = 'white',
     hoverBgColor = 'hover:bg-gray-800',
-    absolutePosition,
+    absolutePosition = '',
     roundedBorder = true
 }: ButtonProps): JSX.Element {
     const ButtonElement = ({
@@ -69,8 +69,8 @@ export default function Button({
                 {
                     'cursor-default': disabled,
                     'cursor-pointer': !disabled,
-                    'w-6': size === 'xs',
-                    'h-6': size === 'xs',
+                    'w-6': size === '2xs',
+                    'h-16': size === 'xs',
                     'w-24': size === 'sm',
                     'w-36': size === 'md',
                     'w-40': size === 'lg',

@@ -72,14 +72,7 @@ export default function usePostImages(
             hasRun.current = true
             setIsLoading(false)
         }
-    }, [
-        events,
-        date,
-        eventsPerCanvas,
-        postImageEventsNeeded,
-        files,
-        hasRun.current
-    ])
+    }, [events, date, eventsPerCanvas, postImageEventsNeeded, files, hasRun])
 
     useEffect(() => {
         setPostImages([])

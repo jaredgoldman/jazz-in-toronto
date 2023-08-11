@@ -30,7 +30,7 @@ const ModalProvider = ({ children }: { children: JSX.Element }) => {
             }}
         >
             <Modal />
-            <div>{children}</div>
+            {children}
         </Provider>
     )
 }

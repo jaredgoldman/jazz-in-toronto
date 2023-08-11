@@ -6,7 +6,7 @@ import { type DailyEventData } from '../types'
 import { type EventWithBandVenue } from '~/types/data'
 import { type QueryObserverResult } from '@tanstack/react-query'
 // Utils
-import { daysOfTheWeek } from '~/utils/constants'
+import { getDaysOfTheWeek } from '~/utils/constants'
 
 interface ReturnType {
     changeMonth: (numOfMonths: number) => void
@@ -26,7 +26,9 @@ export default function useCalendar(
     const [monthlyEvents, setDailyEvents] = useState<DailyEventData[]>([])
 
     const currentMonthName = months[currentMonth] as string
-    const currentDayName = daysOfTheWeek[selectedDate.getDay()] as string
+    const currentDayName = getDaysOfTheWeek('long')[
+        selectedDate.getDay()
+    ] as string
     const daysInMonth = getDaysInMonth(selectedDate)
 
     useEffect(() => {

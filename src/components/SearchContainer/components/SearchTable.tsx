@@ -103,7 +103,7 @@ export default function SearchTable({
     const header = headers[dataType]
 
     return (
-        <table className="table w-full border-collapse rounded-lg bg-white shadow-md">
+        <table className="block table-auto border-collapse overflow-x-auto whitespace-nowrap rounded-lg text-white">
             <thead>{header}</thead>
             <tbody>
                 {items.length ? (

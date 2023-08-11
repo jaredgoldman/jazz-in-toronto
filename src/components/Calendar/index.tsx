@@ -2,12 +2,13 @@ import { useState } from 'react'
 // Components
 import Button from '../Button'
 import CalendarDay from './components/CalendarDay'
+import Container from '../Container'
 // Hooks
 import useCalendar from './hooks/useCalendar'
 // Types
 // Utils
 import { api } from '~/utils/api'
-import { daysOfTheWeek } from '~/utils/constants'
+import { getDaysOfTheWeek } from '~/utils/constants'
 import Loading from '../Loading'
 
 export default function Calendar(): JSX.Element {
@@ -41,7 +42,7 @@ export default function Calendar(): JSX.Element {
         for (let i = 0; i < 5; i++) {
             const rowDays = monthlyEventsCopy.splice(0, 7)
             const calendarRowDays = (
-                <tr className="text-center text-gray-900" key={i}>
+                <tr key={i}>
                     {rowDays.map((dailyEvents, i) => {
                         return (
                             <CalendarDay
@@ -60,26 +61,25 @@ export default function Calendar(): JSX.Element {
     const eventRows = mapEventsToCalendarRows()
 
     return (
-        <main className="flex flex-col items-center">
-            {isLoading ? (
-                <Loading />
-            ) : (
-                <>
-                    <h1 className="text-center">{`Events on ${currentMonthName}, ${currentYear}`}</h1>
-                    <div className="my-8 flex w-1/2 justify-evenly">
-                        {' '}
-                        <Button onClick={() => changeMonth(-1)}>
-                            Previous
-                        </Button>
-                        <Button onClick={() => changeMonth(1)}>Next</Button>
-                    </div>
-                    <div>
-                        <table className="mb-14 min-w-full border-collapse overflow-x-auto">
-                            <thead className="border-shite border-b-2 text-white">
+        <Container justify="center">
+            <div className="overflow-x-auto">
+                {isLoading ? (
+                    <Loading />
+                ) : (
+                    <>
+                        <h1 className="text-center">{`Events on ${currentMonthName}, ${currentYear}`}</h1>
+                        <div className="my-8 flex w-full min-w-[20rem] justify-evenly">
+                            <Button onClick={() => changeMonth(-1)}>
+                                Previous
+                            </Button>
+                            <Button onClick={() => changeMonth(1)}>Next</Button>
+                        </div>
+                        <table className="min-w-max border-collapse">
+                            <thead className="border-b-2 border-white text-white">
                                 <tr>
-                                    {daysOfTheWeek.map((day) => (
+                                    {getDaysOfTheWeek('short').map((day) => (
                                         <td
-                                            className="px-5 py-2 text-center text-sm"
+                                            className="w-1/7 text-center"
                                             key={day}
                                         >
                                             {day}
@@ -89,9 +89,9 @@ export default function Calendar(): JSX.Element {
                             </thead>
                             <tbody>{eventRows}</tbody>
                         </table>
-                    </div>
-                </>
-            )}
-        </main>
+                    </>
+                )}
+            </div>
+        </Container>
     )
 }
