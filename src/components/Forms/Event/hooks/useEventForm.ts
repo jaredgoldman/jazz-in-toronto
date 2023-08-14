@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
 import { type EventWithBandVenue, type Band, type Venue } from '~/types/data'
@@ -62,9 +62,11 @@ export default function useEventForm(currentValues?: EventWithBandVenue) {
         formState: { errors }
     } = useForm<EventFormValues>({ defaultValues })
 
+    useEffect(() => {
+        console.log(errors)
+    }, [errors])
+
     const onSubmit = async (values: EventFormValues) => {
-        console.log('VALUES', values)
-        // handle errors
         try {
             if (isEditing && currentValues && editEventMutation) {
                 await editEventMutation.mutateAsync({

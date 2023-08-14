@@ -1,6 +1,6 @@
 import { type ChangeEvent, useState, useRef, useEffect } from 'react'
 import { type FileData } from '~/types/data'
-import classnames from 'classnames'
+import { Button, Flex } from '@radix-ui/themes'
 
 interface Props {
     onUpload: (data: FileData) => Promise<void> | void
@@ -56,12 +56,9 @@ const FileUploadButton = ({ onUpload, label, name = 'file' }: Props) => {
                 ref={fileInputRef}
                 name={name}
             ></input>
-            <div
-                className="flex h-full w-[500px] items-center justify-center bg-white"
-                onClick={handleButtonClick}
-            >
-                {label}
-            </div>
+            <Flex width="100%" justify="center">
+                <Button onClick={handleButtonClick}>{label}</Button>
+            </Flex>
         </>
     )
 }

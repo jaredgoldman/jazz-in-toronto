@@ -7,7 +7,8 @@ import {
     SelectRoot,
     SelectTrigger,
     SelectContent,
-    SelectItem
+    SelectItem,
+    Text
 } from '@radix-ui/themes'
 // Types
 import { type Venue, type Band } from '~/types/data'
@@ -35,6 +36,7 @@ interface Props<T extends FieldValues> {
     onAdd?: (value: Band | Venue) => Promise<void>
     buttonText?: string
     buttonDisabled?: boolean
+    required?: boolean | string
 }
 
 export default function Select<T extends FieldValues>({
@@ -46,7 +48,8 @@ export default function Select<T extends FieldValues>({
     modalForm,
     onAdd,
     buttonText = `Add an item`,
-    buttonDisabled = false
+    buttonDisabled = false,
+    required = false
 }: Props<T>): JSX.Element {
     const { handleModalForm } = useContext(ModalContext) as ModalContextType
     const mappedOptions = optionData.map((option) => {
@@ -58,6 +61,7 @@ export default function Select<T extends FieldValues>({
 
     return (
         <Controller
+            rules={{ required }}
             control={control}
             name={name}
             render={({ field }) => (
@@ -85,9 +89,9 @@ export default function Select<T extends FieldValues>({
                             </SelectRoot>
                         </Form.Control>
                         {error && (
-                            <Form.Message match="valueMissing">
+                            <Text size="2" color="red">
                                 {error.message}
-                            </Form.Message>
+                            </Text>
                         )}
                         {modalForm && (
                             <Button

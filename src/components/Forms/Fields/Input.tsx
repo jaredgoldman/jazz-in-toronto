@@ -1,6 +1,6 @@
 // Components
 import * as Form from '@radix-ui/react-form'
-import { TextField } from '@radix-ui/themes'
+import { TextField, Text } from '@radix-ui/themes'
 import {
     FieldError,
     Controller,
@@ -12,9 +12,10 @@ import {
 interface Props<T extends FieldValues> {
     label: string
     name: Path<T>
-    type: string
+    type?: string
     control: Control<T>
     error?: FieldError
+    required?: boolean | string
 }
 
 export default function Input<T extends FieldValues>({
@@ -22,11 +23,13 @@ export default function Input<T extends FieldValues>({
     name,
     type = 'text',
     error,
-    control
+    control,
+    required = false
 }: Props<T>): JSX.Element {
     return (
         <Controller
             control={control}
+            rules={{ required }}
             name={name}
             render={({ field }) => (
                 <Form.Field name={name}>
@@ -35,9 +38,9 @@ export default function Input<T extends FieldValues>({
                         <TextField.Input type={type} {...field} />
                     </Form.Control>
                     {error && (
-                        <Form.Message match="valid">
+                        <Text size="2" color="red">
                             {error.message}
-                        </Form.Message>
+                        </Text>
                     )}
                 </Form.Field>
             )}

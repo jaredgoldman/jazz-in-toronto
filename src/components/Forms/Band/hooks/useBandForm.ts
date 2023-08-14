@@ -4,8 +4,9 @@ import { useUploadThing } from '~/hooks/useUploadThing'
 import { type Band } from '~/types/data'
 import { type FormikHelpers } from 'formik'
 import { env } from '~/env.mjs'
+import { useForm } from 'react-hook-form'
 
-export interface Values {
+export interface BandFormValues {
     name: string
     genre?: string
     photoPath?: string
@@ -38,7 +39,7 @@ export default function useBandForm(
     const deleteBandPhotoMutation = api.band.deletePhoto.useMutation()
 
     const isEditing = !!currentValues
-    const initialValues: Values = currentValues
+    const defaultValues: BandFormValues = currentValues
         ? {
               name: currentValues.name,
               instagramHandle: currentValues.instagramHandle || undefined,
@@ -54,6 +55,16 @@ export default function useBandForm(
               photoPath: '',
               fileData: undefined
           }
+
+    const {
+        handleSubmit,
+        control,
+        watch,
+        setValue,
+        formState: { errors }
+    } = useForm<BandFormValues>({
+        defaultValues
+    })
 
     const handleDeletePhoto = async () => {
         if (currentValues?.photoPath) {
@@ -77,7 +88,7 @@ export default function useBandForm(
         }
     })
 
-    const onSubmit = async (values: Values, actions: FormikHelpers<Values>) => {
+    const onSubmit = async (values: BandFormValues) => {
         try {
             setError('')
             let newValues = values
@@ -90,7 +101,6 @@ export default function useBandForm(
                     setError(
                         'File size is too large. Please upload a file smaller than 5MB.'
                     )
-                    actions.setSubmitting(false)
                     return
                 }
                 const res = await startUpload([values.fileData.file])
@@ -109,27 +119,20 @@ export default function useBandForm(
             } else {
                 addedBand = await bandMutation.mutateAsync(newValues)
             }
-            actions.setSubmitting(false)
             // XXX: simplify this process, we shouldn't have to prop drill like this
             // maybe pull the modal context into this form?
             onAdd && (await onAdd(addedBand))
             closeModal && closeModal()
         } catch (e) {
-            actions.setSubmitting(false)
             setError('There was an error adding your band. Please try again.')
         }
     }
 
-    const validate = (values: Values) => {
-        const errors: Errors = {}
-        if (!values.name) {
-            errors.name = 'Required'
-        }
-        return errors
-    }
+    const submit = handleSubmit((data) => {
+        onSubmit(data)
+    })
 
     return {
-        initialValues,
         isEditing,
         bandMutation,
         editBandMutation,
@@ -137,7 +140,10 @@ export default function useBandForm(
         startUpload,
         error,
         setError,
-        onSubmit,
-        validate
+        submit,
+        errors,
+        control,
+        watch,
+        setValue
     }
 }

@@ -26,8 +26,6 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
         onAddBand,
         added,
         isLoading,
-        register,
-        setValue,
         control
     } = useEventForm(currentValues)
 
@@ -40,18 +38,21 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                     type="text"
                     error={errors.name}
                     control={control}
+                    required="You must enter a name for your event"
                 />
                 <DatePicker<EventFormValues>
                     label="Event start date"
                     name="startDate"
                     error={errors.startDate}
                     control={control}
+                    required="Please select a valid start time for your event"
                 />
                 <DatePicker<EventFormValues>
-                    label="Event start date"
+                    label="Event end date"
                     name="endDate"
                     error={errors.endDate}
                     control={control}
+                    required="Please select a valid end time for your event"
                 />
                 {venueData && (
                     <Select
@@ -65,6 +66,7 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                         buttonText={
                             added.venue ? 'Venue added!' : 'Add a venue'
                         }
+                        required="Please select a venue for your event"
                     />
                 )}
                 {bandData && (
@@ -77,6 +79,7 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                         error={errors.bandId}
                         onAdd={onAddBand}
                         buttonText={added.band ? 'Band added!' : 'Add a band'}
+                        required="Please select a band for your event"
                     />
                 )}
                 <Input
