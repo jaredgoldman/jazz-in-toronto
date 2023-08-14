@@ -1,37 +1,21 @@
 import { useRef, useEffect, useState, useCallback, type RefObject } from 'react'
 import { type EventWithBandVenue } from '~/types/data'
-import { getDaysOfTheWeek, getdaysOfTheWeek } from '~/utils/constants'
+import { getDaysOfTheWeek } from '~/utils/constants'
 import getDay from 'date-fns/getDay'
 import { getFormattedTime } from '~/utils/date'
+import { FileData } from '~/types/data'
 
-interface Props {
-    date?: Date
-    events?: EventWithBandVenue[]
-    index?: number
-    height: number
-    width: number
-}
-
-interface FileData {
-    file: File
-    src: string
-}
 // Returns and canvas element for the outer element to render
-export default function useCanvas({
-    date,
-    events,
-    index,
-    height = 1080,
-    width = 1080
-}: Props): {
-    fileData: FileData | null
-    canvasRef: RefObject<HTMLCanvasElement> | null
-} {
+export default function useCanvas() {
+    const canvas = document.createElement('canvas')
     const createPostCanvas = useCallback(
         (
             events: EventWithBandVenue[],
             canvas: HTMLCanvasElement,
-            ctx: CanvasRenderingContext2D
+            ctx: CanvasRenderingContext2D,
+            date: Date,
+            width = 1080,
+            height = 1080
         ) => {
             if (canvas) {
                 canvas.width = width
@@ -118,7 +102,7 @@ export default function useCanvas({
                 ctx.fillText('www.jazzintoronto.com', siteX, tagY)
             }
         },
-        [date, height, width]
+        []
     )
 
     const getBlob = async (
@@ -133,33 +117,23 @@ export default function useCanvas({
             })
             return {
                 file,
-                src: dataURL
+                dataURL
             }
         }
     }
 
-    const [fileData, setFileData] = useState<FileData | null>(null)
-    const canvasRef = useRef<HTMLCanvasElement>(null)
-
-    useEffect(() => {
-        const createCanvas = async () => {
-            const canvas = document.createElement('canvas')
-            // If not events, return as imgSrc is provided from another source
-            if (canvas && events && index) {
-                const ctx = canvas.getContext('2d')
-                if (ctx) {
-                    createPostCanvas(events, canvas, ctx)
-                    const fileData = await getBlob(index, canvas)
-                    fileData && setFileData(fileData)
-                }
-            }
+    const createCanvas = async (
+        events: EventWithBandVenue[],
+        index: number,
+        date: Date
+    ) => {
+        // If not events, return as imgSrc is provided from another source
+        const ctx = canvas.getContext('2d')
+        if (ctx) {
+            createPostCanvas(events, canvas, ctx, date)
+            return await getBlob(index, canvas)
         }
-
-        void createCanvas()
-    }, [events, index, createPostCanvas])
-
-    return {
-        canvasRef,
-        fileData
     }
+
+    return createCanvas
 }

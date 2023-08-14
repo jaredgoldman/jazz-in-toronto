@@ -1,5 +1,6 @@
 // Libraries
 import { useContext, useState } from 'react'
+import { Table } from '@radix-ui/themes'
 // Components
 import {
     EventHeader,
@@ -17,16 +18,15 @@ import {
     type Venue,
     type Item
 } from '~/types/data'
-import { type ModalContextType } from '~/components/Modal/types'
 // Utils
 import { api } from '~/utils/api'
 // Context
-import { ModalContext } from '~/components/Modal/context/ModalContext'
 
 interface Props {
     items: Array<Item>
     dataType: DataType
     featuredItem?: Item | null
+    refetch?: () => Promise<void>
 }
 
 const headers = {
@@ -39,7 +39,8 @@ const headers = {
 export default function SearchTable({
     items,
     dataType,
-    featuredItem
+    featuredItem,
+    refetch
 }: Props): JSX.Element {
     const eventSetFeaturedMutation = api.event.setFeatured.useMutation()
     const venueSetFeaturedMutation = api.venue.setFeatured.useMutation()
@@ -47,8 +48,6 @@ export default function SearchTable({
     const [featured, setFeatured] = useState<string | undefined>(
         featuredItem?.id
     )
-
-    const { handleModalForm } = useContext(ModalContext) as ModalContextType
 
     const handleSetFeatured = (id: string, type: DataType) => {
         setFeatured(id)
@@ -72,9 +71,9 @@ export default function SearchTable({
                 <EventRow
                     item={item as EventWithBandVenue}
                     key={item.id}
-                    handleModalForm={handleModalForm}
                     featured={featured}
                     setFeatured={handleSetFeatured}
+                    refetch={refetch}
                 />
             )
         } else if (dataType === DataType.BAND) {
@@ -82,9 +81,9 @@ export default function SearchTable({
                 <BandRow
                     item={item as Band}
                     key={item.id}
-                    handleModalForm={handleModalForm}
                     featured={featured}
                     setFeatured={handleSetFeatured}
+                    refetch={refetch}
                 />
             )
         } else {
@@ -92,9 +91,9 @@ export default function SearchTable({
                 <VenueRow
                     item={item as Venue}
                     key={item.id}
-                    handleModalForm={handleModalForm}
                     featured={featured}
                     setFeatured={handleSetFeatured}
+                    refetch={refetch}
                 />
             )
         }
@@ -103,17 +102,17 @@ export default function SearchTable({
     const header = headers[dataType]
 
     return (
-        <table className="block table-auto border-collapse overflow-x-auto whitespace-nowrap rounded-lg text-white">
-            <thead>{header}</thead>
-            <tbody>
+        <Table.Root>
+            <Table.Header>{header}</Table.Header>
+            <Table.Body>
                 {items.length ? (
                     rows
                 ) : (
-                    <tr>
-                        <td>No results</td>
-                    </tr>
+                    <Table.Row>
+                        <Table.Cell>No results</Table.Cell>
+                    </Table.Row>
                 )}
-            </tbody>
-        </table>
+            </Table.Body>
+        </Table.Root>
     )
 }

@@ -7,8 +7,11 @@ import { DataType } from '~/types/enums'
 import Loading from '~/components/Loading'
 
 export default function AdminVenues() {
-    const { data: events, isLoading: venuesLoading } =
-        api.venue.getAll.useQuery()
+    const {
+        data: events,
+        isLoading: venuesLoading,
+        refetch
+    } = api.venue.getAll.useQuery()
     const { data: featuredItem, isLoading: featuredLoading } =
         api.venue.getFeatured.useQuery()
 
@@ -18,6 +21,8 @@ export default function AdminVenues() {
             <>
                 {events && !isLoading && (
                     <SearchContainer
+                        heading="Find Venues"
+                        refetch={refetch}
                         items={events}
                         featuredItem={featuredItem}
                         isLoading={isLoading}

@@ -1,19 +1,32 @@
 // Components
+import { useRef, forwardRef, useImperativeHandle } from 'react'
 import * as Form from '@radix-ui/react-form'
 import { DatePicker, Input, Select } from '../Fields'
-import { Flex, Text } from '@radix-ui/themes'
+import { Flex, Text, Button } from '@radix-ui/themes'
 import FormLayout from '~/layouts/FormLayout'
 // Types
 import { type EventWithBandVenue } from '~/types/data'
-import { ModalForms } from '~/components/Modal/types'
 // Hooks
 import useEventForm, { EventFormValues } from './hooks/useEventForm'
+import Dialogue from '~/components/Dialogue'
+import VenueForm from '../Venue'
+import BandForm from '../Band'
 
 interface Props {
     currentValues?: EventWithBandVenue
+    externalSubmit?: boolean
 }
 
-export default function EventForm({ currentValues }: Props): JSX.Element {
+interface InnerFormRef {
+    submitForm: () => Promise<void>
+}
+
+export default forwardRef(function EventForm(
+    { currentValues, externalSubmit = false }: Props,
+    ref: any
+): JSX.Element {
+    const venueFormRef = useRef<InnerFormRef | null>(null)
+    const bandFormRef = useRef<InnerFormRef | null>(null)
     const {
         eventMutation,
         editEventMutation,
@@ -22,12 +35,15 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
         error,
         errors,
         submit,
-        onAddVenue,
-        onAddBand,
-        added,
         isLoading,
-        control
+        control,
+        onAddBand,
+        onAddVenue
     } = useEventForm(currentValues)
+
+    useImperativeHandle(ref, () => ({
+        submitForm: submit
+    }))
 
     return (
         <FormLayout isLoading={isLoading}>
@@ -55,32 +71,53 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                     required="Please select a valid end time for your event"
                 />
                 {venueData && (
-                    <Select
-                        name="venueId"
-                        label="Select a venue"
-                        optionData={venueData}
-                        control={control}
-                        modalForm={ModalForms.Venue}
-                        error={errors.venueId}
-                        onAdd={onAddVenue}
-                        buttonText={
-                            added.venue ? 'Venue added!' : 'Add a venue'
-                        }
-                        required="Please select a venue for your event"
-                    />
+                    <>
+                        <Select
+                            name="venueId"
+                            label="Select a venue"
+                            optionData={venueData}
+                            control={control}
+                            error={errors.venueId}
+                        />
+                        <Dialogue
+                            title="Add a venue"
+                            triggerLabel="Add your venue"
+                            description="Add your venue to our database"
+                            formRef={venueFormRef}
+                            component={
+                                <VenueForm
+                                    ref={venueFormRef}
+                                    onAdd={onAddVenue}
+                                    externalSubmit={true}
+                                />
+                            }
+                        />
+                    </>
                 )}
                 {bandData && (
-                    <Select
-                        name="bandId"
-                        label="Select a band"
-                        optionData={bandData}
-                        control={control}
-                        modalForm={ModalForms.Band}
-                        error={errors.bandId}
-                        onAdd={onAddBand}
-                        buttonText={added.band ? 'Band added!' : 'Add a band'}
-                        required="Please select a band for your event"
-                    />
+                    <>
+                        <Select
+                            name="bandId"
+                            label="Select a band"
+                            optionData={bandData}
+                            control={control}
+                            error={errors.bandId}
+                            required="Please select a band for your event"
+                        />
+                        <Dialogue
+                            title="Add your band"
+                            triggerLabel="Add your band"
+                            description="Add your band to our database"
+                            formRef={bandFormRef}
+                            component={
+                                <BandForm
+                                    ref={bandFormRef}
+                                    onAdd={onAddBand}
+                                    externalSubmit={true}
+                                />
+                            }
+                        />
+                    </>
                 )}
                 <Input
                     name="instagramHandle"
@@ -98,17 +135,29 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
                 />
                 <Flex>
                     {eventMutation.isSuccess && (
-                        <Text>Event submitted succesfully</Text>
+                        <Text size="2" color="green" align="center">
+                            Event submitted succesfully
+                        </Text>
                     )}
                     {editEventMutation.isSuccess && (
-                        <Text>Event edited succesfully</Text>
+                        <Text size="2" color="green" align="center">
+                            Event edited succesfully
+                        </Text>
                     )}
-                    {error && <Text>{error}</Text>}
+                    {error && (
+                        <Text size="2" color="red" align="center">
+                            {error}
+                        </Text>
+                    )}
                 </Flex>
-                <Flex width="100%" justify="center">
-                    <Form.Submit>Submit</Form.Submit>
-                </Flex>
+                {!externalSubmit && (
+                    <Flex width="100%" justify="center" mt="3">
+                        <Form.Submit asChild>
+                            <Button>Submit</Button>
+                        </Form.Submit>
+                    </Flex>
+                )}
             </Form.Root>
         </FormLayout>
     )
-}
+})

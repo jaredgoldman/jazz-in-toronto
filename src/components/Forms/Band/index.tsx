@@ -1,4 +1,5 @@
 // Components
+import { forwardRef, useImperativeHandle } from 'react'
 import * as Form from '@radix-ui/react-form'
 import { Input } from '../Fields'
 import Upload from '../Fields/Upload'
@@ -13,13 +14,13 @@ interface Props {
     currentValues?: Band
     closeModal?: () => void
     onAdd?: (value: Band) => Promise<void>
+    externalSubmit?: boolean
 }
 
-export default function BandForm({
-    currentValues,
-    closeModal,
-    onAdd
-}: Props): JSX.Element {
+export default forwardRef(function BandForm(
+    { currentValues, closeModal, onAdd, externalSubmit = false }: Props,
+    ref: any
+): JSX.Element {
     const {
         bandMutation,
         editBandMutation,
@@ -27,8 +28,13 @@ export default function BandForm({
         error,
         submit,
         errors,
-        control
+        control,
+        onUpload
     } = useBandForm(currentValues, closeModal, onAdd)
+
+    useImperativeHandle(ref, () => ({
+        submitForm: submit
+    }))
 
     return (
         <FormLayout>
@@ -54,6 +60,7 @@ export default function BandForm({
                 <Upload
                     name="fileData"
                     label="Upload a band photo"
+                    onUpload={onUpload}
                     onDeletePhoto={handleDeletePhoto}
                     control={control}
                 />
@@ -78,10 +85,12 @@ export default function BandForm({
                     )}
                     {error && <Text>{error}</Text>}
                 </Flex>
-                <Flex width="100%" justify="center">
-                    <Form.Submit>Submit</Form.Submit>
-                </Flex>
+                {!externalSubmit && (
+                    <Flex width="100%" justify="center">
+                        <Form.Submit>Submit</Form.Submit>
+                    </Flex>
+                )}
             </Form.Root>
         </FormLayout>
     )
-}
+})

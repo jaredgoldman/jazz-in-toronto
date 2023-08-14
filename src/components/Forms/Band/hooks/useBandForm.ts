@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { api } from '~/utils/api'
 import { useUploadThing } from '~/hooks/useUploadThing'
-import { type Band } from '~/types/data'
+import { FileData, type Band } from '~/types/data'
 import { type FormikHelpers } from 'formik'
 import { env } from '~/env.mjs'
 import { useForm } from 'react-hook-form'
@@ -18,17 +18,8 @@ export interface BandFormValues {
     }
 }
 
-interface Errors {
-    name?: string
-    genre?: string
-    photoPath?: string
-    instagramHandle?: string
-    website?: string
-}
-
 export default function useBandForm(
     currentValues: Band | undefined,
-    closeModal?: () => void,
     onAdd?: (values: Band) => Promise<void>
 ) {
     // State
@@ -104,6 +95,8 @@ export default function useBandForm(
                     return
                 }
                 const res = await startUpload([values.fileData.file])
+                // Strip fileDate from the mutation data
+                delete values.fileData
                 if (res) {
                     newValues = {
                         ...values,
@@ -122,14 +115,17 @@ export default function useBandForm(
             // XXX: simplify this process, we shouldn't have to prop drill like this
             // maybe pull the modal context into this form?
             onAdd && (await onAdd(addedBand))
-            closeModal && closeModal()
         } catch (e) {
             setError('There was an error adding your band. Please try again.')
         }
     }
 
-    const submit = handleSubmit((data) => {
-        onSubmit(data)
+    const onUpload = (data: FileData) => {
+        setValue('photoPath', data.dataURL)
+    }
+
+    const submit = handleSubmit(async (data) => {
+        await onSubmit(data)
     })
 
     return {
@@ -144,6 +140,6 @@ export default function useBandForm(
         errors,
         control,
         watch,
-        setValue
+        onUpload
     }
 }

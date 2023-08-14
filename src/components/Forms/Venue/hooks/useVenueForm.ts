@@ -2,11 +2,12 @@ import { useState } from 'react'
 import { useUploadThing } from '~/hooks/useUploadThing'
 import { api } from '~/utils/api'
 import { type Venue } from '~/types/data'
-import { type FormikHelpers } from 'formik'
 import { env } from '~/env.mjs'
 import { Area } from '@prisma/client'
+import { useForm } from 'react-hook-form'
+import { FileData } from '~/types/data'
 
-export interface Values {
+export interface VenueFormValues {
     name: string
     address: string
     latitude: number
@@ -14,26 +15,16 @@ export interface Values {
     city: string
     website: string
     instagramHandle?: string
+    fileData?: FileData
     photoPath?: string
-    fileData?: {
-        file: File
-        dataURL: string
-    }
     phoneNumber: string
     area: Area
 }
 
-interface Errors {
-    name?: string
-    location?: string
-    phoneNumber?: string
-    area?: string
-}
-
 export default function useVenueForm(
     currentValues: Venue | undefined,
-    closeModal?: () => void,
-    onAdd?: (venue: Venue) => Promise<void>
+    onAdd?: (venue: Venue) => Promise<void>,
+    submitTrigger?: (submitFunc: () => void) => void
 ) {
     // State
     const [error, setError] = useState<string>('')
@@ -43,7 +34,7 @@ export default function useVenueForm(
     const deleteVenuePhotoMutation = api.venue.deletePhoto.useMutation()
 
     const isEditing = !!currentValues
-    const initialValues: Values = currentValues
+    const defaultValues: VenueFormValues = currentValues
         ? {
               ...currentValues,
               photoPath: currentValues.photoPath || undefined,
@@ -62,6 +53,31 @@ export default function useVenueForm(
               phoneNumber: '',
               area: Area.DOWNTOWN
           }
+
+    const {
+        handleSubmit,
+        setValue,
+        control,
+        formState: { errors }
+    } = useForm<VenueFormValues>({
+        defaultValues
+    })
+
+    const onUpload = (data: FileData) => {
+        setValue('photoPath', data.dataURL)
+    }
+
+    const onSelectLocation = (
+        address: string,
+        latitude: number,
+        longitude: number,
+        city: string
+    ) => {
+        setValue('address', address)
+        setValue('latitude', latitude)
+        setValue('longitude', longitude)
+        setValue('city', city)
+    }
 
     const handleDeletePhoto = async () => {
         if (currentValues?.photoPath) {
@@ -86,7 +102,8 @@ export default function useVenueForm(
         }
     })
 
-    const onSubmit = async (values: Values, actions: FormikHelpers<Values>) => {
+    const onSubmit = async (values: VenueFormValues) => {
+        console.log('SUBMITTING')
         try {
             setError('')
             // Make coapy of values and conver phoneNumber to string
@@ -104,7 +121,6 @@ export default function useVenueForm(
                     setError(
                         'File size is too large. Please upload a file smaller than 5MB.'
                     )
-                    actions.setSubmitting(false)
                     return
                 }
                 const res = await startUpload([values.fileData.file])
@@ -125,30 +141,14 @@ export default function useVenueForm(
             }
             // If we're in a modal form, handle accordingly
             onAdd && (await onAdd(addedVenue))
-            closeModal && closeModal()
         } catch (e) {
-            actions.setSubmitting(false)
             setError('There was an error adding your band. Please try again.')
         }
     }
 
-    const validate = (values: Values) => {
-        const errors: Errors = {}
-        if (!values.name) {
-            errors.name = 'Required'
-        }
-        if (!values.latitude || !values.longitude || !values.city) {
-            errors.location = 'Please enter a valid location'
-        }
-        const phoneRegex = /^\d{3}-?\d{3}-?\d{4}$/
-        if (!values.phoneNumber || !phoneRegex.test(values.phoneNumber)) {
-            errors.phoneNumber = 'Please enter a valid phone number'
-        }
-        return errors
-    }
+    const submit = handleSubmit(async (data) => await onSubmit(data))
 
     return {
-        initialValues,
         isEditing,
         venueMutation,
         editVenueMutation,
@@ -156,7 +156,10 @@ export default function useVenueForm(
         startUpload,
         setError,
         error,
-        onSubmit,
-        validate
+        errors,
+        control,
+        submit,
+        onUpload,
+        onSelectLocation
     }
 }

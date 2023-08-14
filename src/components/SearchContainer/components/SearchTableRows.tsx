@@ -1,6 +1,10 @@
 // Components
-import { ModalForms } from '~/components/Modal/types'
-import Button from '~/components/Button'
+import { useRef } from 'react'
+import { Table } from '@radix-ui/themes'
+import Dialogue from '~/components/Dialogue'
+import EventForm from '~/components/Forms/Event'
+import BandForm from '~/components/Forms/Band'
+import VenueForm from '~/components/Forms/Venue'
 // Types
 import { type EventWithBandVenue, type Band, type Venue } from '~/types/data'
 // Utils
@@ -9,172 +13,195 @@ import { DataType } from '~/types/enums'
 
 interface RowProps<T> {
     item: T
-    handleModalForm: (formType: ModalForms, item: T) => void
     featured?: string
     setFeatured: (id: string, type: DataType) => void
+    refetch?: () => Promise<void>
 }
-const headerClassName =
-    'truncate border-b bg-black px-6 py-3 text-left text-sm font-semibold text-white max-w-xs'
 
-const rowClassName =
-    'max-w-xs truncate text-white-800 border px-4 py-2 text-left text-xs'
+interface InnerFormRef {
+    submitForm: () => Promise<void>
+}
 
 export const EventHeader = (): JSX.Element => {
     return (
-        <tr>
-            <th className={headerClassName}>Event Name</th>
-            <th className={headerClassName}>Featured</th>
-            <th className={headerClassName}>Venue</th>
-            <th className={headerClassName}>Date</th>
-            <th className={headerClassName}>Time</th>
-            <th className={headerClassName}>Band</th>
-            <th className={headerClassName}>Website</th>
-            <th className={headerClassName}>Insta</th>
-            <th className={headerClassName}>Cancelled</th>
-            <th className={headerClassName}>Featured</th>
-            <th className={headerClassName}></th>
-        </tr>
+        <Table.Row align="center">
+            <Table.ColumnHeaderCell>Event Name</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Featured</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Venue</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Date</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Time</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Band</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Website</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Insta</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Cancelled</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Featured</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
+        </Table.Row>
     )
 }
 
 export const EventRow = ({
     item,
-    handleModalForm,
     featured,
-    setFeatured
+    setFeatured,
+    refetch
 }: RowProps<EventWithBandVenue>): JSX.Element => {
+    const eventFormRef = useRef<InnerFormRef | null>(null)
     return (
-        <tr>
-            <td className={rowClassName}>{item.name}</td>
-            <td className={rowClassName}>{item.featured ? 'Yes' : 'No'}</td>
-            <td className={rowClassName}>{item.venue.name}</td>
-            <td className={rowClassName}>{item.startDate.toDateString()}</td>
-            <td className={rowClassName}>{`${getFormattedTime(
+        <Table.Row align="center">
+            <Table.Cell>{item.name}</Table.Cell>
+            <Table.Cell>{item.featured ? 'Yes' : 'No'}</Table.Cell>
+            <Table.Cell>{item.venue.name}</Table.Cell>
+            <Table.Cell>{item.startDate.toDateString()}</Table.Cell>
+            <Table.Cell>{`${getFormattedTime(
                 item.startDate
-            )} - ${getFormattedTime(item.endDate)}`}</td>
-            <td className={rowClassName}>{item.band.name}</td>
-            <td className={rowClassName}>{item.website ? item.website : ''}</td>
-            <td className={rowClassName}>
+            )} - ${getFormattedTime(item.endDate)}`}</Table.Cell>
+            <Table.Cell>{item.band.name}</Table.Cell>
+            <Table.Cell>{item.website ? item.website : ''}</Table.Cell>
+            <Table.Cell>
                 {item.instagramHandle ? item.instagramHandle : ''}
-            </td>
-            <td className={rowClassName}>{item.cancelled}</td>
-            <td className={`text-center ${rowClassName}`}>
+            </Table.Cell>
+            <Table.Cell>{item.cancelled}</Table.Cell>
+            <Table.Cell className="text-center">
                 <input
                     type="checkbox"
                     className="h-full"
                     checked={item.id === featured}
                     onChange={() => setFeatured(item.id, DataType.EVENT)}
                 />
-            </td>
-            <td className={rowClassName}>
-                <Button
-                    size="sm"
-                    onClick={() => handleModalForm(ModalForms.Event, item)}
-                >
-                    Edit
-                </Button>
-            </td>
-        </tr>
+            </Table.Cell>
+            <Table.Cell justify="center">
+                <Dialogue
+                    title="Edit"
+                    triggerLabel="Edit"
+                    formRef={eventFormRef}
+                    refetch={refetch}
+                    component={
+                        <EventForm
+                            ref={eventFormRef}
+                            currentValues={item}
+                            externalSubmit={true}
+                        />
+                    }
+                />
+            </Table.Cell>
+        </Table.Row>
     )
 }
 
 export const BandHeader = (): JSX.Element => {
     return (
-        <tr>
-            <th className={headerClassName}>Name</th>
-            <th className={headerClassName}>Genre</th>
-            <th className={headerClassName}>instagramHandle</th>
-            <th className={headerClassName}>Website</th>
-            <th className={headerClassName}>Active</th>
-            <th className={headerClassName}>Featured</th>
+        <Table.Row align="center">
+            <Table.RowHeaderCell>Name</Table.RowHeaderCell>
+            <Table.RowHeaderCell>Genre</Table.RowHeaderCell>
+            <Table.RowHeaderCell>instagramHandle</Table.RowHeaderCell>
+            <Table.RowHeaderCell>Website</Table.RowHeaderCell>
+            <Table.RowHeaderCell>Active</Table.RowHeaderCell>
+            <Table.RowHeaderCell>Featured</Table.RowHeaderCell>
 
-            <th className={headerClassName}></th>
-        </tr>
+            <Table.RowHeaderCell></Table.RowHeaderCell>
+        </Table.Row>
     )
 }
 
 export const BandRow = ({
     item,
-    handleModalForm,
     featured,
-    setFeatured
+    setFeatured,
+    refetch
 }: RowProps<Band>) => {
+    const bandFormRef = useRef<InnerFormRef | null>(null)
     return (
-        <tr>
-            <td className={rowClassName}>{item.name}</td>
-            <td className={rowClassName}>{item.genre ? item.genre : ''}</td>
-            <td className={rowClassName}>
+        <Table.Row align="center">
+            <Table.Cell>{item.name}</Table.Cell>
+            <Table.Cell>{item.genre ? item.genre : ''}</Table.Cell>
+            <Table.Cell>
                 {item.instagramHandle ? item.instagramHandle : ''}
-            </td>
-            <td className={rowClassName}>{item.website ? item.website : ''}</td>
-            <td className={rowClassName}>{item.active}</td>
-            <td className={rowClassName}>
+            </Table.Cell>
+            <Table.Cell>{item.website ? item.website : ''}</Table.Cell>
+            <Table.Cell>{item.active}</Table.Cell>
+            <Table.Cell>
                 <input
                     type="checkbox"
                     checked={item.id === featured}
                     onChange={() => setFeatured(item.id, DataType.BAND)}
                 />
-            </td>
+            </Table.Cell>
 
-            <td className={rowClassName}>
-                <Button
-                    size="sm"
-                    onClick={() => handleModalForm(ModalForms.Band, item)}
-                >
-                    Edit
-                </Button>
-            </td>
-        </tr>
+            <Table.Cell>
+                <Dialogue
+                    title="Edit"
+                    triggerLabel="Edit"
+                    formRef={bandFormRef}
+                    refetch={refetch}
+                    component={
+                        <BandForm
+                            ref={bandFormRef}
+                            currentValues={item}
+                            externalSubmit={true}
+                        />
+                    }
+                />
+            </Table.Cell>
+        </Table.Row>
     )
 }
 
 export const VenueHeader = (): JSX.Element => {
     return (
-        <tr>
-            <th className={headerClassName}>Name</th>
-            <th className={headerClassName}>Address</th>
-            <th className={headerClassName}>City</th>
-            <th className={headerClassName}>Website</th>
-            <th className={headerClassName}>instagramHandle</th>
-            <th className={headerClassName}>Active</th>
-            <th className={headerClassName}>Featured</th>
-            <th className={headerClassName}></th>
-        </tr>
+        <Table.Row align="center">
+            <Table.RowHeaderCell>Name</Table.RowHeaderCell>
+            <Table.RowHeaderCell>Address</Table.RowHeaderCell>
+            <Table.RowHeaderCell>City</Table.RowHeaderCell>
+            <Table.RowHeaderCell>Website</Table.RowHeaderCell>
+            <Table.RowHeaderCell>instagramHandle</Table.RowHeaderCell>
+            <Table.RowHeaderCell>Active</Table.RowHeaderCell>
+            <Table.RowHeaderCell>Featured</Table.RowHeaderCell>
+            <Table.RowHeaderCell></Table.RowHeaderCell>
+        </Table.Row>
     )
 }
 
 export const VenueRow = ({
     item,
-    handleModalForm,
     featured,
-    setFeatured
+    setFeatured,
+    refetch
 }: RowProps<Venue>) => {
+    const venueFormRef = useRef<InnerFormRef | null>(null)
     return (
-        <tr>
-            <td className={rowClassName}>{item.name}</td>
-            <td className={rowClassName}>{item.address}</td>
-            <td className={rowClassName}>{item.city}</td>
-            <td className={rowClassName}>{item.website ? item.website : ''}</td>
-            <td className={rowClassName}>
+        <Table.Row align="center">
+            <Table.Cell>{item.name}</Table.Cell>
+            <Table.Cell>{item.address}</Table.Cell>
+            <Table.Cell>{item.city}</Table.Cell>
+            <Table.Cell>{item.website ? item.website : ''}</Table.Cell>
+            <Table.Cell>
                 {item.instagramHandle ? item.instagramHandle : ''}
-            </td>
-            <td className={rowClassName}>{item.active ? 'Yes' : 'No'}</td>
-            <td className={rowClassName}>
+            </Table.Cell>
+            <Table.Cell>{item.active ? 'Yes' : 'No'}</Table.Cell>
+            <Table.Cell>
                 <input
                     type="checkbox"
                     checked={item.id === featured}
                     onChange={() => setFeatured(item.id, DataType.VENUE)}
                 />
-            </td>
+            </Table.Cell>
 
-            <td className={rowClassName}>
-                <Button
-                    size="sm"
-                    onClick={() => handleModalForm(ModalForms.Venue, item)}
-                >
-                    Edit
-                </Button>
-            </td>
-        </tr>
+            <Table.Cell>
+                <Dialogue
+                    title="Edit"
+                    triggerLabel="Edit"
+                    formRef={venueFormRef}
+                    refetch={refetch}
+                    component={
+                        <VenueForm
+                            ref={venueFormRef}
+                            currentValues={item}
+                            externalSubmit={true}
+                        />
+                    }
+                />
+            </Table.Cell>
+        </Table.Row>
     )
 }

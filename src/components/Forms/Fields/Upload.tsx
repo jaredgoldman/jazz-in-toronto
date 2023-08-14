@@ -7,24 +7,20 @@ import {
     Control,
     FieldValues,
     Path,
-    FieldError,
-    UseFormSetValue
+    FieldError
 } from 'react-hook-form'
 import * as Form from '@radix-ui/react-form'
 import { Flex, Button, Text } from '@radix-ui/themes'
 
 interface Props<T extends FieldValues> {
     name: Path<T>
+    onUpload: (data: FileData) => void
+    control: Control<T>
     label?: string
     buttonLabel?: string
-    className?: string
-    buttonClassName?: string
-    itemId?: string
     onDeletePhoto?: () => Promise<void>
-    control: Control<T>
     error?: FieldError
     required?: boolean | string
-    setValue?: UseFormSetValue<T>
 }
 
 export default function Upload<T extends FieldValues>({
@@ -34,12 +30,12 @@ export default function Upload<T extends FieldValues>({
     required,
     control,
     error,
-    setValue
+    onUpload,
+    label
 }: Props<T>) {
     const [src, setSrc] = useState<string>('')
 
     const removeFile = async () => {
-        console.log('REMOVING FILE')
         // If a photoPath and updatemutation func were provided
         setSrc('')
         // we're editing and we can call the mutation to remove the photo
@@ -59,18 +55,13 @@ export default function Upload<T extends FieldValues>({
                 }
                 return (
                     <Form.Field name={name}>
-                        <Form.Label></Form.Label>
-                        <Flex>
+                        <Form.Label>{label}</Form.Label>
+                        <Flex width="100%" justify="center" my="2">
                             {!src ? (
                                 <FileUploadButton
                                     onUpload={(data: FileData) => {
                                         setSrc(data.dataURL)
-                                        if (data && setValue) {
-                                            setValue(
-                                                'fileData' as Path<T>,
-                                                data as any
-                                            )
-                                        }
+                                        onUpload(data)
                                     }}
                                     label={buttonLabel}
                                     name={name}
@@ -80,6 +71,7 @@ export default function Upload<T extends FieldValues>({
                                     <div className="relative">
                                         <Button
                                             className="absolute left-0 top-0"
+                                            size="1"
                                             onClick={removeFile}
                                         >
                                             X

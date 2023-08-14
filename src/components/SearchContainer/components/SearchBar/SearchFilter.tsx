@@ -1,7 +1,7 @@
 import { type ChangeEvent } from 'react'
 import { SearchOption } from '../../types'
 import ReactDatePicker from 'react-datepicker'
-import Container from '~/components/Container'
+import { Flex, TextField } from '@radix-ui/themes'
 
 interface Props {
     onSearch: (searchData: string | Date, searchOption: SearchOption) => void
@@ -30,15 +30,17 @@ export default function SearchFilter({
                     onSearch(data, type)
                     setStartDate && setStartDate(data)
                 },
+                selected: startDate,
                 startDate,
-                className
+                className:
+                    'min-w-full rounded-[4px] border-[1px] border-gray-300 p-[0.325rem] text-sm text-black'
             }
             break
         case SearchOption.Venue:
         case SearchOption.Website:
         case SearchOption.Name:
         case SearchOption.InstagramHandle:
-            Component = 'input'
+            Component = TextField.Input
             componentProps = {
                 onChange: (event: ChangeEvent<HTMLInputElement>) =>
                     onSearch(event.target.value, type),
@@ -48,11 +50,9 @@ export default function SearchFilter({
     }
 
     return (
-        <Container width="xs">
-            <div className="flex flex-col">
-                <label>{label}</label>
-                <Component {...componentProps} />
-            </div>
-        </Container>
+        <Flex direction="column" mr="3">
+            <label>{label}</label>
+            <Component {...componentProps} />
+        </Flex>
     )
 }

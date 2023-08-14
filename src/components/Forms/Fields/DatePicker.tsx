@@ -18,6 +18,7 @@ interface Props<T extends FieldValues> {
     error?: FieldError
     fieldProps?: ReactDatePickerProps
     required?: boolean | string
+    datePickerProps?: Omit<ReactDatePickerProps, 'onChange'>
 }
 
 export default function DatePickerField<T extends FieldValues>({
@@ -25,7 +26,8 @@ export default function DatePickerField<T extends FieldValues>({
     name,
     error,
     control,
-    required = false
+    required = false,
+    datePickerProps
 }: Props<T>): JSX.Element {
     return (
         <Controller
@@ -34,12 +36,14 @@ export default function DatePickerField<T extends FieldValues>({
             name={name}
             render={({ field: { onChange, onBlur, value } }) => (
                 <Form.Field name={name}>
-                    <Flex direction="column">
+                    <Flex direction="column" width="100%">
                         <Form.Label>{label}</Form.Label>
                         <ReactDatePicker
+                            className="min-w-full rounded-[4px] border-[1px] border-gray-300 p-[0.325rem] text-sm"
                             onChange={onChange}
                             onBlur={onBlur}
                             selected={value}
+                            {...datePickerProps}
                         />
                     </Flex>
                     {error && (

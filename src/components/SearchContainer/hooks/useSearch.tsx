@@ -24,8 +24,8 @@ const initialSearchData = {
 }
 
 export default function useSearch(
-    items: Array<Item>,
     itemType: DataType,
+    items?: Array<Item>,
     searchDate?: Date,
     setSearchDate?: (date: Date) => void
 ) {
@@ -37,7 +37,7 @@ export default function useSearch(
         venue: ''
     })
 
-    const [filteredItems, setFilteredItems] = useState<Array<Item>>(items)
+    const [filteredItems, setFilteredItems] = useState<Array<Item>>(items || [])
 
     // Filter functions
     const filterName = useEvent((item: Item) => {
@@ -83,7 +83,7 @@ export default function useSearch(
 
     useEffect(() => {
         // If we havne't searched yet or if we've cleared the search, return all items
-        if (deepEqual(searchData, initialSearchData)) {
+        if (deepEqual(searchData, initialSearchData) && items?.length) {
             return setFilteredItems(items)
         }
 

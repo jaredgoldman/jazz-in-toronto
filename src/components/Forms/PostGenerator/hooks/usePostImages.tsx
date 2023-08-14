@@ -1,96 +1,69 @@
 import { useState, useEffect, useRef } from 'react'
 import { type EventWithBandVenue } from '~/types/data'
 import PostImage from '../components/postImage'
-
+import useCanvas from './useCanvas'
+import { FileData } from '~/types/data'
 export default function usePostImages(
     events: EventWithBandVenue[] | undefined,
     date: Date,
     eventsPerCanvas = 19
 ) {
-    // Files for uploadthingd
-    const [files, setFiles] = useState<{ [key: string]: File }>({})
-    // Files for rendering in the Post generator
+    const createCanvas = useCanvas()
+    const [files, setFiles] = useState<FileData[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [postImages, setPostImages] = useState<JSX.Element[]>([])
-    const eventLength = events?.length || 0
-    const postImageEventsNeeded = Math.ceil(eventLength / eventsPerCanvas)
-    const hasRun = useRef(false)
-
-    const removePostImage = (index: number): void => {
-        const newFiles = { ...files }
-        delete newFiles[index]
-        setFiles(newFiles)
-        const newPostImages = [...postImages]
-        newPostImages.splice(index, 1)
-        setPostImages(newPostImages)
-    }
-
-    const addPostImage = (file: File, dataURL: string) => {
-        const index = Object.values(files).length + 1
-        const postImage = (
-            <PostImage
-                imgSrc={dataURL}
-                index={index}
-                removePostImage={() => removePostImage(index)}
-            />
-        )
-        setFiles((prevFiles) => ({
-            ...prevFiles,
-            [index]: file
-        }))
-        setPostImages((prevPostImages) => [...prevPostImages, postImage])
-    }
+    //
+    // const removePostImage = (index: number): void => {
+    //     const newFiles = { ...files }
+    //     delete newFiles[index]
+    //     setFiles(newFiles)
+    //     const newPostImages = [...postImages]
+    //     newPostImages.splice(index, 1)
+    //     setPostImages(newPostImages)
+    // }
+    //
+    // const addPostImage = (file: File, dataURL: string) => {
+    //     const index = Object.values(files).length + 1
+    //     const postImage = (
+    //         <PostImage
+    //             imgSrc={dataURL}
+    //             index={index}
+    //             removePostImage={() => removePostImage(index)}
+    //         />
+    //     )
+    //     setFiles((prevFiles) => ({
+    //         ...prevFiles,
+    //         [index]: file
+    //     }))
+    //     setPostImages((prevPostImages) => [...prevPostImages, postImage])
+    // }
+    //
 
     useEffect(() => {
-        // if it's a cnavas element, we need to get the blob
-        // pull the file out of PostImage once it's rendered
-        const getFile = (file: File, currentIndex: number): void => {
-            // Do not store the file if it already exists
-            if (files[currentIndex]) return
-            setFiles((prevFiles) => ({ ...prevFiles, [currentIndex]: file }))
-        }
+        const files: FileData[] = []
 
-        // don't re-run if we've mapped events
-        if (events && events.length && !hasRun.current) {
+        const mapPostImages = async () => {
             setIsLoading(true)
-            const eventsCopy = events ? [...events] : []
-            const images: JSX.Element[] = []
-            for (let i = 0; i < postImageEventsNeeded; i++) {
-                const postImageEvents = eventsCopy.splice(0, eventsPerCanvas)
-                const postImage = (
-                    <PostImage
-                        events={postImageEvents}
-                        date={date}
-                        key={i}
-                        fileCallback={getFile}
-                        index={i}
-                    />
+            if (events?.length) {
+                const eventLength = events?.length || 0
+                const postImageEventsNeeded = Math.ceil(
+                    eventLength / eventsPerCanvas
                 )
-                images.push(postImage)
+
+                const eventsCopy = [...events]
+                for (let i = 0; i < postImageEventsNeeded; i++) {
+                    const eventsSlice = eventsCopy.splice(0, eventsPerCanvas)
+                    const fileData = await createCanvas(eventsSlice, i, date)
+                    fileData && files.push(fileData)
+                }
             }
-            setPostImages((prevImages) => [...prevImages, ...images])
-            hasRun.current = true
+            setFiles(files)
             setIsLoading(false)
         }
-    }, [
-        events,
-        date,
-        eventsPerCanvas,
-        postImageEventsNeeded,
-        files,
-        hasRun.current
-    ])
-
-    useEffect(() => {
-        setPostImages([])
-        hasRun.current = false
-    }, [date])
+        mapPostImages()
+    }, [date, events])
 
     return {
-        addPostImage,
-        removePostImage,
-        postImages,
-        files,
-        isLoading
+        isLoading,
+        files
     }
 }

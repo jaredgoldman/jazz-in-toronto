@@ -1,10 +1,10 @@
 // Libraries
 import { useState } from 'react'
 // Components
+import { Container, Flex } from '@radix-ui/themes'
 // Types
 import { SearchOption } from '../../types'
 import { DataType } from '~/types/enums'
-import Container from '~/components/Container'
 import SearchFilter from './SearchFilter'
 
 interface Props {
@@ -14,6 +14,7 @@ interface Props {
     ) => void
     searchDate?: Date
     itemType: DataType
+    refetch?: () => Promise<void>
 }
 // TODO: recator so search fields take up entire width of viewport
 export default function SearchBar({ onSearch, searchDate, itemType }: Props) {
@@ -28,8 +29,8 @@ export default function SearchBar({ onSearch, searchDate, itemType }: Props) {
     }
 
     return (
-        <Container width="lg" justify="left">
-            <div className="flex flex-col md:flex-row">
+        <Container width="100%">
+            <Flex ml="3">
                 {itemType === DataType.EVENT && (
                     <>
                         <SearchFilter
@@ -61,7 +62,7 @@ export default function SearchBar({ onSearch, searchDate, itemType }: Props) {
                     type={SearchOption.InstagramHandle}
                     label="Instagram"
                 />
-            </div>
+            </Flex>
         </Container>
     )
 }

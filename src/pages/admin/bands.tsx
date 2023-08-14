@@ -7,7 +7,11 @@ import { api } from '~/utils/api'
 import { DataType } from '~/types/enums'
 
 export default function AdminBands() {
-    const { data: bands, isLoading: bandsLoading } = api.band.getAll.useQuery()
+    const {
+        data: bands,
+        isLoading: bandsLoading,
+        refetch
+    } = api.band.getAll.useQuery()
     const { data: featuredItem, isLoading: featuredLoading } =
         api.band.getFeatured.useQuery()
 
@@ -18,10 +22,12 @@ export default function AdminBands() {
             <>
                 {bands && !isLoading && (
                     <SearchContainer
+                        heading="Find Bands"
                         items={bands}
                         featuredItem={featuredItem}
                         isLoading={isLoading}
                         itemType={DataType.BAND}
+                        refetch={refetch}
                     />
                 )}
                 {isLoading && <Loading />}

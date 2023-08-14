@@ -19,7 +19,12 @@ export default function Header({
     return (
         <header className="mb-5 w-full flex-col items-center pb-2 text-center">
             {headerType === HeaderType.Admin && session && (
-                <Button onClick={() => void signOut()}>Sign Out</Button>
+                <Button
+                    className="absolute right-2 top-2"
+                    onClick={() => void signOut()}
+                >
+                    Sign Out
+                </Button>
             )}
 
             <div className="mx-auto w-3/4 justify-center border-b-2 border-white pt-8">

@@ -18,7 +18,7 @@ const trimFileName = (originalFile: File) => {
     })
 }
 
-const FileUploadButton = ({ onUpload, label, name = 'file' }: Props) => {
+const FileUploadButton = ({ onUpload, label }: Props) => {
     const [selectedFile, setSelectedFile] = useState<FileData | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -54,7 +54,7 @@ const FileUploadButton = ({ onUpload, label, name = 'file' }: Props) => {
                 onChange={handleFileChange}
                 className="hidden"
                 ref={fileInputRef}
-                name={name}
+                name="file"
             ></input>
             <Flex width="100%" justify="center">
                 <Button onClick={handleButtonClick}>{label}</Button>

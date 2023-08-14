@@ -1,98 +1,111 @@
 // Components
-import { Form, Formik } from 'formik'
 import PlacesAutocomplete from '../Fields/PlacesAutoComplete'
 import { Input } from '../Fields'
-import Button from '~/components/Button'
+import * as Form from '@radix-ui/react-form'
 import Upload from '../Fields/Upload'
 import FormLayout from '~/layouts/FormLayout'
-import Number from '../Fields/Number'
+import { Heading, Text, Flex } from '@radix-ui/themes'
 // Types
 import { type Venue } from '~/types/data'
+import { forwardRef, useImperativeHandle } from 'react'
 // Hooks
 import useVenueForm from './hooks/useVenueForm'
 
 interface Props {
     currentValues?: Venue
-    closeModal?: () => void
     onAdd?: (value: Venue) => Promise<void>
+    externalSubmit?: boolean
 }
 
-export default function VenueForm({
-    currentValues,
-    closeModal,
-    onAdd
-}: Props): JSX.Element {
+export default forwardRef(function VenueForm(
+    { currentValues, onAdd, externalSubmit = false }: Props,
+    ref: any
+): JSX.Element {
     const {
-        initialValues,
         venueMutation,
         editVenueMutation,
         handleDeletePhoto,
-        isEditing,
-        error,
-        onSubmit,
-        validate
-    } = useVenueForm(currentValues, closeModal, onAdd)
+        errors,
+        submit,
+        control,
+        onUpload,
+        onSelectLocation,
+        error
+    } = useVenueForm(currentValues, onAdd)
+
+    // Leverage useImperitiveHandle to pass submission to parent component
+    useImperativeHandle(ref, () => ({
+        submitForm: submit
+    }))
 
     return (
-        <FormLayout padding="lg">
-            <h1 className="mb-5">
+        <FormLayout>
+            <Heading>
                 {currentValues ? 'Edit venue' : 'Add your venue here!'}
-            </h1>
-            <Formik
-                initialValues={initialValues}
-                validate={validate}
-                onSubmit={onSubmit}
-            >
-                {({ isSubmitting }) => (
-                    <Form className="flex flex-col">
-                        <Input
-                            name="name"
-                            label="Venue Name"
-                            placeHolder="Enter your venue's name"
-                        />
-                        <PlacesAutocomplete name="location" label="Address" />
-                        <Upload
-                            name="fileData"
-                            label="Upload a photo of your venue"
-                            photoPath={initialValues.photoPath}
-                            onDeletePhoto={handleDeletePhoto}
-                        />
-                        <Number name="phoneNumber" />
-                        <Input
-                            name="instagramHandle"
-                            label="Instagram Handle"
-                            placeHolder="Enter your instagram hande"
-                        />
-                        <Input
-                            name="website"
-                            label="Venue Website"
-                            placeHolder="Enter your venue's website"
-                        />
-                        <div className="flex w-full flex-col items-center">
-                            <div className="flex flex-col justify-center text-sm text-red-500">
-                                {error && (
-                                    <p className="text-red-500">{error}</p>
-                                )}
-                                {venueMutation.isSuccess ||
-                                    (editVenueMutation.isSuccess && (
-                                        <p className="text-green-500">
-                                            `Success $
-                                            {isEditing ? 'editing' : 'adding'}{' '}
-                                            venue`
-                                        </p>
-                                    ))}
-                            </div>
-                            <Button
-                                type="submit"
-                                disabled={isSubmitting}
-                                isLoading={isSubmitting}
-                            >
-                                Submit
-                            </Button>
-                        </div>
-                    </Form>
+            </Heading>
+            <Form.Root onSubmit={submit}>
+                <Input
+                    name="name"
+                    label="Venue Name"
+                    error={errors.name}
+                    control={control}
+                    required="Please eneter your venues name"
+                />
+                <PlacesAutocomplete
+                    name="address"
+                    label="Address"
+                    control={control}
+                    onSelect={onSelectLocation}
+                />
+                <Upload
+                    name="fileData"
+                    label="Upload a photo of your venue"
+                    onUpload={onUpload}
+                    control={control}
+                    onDeletePhoto={handleDeletePhoto}
+                />
+                <Input
+                    name="phoneNumber"
+                    label="Enter your venues phone number"
+                    error={errors.phoneNumber}
+                    type="number"
+                    control={control}
+                />
+                <Input
+                    name="instagramHandle"
+                    label="Instagram Handle"
+                    error={errors.instagramHandle}
+                    control={control}
+                />
+                <Input
+                    name="website"
+                    label="Venue Website"
+                    error={errors.website}
+                    control={control}
+                />
+                <Flex>
+                    {venueMutation.isSuccess && (
+                        <Text size="2" color="green" align="center">
+                            Venue submitted succesfully
+                        </Text>
+                    )}
+                    {editVenueMutation.isSuccess && (
+                        <Text size="2" color="green" align="center">
+                            Venue edited succesfully
+                        </Text>
+                    )}
+                    {error && (
+                        <Text size="2" color="red" align="center">
+                            {error}
+                        </Text>
+                    )}
+                </Flex>
+                {!externalSubmit && (
+                    <Flex width="100%" justify="center">
+                        <Form.Submit>Submit</Form.Submit>
+                    </Flex>
                 )}
-            </Formik>
+            </Form.Root>
         </FormLayout>
     )
-}
+})

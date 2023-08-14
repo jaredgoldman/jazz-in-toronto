@@ -16,10 +16,6 @@ export interface EventFormValues {
 
 export default function useEventForm(currentValues?: EventWithBandVenue) {
     const [error, setError] = useState<string>('')
-    const [added, setAdded] = useState<{ band: boolean; venue: boolean }>({
-        band: false,
-        venue: false
-    })
 
     const {
         data: venueData,
@@ -62,10 +58,6 @@ export default function useEventForm(currentValues?: EventWithBandVenue) {
         formState: { errors }
     } = useForm<EventFormValues>({ defaultValues })
 
-    useEffect(() => {
-        console.log(errors)
-    }, [errors])
-
     const onSubmit = async (values: EventFormValues) => {
         try {
             if (isEditing && currentValues && editEventMutation) {
@@ -85,18 +77,18 @@ export default function useEventForm(currentValues?: EventWithBandVenue) {
     const onAddBand = async (value: Band | Venue) => {
         if (isBand(value)) {
             await refetchBands()
-            setAdded((prev) => ({ ...prev, band: true }))
+            setValue('bandId', value.id)
         }
     }
     const onAddVenue = async (value: Band | Venue) => {
         if (isVenue(value)) {
             await refetchVenues()
-            setAdded((prev) => ({ ...prev, venue: true }))
+            setValue('venueId', value.id)
         }
     }
 
-    const submit = handleSubmit((data) => {
-        onSubmit(data)
+    const submit = handleSubmit(async (data) => {
+        await onSubmit(data)
     })
 
     return {
@@ -106,7 +98,6 @@ export default function useEventForm(currentValues?: EventWithBandVenue) {
         eventMutation,
         editEventMutation,
         submit,
-        added,
         onAddBand,
         onAddVenue,
         isLoading,

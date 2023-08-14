@@ -4,8 +4,8 @@ import { useState } from 'react'
 import AdminLayout from '~/layouts/AdminLayout'
 import SearchContainer from '~/components/SearchContainer'
 import PostGenerator from '~/components/Forms/PostGenerator'
-import Button from '~/components/Button'
 import EventScraper from '~/components/Forms/EventScraper'
+import { Button, Container, Flex } from '@radix-ui/themes'
 // Types
 import { DataType } from '~/types/enums'
 // Utils
@@ -23,10 +23,13 @@ export default function AdminEvents(): JSX.Element {
     const [view, setView] = useState<View>(View.Search)
 
     // Queries
-    const { data: events, isLoading: isLoadingEvents } =
-        api.event.getAllByDay.useQuery({
-            date: searchDate
-        })
+    const {
+        data: events,
+        isLoading: isLoadingEvents,
+        refetch
+    } = api.event.getAllByDay.useQuery({
+        date: searchDate
+    })
     const { data: venues, isLoading: isLoadingVenues } =
         api.venue.getAll.useQuery()
     const { data: featuredItem, isLoading: featuredLoading } =
@@ -36,49 +39,47 @@ export default function AdminEvents(): JSX.Element {
 
     return (
         <AdminLayout>
-            <>
-                <div className="mb-8 flex w-1/5 min-w-[20rem] justify-between">
-                    <Button
-                        onClick={() => setView(View.Search)}
-                        disabled={view === View.Search}
-                        roundedBorder={false}
-                        size="sm"
-                    >
-                        Search
-                    </Button>
-                    <Button
-                        onClick={() => setView(View.Scrape)}
-                        disabled={view === View.Scrape}
-                        roundedBorder={false}
-                        size="sm"
-                    >
-                        Crawl
-                    </Button>
-                    <Button
-                        onClick={() => setView(View.Post)}
-                        disabled={view === View.Post}
-                        roundedBorder={false}
-                        size="sm"
-                    >
-                        Post
-                    </Button>
-                </div>
-                {view === View.Search && events && !isLoading && (
+            <Flex mb="5" justify="center">
+                <Button
+                    mr="2"
+                    onClick={() => setView(View.Search)}
+                    disabled={view === View.Search}
+                >
+                    Search
+                </Button>
+                <Button
+                    onClick={() => setView(View.Scrape)}
+                    disabled={view === View.Scrape}
+                >
+                    Crawl
+                </Button>
+                <Button
+                    ml="2"
+                    onClick={() => setView(View.Post)}
+                    disabled={view === View.Post}
+                >
+                    Post
+                </Button>
+            </Flex>
+            <Container size="1">
+                {view === View.Search && (
                     <SearchContainer
+                        heading="Find Events"
                         items={events}
                         featuredItem={featuredItem}
                         itemType={DataType.EVENT}
                         isLoading={isLoadingEvents}
                         searchDate={searchDate}
                         setSearchDate={setSearchDate}
+                        refetch={refetch}
                     />
                 )}
-                {isLoading && <Loading />}
                 {view === View.Scrape && venues && (
                     <EventScraper venues={venues} />
                 )}
                 {view === View.Post && <PostGenerator />}
-            </>
+                {isLoading && <Loading />}
+            </Container>
         </AdminLayout>
     )
 }

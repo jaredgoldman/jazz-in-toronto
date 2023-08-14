@@ -1,59 +1,37 @@
 /* eslint-disable */
 // Components
-import {
-    Field,
-    ErrorMessage,
-    type FieldInputProps,
-    type FormikProps
-} from 'formik'
+import * as Form from '@radix-ui/react-form'
 // Libraries
 import usePlacesAutocomplete, {
     getGeocode,
     getLatLng
 } from 'use-places-autocomplete'
 import useOnclickOutside from 'react-cool-onclickoutside'
+import { TextField, Strong, Text } from '@radix-ui/themes'
+import { Control, Controller, FieldValues, Path } from 'react-hook-form'
 
-interface Props {
+interface Props<T extends FieldValues> {
     label: string
-    name: string
-    className?: string
-    fieldClassName?: string
+    name: Path<T>
+    control: Control<T>
+    onSelect: (
+        address: string,
+        latitude: number,
+        longitude: number,
+        city: string
+    ) => void
     placeHolder?: string
+    required?: boolean | string
 }
 
-export default function PlacesAutoCompleteField({
+export default function PlacesAutocomplete<T extends FieldValues>({
     label,
     name,
-    className = 'flex-col mb-5',
-    fieldClassName = 'border-2 border-black',
-    placeHolder = "Enter your venue's location"
-}: Props): JSX.Element {
-    return (
-        <div className={className}>
-            <label>{label}</label>
-            <Field
-                className={fieldClassName}
-                name={name}
-                component={PlacesAutocomplete}
-                props={{ placeHolder }}
-            />
-            <ErrorMessage name={name} component="div" />
-        </div>
-    )
-}
-
-interface PlacesAutoCompleteProps {
-    form: FormikProps<string>
-    field: FieldInputProps<string>
-    props: {
-        placeHolder: string
-    }
-}
-
-const PlacesAutocomplete = ({
-    form,
-    props
-}: PlacesAutoCompleteProps): JSX.Element => {
+    placeHolder,
+    onSelect,
+    control,
+    required = false
+}: Props<T>): JSX.Element {
     const {
         ready,
         value,
@@ -90,14 +68,8 @@ const PlacesAutocomplete = ({
         // Get latitude and longitude via utility functions
         const results = await getGeocode({ address: description })
         const { lat, lng } = getLatLng(results[0])
-        await form.setFieldValue('address', description)
-        await form.setFieldValue('latitude', lat)
-        await form.setFieldValue('longitude', lng)
-        await form.setFieldValue(
-            'city',
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            results[0].address_components[3].long_name
-        )
+        const city = results[0].address_components[3].long_name
+        onSelect(description, lat, lng, city)
     }
 
     const renderSuggestions = () =>
@@ -114,22 +86,34 @@ const PlacesAutocomplete = ({
                         await handleSelect(suggestion)
                     }}
                 >
-                    <strong>{main_text}</strong> <small>{secondary_text}</small>
+                    <Strong>{main_text}</Strong> <Text>{secondary_text}</Text>
                 </li>
             )
         })
 
     return (
-        <div ref={ref}>
-            <input
-                className="w-full text-black"
-                value={value}
-                onChange={handleInput}
-                disabled={!ready}
-                placeholder={props.placeHolder}
-            />
-            {/* We can use the "status" to decide whether we should display the dropdown or not */}
-            {status === 'OK' && <ul>{renderSuggestions()}</ul>}
-        </div>
+        <Controller
+            control={control}
+            rules={{ required }}
+            name={name}
+            render={({ field }) => (
+                <Form.Field ref={ref} name={name}>
+                    <Form.Label>{label}</Form.Label>
+                    <Form.Control asChild>
+                        <TextField.Input
+                            value={value}
+                            onChange={(event) => {
+                                handleInput(event)
+                            }}
+                            disabled={!ready}
+                            placeholder={placeHolder}
+                            onBlur={field.onBlur}
+                        />
+                    </Form.Control>
+                    {/* We can use the "status" to decide whether we should display the dropdown or not */}
+                    {status === 'OK' && <ul>{renderSuggestions()}</ul>}
+                </Form.Field>
+            )}
+        />
     )
 }
