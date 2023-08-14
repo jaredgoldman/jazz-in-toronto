@@ -5,7 +5,6 @@ import {
     type NextAuthOptions,
     type DefaultSession
 } from 'next-auth'
-import FacebookProvider from 'next-auth/providers/facebook'
 import EmailProvider from 'next-auth/providers/email'
 import { env } from '~/env.mjs'
 import { prisma } from '~/server/db'
@@ -41,10 +40,6 @@ export const authOptions: NextAuthOptions = {
     },
     adapter: PrismaAdapter(prisma),
     providers: [
-        FacebookProvider({
-            clientId: env.FACEBOOK_CLIENT_ID,
-            clientSecret: env.FACEBOOK_CLIENT_SECRET
-        }),
         EmailProvider({
             server: {
                 host: env.EMAIL_SERVER_HOST,

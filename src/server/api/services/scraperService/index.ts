@@ -11,11 +11,17 @@ import { env } from '~/env.mjs'
 // Data
 import rexJson from './templates/rex.json'
 import { TRPCError } from '@trpc/server'
+import { PrismaClient } from '@prisma/client'
 
 export default class ScraperService {
     private venue!: Venue
     private page?: Page
     private initialized = false
+    private prisma: PrismaClient
+
+    constructor(prisma: PrismaClient) {
+        this.prisma = prisma
+    }
 
     public async init(venue: Venue): Promise<void> {
         if (!venue.website || !venue.eventsPath) {
@@ -41,16 +47,6 @@ export default class ScraperService {
         switch (this.venue.name.toLowerCase()) {
             case 'the rex':
                 return await this.scrapeRexEvents(date)
-            case 'jazz bistro':
-                throw new TRPCError({
-                    message: 'Venue not yet supported',
-                    code: 'BAD_REQUEST'
-                })
-            case 'drom taberna':
-                throw new TRPCError({
-                    message: 'Venue not yet supported',
-                    code: 'BAD_REQUEST'
-                })
             default:
                 throw new TRPCError({
                     message: "Venue doesn't exist or is not crawlable",
@@ -64,7 +60,7 @@ export default class ScraperService {
             const url = `https://${this.venue.website}${
                 this.venue?.eventsPath || ''
             }`
-            console.log('URL', url)
+
             const browser = await puppeterr.launch({
                 args: [
                     '--no-sandbox',
@@ -99,15 +95,25 @@ export default class ScraperService {
         }
         const monthIndex = date.getMonth()
         const currentMonthIndex = new Date().getMonth()
+        const isFutureMonth = currentMonthIndex - monthIndex < 0
+        let monthNavButton
 
-        const nextMonthButton = await this.page.waitForSelector(
-            `${rexJson['$']} > .yui3-calendar-header > .yui3-calendarnav-nextmonth`
-        )
-        //
         // // If the month is in the future, we need to click the next month button
-        if (nextMonthButton) {
-            for (let i = 0; i < monthIndex - currentMonthIndex; i++) {
-                await nextMonthButton.click()
+        if (isFutureMonth) {
+            monthNavButton = await this.page.waitForSelector(
+                `${rexJson['$']} > .yui3-calendar-header > .yui3-calendarnav-nextmonth`
+            )
+        } else {
+            monthNavButton = await this.page.waitForSelector(
+                `${rexJson['$']} > .yui3-calendar-header > .yui3-calendarnav-prevmonth`
+            )
+        }
+
+        if (monthNavButton) {
+            // Get the absolute difference between the two months
+            const difference = Math.abs(monthIndex - currentMonthIndex)
+            for (let i = 0; i < difference; i++) {
+                await monthNavButton.click() // Click the correct button based on whether you're going to a future or previous month
             }
         }
 

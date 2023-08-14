@@ -14,6 +14,7 @@ import { ZodError } from 'zod'
 import { getServerAuthSession } from '~/server/auth'
 import { prisma } from '~/server/db'
 import ScraperService from './services/scraperService'
+import PostService from './services/postService'
 
 /**
  * 1. CONTEXT
@@ -25,7 +26,8 @@ import ScraperService from './services/scraperService'
 
 type CreateContextOptions = {
     session: Session | null
-    scraperServe: ScraperService
+    scraperService: ScraperService
+    postService: PostService
 }
 
 /**
@@ -42,7 +44,8 @@ export const createInnerTRPCContext = (opts: CreateContextOptions) => {
     return {
         session: opts.session,
         prisma,
-        scraperService: new ScraperService()
+        scraperService: opts.scraperService,
+        postService: opts.postService
     }
 }
 
@@ -59,7 +62,9 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
     const session = await getServerAuthSession({ req, res })
 
     return createInnerTRPCContext({
-        session
+        session,
+        scraperService: new ScraperService(prisma),
+        postService: new PostService()
     })
 }
 

@@ -20,26 +20,21 @@ export default function AdminLayout({
 }: Props): JSX.Element {
     const { data: session } = useSession()
     return (
-        <Container>
-            <Flex direction="column">
-                <Header
-                    headerType={HeaderType.Admin}
-                    showLinks={showHeaderLinks}
-                />
+        <Flex direction="column" className="h-screen">
+            <Header headerType={HeaderType.Admin} showLinks={showHeaderLinks} />
+            <div className="flex-grow">
                 {session ? (
                     <Container size="3">{children}</Container>
                 ) : (
-                    <>
-                        <Flex direction="column">
-                            <Text align="center" size="5">
-                                Please sign in to access the admin panel.
-                            </Text>
-                        </Flex>
+                    <Flex direction="column" align="center">
+                        <Text align="center" size="5" mb="5">
+                            Please sign in to access the admin panel.
+                        </Text>
                         <Button onClick={() => void signIn()}>Sign In</Button>
-                    </>
+                    </Flex>
                 )}
-                <Footer />
-            </Flex>
-        </Container>
+            </div>
+            <Footer />
+        </Flex>
     )
 }

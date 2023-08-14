@@ -7,9 +7,6 @@ import {
 } from '~/server/api/trpc'
 // Utils
 import addDays from 'date-fns/addDays'
-// Services
-import ScraperService from '../services/scraperService'
-import PostService from '../services/postService'
 
 export const eventRouter = createTRPCRouter({
     create: publicProcedure
@@ -127,7 +124,6 @@ export const eventRouter = createTRPCRouter({
             if (venue) {
                 await ctx.scraperService.init(venue)
                 const events = await ctx.scraperService.getEvents(input.date)
-                console.log('EVENTS', events)
                 const processedEvents = []
                 if (events) {
                     //  Tranform partialEvent to Event
@@ -194,10 +190,10 @@ export const eventRouter = createTRPCRouter({
                 caption: z.string()
             })
         )
-        .mutation(async ({ input }) => {
+        .mutation(async ({ ctx, input }) => {
             // post to instagram
-            const postService = new PostService(input)
-            await postService.postAndDeleteImages()
+            ctx.postService.init(input)
+            await ctx.postService.postAndDeleteImages()
             // return res.status(200).json({ message: 'Posted to Instagram' })
         }),
 

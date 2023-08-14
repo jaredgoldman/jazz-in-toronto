@@ -45,7 +45,7 @@ export default function EventScraper({ venues }: Props): JSX.Element {
                         error={errors.venueId}
                         required="You must select a venue to scrape"
                     />
-                    <Flex width="100%" justify="center" mt="3">
+                    <Flex width="100%" justify="center" mt="5">
                         <Form.Submit asChild>
                             <Button>Scrape Events</Button>
                         </Form.Submit>

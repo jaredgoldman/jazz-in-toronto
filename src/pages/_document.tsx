@@ -8,7 +8,10 @@ export default function Document() {
     return (
         <Html>
             <Head>
+                <title>Jazz In Toronto</title>
+                <meta name="description" content="Jazz In Toronto" />
                 <script async src={src} />
+                <link rel="icon" href="/favicon.ico" />
             </Head>
             <body>
                 <Main />

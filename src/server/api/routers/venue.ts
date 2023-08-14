@@ -52,6 +52,14 @@ export const venueRouter = createTRPCRouter({
         return ctx.prisma.venue.findMany()
     }),
 
+    getAllCrawlable: publicProcedure.query(({ ctx }) => {
+        return ctx.prisma.venue.findMany({
+            where: {
+                crawlable: true
+            }
+        })
+    }),
+
     update: protectedProcedure
         .input(
             z.object({

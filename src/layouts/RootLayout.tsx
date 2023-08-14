@@ -5,7 +5,7 @@ import Footer from '~/components/Footer'
 // Types
 import { HeaderType } from '~/components/Header/types'
 import { type ReactNode } from 'react'
-import { Container } from '@radix-ui/themes'
+import { Container, Flex } from '@radix-ui/themes'
 // Context
 
 interface Props {
@@ -14,17 +14,12 @@ interface Props {
 
 export default function RootLayout({ children }: Props): JSX.Element {
     return (
-        <>
-            <Head>
-                <title>Jazz In Toronto</title>
-                <meta name="description" content="Jazz In Toronto" />
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
-            <main className="flex min-h-screen flex-col items-center font-body">
-                <Header headerType={HeaderType.Public} />
+        <Flex direction="column" className="h-screen">
+            <Header headerType={HeaderType.Public} />
+            <div className="flex-grow">
                 <Container size="3">{children}</Container>
-                <Footer />
-            </main>
-        </>
+            </div>
+            <Footer />
+        </Flex>
     )
 }

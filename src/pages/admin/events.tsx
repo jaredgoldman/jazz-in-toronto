@@ -31,7 +31,7 @@ export default function AdminEvents(): JSX.Element {
         date: searchDate
     })
     const { data: venues, isLoading: isLoadingVenues } =
-        api.venue.getAll.useQuery()
+        api.venue.getAllCrawlable.useQuery()
     const { data: featuredItem, isLoading: featuredLoading } =
         api.event.getFeatured.useQuery()
 

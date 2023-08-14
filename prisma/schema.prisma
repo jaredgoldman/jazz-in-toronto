@@ -59,6 +59,7 @@ model Venue {
   eventsPath      String?
   description     String?
   area            Area
+  eventsHash      String?
 
   @@index([featured])
 }

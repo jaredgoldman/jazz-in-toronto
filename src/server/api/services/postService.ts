@@ -1,3 +1,5 @@
+import { TRPCContext } from '@trpc/react-query/shared'
+import { TRPCError } from '@trpc/server'
 import { utapi } from 'uploadthing/server'
 
 interface PostedImageData {
@@ -9,13 +11,19 @@ interface PostedImageData {
 }
 
 export default class postService {
-    private postedImageData: PostedImageData
+    private postedImageData!: PostedImageData
 
-    constructor(postedImageData: PostedImageData) {
+    init(postedImageData: PostedImageData) {
         this.postedImageData = postedImageData
     }
 
     async postAndDeleteImages() {
+        if (!this.postedImageData) {
+            throw new TRPCError({
+                message: 'No image data to delete',
+                code: 'BAD_REQUEST'
+            })
+        }
         await this.deletePostedImages()
     }
 
@@ -24,7 +32,10 @@ export default class postService {
         const fileKeys = this.postedImageData.files.map((file) => file.fileKey)
         const { success } = await utapi.deleteFiles(fileKeys)
         if (!success) {
-            throw new Error('Failed to delete files')
+            throw new TRPCError({
+                message: 'Failed to delete files',
+                code: 'INTERNAL_SERVER_ERROR'
+            })
         }
     }
 }
