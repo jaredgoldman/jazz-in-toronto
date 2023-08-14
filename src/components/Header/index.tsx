@@ -2,7 +2,7 @@
 import { signOut, useSession } from 'next-auth/react'
 // Components
 import Link from 'next/link'
-import Button from '../Button'
+import { Button, Heading } from '@radix-ui/themes'
 // Types
 import { HeaderType } from './types'
 
@@ -17,28 +17,22 @@ export default function Header({
 }: Props): JSX.Element {
     const { data: session } = useSession()
     return (
-        <header className="mb-5 w-full flex-col items-center bg-gray-800 pb-2 text-center">
+        <header className="mb-5 w-full flex-col items-center pb-2 text-center">
             {headerType === HeaderType.Admin && session && (
-                <Button
-                    absolutePosition="absolute top-2 left-1"
-                    size="sm"
-                    onClick={() => void signOut()}
-                >
-                    Sign Out
-                </Button>
+                <Button onClick={() => void signOut()}>Sign Out</Button>
             )}
 
-            <div className="mx-auto w-3/4 justify-center border-b-2 border-white pb-4 pt-8">
+            <div className="mx-auto w-3/4 justify-center border-b-2 border-white pt-8">
                 <Link className="text-3xl font-bold" href="/">
                     JAZZINTORONTO
                 </Link>
-                <h2 className="m-auto mb-2 text-center lg:w-1/2">
+                <Heading size="2" align="center">
                     Connecting Toronto&apos;s Jazz Musicians, Audiences, Venues
                     and Presenters
-                </h2>
+                </Heading>
             </div>
             {showLinks && (
-                <nav className="mt-2 flex justify-center">
+                <nav className="flex justify-center border-y-black">
                     <ul className="flex text-sm">
                         {headerType === HeaderType.Public && (
                             <>

@@ -5,6 +5,7 @@ import Footer from '~/components/Footer'
 // Types
 import { HeaderType } from '~/components/Header/types'
 import { type ReactNode } from 'react'
+import { Container } from '@radix-ui/themes'
 // Context
 
 interface Props {
@@ -21,9 +22,7 @@ export default function RootLayout({ children }: Props): JSX.Element {
             </Head>
             <main className="flex min-h-screen flex-col items-center font-body">
                 <Header headerType={HeaderType.Public} />
-                <div className="mt-4 flex w-full flex-grow flex-col items-center">
-                    {children}
-                </div>
+                <Container size="3">{children}</Container>
                 <Footer />
             </main>
         </>

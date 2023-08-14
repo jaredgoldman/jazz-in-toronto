@@ -1,15 +1,17 @@
 import Image from 'next/image'
+import { Flex } from '@radix-ui/themes'
 
 export default function Loading() {
     return (
-        <div className="my-10 flex w-full justify-center">
+        <Flex my="9" justify="center" align="center">
             <Image
                 className="animate-spin"
                 src="/images/spinner.png"
                 width={100}
                 height={100}
                 alt="loading"
-            />
-        </div>
+                >
+            </Image>
+        </Flex>
     )
 }

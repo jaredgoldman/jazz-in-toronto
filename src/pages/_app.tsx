@@ -6,6 +6,8 @@ import '~/styles/globals.css'
 import { ModalProvider } from '~/components/Modal/context/ModalContext'
 // Assets
 import { Poppins } from 'next/font/google'
+import '@radix-ui/themes/styles.css'
+import { Theme } from '@radix-ui/themes'
 
 const poppins = Poppins({
     weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
@@ -19,13 +21,15 @@ const MyApp: AppType<{ session: Session | null }> = ({
     pageProps: { session, ...pageProps }
 }) => {
     return (
-        <ModalProvider>
-            <SessionProvider session={session}>
-                <main className={`w-full ${poppins.variable}`}>
-                    <Component {...pageProps} />
-                </main>
-            </SessionProvider>
-        </ModalProvider>
+        <Theme>
+            <ModalProvider>
+                <SessionProvider session={session}>
+                    <main className={`w-full ${poppins.variable}`}>
+                        <Component {...pageProps} />
+                    </main>
+                </SessionProvider>
+            </ModalProvider>
+        </Theme>
     )
 }
 

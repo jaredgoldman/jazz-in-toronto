@@ -4,7 +4,7 @@ import VenueCard from '~/components/VenueCard/VenueCard'
 import Loading from '~/components/Loading'
 // Uti;s
 import { api } from '~/utils/api'
-import Container from '~/components/Container'
+import { Flex, Heading } from '@radix-ui/themes'
 
 export default function Venues(): JSX.Element {
     const { data: venues, isLoading } = api.venue.getAll.useQuery()
@@ -20,18 +20,16 @@ export default function Venues(): JSX.Element {
 
     return (
         <RootLayout>
-            <Container maxWidth="xl">
-                <div className="w-full">
-                    <div className="mx-2 flex items-center justify-center">
-                        <div className="flex-1 border-b"></div>
-                        <h1 className="px-4 text-center text-xl">
-                            Venue listings
-                        </h1>
-                        <div className="flex-1 border-b"></div>
-                    </div>
-                    {venueCards}
-                </div>
-            </Container>
+            <Flex direction="column">
+                <Flex mx="2">
+                    <div className="flex-1 border-b"></div>
+                    <Heading mb="5" align="center">
+                        Venue listings
+                    </Heading>
+                    <div className="flex-1 border-b"></div>
+                </Flex>
+                {venueCards}
+            </Flex>
         </RootLayout>
     )
 }

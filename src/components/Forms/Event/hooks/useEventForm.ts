@@ -1,10 +1,10 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
 import { type EventWithBandVenue, type Band, type Venue } from '~/types/data'
-import { type FormikContextType, type FormikHelpers } from 'formik'
 import { isBand, isVenue } from '~/utils/typeguards'
 
-export interface Values {
+export interface EventFormValues {
     name: string
     startDate: Date
     endDate: Date
@@ -14,28 +14,19 @@ export interface Values {
     venueId: string
 }
 
-interface Errors {
-    name?: string
-    startDate?: string
-    endDate?: string
-    bandId?: string
-    instagramHandle?: string
-    website?: string
-    venueId?: string
-}
-
 export default function useEventForm(currentValues?: EventWithBandVenue) {
-    const formikRef = useRef<FormikContextType<Values>>(null)
     const [error, setError] = useState<string>('')
     const [added, setAdded] = useState<{ band: boolean; venue: boolean }>({
         band: false,
         venue: false
     })
+
     const {
         data: venueData,
         refetch: refetchVenues,
         isLoading: venuesLoading
     } = api.venue.getAll.useQuery()
+
     const {
         data: bandData,
         refetch: refetchBands,
@@ -47,7 +38,7 @@ export default function useEventForm(currentValues?: EventWithBandVenue) {
 
     const isLoading = venuesLoading || bandsLoading
     const isEditing = !!currentValues
-    const initialValues: Values = currentValues
+    const defaultValues: EventFormValues = currentValues
         ? {
               ...currentValues,
               instagramHandle: currentValues.instagramHandle || undefined,
@@ -63,7 +54,17 @@ export default function useEventForm(currentValues?: EventWithBandVenue) {
               website: ''
           }
 
-    const onSubmit = async (values: Values, actions: FormikHelpers<Values>) => {
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        control,
+        formState: { errors }
+    } = useForm<EventFormValues>({ defaultValues })
+
+    const onSubmit = async (values: EventFormValues) => {
+        console.log('VALUES', values)
+        // handle errors
         try {
             if (isEditing && currentValues && editEventMutation) {
                 await editEventMutation.mutateAsync({
@@ -74,63 +75,43 @@ export default function useEventForm(currentValues?: EventWithBandVenue) {
                 await eventMutation.mutateAsync(values)
             }
         } catch (e) {
-            actions.setSubmitting(false)
             setError('There was an error submitting. Please try again')
         }
-    }
-
-    const validate = (values: Values) => {
-        const errors: Errors = {}
-        if (!values.name) {
-            errors.name = 'Required'
-        }
-        if (!values.venueId) {
-            errors.venueId = 'Required'
-        }
-        if (!values.bandId) {
-            errors.bandId = 'Required'
-        }
-        if (!values.startDate) {
-            errors.startDate = 'Required'
-        }
-        if (!values.endDate) {
-            errors.endDate = 'Required'
-        }
-
-        return errors
     }
 
     // TODO: Factor into single function
     const onAddBand = async (value: Band | Venue) => {
         if (isBand(value)) {
             await refetchBands()
-            await formikRef.current?.setFieldValue('bandId', value.id)
             setAdded((prev) => ({ ...prev, band: true }))
         }
     }
     const onAddVenue = async (value: Band | Venue) => {
         if (isVenue(value)) {
             await refetchVenues()
-            await formikRef.current?.setFieldValue('venueId', value.id)
             setAdded((prev) => ({ ...prev, venue: true }))
         }
     }
 
+    const submit = handleSubmit((data) => {
+        onSubmit(data)
+    })
+
     return {
-        initialValues,
         isEditing,
         venueData,
         bandData,
         eventMutation,
         editEventMutation,
-        error,
-        setError,
-        onSubmit,
-        validate,
+        submit,
         added,
         onAddBand,
         onAddVenue,
-        formikRef,
-        isLoading
+        isLoading,
+        register,
+        error,
+        errors,
+        setValue,
+        control
     }
 }

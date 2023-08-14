@@ -19,11 +19,11 @@ export default function Modal(): JSX.Element | null {
     if (showModal) {
         return (
             <div
-                className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+                className="fixed inset-0 z-50 flex items-center justify-center bg-white"
                 id="overlay"
                 onClick={handleOutsideClick}
             >
-                <div className="relative box-border max-h-[80vh] overflow-y-hidden rounded-md border-2 border-gray-400 bg-gray-800 px-3">
+                <div className="relative box-border max-h-[80vh] overflow-y-hidden rounded-md border-2 border-gray-400 px-3">
                     <div className="my-2 ml-3" onClick={() => closeModal()}>
                         X
                     </div>

@@ -1,4 +1,4 @@
-import Container from '../Container'
+import { Card, Heading, Text, Flex } from '@radix-ui/themes'
 
 interface Props {
     title: string
@@ -14,17 +14,19 @@ const FeaturedCard = ({
     link
 }: Props) => {
     return (
-        <Container
-            width="md"
+        <Card
             style={{
                 backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(1,1,1,1) 95%), url(${
                     image ? image : 'none'
                 })`
             }}
+            m="2"
+            variant="classic"
+            className="min-h-[20rem] bg-cover bg-center bg-no-repeat"
         >
-            <div className="flex flex-col p-4">
-                <h2 className="text-1xl mb-2 font-bold">{title}</h2>
-                <p className="text-white-700">{content}</p>
+            <Flex direction="column" justify="start" height="100%" p="2">
+                <Heading className="text-1xl mb-2 font-bold">{title}</Heading>
+                <Text className="text-white-700">{content}</Text>
                 {link && (
                     <a
                         href={link}
@@ -33,8 +35,8 @@ const FeaturedCard = ({
                         Learn more
                     </a>
                 )}
-            </div>
-        </Container>
+            </Flex>
+        </Card>
     )
 }
 

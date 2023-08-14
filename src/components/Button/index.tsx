@@ -2,6 +2,7 @@ import Image from 'next/image'
 import React, { type ReactNode } from 'react'
 import Link from 'next/link'
 import classnames from 'classnames'
+import { Button } from '@radix-ui/themes'
 
 interface ButtonProps {
     children: ReactNode
@@ -51,14 +52,9 @@ export default function Button({
             )
         }
         return (
-            <button
-                className={innerClassName}
-                onClick={onClick}
-                type={type}
-                disabled={disabled}
-            >
+            <Button onClick={onClick} type={type} disabled={disabled}>
                 {children}
-            </button>
+            </Button>
         )
     }
 

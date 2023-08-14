@@ -5,6 +5,7 @@ import { createServerSideHelpers } from '@trpc/react-query/server'
 import { appRouter } from '~/server/api/root'
 import superjson from 'superjson'
 import { prisma } from '~/server/db'
+import { Box, Flex, Heading } from '@radix-ui/themes'
 import Button from '~/components/Button'
 
 export async function getStaticProps() {
@@ -29,25 +30,17 @@ export async function getStaticProps() {
 export default function Home() {
     return (
         <RootLayout>
-            <div className="mb-1 flex w-full flex-col items-center">
-                <h1 className="mb-10 text-center text-2xl font-bold">
-                    Follow us!
-                </h1>
-                <div className="mb-7 flex w-3/4 max-w-lg justify-evenly lg:w-1/2">
-                    <Button
-                        size="sm"
-                        link="https://www.instagram.com/jazzintoronto/ "
-                    >
-                        instagram
-                    </Button>
-                    <Button
-                        size="sm"
-                        link="https://www.facebook.com/jazzintoronto/ "
-                    >
-                        Facebook
-                    </Button>
-                </div>
-            </div>
+            <Heading align="center" mb="5">
+                Follow us!
+            </Heading>
+            <Flex justify="center" align="center" height="9" mb="5">
+                <Button link="https://www.instagram.com/jazzintoronto/ ">
+                    instagram
+                </Button>
+                <Button link="https://www.facebook.com/jazzintoronto/ ">
+                    Facebook
+                </Button>
+            </Flex>
             <Featured />
         </RootLayout>
     )

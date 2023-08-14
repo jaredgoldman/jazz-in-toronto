@@ -2,11 +2,11 @@
 import RootLayout from '~/layouts/RootLayout'
 import Image from 'next/image'
 import Button from '~/components/Button'
-import Container from '~/components/Container'
 import { graphQlWithAuth } from '~/utils/gql'
 import { graphql } from '../gql'
 import { type AboutUsQuery } from '~/gql/graphql'
 import { type GetStaticProps, type InferGetStaticPropsType } from 'next'
+import { Flex, Heading, Text, Grid, Box, Container } from '@radix-ui/themes'
 
 const query = graphql(`
     query aboutUs {
@@ -66,32 +66,32 @@ export default function About({
 
     return (
         <RootLayout>
-            <Container>
-                <h1 className="mb-10 text-center text-4xl font-bold">
+            <Box width="auto">
+                <Heading mb="5" align="center">
                     {aboutData?.heading}
-                </h1>
-                <p className="mb-5 text-left text-sm">
+                </Heading>
+                <Text mb="5" align="left">
                     {aboutData?.description}
-                </p>
-                <div className="justify-left mb-5 flex w-full items-center">
+                </Text>
+                <Flex justify="start" mt="5" align="center">
                     <div className="flex-1 border-b"></div>
-                    <h2 className="px-4 text-center text-2xl ">
+                    <Heading align="center" className="px-3">
                         {aboutData?.teamHeading}
-                    </h2>
+                    </Heading>
                     <div className="flex-1 border-b"></div>
-                </div>
-                <div className="mb-5 grid w-full grid-cols-2 grid-rows-2 gap-x-10 gap-y-5 text-sm">
+                </Flex>
+                <Grid my="5" columns="2" rows="2" gapX="9" gapY="5">
                     {aboutData?.staffMembers?.data?.map((member) => {
                         return (
-                            <div className="" key={member.attributes?.name}>
-                                <h3 className="font-bold">
+                            <div key={member.attributes?.name}>
+                                <Heading className="font-bold">
                                     {member.attributes?.position}
-                                </h3>
-                                <p>{member.attributes?.name}</p>
+                                </Heading>
+                                <Text>{member.attributes?.name}</Text>
                             </div>
                         )
                     })}
-                </div>
+                </Grid>
                 {teamImagePath && (
                     <div className="mb-10">
                         <Image
@@ -102,66 +102,60 @@ export default function About({
                         />
                     </div>
                 )}
-                <div>
-                    <div className="justify-left mb-5 flex w-full items-center">
-                        <div className="flex-1 border-b"></div>
-                        <h2 className="px-4 text-center text-2xl ">
-                            {aboutData?.supportHeading}
-                        </h2>
-                        <div className="flex-1 border-b"></div>
-                    </div>
-                    <p className="text-left text-sm">
-                        {aboutData?.supportDescription}
-                    </p>
-                    <div>
-                        <div className="my-10 flex max-w-[35rem] justify-between">
-                            {aboutData?.paypalProfileUrl && (
-                                <div className="flex flex-col">
-                                    <div>Paypal</div>
-                                    <a
-                                        className="text-blue-500"
-                                        href={`https://${aboutData?.paypalProfileUrl}`}
-                                    >
-                                        {aboutData?.paypalProfileUrl}
-                                    </a>
-                                </div>
-                            )}
-                            {aboutData?.eTransferAddress && (
-                                <div className="flex flex-col">
-                                    <div>ETransfer</div>
-                                    <a
-                                        className="text-blue-500"
-                                        href={`mailto:${aboutData?.eTransferAddress}`}
-                                    >
-                                        {aboutData?.eTransferAddress}
-                                    </a>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                    <div className="mb-10 flex w-full justify-center">
-                        {aboutData?.ctaText && aboutData?.paypalProfileUrl && (
-                            <Button
-                                roundedBorder={false}
-                                size="xl"
-                                link={`https://${aboutData?.paypalProfileUrl}`}
-                            >
-                                {aboutData?.ctaText}
-                            </Button>
+                <Flex justify="start" mb="5" align="center">
+                    <div className="flex-1 border-b"></div>
+                    <Heading align="center" className="px-4">
+                        {aboutData?.supportHeading}
+                    </Heading>
+                    <div className="flex-1 border-b"></div>
+                </Flex>
+                <Text align="left">{aboutData?.supportDescription}</Text>
+                <Flex justify="center">
+                    <Flex my="9" justify="between">
+                        {aboutData?.paypalProfileUrl && (
+                            <Flex mr="9" direction="column">
+                                <div>Paypal</div>
+                                <a
+                                    className="text-blue-500"
+                                    href={`https://${aboutData?.paypalProfileUrl}`}
+                                >
+                                    {aboutData?.paypalProfileUrl}
+                                </a>
+                            </Flex>
                         )}
-                    </div>
-                    {imageCollagePath && (
-                        <div className="mb-10 flex justify-center">
-                            <Image
-                                src={imageCollagePath}
-                                height={1000}
-                                width={1000}
-                                alt="Jazz In Toronto team"
-                            />
-                        </div>
+                        {aboutData?.eTransferAddress && (
+                            <Flex ml="9" direction="column">
+                                <div>ETransfer</div>
+                                <a
+                                    className="text-blue-500"
+                                    href={`mailto:${aboutData?.eTransferAddress}`}
+                                >
+                                    {aboutData?.eTransferAddress}
+                                </a>
+                            </Flex>
+                        )}
+                    </Flex>
+                </Flex>
+                <Flex mb="9" justify="center">
+                    {aboutData?.ctaText && aboutData?.paypalProfileUrl && (
+                        <Button
+                            roundedBorder={false}
+                            size="xl"
+                            link={`https://${aboutData?.paypalProfileUrl}`}
+                        >
+                            {aboutData?.ctaText}
+                        </Button>
                     )}
-                </div>
-            </Container>
+                </Flex>
+                {imageCollagePath && (
+                    <Image
+                        src={imageCollagePath}
+                        height={1000}
+                        width={1000}
+                        alt="Jazz In Toronto team"
+                    />
+                )}
+            </Box>
         </RootLayout>
     )
 }

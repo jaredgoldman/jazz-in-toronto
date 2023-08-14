@@ -2,7 +2,7 @@
 import { type Venue } from '~/types/data'
 import Image from 'next/image'
 import Link from 'next/link'
-import Container from '../Container'
+import { Card, Flex } from '@radix-ui/themes'
 
 interface Props {
     venue: Venue
@@ -71,50 +71,52 @@ export default function VenueCard({ venue }: Props): JSX.Element {
     const { withAt, withoutAt } = processIGHandle(venue?.instagramHandle)
 
     return (
-        <Container maxWidth="full">
-            <div className="relative h-[10rem] w-[10rem] object-contain">
-                {venue.photoPath && (
-                    <Image
-                        fill={true}
-                        alt={`photo of ${venue.name}`}
-                        src={venue.photoPath}
-                    />
-                )}
-            </div>
-            <div className="my-2 ml-10 flex flex-col">
-                <div className="mb-5 text-lg">{venue.name}</div>
-                <div className="mb-7 text-xs">
-                    <div>{venue.address}</div>
-                    <div>{venue.phoneNumber}</div>
-                    <div className="flex flex-col sm:flex-row">
-                        {venue.instagramHandle && (
-                            <span>
-                                IG:{' '}
-                                <Link
-                                    className="text-blue-500"
-                                    href={`https://instagram.com/${withoutAt}`}
-                                >
-                                    {withAt}
-                                </Link>
-                            </span>
-                        )}
-                        {venue.facebookLink && (
-                            <span className="sm:ml-2 ">
-                                FB:{' '}
-                                <Link
-                                    className="text-blue-500"
-                                    href={venue.facebookLink}
-                                >
-                                    {stripFbUrl(venue.facebookLink)}
-                                </Link>
-                            </span>
-                        )}
-                    </div>
+        <Card mb="2" size="3">
+            <Flex>
+                <div className="relative h-[10rem] w-[10rem] object-contain">
+                    {venue.photoPath && (
+                        <Image
+                            fill={true}
+                            alt={`photo of ${venue.name}`}
+                            src={venue.photoPath}
+                        />
+                    )}
                 </div>
-                <Link className="text-xs" href={venue.website}>
-                    {simplifyURL(venue.website)}
-                </Link>
-            </div>
-        </Container>
+                <Flex my="2" ml="5" direction="column">
+                    <div className="mb-5 text-lg">{venue.name}</div>
+                    <div className="mb-7 text-xs">
+                        <div>{venue.address}</div>
+                        <div>{venue.phoneNumber}</div>
+                        <div className="flex flex-col sm:flex-row">
+                            {venue.instagramHandle && (
+                                <span>
+                                    IG:{' '}
+                                    <Link
+                                        className="text-blue-500"
+                                        href={`https://instagram.com/${withoutAt}`}
+                                    >
+                                        {withAt}
+                                    </Link>
+                                </span>
+                            )}
+                            {venue.facebookLink && (
+                                <span className="sm:ml-2 ">
+                                    FB:{' '}
+                                    <Link
+                                        className="text-blue-500"
+                                        href={venue.facebookLink}
+                                    >
+                                        {stripFbUrl(venue.facebookLink)}
+                                    </Link>
+                                </span>
+                            )}
+                        </div>
+                    </div>
+                    <Link className="text-xs" href={venue.website}>
+                        {simplifyURL(venue.website)}
+                    </Link>
+                </Flex>
+            </Flex>
+        </Card>
     )
 }

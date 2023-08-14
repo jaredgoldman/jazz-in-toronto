@@ -1,13 +1,13 @@
 // Components
-import { Form, Formik } from 'formik'
+import * as Form from '@radix-ui/react-form'
 import { DatePicker, Input, Select } from '../Fields'
-import { ModalForms } from '~/components/Modal/types'
-import Button from '~/components/Button'
+import { Flex, Text } from '@radix-ui/themes'
 import FormLayout from '~/layouts/FormLayout'
 // Types
 import { type EventWithBandVenue } from '~/types/data'
+import { ModalForms } from '~/components/Modal/types'
 // Hooks
-import useEventForm from './hooks/useEventForm'
+import useEventForm, { EventFormValues } from './hooks/useEventForm'
 
 interface Props {
     currentValues?: EventWithBandVenue
@@ -19,113 +19,93 @@ export default function EventForm({ currentValues }: Props): JSX.Element {
         editEventMutation,
         venueData,
         bandData,
-        initialValues,
         error,
-        isEditing,
-        onSubmit,
-        validate,
+        errors,
+        submit,
         onAddVenue,
         onAddBand,
         added,
-        formikRef,
-        isLoading
+        isLoading,
+        register,
+        setValue,
+        control
     } = useEventForm(currentValues)
 
     return (
-        <FormLayout isLoading={isLoading} width="md">
-            <h1 className="text-bold mb-5 text-center text-2xl">
-                {currentValues ? 'Edit gig' : 'Add your gig here!'}
-            </h1>
-            <Formik
-                initialValues={initialValues}
-                validate={validate}
-                onSubmit={onSubmit}
-                innerRef={formikRef}
-            >
-                {({ isSubmitting }) => (
-                    <Form className="flex w-full flex-col">
-                        <Input
-                            name="name"
-                            label="Event Name"
-                            placeHolder="Add the name of your event"
-                        />
-                        {venueData && (
-                            <Select
-                                name="venueId"
-                                label="Venue"
-                                optionData={venueData}
-                                modalForm={ModalForms.Venue}
-                                onAdd={onAddVenue}
-                                buttonText={
-                                    added.venue ? 'Venue added!' : 'Add a venue'
-                                }
-                                error={formikRef?.current?.errors.venueId}
-                                buttonDisabled={added.venue}
-                            />
-                        )}
-                        {bandData && (
-                            <Select
-                                name="bandId"
-                                label="Band"
-                                optionData={bandData}
-                                modalForm={ModalForms.Band}
-                                onAdd={onAddBand}
-                                buttonText={
-                                    added.band ? 'Band added!' : 'Add a band'
-                                }
-                                error={formikRef?.current?.errors.bandId}
-                                buttonDisabled={added.band}
-                            />
-                        )}
-                        <DatePicker
-                            name="startDate"
-                            label="Start Date"
-                            datePickerProps={{
-                                showTimeSelect: true
-                            }}
-                        />
-                        <DatePicker
-                            name="endDate"
-                            label="End Date"
-                            datePickerProps={{
-                                showTimeSelect: true
-                            }}
-                        />
-                        <Input
-                            name="instagramHandle"
-                            label="Instagram Handle"
-                            placeHolder="Add your IG handle"
-                        />
-                        <Input
-                            name="website"
-                            label="Website"
-                            placeHolder="Add your website"
-                        />
-                        <div className="flex w-full flex-col items-center">
-                            <Button
-                                type="submit"
-                                disabled={isSubmitting}
-                                isLoading={isSubmitting}
-                            >
-                                Submit
-                            </Button>
-                            <div className="flex h-10 flex-col justify-center text-sm text-red-500">
-                                {error && (
-                                    <p className="text-red-500">{error}</p>
-                                )}
-                                {eventMutation.isSuccess ||
-                                    (editEventMutation.isSuccess && (
-                                        <p className="text-green-500">
-                                            {`Event ${
-                                                isEditing ? 'edited' : 'added'
-                                            } successfully!`}
-                                        </p>
-                                    ))}
-                            </div>
-                        </div>
-                    </Form>
+        <FormLayout isLoading={isLoading}>
+            <Form.Root onSubmit={submit}>
+                <Input
+                    name="name"
+                    label="Enter the name of your event"
+                    type="text"
+                    error={errors.name}
+                    control={control}
+                />
+                <DatePicker<EventFormValues>
+                    label="Event start date"
+                    name="startDate"
+                    error={errors.startDate}
+                    control={control}
+                />
+                <DatePicker<EventFormValues>
+                    label="Event start date"
+                    name="endDate"
+                    error={errors.endDate}
+                    control={control}
+                />
+                {venueData && (
+                    <Select
+                        name="venueId"
+                        label="Select a venue"
+                        optionData={venueData}
+                        control={control}
+                        modalForm={ModalForms.Venue}
+                        error={errors.venueId}
+                        onAdd={onAddVenue}
+                        buttonText={
+                            added.venue ? 'Venue added!' : 'Add a venue'
+                        }
+                    />
                 )}
-            </Formik>
+                {bandData && (
+                    <Select
+                        name="bandId"
+                        label="Select a band"
+                        optionData={bandData}
+                        control={control}
+                        modalForm={ModalForms.Band}
+                        error={errors.bandId}
+                        onAdd={onAddBand}
+                        buttonText={added.band ? 'Band added!' : 'Add a band'}
+                    />
+                )}
+                <Input
+                    name="instagramHandle"
+                    label="Enter your IG handle"
+                    type="text"
+                    error={errors.instagramHandle}
+                    control={control}
+                />
+                <Input
+                    name="website"
+                    label="Enter a related website"
+                    type="text"
+                    error={errors.website}
+                    control={control}
+                />
+                <Flex>
+                    {eventMutation.isSuccess && (
+                        <Text>Event submitted succesfully</Text>
+                    )}
+                    {editEventMutation.isSuccess && (
+                        <Text>Event edited succesfully</Text>
+                    )}
+                    {error && <Text>{error}</Text>}
+                </Flex>
+                <Flex width="100%" justify="center">
+                    <Form.Submit>Submit</Form.Submit>
+                </Flex>
+            </Form.Root>
         </FormLayout>
     )
 }

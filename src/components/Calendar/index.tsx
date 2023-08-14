@@ -1,8 +1,7 @@
 import { useState } from 'react'
 // Components
-import Button from '../Button'
 import CalendarDay from './components/CalendarDay'
-import Container from '../Container'
+import { Flex, Section, Button, Table, Heading } from '@radix-ui/themes'
 // Hooks
 import useCalendar from './hooks/useCalendar'
 // Types
@@ -42,7 +41,7 @@ export default function Calendar(): JSX.Element {
         for (let i = 0; i < 5; i++) {
             const rowDays = monthlyEventsCopy.splice(0, 7)
             const calendarRowDays = (
-                <tr key={i}>
+                <Table.Row key={i}>
                     {rowDays.map((dailyEvents, i) => {
                         return (
                             <CalendarDay
@@ -51,7 +50,7 @@ export default function Calendar(): JSX.Element {
                             />
                         )
                     })}
-                </tr>
+                </Table.Row>
             )
             rows.push(calendarRowDays)
         }
@@ -61,37 +60,40 @@ export default function Calendar(): JSX.Element {
     const eventRows = mapEventsToCalendarRows()
 
     return (
-        <Container justify="center">
-            <div className="overflow-x-auto">
-                {isLoading ? (
-                    <Loading />
-                ) : (
-                    <>
-                        <h1 className="text-center">{`Events on ${currentMonthName}, ${currentYear}`}</h1>
-                        <div className="my-8 flex w-full min-w-[20rem] justify-evenly">
-                            <Button onClick={() => changeMonth(-1)}>
-                                Previous
-                            </Button>
-                            <Button onClick={() => changeMonth(1)}>Next</Button>
-                        </div>
-                        <table className="min-w-max border-collapse">
-                            <thead className="border-b-2 border-white text-white">
-                                <tr>
-                                    {getDaysOfTheWeek('short').map((day) => (
-                                        <td
-                                            className="w-1/7 text-center"
-                                            key={day}
-                                        >
-                                            {day}
-                                        </td>
-                                    ))}
-                                </tr>
-                            </thead>
-                            <tbody>{eventRows}</tbody>
-                        </table>
-                    </>
-                )}
-            </div>
-        </Container>
+        <Flex direction="column" justify="center">
+            <Heading
+                align="center"
+                mb="5"
+            >{`Events on ${currentMonthName}, ${currentYear}`}</Heading>
+            <Flex mb="5" justify="center">
+                <Button mr="2" onClick={() => changeMonth(-1)}>
+                    Previous
+                </Button>
+                <Button ml="2" onClick={() => changeMonth(1)}>
+                    Next
+                </Button>
+            </Flex>
+            {isLoading ? (
+                <Loading />
+            ) : (
+                <Table.Root className="border-collapse">
+                    <Table.Header>
+                        <Table.Row>
+                            {getDaysOfTheWeek('short').map((day) => (
+                                <Table.Cell
+                                    className="w-1/7 text-center"
+                                    key={day}
+                                    justify="center"
+                                    width="7rem"
+                                >
+                                    {day}
+                                </Table.Cell>
+                            ))}
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>{eventRows}</Table.Body>
+                </Table.Root>
+            )}
+        </Flex>
     )
 }

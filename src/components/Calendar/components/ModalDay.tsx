@@ -1,3 +1,4 @@
+import { Table, Heading, Box } from '@radix-ui/themes'
 // Types
 import { type DailyEventData } from '../types'
 import { type EventWithBandVenue } from '~/types/data'
@@ -9,7 +10,6 @@ interface Props {
 }
 
 export default function ModalDay({ dailyEvents: { date, events } }: Props) {
-    console.log('DAILY EVENTS', events)
     const readableDate = new Intl.DateTimeFormat('en-US', {
         dateStyle: 'full'
     }).format(date)
@@ -17,19 +17,19 @@ export default function ModalDay({ dailyEvents: { date, events } }: Props) {
     const venueEvents = Object.entries(events).map(([venueName, events]) => {
         return (
             <>
-                <tr className="m-2 w-full bg-black" key={venueName}>
-                    <td className="text-lg">{venueName}</td>
-                </tr>
+                <Table.Row key={venueName}>
+                    <Table.Cell className="text-lg">{venueName}</Table.Cell>
+                </Table.Row>
                 {events.map((event: EventWithBandVenue) => {
                     return (
-                        <tr className="m-2" key={event.id}>
-                            <td>
+                        <Table.Row className="m-2" key={event.id}>
+                            <Table.Cell>
                                 <span className="mr-6">
                                     {`${getFormattedTime(event.startDate)}`}
                                 </span>
                                 <span>{event.band.name}</span>
-                            </td>
-                        </tr>
+                            </Table.Cell>
+                        </Table.Row>
                     )
                 })}
             </>
@@ -37,13 +37,13 @@ export default function ModalDay({ dailyEvents: { date, events } }: Props) {
     })
 
     return (
-        <div className="w-full p-2">
-            <div className="mb-2 text-center text-lg">{`Events on ${readableDate}`}</div>
-            <div className=" h-[60vh]  overflow-y-auto">
-                <table className="w-full">
-                    <tbody className="w-full">{venueEvents}</tbody>
-                </table>
+        <Box>
+            <Heading align="center">{`Events on ${readableDate}`}</Heading>
+            <div className="h-[60vh] overflow-y-auto">
+                <Table.Root>
+                    <Table.Body>{venueEvents}</Table.Body>
+                </Table.Root>
             </div>
-        </div>
+        </Box>
     )
 }

@@ -2,6 +2,7 @@
 import { useContext, useState } from 'react'
 // Compoments
 import ModalDay from './ModalDay'
+import { Table } from '@radix-ui/themes'
 // Types
 import { type DailyEventData } from '../types'
 import { type ModalContextType } from '~/components/Modal/types'
@@ -32,7 +33,7 @@ export default function CalendarDay({ dailyEvents }: Props) {
     const modalDay = <ModalDay dailyEvents={dailyEvents} />
 
     return (
-        <td
+        <Table.Cell
             onMouseOver={onHover}
             onMouseOut={onLeave}
             onClick={() => {
@@ -40,9 +41,9 @@ export default function CalendarDay({ dailyEvents }: Props) {
                 onLeave()
                 handleModal(modalDay)
             }}
-            className="w-1/7 w-[5rem] py-5 text-center"
+            justify="center"
         >
             {dailyEvents.placeholder ? null : dayText}
-        </td>
+        </Table.Cell>
     )
 }

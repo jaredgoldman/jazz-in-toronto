@@ -1,46 +1,54 @@
 import FeaturedCard from './FeaturedCard'
 import { api } from '~/utils/api'
 import Loading from '../Loading'
-import Container from '../Container'
+import { Flex, Heading } from '@radix-ui/themes'
 
 export default function Featured() {
     const { data: featuredItems, isLoading } =
         api.featured.getFeatured.useQuery()
 
     return (
-        <div>
-            <h1 className="mb-4 w-full text-center text-2xl font-bold">
+        <Flex
+            mb="2"
+            display="flex"
+            direction="column"
+            justify="center"
+            className="max-w-5xl"
+        >
+            <Heading align="center" mb="5">
                 Our Faves
-            </h1>
-            <Container justify="center">
-                {featuredItems && !isLoading ? (
-                    <div className="mb-5">
-                        {featuredItems?.venue && (
-                            <FeaturedCard
-                                image={featuredItems.venue?.photoPath}
-                                title={featuredItems.venue.name}
-                                link={featuredItems.venue?.website}
-                            />
-                        )}
-                        {featuredItems?.event && (
-                            <FeaturedCard
-                                image={featuredItems.event.band.photoPath}
-                                title={featuredItems.event.name}
-                                link={featuredItems.event?.website}
-                            />
-                        )}
-                        {featuredItems?.band && (
-                            <FeaturedCard
-                                image={featuredItems.band.photoPath}
-                                title={featuredItems.band.name}
-                                link={featuredItems.band?.website}
-                            />
-                        )}
-                    </div>
-                ) : (
-                    <Loading />
-                )}
-            </Container>
-        </div>
+            </Heading>
+            {featuredItems && !isLoading ? (
+                <Flex
+                    direction={{ initial: 'column', md: 'row' }}
+                    m="3"
+                    className="justify-center"
+                >
+                    {featuredItems?.venue && (
+                        <FeaturedCard
+                            image={featuredItems.venue?.photoPath}
+                            title={featuredItems.venue.name}
+                            link={featuredItems.venue?.website}
+                        />
+                    )}
+                    {featuredItems?.event && (
+                        <FeaturedCard
+                            image={featuredItems.event.band.photoPath}
+                            title={featuredItems.event.name}
+                            link={featuredItems.event?.website}
+                        />
+                    )}
+                    {featuredItems?.band && (
+                        <FeaturedCard
+                            image={featuredItems.band.photoPath}
+                            title={featuredItems.band.name}
+                            link={featuredItems.band?.website}
+                        />
+                    )}
+                </Flex>
+            ) : (
+                <Loading />
+            )}
+        </Flex>
     )
 }

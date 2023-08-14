@@ -1,26 +1,46 @@
 // Components
-import { Field, ErrorMessage } from 'formik'
+import * as Form from '@radix-ui/react-form'
+import { TextField } from '@radix-ui/themes'
+import {
+    FieldError,
+    Controller,
+    Control,
+    FieldValues,
+    Path
+} from 'react-hook-form'
 
-interface InputProps {
-    name: string
+interface Props<T extends FieldValues> {
     label: string
-    placeHolder?: string
+    name: Path<T>
+    type: string
+    control: Control<T>
+    error?: FieldError
 }
 
-export default function Input({
+export default function Input<T extends FieldValues>({
     label,
     name,
-    placeHolder
-}: InputProps): JSX.Element {
+    type = 'text',
+    error,
+    control
+}: Props<T>): JSX.Element {
     return (
-        <div className="mb-5 flex flex-col">
-            <label>{label}</label>
-            <Field
-                name={name}
-                className="border-2 border-black text-black placeholder-black dark:border-white "
-                placeHolder={placeHolder}
-            />
-            <ErrorMessage name={name} />
-        </div>
+        <Controller
+            control={control}
+            name={name}
+            render={({ field }) => (
+                <Form.Field name={name}>
+                    <Form.Label>{label}</Form.Label>
+                    <Form.Control asChild>
+                        <TextField.Input type={type} {...field} />
+                    </Form.Control>
+                    {error && (
+                        <Form.Message match="valid">
+                            {error.message}
+                        </Form.Message>
+                    )}
+                </Form.Field>
+            )}
+        />
     )
 }
