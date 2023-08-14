@@ -35,7 +35,7 @@ model Band {
   active          Boolean  @default(true)
   description     String?
 
-  @@index([featured])
+  @@index([featured, name])
 }
 
 model Venue {
@@ -92,7 +92,7 @@ model Event {
   cancelled       Boolean  @default(false)
   description     String?
 
-  @@index([featured])
+  @@index([featured, name])
 }
 
 // NextAuth

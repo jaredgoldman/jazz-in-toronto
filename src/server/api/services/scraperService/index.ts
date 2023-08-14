@@ -13,21 +13,19 @@ import rexJson from './templates/rex.json'
 import { TRPCError } from '@trpc/server'
 
 export default class ScraperService {
-    private venue: Venue
+    private venue!: Venue
     private page?: Page
     private initialized = false
 
-    constructor(venue: Venue) {
+    public async init(venue: Venue): Promise<void> {
         if (!venue.website || !venue.eventsPath) {
             throw new TRPCError({
                 message: 'No website or events path provided',
                 code: 'BAD_REQUEST'
             })
         }
-        this.venue = venue
-    }
 
-    public async init(): Promise<void> {
+        this.venue = venue
         console.log('Initializing scraper for venue', this.venue)
         await this.loadPage()
         this.initialized = true
@@ -145,10 +143,6 @@ export default class ScraperService {
         // Map partial events, convert strings to numbers where necessary
         const processedEvents: PartialEvent[] = []
         dailyEvents.forEach(({ date, sets }: RexEvent) => {
-            console.log({
-                date,
-                sets
-            })
             if (date && sets?.each) {
                 // map through sets in each daily events object
                 sets.each.forEach(({ name, time }) => {

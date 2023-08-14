@@ -121,15 +121,13 @@ export const eventRouter = createTRPCRouter({
     getVenueEvents: protectedProcedure
         .input(z.object({ venueId: z.string().cuid(), date: z.date() }))
         .mutation(async ({ ctx, input }) => {
-            console.log('Attempting to scrape venue events for', input)
-
             const venue = await ctx.prisma.venue.findUnique({
                 where: { id: input.venueId }
             })
             if (venue) {
-                const scraper = new ScraperService(venue)
-                await scraper.init()
-                const events = await scraper.getEvents(input.date)
+                await ctx.scraperService.init(venue)
+                const events = await ctx.scraperService.getEvents(input.date)
+                console.log('EVENTS', events)
                 const processedEvents = []
                 if (events) {
                     //  Tranform partialEvent to Event
