@@ -12,13 +12,12 @@ import { Heading, Flex, Text } from '@radix-ui/themes'
 
 interface Props {
     currentValues?: Band
-    closeModal?: () => void
     onAdd?: (value: Band) => Promise<void>
     externalSubmit?: boolean
 }
 
 export default forwardRef(function BandForm(
-    { currentValues, closeModal, onAdd, externalSubmit = false }: Props,
+    { currentValues, onAdd, externalSubmit = false }: Props,
     ref: any
 ): JSX.Element {
     const {
@@ -30,7 +29,7 @@ export default forwardRef(function BandForm(
         errors,
         control,
         onUpload
-    } = useBandForm(currentValues, closeModal, onAdd)
+    } = useBandForm(currentValues, onAdd)
 
     useImperativeHandle(ref, () => ({
         submitForm: submit
@@ -78,12 +77,20 @@ export default forwardRef(function BandForm(
                 />
                 <Flex>
                     {bandMutation.isSuccess && (
-                        <Text>Event submitted succesfully</Text>
+                        <Text size="2" color="green" align="center">
+                            Event submitted succesfully
+                        </Text>
                     )}
                     {editBandMutation.isSuccess && (
-                        <Text>Event edited succesfully</Text>
+                        <Text size="2" color="green" align="center">
+                            Event edited succesfully
+                        </Text>
                     )}
-                    {error && <Text>{error}</Text>}
+                    {error && (
+                        <Text size="2" color="red" align="center">
+                            {error}
+                        </Text>
+                    )}
                 </Flex>
                 {!externalSubmit && (
                     <Flex width="100%" justify="center">
