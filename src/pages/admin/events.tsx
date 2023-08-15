@@ -51,7 +51,7 @@ export default function AdminEvents(): JSX.Element {
                     onClick={() => setView(View.Scrape)}
                     disabled={view === View.Scrape}
                 >
-                    Crawl
+                    Scrape
                 </Button>
                 <Button
                     ml="2"
@@ -61,7 +61,7 @@ export default function AdminEvents(): JSX.Element {
                     Post
                 </Button>
             </Flex>
-            <Container size="1">
+            <Container size="3">
                 {view === View.Search && (
                     <SearchContainer
                         heading="Find Events"

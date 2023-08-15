@@ -37,7 +37,7 @@ export default function SearchContainer({
     )
 
     return (
-        <Container>
+        <Container size="4">
             <Heading mb="3" ml="3">
                 {heading}
             </Heading>

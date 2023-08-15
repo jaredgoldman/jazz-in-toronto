@@ -25,8 +25,8 @@ const seed = async () => {
         const events = bandsData.map((band, j) => {
             return {
                 name: `Event ${j + 1}`,
-                startDate: new Date(Date.now() + i * oneDay),
-                endDate: new Date(Date.now() + i * oneDay + oneDay),
+                startDate: new Date(Date.now() + j * oneDay),
+                endDate: new Date(Date.now() + j * oneDay + oneDay),
                 instagramHandle: `@event${i + 1}`,
                 website: `https://google.com`,
                 bandId: band.id,

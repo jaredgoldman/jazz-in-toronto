@@ -89,10 +89,48 @@ export default class ScraperService {
         return (await cheerioJsonMapper(html, json)) as T
     }
 
-    private async hashString(string: string) {
+    private async compareAndSaveHashedEvents(
+        hash: string,
+        startDate: Date
+    ): Promise<boolean> {
+        const venueHash = await this.prisma.venueHash.findUnique({
+            where: {
+                startDate_venueId: {
+                    startDate,
+                    venueId: this.venue.id
+                }
+            }
+        })
+        if (!venueHash) {
+            await this.prisma.venueHash.create({
+                data: {
+                    startDate,
+                    venueId: this.venue.id,
+                    hash
+                }
+            })
+            return false
+        }
+        if (venueHash.hash === hash) {
+            return true
+        } else {
+            await this.prisma.venueHash.update({
+                where: {
+                    startDate_venueId: {
+                        venueId: this.venue.id,
+                        startDate
+                    }
+                },
+                data: { hash }
+            })
+        }
+        return false
+    }
+
+    private async hashString(input: string): Promise<string> {
         // Convert the string to a Uint8Array
         const encoder = new TextEncoder()
-        const data = encoder.encode(string)
+        const data = encoder.encode(input)
 
         // Hash the data using the SHA-256 algorithm
         const hashBuffer = await crypto.subtle.digest('SHA-256', data)
@@ -137,24 +175,18 @@ export default class ScraperService {
         await wait(500)
 
         const html = await this.page.content()
-        // COmpare to previous hash to speed up query if nothings changed
-        const htmlHash = await this.hashString(html)
-
-        if (this.venue?.eventsHash === htmlHash) {
-            console.log('SAME HASH')
-            return []
-        } else {
-            console.log('UPDATING HASH')
-            await this.prisma.venue.update({
-                where: { id: this.venue.id },
-                data: { eventsHash: htmlHash }
-            })
-        }
 
         const {
             monthAndYear,
             monthlyEvents: { dailyEvents }
         } = await this.mapEvents<VenueEvents<RexEvent>>(html, rexJson)
+
+        const eventsHash = await this.hashString(JSON.stringify(dailyEvents))
+        const noChange = await this.compareAndSaveHashedEvents(eventsHash, date)
+
+        if (noChange) {
+            return []
+        }
 
         if (!dailyEvents.length) {
             throw new Error('Error getting daily events')

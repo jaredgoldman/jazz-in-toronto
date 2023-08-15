@@ -36,7 +36,7 @@ export default function DatePickerField<T extends FieldValues>({
             name={name}
             render={({ field: { onChange, onBlur, value } }) => (
                 <Form.Field name={name}>
-                    <Flex direction="column" width="100%">
+                    <Flex direction="column" width="100%" mb="3">
                         <Form.Label>{label}</Form.Label>
                         <ReactDatePicker
                             className="min-w-full rounded-[4px] border-[1px] border-gray-300 p-[0.325rem] text-sm"

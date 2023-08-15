@@ -39,29 +39,42 @@ model Band {
 }
 
 model Venue {
-  id              String   @id @default(cuid())
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id              String      @id @default(cuid())
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
   name            String
   address         String
   city            String
   photoPath       String?
-  featured        Boolean  @default(false)
+  featured        Boolean     @default(false)
   instagramHandle String?
   facebookLink    String?
   website         String
   phoneNumber     String
   events          Event[]
-  active          Boolean  @default(true)
+  active          Boolean     @default(true)
   latitude        Float
   longitude       Float
-  crawlable       Boolean  @default(false)
+  crawlable       Boolean     @default(false)
   eventsPath      String?
   description     String?
   area            Area
   eventsHash      String?
+  VenueHash       VenueHash[]
 
   @@index([featured])
+}
+
+model VenueHash {
+  id        String   @id @default(cuid())
+  startDate DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  hash      String
+  Venue     Venue    @relation(fields: [venueId], references: [id])
+  venueId   String
+
+  @@unique([startDate, venueId])
 }
 
 enum Area {
@@ -94,6 +107,7 @@ model Event {
   description     String?
 
   @@index([featured, name])
+  @@unique([startDate, venueId])
 }
 
 // NextAuth

@@ -1,4 +1,4 @@
-import { Card, Heading, Text, Flex } from '@radix-ui/themes'
+import { Card, Heading, Text, Flex, Link } from '@radix-ui/themes'
 
 interface Props {
     title: string
@@ -16,7 +16,7 @@ const FeaturedCard = ({
     return (
         <Card
             style={{
-                backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(1,1,1,1) 95%), url(${
+                backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(1,1,1,1) 70%), url(${
                     image ? image : 'none'
                 })`
             }}
@@ -24,16 +24,15 @@ const FeaturedCard = ({
             variant="classic"
             className="min-h-[20rem] bg-cover bg-center bg-no-repeat"
         >
-            <Flex direction="column" justify="start" height="100%" p="2">
-                <Heading className="text-1xl mb-2 font-bold">{title}</Heading>
-                <Text className="text-white-700">{content}</Text>
+            <Flex direction="column" justify="end" height="100%" p="2">
+                <Heading className="text-1xl mb-2 font-bold text-white">
+                    {title}
+                </Heading>
+                <Text className="text-gray-200">{content}</Text>
                 {link && (
-                    <a
-                        href={link}
-                        className="mt-2 inline-block text-blue-500 hover:underline"
-                    >
+                    <Link href={link} color="tomato">
                         Learn more
-                    </a>
+                    </Link>
                 )}
             </Flex>
         </Card>

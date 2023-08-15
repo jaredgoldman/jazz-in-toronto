@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { api } from '~/utils/api'
 import { useForm } from 'react-hook-form'
+import startOfDay from 'date-fns/startOfDay'
 
 export default function useEventScraper() {
     const [error, setError] = useState<string>('')
@@ -9,7 +10,7 @@ export default function useEventScraper() {
 
     const defaultValues = {
         venueId: '',
-        date: new Date()
+        date: startOfDay(new Date())
     }
 
     const {

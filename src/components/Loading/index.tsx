@@ -25,7 +25,7 @@ export default function Loading() {
                 height={100}
                 alt="loading"
             ></Image>
-            <Text>{`Loading${ellipsis}`}</Text>
+            <Text className="w-32" align="center">{`Loading${ellipsis}`}</Text>
         </Flex>
     )
 }

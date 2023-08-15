@@ -6,7 +6,7 @@ import { graphQlWithAuth } from '~/utils/gql'
 import { graphql } from '../gql'
 import { type AboutUsQuery } from '~/gql/graphql'
 import { type GetStaticProps, type InferGetStaticPropsType } from 'next'
-import { Flex, Heading, Text, Grid, Box, Container } from '@radix-ui/themes'
+import { Flex, Heading, Text, Grid, Box } from '@radix-ui/themes'
 
 const query = graphql(`
     query aboutUs {

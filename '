@@ -118,27 +118,30 @@ export const eventRouter = createTRPCRouter({
     getVenueEvents: protectedProcedure
         .input(z.object({ venueId: z.string().cuid(), date: z.date() }))
         .mutation(async ({ ctx, input }) => {
-            const venue = await ctx.prisma.venue.findUnique({
-                where: { id: input.venueId }
-            })
-            if (venue && ctx.scraperService) {
-                await ctx.scraperService.init(venue)
-                const events = await ctx.scraperService.getEvents(input.date)
-                const processedEvents = []
-                if (events) {
-                    //  Tranform partialEvent to Event
+            await ctx.prisma.$transaction(async (prisma) => {
+                const venue = await prisma.venue.findUnique({
+                    where: { id: input.venueId }
+                })
+
+                if (venue && ctx.scraperService) {
+                    // Initialize the scraper service outside the loop
+                    await ctx.scraperService.init(venue)
+
+                    const events = await ctx.scraperService.getEvents(
+                        input.date
+                    )
+                    const processedEvents = []
+                    const newBands = new Set<string>()
                     for (const event of events) {
-                        const existingEvent = await ctx.prisma.event.findUnique(
-                            {
-                                where: {
-                                    startDate_venueId: {
-                                        venueId: input.venueId,
-                                        startDate: input.date
-                                    }
+                        // Check for existing events outside the loop
+                        const existingEvent = await prisma.event.findUnique({
+                            where: {
+                                startDate_venueId: {
+                                    venueId: input.venueId,
+                                    startDate: input.date
                                 }
                             }
-                        )
-
+                        })
                         if (
                             existingEvent &&
                             existingEvent.name
@@ -147,32 +150,27 @@ export const eventRouter = createTRPCRouter({
                         ) {
                             continue
                         }
-                        let band
-                        // Create band for even name if band doesn't exist
-                        // TODO: Clean name before this step
-                        // XXX: This takes FOREVER - need to speed this query up
-                        band = await ctx.prisma.band.findFirst({
+
+                        let band = await prisma.band.findFirst({
                             where: {
                                 name: {
                                     contains: event.name.toLowerCase(),
                                     mode: 'insensitive'
-                                }
+                                },
+                                active: true
                             }
                         })
 
                         if (!band) {
-                            band = await ctx.prisma.band.create({
-                                data: {
-                                    name: event.name
-                                }
-                            })
+                            // Collect new bands in a set to create them later
+                            newBands.add(event.name)
                         }
 
-                        const processedEvent = await ctx.prisma.event.create({
+                        const processedEvent = await prisma.event.create({
                             data: {
                                 name: event.name,
                                 venueId: input.venueId,
-                                bandId: band.id,
+                                bandId: band ? band.id : undefined,
                                 startDate: event.startDate,
                                 endDate: event.endDate
                             },
@@ -183,9 +181,19 @@ export const eventRouter = createTRPCRouter({
                         })
                         processedEvents.push(processedEvent)
                     }
-                    return processedEvents
                 }
-            }
+
+                // Create the new bands after the loop
+                for (const bandName of newBands) {
+                    await prisma.band.create({
+                        data: {
+                            name: bandName
+                        }
+                    })
+                }
+
+                return processedEvents
+            })
         }),
 
     post: protectedProcedure
