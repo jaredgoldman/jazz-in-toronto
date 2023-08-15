@@ -56,7 +56,9 @@ const FileUploadButton = ({ onUpload, label }: Props) => {
                 name="file"
             ></input>
             <Flex width="100%" justify="center">
-                <Button onClick={handleButtonClick}>{label}</Button>
+                <Button type="button" onClick={handleButtonClick}>
+                    {label}
+                </Button>
             </Flex>
         </>
     )

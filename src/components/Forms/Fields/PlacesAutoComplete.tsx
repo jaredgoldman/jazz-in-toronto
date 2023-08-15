@@ -68,7 +68,8 @@ export default function PlacesAutocomplete<T extends FieldValues>({
         // Get latitude and longitude via utility functions
         const results = await getGeocode({ address: description })
         const { lat, lng } = getLatLng(results[0])
-        const city = results[0].address_components[3].long_name
+        const city =
+            results[0]?.address_components[3]?.long_name || 'city unknonw'
         onSelect(description, lat, lng, city)
     }
 

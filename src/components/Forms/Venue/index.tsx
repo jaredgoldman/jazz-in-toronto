@@ -85,7 +85,7 @@ export default forwardRef(function VenueForm(
                         control={control}
                     />
                 </Flex>
-                <Flex>
+                <Flex width="100%" align="center" mt="3">
                     {venueMutation.isSuccess && (
                         <Text size="2" color="green" align="center">
                             Venue submitted succesfully

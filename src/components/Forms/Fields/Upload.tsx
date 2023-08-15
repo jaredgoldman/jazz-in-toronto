@@ -75,7 +75,7 @@ export default function Upload<T extends FieldValues>({
                                         <Button
                                             className="absolute left-0 top-0"
                                             size="1"
-                                            onClick={void removeFile}
+                                            onClick={removeFile}
                                         >
                                             X
                                         </Button>

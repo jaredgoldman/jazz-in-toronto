@@ -66,12 +66,12 @@ export default function Dialogue({
                 </Dialog.Description>
                 <Box mb="3">{component}</Box>
                 <Dialog.Close>
-                    <Button variant="soft" color="gray">
+                    <Button type="button" variant="soft" color="gray">
                         Cancel
                     </Button>
                 </Dialog.Close>
                 {showSave && (
-                    <Button ml="2" onClick={void handleOnSave}>
+                    <Button type="button" ml="2" onClick={handleOnSave}>
                         Save
                     </Button>
                 )}

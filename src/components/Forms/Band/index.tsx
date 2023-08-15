@@ -82,22 +82,23 @@ export default forwardRef(function BandForm(
                         error={errors.website}
                         control={control}
                     />
-                    <Flex></Flex>
-                    {bandMutation.isSuccess && (
-                        <Text size="2" color="green" align="center">
-                            Event submitted succesfully
-                        </Text>
-                    )}
-                    {editBandMutation.isSuccess && (
-                        <Text size="2" color="green" align="center">
-                            Event edited succesfully
-                        </Text>
-                    )}
-                    {error && (
-                        <Text size="2" color="red" align="center">
-                            {error}
-                        </Text>
-                    )}
+                    <Flex width="100%" align="center" mt="3">
+                        {bandMutation.isSuccess && (
+                            <Text size="2" color="green" align="center">
+                                Event submitted succesfully
+                            </Text>
+                        )}
+                        {editBandMutation.isSuccess && (
+                            <Text size="2" color="green" align="center">
+                                Event edited succesfully
+                            </Text>
+                        )}
+                        {error && (
+                            <Text size="2" color="red" align="center">
+                                {error}
+                            </Text>
+                        )}
+                    </Flex>
                 </Flex>
                 {!externalSubmit && (
                     <Flex width="100%" justify="center">

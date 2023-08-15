@@ -53,7 +53,7 @@ export default forwardRef(function EventForm(
 
     return (
         <FormLayout maxWidth="max-w-md" isLoading={isLoading}>
-            <Form.Root onSubmit={void submit}>
+            <Form.Root onSubmit={submit}>
                 <Flex direction="column" gap="3">
                     <Input
                         name="name"
@@ -149,7 +149,7 @@ export default forwardRef(function EventForm(
                         control={control}
                     />
                 </Flex>
-                <Flex>
+                <Flex width="100%" justify="center" mt="3">
                     {eventMutation.isSuccess && (
                         <Text size="2" color="green" align="center">
                             Event submitted succesfully
@@ -167,7 +167,7 @@ export default forwardRef(function EventForm(
                     )}
                 </Flex>
                 {!externalSubmit && (
-                    <Flex width="100%" justify="center" mt="5">
+                    <Flex width="100%" justify="center" mt="3">
                         <Form.Submit asChild>
                             <Button>Submit</Button>
                         </Form.Submit>
