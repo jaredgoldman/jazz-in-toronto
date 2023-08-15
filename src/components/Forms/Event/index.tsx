@@ -97,7 +97,6 @@ export default forwardRef(function EventForm(
                             <Dialogue
                                 title="Add a venue"
                                 triggerLabel="Add your venue"
-                                description="Add your venue to our database"
                                 formRef={venueFormRef}
                                 component={
                                     <VenueForm
@@ -122,7 +121,6 @@ export default forwardRef(function EventForm(
                             <Dialogue
                                 title="Add your band"
                                 triggerLabel="Add your band"
-                                description="Add your band to our database"
                                 formRef={bandFormRef}
                                 component={
                                     <BandForm
