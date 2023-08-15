@@ -1,5 +1,8 @@
+// Libraries
 import { useState } from 'react'
+// Components
 import { Dialog, Button, Box } from '@radix-ui/themes'
+// Types
 import { type QueryObserverResult } from '@tanstack/react-query'
 import { type RefObject } from 'react'
 
@@ -9,9 +12,11 @@ interface Props {
     component: JSX.Element
     closeLabel?: string
     description?: string
+    // Reference to previous form submition method
     formRef?: RefObject<{
         submitForm: () => Promise<void>
     }>
+    // refetch function for re-updating state a previous form
     refetch?: () => Promise<QueryObserverResult<unknown>>
     showSave?: boolean
     triggerButtonClassName?: string

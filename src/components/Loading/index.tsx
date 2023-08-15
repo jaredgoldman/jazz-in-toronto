@@ -1,4 +1,6 @@
+// Libraries
 import { useState, useEffect } from 'react'
+// Componenets
 import Image from 'next/image'
 import { Flex, Text } from '@radix-ui/themes'
 

@@ -1,7 +1,9 @@
+// Libraries
 import { getServerSession } from 'next-auth'
 import { createUploadthing } from 'uploadthing/next-legacy'
 import type { FileRouter } from 'uploadthing/next-legacy'
 import { authOptions } from './auth'
+// Assets
 import { env } from '~/env.mjs'
 
 const f = createUploadthing()

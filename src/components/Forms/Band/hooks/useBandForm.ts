@@ -1,9 +1,14 @@
+// Libraries
 import { useState } from 'react'
-import { api } from '~/utils/api'
-import { useUploadThing } from '~/hooks/useUploadThing'
-import { type FileData, type Band } from '~/types/data'
-import { env } from '~/env.mjs'
 import { useForm } from 'react-hook-form'
+// Utils
+import { api } from '~/utils/api'
+// Hooks
+import { useUploadThing } from '~/hooks/useUploadThing'
+// Types
+import { type FileData, type Band } from '~/types/data'
+// Assets
+import { env } from '~/env.mjs'
 
 export interface BandFormValues {
     name: string
@@ -21,9 +26,7 @@ export default function useBandForm(
     currentValues: Band | undefined,
     onAdd?: (values: Band) => Promise<void>
 ) {
-    // State
     const [error, setError] = useState<string>('')
-    // Mutations
     const bandMutation = api.band.create.useMutation()
     const editBandMutation = api.band.update.useMutation()
     const deleteBandPhotoMutation = api.band.deletePhoto.useMutation()

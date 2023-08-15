@@ -6,7 +6,6 @@ import { Table } from '@radix-ui/themes'
 import Dialogue from '~/components/Dialogue'
 // Types
 import { type DailyEventData } from '../types'
-// Context
 
 interface Props {
     dailyEvents: DailyEventData
@@ -27,7 +26,7 @@ export default function CalendarDay({ dailyEvents }: Props) {
         setDayText(dailyEvents.date.getDate())
     }
 
-    // Can we lazy load this?
+    // TODO: Lazy load this component
     const modalDay = <ModalDay dailyEvents={dailyEvents} />
 
     return (

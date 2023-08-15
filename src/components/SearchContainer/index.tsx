@@ -5,9 +5,9 @@ import { Container, Heading } from '@radix-ui/themes'
 // Types
 import { type Items, type Item } from '~/types/data'
 import { type QueryObserverResult } from '@tanstack/react-query'
+import { type DataType } from '~/types/enums'
 // Hooks
 import useSearch from './hooks/useSearch'
-import { type DataType } from '~/types/enums'
 
 interface Props<T> {
     heading?: string

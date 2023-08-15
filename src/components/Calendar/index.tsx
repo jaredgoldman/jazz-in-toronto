@@ -2,12 +2,12 @@ import { useState } from 'react'
 // Components
 import CalendarDay from './components/CalendarDay'
 import { Flex, Button, Table, Heading } from '@radix-ui/themes'
+import Loading from '../Loading'
 // Hooks
 import useCalendar from './hooks/useCalendar'
 // Utils
 import { api } from '~/utils/api'
 import { getDaysOfTheWeek } from '~/utils/constants'
-import Loading from '../Loading'
 
 export default function Calendar(): JSX.Element {
     const [selectedDate, setSelectedDate] = useState(new Date())
@@ -32,6 +32,7 @@ export default function Calendar(): JSX.Element {
         refetch
     )
 
+    // Map calendar events to 5 x 7 grid
     const mapEventsToCalendarRows = () => {
         if (!monthlyEvents) return
         const monthlyEventsCopy = [...monthlyEvents]

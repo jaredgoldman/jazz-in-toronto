@@ -1,12 +1,13 @@
 // Components
 import * as Form from '@radix-ui/react-form'
 import { TextField, Text } from '@radix-ui/themes'
+// Types
 import {
     type FieldError,
     type FieldValues,
     type Path,
     type Control,
-    Controller,
+    Controller
 } from 'react-hook-form'
 
 interface Props<T extends FieldValues> {

@@ -3,14 +3,13 @@ import { Select } from '../Fields'
 import SearchTable from '~/components/SearchContainer/components/SearchTable'
 import FormLayout from '~/layouts/FormLayout'
 import { Heading, Button, Flex, Text } from '@radix-ui/themes'
-// Types
-import { type Venue } from '~/types/data'
-// Utils
-import { DataType } from '~/types/enums'
 import DatePickerField from '../Fields/DatePicker'
 import Loading from '~/components/Loading'
 import * as Form from '@radix-ui/react-form'
-
+// Types
+import { type Venue } from '~/types/data'
+import { DataType } from '~/types/enums'
+// Hooks
 import useEventScraper from './hooks/useEventScraper'
 
 interface Props {

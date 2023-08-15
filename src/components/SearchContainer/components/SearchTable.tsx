@@ -21,7 +21,6 @@ import {
 } from '~/types/data'
 // Utils
 import { api } from '~/utils/api'
-// Context
 
 interface Props {
     items: Array<Item>

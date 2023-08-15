@@ -1,3 +1,4 @@
+// Componenets
 import AdminLayout from '~/layouts/AdminLayout'
 
 export default function AdminHome() {

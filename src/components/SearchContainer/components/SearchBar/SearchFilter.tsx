@@ -1,7 +1,9 @@
-import { type ChangeEvent } from 'react'
-import { SearchOption } from '../../types'
+// Componenets
 import ReactDatePicker from 'react-datepicker'
 import { Flex, TextField } from '@radix-ui/themes'
+// Types
+import { type ChangeEvent } from 'react'
+import { SearchOption } from '../../types'
 
 interface Props {
     onSearch: (searchData: string | Date, searchOption: SearchOption) => void

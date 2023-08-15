@@ -1,8 +1,9 @@
-// Types
-import { type Venue } from '~/types/data'
+// Components
 import Image from 'next/image'
 import Link from 'next/link'
 import { Card, Flex } from '@radix-ui/themes'
+// Types
+import { type Venue } from '~/types/data'
 
 interface Props {
     venue: Venue

@@ -2,11 +2,13 @@
 import RootLayout from '~/layouts/RootLayout'
 import Image from 'next/image'
 import { Badge, Link } from '@radix-ui/themes'
-import { graphQlWithAuth } from '~/utils/gql'
-import { graphql } from '../gql'
+import { Flex, Heading, Text, Grid, Box } from '@radix-ui/themes'
+// Types
 import { type AboutUsQuery } from '~/gql/graphql'
 import { type GetStaticProps, type InferGetStaticPropsType } from 'next'
-import { Flex, Heading, Text, Grid, Box } from '@radix-ui/themes'
+// Utils
+import { graphQlWithAuth } from '~/utils/gql'
+import { graphql } from '../gql'
 
 const query = graphql(`
     query aboutUs {

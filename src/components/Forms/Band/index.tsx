@@ -1,14 +1,15 @@
-// Components
+// Libraries
 import { forwardRef, useImperativeHandle, type Ref } from 'react'
+// Components
 import * as Form from '@radix-ui/react-form'
 import { Input } from '../Fields'
 import Upload from '../Fields/Upload'
 import FormLayout from '~/layouts/FormLayout'
+import { Heading, Flex, Text } from '@radix-ui/themes'
 // Types
 import { type Band } from '~/types/data'
 // hooks
 import useBandForm from './hooks/useBandForm'
-import { Heading, Flex, Text } from '@radix-ui/themes'
 
 interface Props {
     currentValues?: Band
@@ -31,6 +32,11 @@ export default forwardRef(function BandForm(
         onUpload
     } = useBandForm(currentValues, onAdd)
 
+    /*
+     * useImperative handle helps reference methods
+     * in a sibling or parents components
+     * helpful for nested forms like this one
+     */
     useImperativeHandle(ref, () => ({
         submitForm: submit
     }))

@@ -6,11 +6,11 @@ import SearchContainer from '~/components/SearchContainer'
 import PostGenerator from '~/components/Forms/PostGenerator'
 import EventScraper from '~/components/Forms/EventScraper'
 import { Button, Container, Flex } from '@radix-ui/themes'
+import Loading from '~/components/Loading'
 // Types
 import { DataType } from '~/types/enums'
 // Utils
 import { api } from '~/utils/api'
-import Loading from '~/components/Loading'
 
 enum View {
     Search = 'Search',

@@ -1,3 +1,4 @@
+// componenets
 import Image from 'next/image'
 import { Box, Button, Card } from '@radix-ui/themes'
 

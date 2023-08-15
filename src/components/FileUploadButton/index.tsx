@@ -1,5 +1,7 @@
+// Libraries
 import { type ChangeEvent, useState, useRef, useEffect } from 'react'
 import { type FileData } from '~/types/data'
+// Components
 import { Button, Flex } from '@radix-ui/themes'
 
 interface Props {

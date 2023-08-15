@@ -1,11 +1,11 @@
 // Components
 import Header from '~/components/Header'
-import Footer from '~/components/Footer'
-// Types
-import { HeaderType } from '~/components/Header/types'
-import { type ReactNode } from 'react'
-import { Container, Flex } from '@radix-ui/themes'
 import Head from 'next/head'
+import Footer from '~/components/Footer'
+import { Container, Flex } from '@radix-ui/themes'
+// Types
+import { HeaderType } from '~/components/Header/'
+import { type ReactNode } from 'react'
 // Context
 
 interface Props {

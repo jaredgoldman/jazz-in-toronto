@@ -1,9 +1,12 @@
-import { type Session } from 'next-auth'
+// Components
 import { SessionProvider } from 'next-auth/react'
+// Types
+import { type Session } from 'next-auth'
 import { type AppType } from 'next/app'
+// Utils
 import { api } from '~/utils/api'
-import '~/styles/globals.css'
 // Assets
+import '~/styles/globals.css'
 import { Poppins } from 'next/font/google'
 import '@radix-ui/themes/styles.css'
 import { Theme } from '@radix-ui/themes'

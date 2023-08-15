@@ -1,7 +1,6 @@
+// Libraries
 import { useState } from 'react'
-
 import { DANGEROUS__uploadFiles } from 'uploadthing/client'
-
 import { useEvent } from './useEvent'
 
 export const useUploadThing = <T extends string>({

@@ -1,7 +1,10 @@
+// Libraires
 import { useState } from 'react'
-import { api } from '~/utils/api'
-import { useForm } from 'react-hook-form'
 import { startOfMonth } from 'date-fns'
+// Utils
+import { api } from '~/utils/api'
+// Hooks
+import { useForm } from 'react-hook-form'
 
 export default function useEventScraper() {
     const [error, setError] = useState<string>('')

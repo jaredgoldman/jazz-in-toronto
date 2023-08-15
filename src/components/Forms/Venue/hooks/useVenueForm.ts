@@ -1,8 +1,13 @@
+// Libraries
 import { useState } from 'react'
+// Hooks
 import { useUploadThing } from '~/hooks/useUploadThing'
-import { api } from '~/utils/api'
-import { env } from '~/env.mjs'
 import { useForm } from 'react-hook-form'
+// utils
+import { api } from '~/utils/api'
+// Assets
+import { env } from '~/env.mjs'
+// Types
 import { Area } from '@prisma/client'
 import { type Venue } from '~/types/data'
 import { type FileData } from '~/types/data'

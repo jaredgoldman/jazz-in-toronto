@@ -6,7 +6,7 @@ import Footer from '~/components/Footer'
 import { Container, Flex, Text } from '@radix-ui/themes'
 import Head from 'next/head'
 // Types
-import { HeaderType } from '~/components/Header/types'
+import { HeaderType } from '~/components/Header'
 import { Button } from '@radix-ui/themes'
 import { type ReactNode } from 'react'
 

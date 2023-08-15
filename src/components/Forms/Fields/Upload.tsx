@@ -1,16 +1,19 @@
+// Libraries
 import { useState } from 'react'
+// Componenets
 import FileUploadButton from '~/components/FileUploadButton'
 import Image from 'next/image'
+import { Flex, Button, Text } from '@radix-ui/themes'
+import * as Form from '@radix-ui/react-form'
+// Types
 import { type FileData } from '~/types/data'
 import {
     type FieldValues,
     type Path,
     type FieldError,
     type Control,
-    Controller,
+    Controller
 } from 'react-hook-form'
-import * as Form from '@radix-ui/react-form'
-import { Flex, Button, Text } from '@radix-ui/themes'
 
 interface Props<T extends FieldValues> {
     name: Path<T>

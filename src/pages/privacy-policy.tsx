@@ -1,5 +1,7 @@
+// Componenets
 import RootLayout from '~/layouts/RootLayout'
 
+// TODO: Convert this comp to radix-ui componenets and link in UI
 export default function PrivacyPolicy() {
     return (
         <RootLayout pageTitle="Jazz In Toronto | Privacy Policy">

@@ -8,9 +8,9 @@ import VenueForm from '~/components/Forms/Venue'
 // Types
 import { type EventWithBandVenue, type Band, type Venue } from '~/types/data'
 import { type QueryObserverResult } from '@tanstack/react-query'
+import { DataType } from '~/types/enums'
 // Utils
 import { getFormattedTime } from '~/utils/date'
-import { DataType } from '~/types/enums'
 
 interface RowProps<T> {
     item: T

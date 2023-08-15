@@ -1,16 +1,17 @@
-// Components
+// Libraries
 import { useRef, forwardRef, useImperativeHandle, type Ref } from 'react'
+// Components
 import * as Form from '@radix-ui/react-form'
 import { DatePicker, Input, Select } from '../Fields'
 import { Flex, Text, Button } from '@radix-ui/themes'
 import FormLayout from '~/layouts/FormLayout'
+import Dialogue from '~/components/Dialogue'
+import VenueForm from '../Venue'
+import BandForm from '../Band'
 // Types
 import { type EventWithBandVenue } from '~/types/data'
 // Hooks
 import useEventForm, { type EventFormValues } from './hooks/useEventForm'
-import Dialogue from '~/components/Dialogue'
-import VenueForm from '../Venue'
-import BandForm from '../Band'
 
 interface Props {
     currentValues?: EventWithBandVenue
@@ -41,6 +42,11 @@ export default forwardRef(function EventForm(
         onAddVenue
     } = useEventForm(currentValues)
 
+    /*
+     * useImperative handle helps reference methods
+     * in a sibling or parents components
+     * helpful for nested forms like this one
+     */
     useImperativeHandle(ref, () => ({
         submitForm: submit
     }))

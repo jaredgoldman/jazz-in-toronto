@@ -15,6 +15,10 @@ interface ReturnType {
     monthlyEvents: DailyEventData[]
 }
 
+/*
+ * Hook responsible for managing sorting of calendar events from
+ * rows to venue mappings. Also counts events per day
+ */
 export default function useCalendar(
     events: EventWithBandVenue[] | undefined,
     currentYear: number,

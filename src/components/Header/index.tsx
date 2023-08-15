@@ -3,12 +3,15 @@ import { signOut, useSession } from 'next-auth/react'
 // Components
 import Link from 'next/link'
 import { Button, Heading } from '@radix-ui/themes'
-// Types
-import { HeaderType } from './types'
 
 interface Props {
     headerType: HeaderType
     showLinks?: boolean
+}
+
+export enum HeaderType {
+    Admin = 'Admin',
+    Public = 'Public'
 }
 
 export default function Header({

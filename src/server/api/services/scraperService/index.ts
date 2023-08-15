@@ -1,8 +1,10 @@
 // Libraries
 import { cheerioJsonMapper, type JsonTemplate } from 'cheerio-json-mapper'
+import { TRPCError } from '@trpc/server'
+import puppeterr, { type Page } from 'puppeteer-core'
 // types
 import type { Venue, PartialEvent } from '~/types/data'
-import puppeterr, { type Page } from 'puppeteer-core'
+import { type PrismaClient } from '@prisma/client'
 // Utils
 import chromium from '@sparticuz/chromium-min'
 import { wait } from '~/utils/shared'
@@ -10,8 +12,6 @@ import type { RexEvent, VenueEvents } from './types'
 import { env } from '~/env.mjs'
 // Data
 import rexJson from './templates/rex.json'
-import { TRPCError } from '@trpc/server'
-import { type PrismaClient } from '@prisma/client'
 
 export default class ScraperService {
     private venue!: Venue

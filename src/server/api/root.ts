@@ -4,7 +4,6 @@ import { venueRouter } from './routers/venue'
 import { adminRouter } from './routers/admin'
 import { bandRouter } from './routers/band'
 import { featuredRouter } from './routers/featured'
-import { cmsRouter } from './routers/cms'
 
 /**
  * This is the primary router for your server.
@@ -21,7 +20,6 @@ export const appRouter = createTRPCRouter({
     venue: venueRouter,
     admin: adminRouter,
     band: bandRouter,
-    cms: cmsRouter,
     featured: featuredRouter
 })
 

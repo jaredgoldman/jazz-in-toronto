@@ -1,5 +1,8 @@
+// Libraries
 import { GraphQLClient } from 'graphql-request'
+// Datat
 import { env } from '~/env.mjs'
+// Types
 import { type TypedDocumentNode } from '@graphql-typed-document-node/core'
 import { type Exact } from '~/gql/graphql'
 

@@ -1,11 +1,13 @@
+// Libraries
+import superjson from 'superjson'
 // Components
 import RootLayout from '~/layouts/RootLayout'
 import Featured from '~/components/Featured'
+import { Flex, Heading, Link } from '@radix-ui/themes'
+// Utils
 import { createServerSideHelpers } from '@trpc/react-query/server'
 import { appRouter } from '~/server/api/root'
-import superjson from 'superjson'
 import { prisma } from '~/server/db'
-import { Flex, Heading, Link } from '@radix-ui/themes'
 
 export async function getStaticProps() {
     const helpers = createServerSideHelpers({

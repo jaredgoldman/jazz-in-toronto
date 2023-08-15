@@ -1,11 +1,13 @@
+// componenets
 import { DatePicker } from '../Fields'
 import { Input } from '../Fields'
 import FormLayout from '~/layouts/FormLayout'
 import { Heading, Flex, Button, Text } from '@radix-ui/themes'
-import usePostGenerator from './hooks/usePostGenerator'
-import * as Form from '@radix-ui/react-form'
 import PostImage from './components/postImage'
 import Loading from '~/components/Loading'
+import * as Form from '@radix-ui/react-form'
+// Hooks
+import usePostGenerator from './hooks/usePostGenerator'
 
 export default function PostGenerator(): JSX.Element {
     const { files, control, errors, submit, isLoading, isSuccess, error } =
@@ -14,7 +16,7 @@ export default function PostGenerator(): JSX.Element {
     return (
         <FormLayout>
             <Flex align="center" direction="column" grow="1">
-                <Form.Root onSubmit={submit} className="max-w-7xl">
+                <Form.Root onSubmit={void submit} className="max-w-7xl">
                     <Heading mb="3">Generate an Instagram Post</Heading>
                     <DatePicker
                         label="Select a day to generate a post for"

@@ -1,7 +1,9 @@
-import FeaturedCard from './FeaturedCard'
-import { api } from '~/utils/api'
+// Components
 import Loading from '../Loading'
+import FeaturedCard from './FeaturedCard'
 import { Flex, Heading } from '@radix-ui/themes'
+// Utisl
+import { api } from '~/utils/api'
 
 export default function Featured() {
     const { data: featuredItems, isLoading } =
