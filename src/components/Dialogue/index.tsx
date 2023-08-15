@@ -1,17 +1,19 @@
 import { useState } from 'react'
-import { RefObject } from 'react'
 import { Dialog, Button } from '@radix-ui/themes'
+import { type QueryObserverResult } from '@tanstack/react-query'
+import { type RefObject } from 'react'
 
 interface Props {
     title: string
-    triggerLabel: string
+    triggerLabel: string | number
     component: JSX.Element
     closeLabel?: string
     description?: string
     formRef?: RefObject<{
         submitForm: () => Promise<void>
     }>
-    refetch?: () => Promise<void>
+    refetch?: () => Promise<QueryObserverResult<unknown>>
+    showSave?: boolean
 }
 
 export default function Dialogue({
@@ -20,7 +22,8 @@ export default function Dialogue({
     description,
     component,
     formRef,
-    refetch
+    refetch,
+    showSave = true
 }: Props) {
     const [open, setOpen] = useState(false)
     const handleOnSave = async () => {
@@ -47,13 +50,7 @@ export default function Dialogue({
                         Cancel
                     </Button>
                 </Dialog.Close>
-                <Button
-                    onClick={async () => {
-                        await handleOnSave()
-                    }}
-                >
-                    Save
-                </Button>
+                {showSave && <Button onClick={void handleOnSave}>Save</Button>}
             </Dialog.Content>
         </Dialog.Root>
     )

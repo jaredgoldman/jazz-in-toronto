@@ -1,17 +1,17 @@
 // Libraries
 import { cheerioJsonMapper, type JsonTemplate } from 'cheerio-json-mapper'
 // types
-import { type Venue, type PartialEvent } from '~/types/data'
+import type { Venue, PartialEvent } from '~/types/data'
 import puppeterr, { type Page } from 'puppeteer-core'
 // Utils
 import chromium from '@sparticuz/chromium-min'
 import { wait } from '~/utils/shared'
-import { type RexEvent, type VenueEvents } from './types'
+import type { RexEvent, VenueEvents } from './types'
 import { env } from '~/env.mjs'
 // Data
 import rexJson from './templates/rex.json'
 import { TRPCError } from '@trpc/server'
-import { PrismaClient } from '@prisma/client'
+import { type PrismaClient } from '@prisma/client'
 
 export default class ScraperService {
     private venue!: Venue
@@ -148,6 +148,7 @@ export default class ScraperService {
         if (!this.page) {
             throw new Error('No page loaded')
         }
+
         const monthIndex = date.getMonth()
         const currentMonthIndex = new Date().getMonth()
         const isFutureMonth = currentMonthIndex - monthIndex < 0

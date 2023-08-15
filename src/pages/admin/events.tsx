@@ -38,7 +38,7 @@ export default function AdminEvents(): JSX.Element {
     const isLoading = isLoadingEvents || isLoadingVenues || featuredLoading
 
     return (
-        <AdminLayout>
+        <AdminLayout pageTitle="Jazz In Toronto | Admin - Events">
             <Flex mb="5" justify="center">
                 <Button
                     mr="2"

@@ -65,7 +65,7 @@ export default function About({
         aboutData?.imageCollage?.data?.attributes?.url || null
 
     return (
-        <RootLayout>
+        <RootLayout pageTitle="Jazz In Toronto | About Us">
             <Box width="auto">
                 <Heading mb="5" align="center">
                     {aboutData?.heading}

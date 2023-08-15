@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { api } from '~/utils/api'
 import { useForm } from 'react-hook-form'
-import startOfDay from 'date-fns/startOfDay'
+import { startOfMonth } from 'date-fns'
 
 export default function useEventScraper() {
     const [error, setError] = useState<string>('')
@@ -10,7 +10,11 @@ export default function useEventScraper() {
 
     const defaultValues = {
         venueId: '',
-        date: startOfDay(new Date())
+        /* Ensure to always query the start of month here
+         * So that our query for the hashed venue content
+         * ensures processing will not run if no events have changed
+         */
+        date: startOfMonth(new Date())
     }
 
     const {

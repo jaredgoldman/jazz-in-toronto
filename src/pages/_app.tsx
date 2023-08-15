@@ -3,7 +3,6 @@ import { SessionProvider } from 'next-auth/react'
 import { type AppType } from 'next/app'
 import { api } from '~/utils/api'
 import '~/styles/globals.css'
-import { ModalProvider } from '~/components/Modal/context/ModalContext'
 // Assets
 import { Poppins } from 'next/font/google'
 import '@radix-ui/themes/styles.css'
@@ -22,13 +21,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
     return (
         <Theme>
-            <ModalProvider>
-                <SessionProvider session={session}>
-                    <main className={`w-full ${poppins.variable}`}>
-                        <Component {...pageProps} />
-                    </main>
-                </SessionProvider>
-            </ModalProvider>
+            <SessionProvider session={session}>
+                <main className={`w-full ${poppins.variable}`}>
+                    <Component {...pageProps} />
+                </main>
+            </SessionProvider>
         </Theme>
     )
 }

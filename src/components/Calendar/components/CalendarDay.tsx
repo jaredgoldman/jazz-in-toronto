@@ -1,13 +1,12 @@
 // Libraries
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 // Compoments
 import ModalDay from './ModalDay'
 import { Table } from '@radix-ui/themes'
+import Dialogue from '~/components/Dialogue'
 // Types
 import { type DailyEventData } from '../types'
-import { type ModalContextType } from '~/components/Modal/types'
 // Context
-import { ModalContext } from '~/components/Modal/context/ModalContext'
 
 interface Props {
     dailyEvents: DailyEventData
@@ -17,7 +16,6 @@ export default function CalendarDay({ dailyEvents }: Props) {
     const [dayText, setDayText] = useState<string | number>(
         dailyEvents.date.getDate()
     )
-    const { handleModal } = useContext(ModalContext) as ModalContextType
 
     const onHover = () => {
         if (!dailyEvents.numOfEvents) return
@@ -39,11 +37,15 @@ export default function CalendarDay({ dailyEvents }: Props) {
             onClick={() => {
                 if (!dailyEvents.numOfEvents) return
                 onLeave()
-                handleModal(modalDay)
             }}
             justify="center"
         >
-            {dailyEvents.placeholder ? null : dayText}
+            <Dialogue
+                title="Events"
+                triggerLabel={dayText}
+                component={modalDay}
+                showSave={false}
+            />
         </Table.Cell>
     )
 }

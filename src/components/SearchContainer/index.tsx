@@ -1,15 +1,15 @@
 // Components
 import SearchBar from './components/SearchBar'
 import SearchTable from './components/SearchTable'
-import Loading from '../Loading'
 import { Container, Heading } from '@radix-ui/themes'
 // Types
 import { type Items, type Item } from '~/types/data'
+import { type QueryObserverResult } from '@tanstack/react-query'
 // Hooks
 import useSearch from './hooks/useSearch'
 import { type DataType } from '~/types/enums'
 
-interface Props {
+interface Props<T> {
     heading?: string
     items?: Items
     itemType: DataType
@@ -17,10 +17,10 @@ interface Props {
     featuredItem?: Item | null
     searchDate?: Date
     setSearchDate?: (date: Date) => void
-    refetch?: any
+    refetch?: () => Promise<QueryObserverResult<T>>
 }
 
-export default function SearchContainer({
+export default function SearchContainer<T>({
     heading,
     items,
     featuredItem,
@@ -28,7 +28,7 @@ export default function SearchContainer({
     searchDate,
     setSearchDate,
     refetch
-}: Props): JSX.Element {
+}: Props<T>): JSX.Element {
     const { filteredItems, handleSearch } = useSearch(
         itemType,
         items,

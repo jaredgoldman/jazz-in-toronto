@@ -17,7 +17,7 @@ export default function AdminVenues() {
 
     const isLoading = venuesLoading || featuredLoading
     return (
-        <AdminLayout>
+        <AdminLayout pageTitle="Jazz In Toronto | Admin - Venues">
             <>
                 {events && !isLoading && (
                     <SearchContainer

@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from 'react'
-import { type EventWithBandVenue } from '~/types/data'
-import PostImage from '../components/postImage'
+import { useState, useEffect } from 'react'
 import useCanvas from './useCanvas'
-import { FileData } from '~/types/data'
+import { type EventWithBandVenue } from '~/types/data'
+import { type FileData } from '~/types/data'
+
 export default function usePostImages(
     events: EventWithBandVenue[] | undefined,
     date: Date,
@@ -11,32 +11,6 @@ export default function usePostImages(
     const createCanvas = useCanvas()
     const [files, setFiles] = useState<FileData[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    //
-    // const removePostImage = (index: number): void => {
-    //     const newFiles = { ...files }
-    //     delete newFiles[index]
-    //     setFiles(newFiles)
-    //     const newPostImages = [...postImages]
-    //     newPostImages.splice(index, 1)
-    //     setPostImages(newPostImages)
-    // }
-    //
-    // const addPostImage = (file: File, dataURL: string) => {
-    //     const index = Object.values(files).length + 1
-    //     const postImage = (
-    //         <PostImage
-    //             imgSrc={dataURL}
-    //             index={index}
-    //             removePostImage={() => removePostImage(index)}
-    //         />
-    //     )
-    //     setFiles((prevFiles) => ({
-    //         ...prevFiles,
-    //         [index]: file
-    //     }))
-    //     setPostImages((prevPostImages) => [...prevPostImages, postImage])
-    // }
-    //
 
     useEffect(() => {
         const files: FileData[] = []
@@ -59,8 +33,9 @@ export default function usePostImages(
             setFiles(files)
             setIsLoading(false)
         }
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         mapPostImages()
-    }, [date, events])
+    }, [date, events, createCanvas, eventsPerCanvas])
 
     return {
         isLoading,

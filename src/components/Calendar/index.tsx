@@ -1,10 +1,9 @@
 import { useState } from 'react'
 // Components
 import CalendarDay from './components/CalendarDay'
-import { Flex, Section, Button, Table, Heading } from '@radix-ui/themes'
+import { Flex, Button, Table, Heading } from '@radix-ui/themes'
 // Hooks
 import useCalendar from './hooks/useCalendar'
-// Types
 // Utils
 import { api } from '~/utils/api'
 import { getDaysOfTheWeek } from '~/utils/constants'

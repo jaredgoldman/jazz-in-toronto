@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useUploadThing } from '~/hooks/useUploadThing'
 import { api } from '~/utils/api'
-import { type Venue } from '~/types/data'
 import { env } from '~/env.mjs'
-import { Area } from '@prisma/client'
 import { useForm } from 'react-hook-form'
-import { FileData } from '~/types/data'
+import { Area } from '@prisma/client'
+import { type Venue } from '~/types/data'
+import { type FileData } from '~/types/data'
 
 export interface VenueFormValues {
     name: string
@@ -23,8 +23,7 @@ export interface VenueFormValues {
 
 export default function useVenueForm(
     currentValues: Venue | undefined,
-    onAdd?: (venue: Venue) => Promise<void>,
-    submitTrigger?: (submitFunc: () => void) => void
+    onAdd?: (venue: Venue) => Promise<void>
 ) {
     // State
     const [error, setError] = useState<string>('')

@@ -1,5 +1,5 @@
 // Components
-import { useRef, forwardRef, useImperativeHandle } from 'react'
+import { useRef, forwardRef, useImperativeHandle, type Ref } from 'react'
 import * as Form from '@radix-ui/react-form'
 import { DatePicker, Input, Select } from '../Fields'
 import { Flex, Text, Button } from '@radix-ui/themes'
@@ -7,7 +7,7 @@ import FormLayout from '~/layouts/FormLayout'
 // Types
 import { type EventWithBandVenue } from '~/types/data'
 // Hooks
-import useEventForm, { EventFormValues } from './hooks/useEventForm'
+import useEventForm, { type EventFormValues } from './hooks/useEventForm'
 import Dialogue from '~/components/Dialogue'
 import VenueForm from '../Venue'
 import BandForm from '../Band'
@@ -23,7 +23,7 @@ interface InnerFormRef {
 
 export default forwardRef(function EventForm(
     { currentValues, externalSubmit = false }: Props,
-    ref: any
+    ref: Ref<unknown> | undefined
 ): JSX.Element {
     const venueFormRef = useRef<InnerFormRef | null>(null)
     const bandFormRef = useRef<InnerFormRef | null>(null)
@@ -47,7 +47,7 @@ export default forwardRef(function EventForm(
 
     return (
         <FormLayout isLoading={isLoading}>
-            <Form.Root onSubmit={submit}>
+            <Form.Root onSubmit={void submit}>
                 <Input
                     name="name"
                     label="Enter the name of your event"

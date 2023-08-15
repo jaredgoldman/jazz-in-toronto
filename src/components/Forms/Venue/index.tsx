@@ -7,7 +7,7 @@ import FormLayout from '~/layouts/FormLayout'
 import { Heading, Text, Flex } from '@radix-ui/themes'
 // Types
 import { type Venue } from '~/types/data'
-import { forwardRef, useImperativeHandle } from 'react'
+import { forwardRef, useImperativeHandle, type Ref } from 'react'
 // Hooks
 import useVenueForm from './hooks/useVenueForm'
 
@@ -19,7 +19,7 @@ interface Props {
 
 export default forwardRef(function VenueForm(
     { currentValues, onAdd, externalSubmit = false }: Props,
-    ref: any
+    ref: Ref<unknown> | undefined
 ): JSX.Element {
     const {
         venueMutation,

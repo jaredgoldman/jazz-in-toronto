@@ -2,7 +2,7 @@
 import { Select } from '../Fields'
 import SearchTable from '~/components/SearchContainer/components/SearchTable'
 import FormLayout from '~/layouts/FormLayout'
-import { Heading, Button, Flex, Text, Box } from '@radix-ui/themes'
+import { Heading, Button, Flex, Text } from '@radix-ui/themes'
 // Types
 import { type Venue } from '~/types/data'
 // Utils

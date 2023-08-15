@@ -4,7 +4,7 @@ import Calendar from '~/components/Calendar'
 
 export default function Listings(): JSX.Element {
     return (
-        <RootLayout>
+        <RootLayout pageTitle='Jazz In Toronto | Event Listings'>
             <Calendar />
         </RootLayout>
     )

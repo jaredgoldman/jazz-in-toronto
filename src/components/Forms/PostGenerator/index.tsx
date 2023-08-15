@@ -44,7 +44,6 @@ export default function PostGenerator(): JSX.Element {
                             </Text>
                         )}
                     </Flex>
-
                     <Flex width="100%" justify="center" mt="3">
                         <Form.Submit asChild>
                             <Button>Post to IG</Button>
@@ -54,7 +53,12 @@ export default function PostGenerator(): JSX.Element {
                 {files.length ? (
                     <Flex mt="5" direction={{ initial: 'column', md: 'row' }}>
                         {files.map((file) => {
-                            return <PostImage src={file.dataURL} />
+                            return (
+                                <PostImage
+                                    key={file.file.name}
+                                    src={file.dataURL}
+                                />
+                            )
                         })}
                     </Flex>
                 ) : null}

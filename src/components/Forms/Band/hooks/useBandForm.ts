@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { api } from '~/utils/api'
 import { useUploadThing } from '~/hooks/useUploadThing'
-import { FileData, type Band } from '~/types/data'
-import { type FormikHelpers } from 'formik'
+import { type FileData, type Band } from '~/types/data'
 import { env } from '~/env.mjs'
 import { useForm } from 'react-hook-form'
 

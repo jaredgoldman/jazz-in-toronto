@@ -4,11 +4,11 @@ import * as Form from '@radix-ui/react-form'
 import 'react-datepicker/dist/react-datepicker.css'
 import { Flex, Text } from '@radix-ui/themes'
 import {
-    FieldError,
+    type FieldError,
+    type FieldValues,
+    type Path,
+    type Control,
     Controller,
-    FieldValues,
-    Control,
-    Path
 } from 'react-hook-form'
 
 interface Props<T extends FieldValues> {

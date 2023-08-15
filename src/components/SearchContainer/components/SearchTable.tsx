@@ -1,5 +1,5 @@
 // Libraries
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { Table } from '@radix-ui/themes'
 // Components
 import {
@@ -11,6 +11,7 @@ import {
     VenueRow
 } from './SearchTableRows'
 // Types
+import { type QueryObserverResult } from '@tanstack/react-query'
 import { DataType } from '~/types/enums'
 import {
     type Band,
@@ -26,7 +27,7 @@ interface Props {
     items: Array<Item>
     dataType: DataType
     featuredItem?: Item | null
-    refetch?: () => Promise<void>
+    refetch?: () => Promise<QueryObserverResult<unknown>>
 }
 
 const headers = {

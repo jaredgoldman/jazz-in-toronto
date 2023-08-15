@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
 import { type EventWithBandVenue, type Band, type Venue } from '~/types/data'

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import ScraperService from '../scraperService'
 import { prisma } from '~/server/db'
-import { type Venue } from '@prisma/client'
+import { Area, type Venue } from '@prisma/client'
 import { addMonths } from 'date-fns'
 let venue: Venue
 
@@ -17,19 +17,20 @@ beforeAll(async () => {
             latitude: 43.6509,
             longitude: -79.3883,
             crawlable: true,
-            eventsPath: 'events'
+            eventsPath: 'events',
+            phoneNumber: '6474548412',
+            area: Area.ANNEX
         }
     })
 })
 
 describe('Scraper service', () => {
     it('should be able to scrape a website and return an array of events', async () => {
-        const scraperService = new ScraperService(venue)
-        await scraperService.init()
+        const scraperService = new ScraperService(prisma)
+        await scraperService.init(venue)
         const events = await scraperService.getEvents(addMonths(new Date(), 1))
         expect(events.length).toBeGreaterThan(0)
-        console.log(events)
-        // console.log(events)
+
         events.forEach((event) => {
             // confirm that all events have a name, date, and time
             expect(event.name).toBeDefined()

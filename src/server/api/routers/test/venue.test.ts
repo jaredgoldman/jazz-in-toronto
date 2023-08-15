@@ -3,7 +3,7 @@ import { type RouterInputs } from '~/utils/api'
 import { appRouter } from '~/server/api/root'
 import { createInnerTRPCContext } from '~/server/api/trpc'
 import { prisma } from '~/server/db'
-import { type Admin, type Venue } from '@prisma/client'
+import { Area, type Admin, type Venue } from '@prisma/client'
 
 const testVenueData = {
     name: 'venue test venue',
@@ -11,7 +11,9 @@ const testVenueData = {
     website: 'www.google.com',
     city: 'test city',
     longitude: 0,
-    latitude: 0
+    latitude: 0,
+    phoneNumber: '6474548412',
+    area: Area.ANNEX
 }
 
 let venue: Venue

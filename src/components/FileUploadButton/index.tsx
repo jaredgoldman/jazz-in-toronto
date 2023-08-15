@@ -20,7 +20,6 @@ const trimFileName = (originalFile: File) => {
 
 const FileUploadButton = ({ onUpload, label }: Props) => {
     const [selectedFile, setSelectedFile] = useState<FileData | null>(null)
-    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -32,13 +31,11 @@ const FileUploadButton = ({ onUpload, label }: Props) => {
     }, [selectedFile])
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setIsLoading(true)
         const file = event.target.files?.[0]
         if (file) {
             const dataURL = URL.createObjectURL(file)
             setSelectedFile({ file: trimFileName(file), dataURL })
         }
-        setIsLoading(false)
     }
 
     const handleButtonClick = () => {

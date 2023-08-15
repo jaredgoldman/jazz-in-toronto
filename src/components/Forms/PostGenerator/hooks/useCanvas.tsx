@@ -1,9 +1,9 @@
-import { useRef, useEffect, useState, useCallback, type RefObject } from 'react'
+import { useCallback } from 'react'
 import { type EventWithBandVenue } from '~/types/data'
 import { getDaysOfTheWeek } from '~/utils/constants'
 import getDay from 'date-fns/getDay'
 import { getFormattedTime } from '~/utils/date'
-import { FileData } from '~/types/data'
+import { type FileData } from '~/types/data'
 
 // Returns and canvas element for the outer element to render
 export default function useCanvas() {

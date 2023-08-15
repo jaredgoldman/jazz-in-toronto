@@ -1,5 +1,5 @@
 // Components
-import { forwardRef, useImperativeHandle } from 'react'
+import { forwardRef, useImperativeHandle, type Ref } from 'react'
 import * as Form from '@radix-ui/react-form'
 import { Input } from '../Fields'
 import Upload from '../Fields/Upload'
@@ -18,7 +18,7 @@ interface Props {
 
 export default forwardRef(function BandForm(
     { currentValues, onAdd, externalSubmit = false }: Props,
-    ref: any
+    ref: Ref<unknown> | undefined
 ): JSX.Element {
     const {
         bandMutation,

@@ -2,7 +2,7 @@ import RootLayout from '~/layouts/RootLayout'
 
 export default function PrivacyPolicy() {
     return (
-        <RootLayout>
+        <RootLayout pageTitle="Jazz In Toronto | Privacy Policy">
             <main>
                 <h1>Privacy Policy</h1>
                 <p>

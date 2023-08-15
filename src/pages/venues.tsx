@@ -19,7 +19,7 @@ export default function Venues(): JSX.Element {
         )
 
     return (
-        <RootLayout>
+        <RootLayout pageTitle="Jazz In Toronto | Venues">
             <Flex direction="column">
                 <Flex mx="2">
                     <div className="flex-1 border-b"></div>

@@ -11,14 +11,14 @@ import {
     SelectLabel
 } from '@radix-ui/themes'
 // Types
-import { type Venue, type Band } from '~/types/data'
+import type { Venue, Band } from '~/types/data'
 // Context
 import {
-    FieldError,
-    Control,
-    FieldValues,
-    Controller,
-    Path
+    type FieldValues,
+    type FieldError,
+    type Control,
+    type Path,
+    Controller
 } from 'react-hook-form'
 
 interface Props<T extends FieldValues> {

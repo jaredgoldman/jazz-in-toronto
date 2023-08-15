@@ -18,7 +18,7 @@ export default function AdminBands() {
     const isLoading = bandsLoading || featuredLoading
 
     return (
-        <AdminLayout>
+        <AdminLayout pageTitle="Jazz In Toronto | Admin - Bands">
             <>
                 {bands && !isLoading && (
                     <SearchContainer

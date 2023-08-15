@@ -49,8 +49,8 @@ export default function usePostGenerator() {
         }
     }
 
-    const submit = handleSubmit((data) => {
-        onSubmit(data)
+    const submit = handleSubmit(async (data) => {
+        await onSubmit(data)
     })
 
     return {

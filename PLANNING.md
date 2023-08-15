@@ -20,12 +20,12 @@
 -   Clean up imports x
 -   Form validation x
 -   Add seperate DB instance for testing
--   Add CMS
+-   Add CMS x
 -   Style site
 -   Complete unit testing
 -   Complete integration testing
 -   End-to-end testing with playwright
--   Advanced form validation
+-   Advanced form validation x
 
 ## Requirements
 

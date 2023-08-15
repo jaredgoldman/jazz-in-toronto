@@ -2,11 +2,11 @@
 import * as Form from '@radix-ui/react-form'
 import { TextField, Text } from '@radix-ui/themes'
 import {
-    FieldError,
+    type FieldError,
+    type FieldValues,
+    type Path,
+    type Control,
     Controller,
-    Control,
-    FieldValues,
-    Path
 } from 'react-hook-form'
 
 interface Props<T extends FieldValues> {

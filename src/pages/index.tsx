@@ -5,7 +5,7 @@ import { createServerSideHelpers } from '@trpc/react-query/server'
 import { appRouter } from '~/server/api/root'
 import superjson from 'superjson'
 import { prisma } from '~/server/db'
-import { Badge, Flex, Heading, Link } from '@radix-ui/themes'
+import { Flex, Heading, Link } from '@radix-ui/themes'
 
 export async function getStaticProps() {
     const helpers = createServerSideHelpers({
@@ -30,21 +30,17 @@ export async function getStaticProps() {
 
 export default function Home() {
     return (
-        <RootLayout>
+        <RootLayout pageTitle="Jazz In Toronto | Home">
             <Heading align="center" mb="5">
                 Follow us!
             </Heading>
             <Flex justify="center" mb="5">
-                <Badge size="2" mx="3" variant="solid">
-                    <Link href="https://www.instagram.com/jazzintoronto/ ">
-                        instagram
-                    </Link>
-                </Badge>
-                <Badge mx="3" size="2" variant="solid">
-                    <Link href="https://www.facebook.com/jazzintoronto/ ">
-                        Facebook
-                    </Link>
-                </Badge>
+                <Link mx="2" href="https://www.instagram.com/jazzintoronto/ ">
+                    instagram
+                </Link>
+                <Link mx="2" href="https://www.facebook.com/jazzintoronto/ ">
+                    Facebook
+                </Link>
             </Flex>
             <Featured />
         </RootLayout>

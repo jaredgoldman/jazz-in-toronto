@@ -3,11 +3,11 @@ import FileUploadButton from '~/components/FileUploadButton'
 import Image from 'next/image'
 import { type FileData } from '~/types/data'
 import {
+    type FieldValues,
+    type Path,
+    type FieldError,
+    type Control,
     Controller,
-    Control,
-    FieldValues,
-    Path,
-    FieldError
 } from 'react-hook-form'
 import * as Form from '@radix-ui/react-form'
 import { Flex, Button, Text } from '@radix-ui/themes'
@@ -51,7 +51,7 @@ export default function Upload<T extends FieldValues>({
             name={name}
             render={({ field }) => {
                 if (field.value) {
-                    setSrc(field.value.dataURL)
+                    setSrc(field.value.dataURL as string)
                 }
                 return (
                     <Form.Field name={name}>
@@ -72,7 +72,7 @@ export default function Upload<T extends FieldValues>({
                                         <Button
                                             className="absolute left-0 top-0"
                                             size="1"
-                                            onClick={removeFile}
+                                            onClick={void removeFile}
                                         >
                                             X
                                         </Button>
