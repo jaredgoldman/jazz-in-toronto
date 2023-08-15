@@ -33,7 +33,7 @@ export default function SearchFilter({
                 selected: startDate,
                 startDate,
                 className:
-                    'min-w-full rounded-[4px] border-[1px] border-gray-300 p-[0.325rem] text-sm text-black'
+                    'lg:min-w-full min-w-0 rounded-[4px] border-[1px] border-gray-300 p-[0.325rem] text-sm text-black'
             }
             break
         case SearchOption.Venue:

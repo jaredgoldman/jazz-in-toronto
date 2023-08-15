@@ -45,6 +45,8 @@ export default function CalendarDay({ dailyEvents }: Props) {
                 triggerLabel={dayText}
                 component={modalDay}
                 showSave={false}
+                triggerButtonClassName="w-full"
+                triggerButtonVariant="ghost"
             />
         </Table.Cell>
     )

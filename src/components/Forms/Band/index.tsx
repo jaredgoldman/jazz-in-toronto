@@ -43,39 +43,40 @@ export default forwardRef(function BandForm(
                         ? `Edit band`
                         : 'Add your band to our database'}
                 </Heading>
-                <Input
-                    name="name"
-                    label="Name"
-                    error={errors.name}
-                    control={control}
-                    required="You must enter a band name"
-                />
-                <Input
-                    name="genre"
-                    label="Musical genre"
-                    error={errors.genre}
-                    control={control}
-                />
-                <Upload
-                    name="fileData"
-                    label="Upload a band photo"
-                    onUpload={onUpload}
-                    onDeletePhoto={handleDeletePhoto}
-                    control={control}
-                />
-                <Input
-                    name="instagramHandle"
-                    label="Instagram Handle"
-                    error={errors.instagramHandle}
-                    control={control}
-                />
-                <Input
-                    name="website"
-                    label="Enter your website"
-                    error={errors.website}
-                    control={control}
-                />
-                <Flex>
+                <Flex direction="column" gap="3">
+                    <Input
+                        name="name"
+                        label="Name"
+                        error={errors.name}
+                        control={control}
+                        required="You must enter a band name"
+                    />
+                    <Input
+                        name="genre"
+                        label="Musical genre"
+                        error={errors.genre}
+                        control={control}
+                    />
+                    <Upload
+                        name="fileData"
+                        label="Upload a band photo"
+                        onUpload={onUpload}
+                        onDeletePhoto={handleDeletePhoto}
+                        control={control}
+                    />
+                    <Input
+                        name="instagramHandle"
+                        label="Instagram Handle"
+                        error={errors.instagramHandle}
+                        control={control}
+                    />
+                    <Input
+                        name="website"
+                        label="Enter your website"
+                        error={errors.website}
+                        control={control}
+                    />
+                    <Flex></Flex>
                     {bandMutation.isSuccess && (
                         <Text size="2" color="green" align="center">
                             Event submitted succesfully

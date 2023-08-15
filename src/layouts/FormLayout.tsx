@@ -5,18 +5,16 @@ import { Container } from '@radix-ui/themes'
 interface Props {
     children: ReactNode
     isLoading?: boolean
-    width?: '100%'
-    size?: '1' | '2' | '3' | '4'
+    maxWidth?: 'max-w-md' | 'max-w-lg' | 'max-w-xl' | 'max-w-2xl'
 }
 
 export default function FormLayout({
     children,
     isLoading,
-    width = '100%',
-    size = '4'
+    maxWidth = 'max-w-xl'
 }: Props) {
     return (
-        <Container width={width} size={size}>
+        <Container mx={{ initial: '3', sm: 'auto' }} className={maxWidth}>
             {isLoading ? <Loading /> : children}
         </Container>
     )

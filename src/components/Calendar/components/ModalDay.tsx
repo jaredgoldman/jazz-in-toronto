@@ -37,7 +37,7 @@ export default function ModalDay({ dailyEvents: { date, events } }: Props) {
     })
 
     return (
-        <Box>
+        <Box key={readableDate}>
             <Heading align="center">{`Events on ${readableDate}`}</Heading>
             <div className="h-[60vh] overflow-y-auto">
                 <Table.Root>

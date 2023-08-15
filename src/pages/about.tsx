@@ -66,11 +66,16 @@ export default function About({
 
     return (
         <RootLayout pageTitle="Jazz In Toronto | About Us">
-            <Box width="auto">
+            <Flex direction="column" align="center" width="100%" mx="auto">
                 <Heading mb="5" align="center">
                     {aboutData?.heading}
                 </Heading>
-                <Text mb="5" align="left">
+                <Text
+                    mb="5"
+                    align="left"
+                    mx={{ initial: '4', md: '0' }}
+                    className="max-w-2xl"
+                >
                     {aboutData?.description}
                 </Text>
                 <Flex justify="start" mt="5" align="center">
@@ -81,15 +86,22 @@ export default function About({
                     <div className="flex-1 border-b"></div>
                 </Flex>
                 <Flex width="100%" justify="center">
-                    <Grid my="5" columns="2" rows="2" gapX="9" gapY="5">
+                    <Grid
+                        my="5"
+                        columns="2"
+                        rows="2"
+                        gapX="9"
+                        gapY="5"
+                        mx={{ initial: '3', md: '0' }}
+                    >
                         {aboutData?.staffMembers?.data?.map((member) => {
                             return (
-                                <div key={member.attributes?.name}>
+                                <Box key={member.attributes?.name}>
                                     <Heading className="font-bold">
                                         {member.attributes?.position}
                                     </Heading>
                                     <Text>{member.attributes?.name}</Text>
-                                </div>
+                                </Box>
                             )
                         })}
                     </Grid>
@@ -111,29 +123,44 @@ export default function About({
                     </Heading>
                     <div className="flex-1 border-b"></div>
                 </Flex>
-                <Text align="left">{aboutData?.supportDescription}</Text>
+                <Text
+                    mb="5"
+                    align="left"
+                    className="max-w-2xl"
+                    mx={{ initial: '4', md: '0' }}
+                >
+                    {aboutData?.supportDescription}
+                </Text>
                 <Flex justify="center">
-                    <Flex my="9" justify="between">
+                    <Flex
+                        justify="between"
+                        direction={{ initial: 'column', md: 'row' }}
+                        gap={{ initial: '3', md: '9' }}
+                        my="6"
+                    >
                         {aboutData?.paypalProfileUrl && (
-                            <Flex mr="9" direction="column">
-                                <div>Paypal</div>
-                                <a
+                            <Flex
+                                direction="column"
+                                mb={{ initial: '5', md: '0' }}
+                            >
+                                <Heading size="3">Paypal</Heading>
+                                <Link
                                     className="text-blue-500"
                                     href={`https://${aboutData?.paypalProfileUrl}`}
                                 >
                                     {aboutData?.paypalProfileUrl}
-                                </a>
+                                </Link>
                             </Flex>
                         )}
                         {aboutData?.eTransferAddress && (
-                            <Flex ml="9" direction="column">
-                                <div>ETransfer</div>
-                                <a
+                            <Flex direction="column">
+                                <Heading size="3">ETransfer</Heading>
+                                <Link
                                     className="text-blue-500"
                                     href={`mailto:${aboutData?.eTransferAddress}`}
                                 >
                                     {aboutData?.eTransferAddress}
-                                </a>
+                                </Link>
                             </Flex>
                         )}
                     </Flex>
@@ -155,7 +182,7 @@ export default function About({
                         alt="Jazz In Toronto team"
                     />
                 )}
-            </Box>
+            </Flex>
         </RootLayout>
     )
 }

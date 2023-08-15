@@ -44,45 +44,47 @@ export default forwardRef(function VenueForm(
                 {currentValues ? 'Edit venue' : 'Add your venue here!'}
             </Heading>
             <Form.Root onSubmit={submit}>
-                <Input
-                    name="name"
-                    label="Venue Name"
-                    error={errors.name}
-                    control={control}
-                    required="Please eneter your venues name"
-                />
-                <PlacesAutocomplete
-                    name="address"
-                    label="Address"
-                    control={control}
-                    onSelect={onSelectLocation}
-                />
-                <Upload
-                    name="fileData"
-                    label="Upload a photo of your venue"
-                    onUpload={onUpload}
-                    control={control}
-                    onDeletePhoto={handleDeletePhoto}
-                />
-                <Input
-                    name="phoneNumber"
-                    label="Enter your venues phone number"
-                    error={errors.phoneNumber}
-                    type="number"
-                    control={control}
-                />
-                <Input
-                    name="instagramHandle"
-                    label="Instagram Handle"
-                    error={errors.instagramHandle}
-                    control={control}
-                />
-                <Input
-                    name="website"
-                    label="Venue Website"
-                    error={errors.website}
-                    control={control}
-                />
+                <Flex direction="column" gap="3">
+                    <Input
+                        name="name"
+                        label="Venue Name"
+                        error={errors.name}
+                        control={control}
+                        required="Please eneter your venues name"
+                    />
+                    <PlacesAutocomplete
+                        name="address"
+                        label="Address"
+                        control={control}
+                        onSelect={onSelectLocation}
+                    />
+                    <Upload
+                        name="fileData"
+                        label="Upload a photo of your venue"
+                        onUpload={onUpload}
+                        control={control}
+                        onDeletePhoto={handleDeletePhoto}
+                    />
+                    <Input
+                        name="phoneNumber"
+                        label="Enter your venues phone number"
+                        error={errors.phoneNumber}
+                        type="number"
+                        control={control}
+                    />
+                    <Input
+                        name="instagramHandle"
+                        label="Instagram Handle"
+                        error={errors.instagramHandle}
+                        control={control}
+                    />
+                    <Input
+                        name="website"
+                        label="Venue Website"
+                        error={errors.website}
+                        control={control}
+                    />
+                </Flex>
                 <Flex>
                     {venueMutation.isSuccess && (
                         <Text size="2" color="green" align="center">
