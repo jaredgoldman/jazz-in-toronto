@@ -16,9 +16,9 @@ export default function RootLayout({ children }: Props): JSX.Element {
     return (
         <Flex direction="column" className="h-screen">
             <Header headerType={HeaderType.Public} />
-            <div className="flex-grow">
-                <Container size="3">{children}</Container>
-            </div>
+            <Container size="3" className="flex-grow">
+                {children}
+            </Container>
             <Footer />
         </Flex>
     )

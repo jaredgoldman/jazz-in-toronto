@@ -26,8 +26,8 @@ import PostService from './services/postService'
 
 type CreateContextOptions = {
     session: Session | null
-    scraperService: ScraperService
-    postService: PostService
+    scraperService?: ScraperService
+    postService?: PostService
 }
 
 /**

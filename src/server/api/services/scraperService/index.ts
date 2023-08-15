@@ -89,6 +89,23 @@ export default class ScraperService {
         return (await cheerioJsonMapper(html, json)) as T
     }
 
+    private async hashString(string: string) {
+        // Convert the string to a Uint8Array
+        const encoder = new TextEncoder()
+        const data = encoder.encode(string)
+
+        // Hash the data using the SHA-256 algorithm
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data)
+
+        // Convert the hash to a hex string
+        const hashArray = Array.from(new Uint8Array(hashBuffer))
+        const hashHex = hashArray
+            .map((b) => b.toString(16).padStart(2, '0'))
+            .join('')
+
+        return hashHex
+    }
+
     private async scrapeRexEvents(date: Date): Promise<PartialEvent[]> {
         if (!this.page) {
             throw new Error('No page loaded')
@@ -120,6 +137,19 @@ export default class ScraperService {
         await wait(500)
 
         const html = await this.page.content()
+        // COmpare to previous hash to speed up query if nothings changed
+        const htmlHash = await this.hashString(html)
+
+        if (this.venue?.eventsHash === htmlHash) {
+            console.log('SAME HASH')
+            return []
+        } else {
+            console.log('UPDATING HASH')
+            await this.prisma.venue.update({
+                where: { id: this.venue.id },
+                data: { eventsHash: htmlHash }
+            })
+        }
 
         const {
             monthAndYear,

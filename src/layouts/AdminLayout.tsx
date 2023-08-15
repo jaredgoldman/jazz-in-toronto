@@ -22,9 +22,9 @@ export default function AdminLayout({
     return (
         <Flex direction="column" className="h-screen">
             <Header headerType={HeaderType.Admin} showLinks={showHeaderLinks} />
-            <div className="flex-grow">
+            <Container size="3" className="flex-grow">
                 {session ? (
-                    <Container size="3">{children}</Container>
+                    children
                 ) : (
                     <Flex direction="column" align="center">
                         <Text align="center" size="5" mb="5">
@@ -33,7 +33,7 @@ export default function AdminLayout({
                         <Button onClick={() => void signIn()}>Sign In</Button>
                     </Flex>
                 )}
-            </div>
+            </Container>
             <Footer />
         </Flex>
     )
