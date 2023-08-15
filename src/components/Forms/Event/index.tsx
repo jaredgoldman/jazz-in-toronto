@@ -69,6 +69,10 @@ export default forwardRef(function EventForm(
                         error={errors.startDate}
                         control={control}
                         required="Please select a valid start time for your event"
+                        datePickerProps={{
+                            showTimeSelect: true,
+                            dateFormat: 'MMMM d, yyyy h:mm aa'
+                        }}
                     />
                     <DatePicker<EventFormValues>
                         label="Event end date"
@@ -76,6 +80,10 @@ export default forwardRef(function EventForm(
                         error={errors.endDate}
                         control={control}
                         required="Please select a valid end time for your event"
+                        datePickerProps={{
+                            showTimeSelect: true,
+                            dateFormat: 'MMMM d, yyyy h:mm aa'
+                        }}
                     />
                     {venueData && (
                         <>
