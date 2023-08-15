@@ -1,7 +1,7 @@
 // Components
 import RootLayout from '~/layouts/RootLayout'
 import Image from 'next/image'
-import Button from '~/components/Button'
+import { Badge, Link } from '@radix-ui/themes'
 import { graphQlWithAuth } from '~/utils/gql'
 import { graphql } from '../gql'
 import { type AboutUsQuery } from '~/gql/graphql'
@@ -138,13 +138,11 @@ export default function About({
                 </Flex>
                 <Flex mb="9" justify="center">
                     {aboutData?.ctaText && aboutData?.paypalProfileUrl && (
-                        <Button
-                            roundedBorder={false}
-                            size="xl"
-                            link={`https://${aboutData?.paypalProfileUrl}`}
-                        >
-                            {aboutData?.ctaText}
-                        </Button>
+                        <Badge>
+                            <Link href={aboutData.paypalProfileUrl}>
+                                {aboutData.ctaText}
+                            </Link>
+                        </Badge>
                     )}
                 </Flex>
                 {imageCollagePath && (
