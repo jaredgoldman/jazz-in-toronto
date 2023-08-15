@@ -80,27 +80,29 @@ export default function About({
                     </Heading>
                     <div className="flex-1 border-b"></div>
                 </Flex>
-                <Grid my="5" columns="2" rows="2" gapX="9" gapY="5">
-                    {aboutData?.staffMembers?.data?.map((member) => {
-                        return (
-                            <div key={member.attributes?.name}>
-                                <Heading className="font-bold">
-                                    {member.attributes?.position}
-                                </Heading>
-                                <Text>{member.attributes?.name}</Text>
-                            </div>
-                        )
-                    })}
-                </Grid>
+                <Flex width="100%" justify="center">
+                    <Grid my="5" columns="2" rows="2" gapX="9" gapY="5">
+                        {aboutData?.staffMembers?.data?.map((member) => {
+                            return (
+                                <div key={member.attributes?.name}>
+                                    <Heading className="font-bold">
+                                        {member.attributes?.position}
+                                    </Heading>
+                                    <Text>{member.attributes?.name}</Text>
+                                </div>
+                            )
+                        })}
+                    </Grid>
+                </Flex>
                 {teamImagePath && (
-                    <div className="mb-10">
+                    <Flex mb="9" width="100%" justify="center">
                         <Image
                             src={teamImagePath}
                             width={800}
                             height={500}
                             alt="Jazz In Toronto team"
                         />
-                    </div>
+                    </Flex>
                 )}
                 <Flex justify="start" mb="5" align="center">
                     <div className="flex-1 border-b"></div>
