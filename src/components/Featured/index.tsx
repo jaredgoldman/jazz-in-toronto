@@ -6,8 +6,7 @@ import { Flex, Heading } from '@radix-ui/themes'
 import { api } from '~/utils/api'
 
 export default function Featured() {
-    const { data: featuredItems, isLoading } =
-        api.featured.getFeatured.useQuery()
+    const { data: featuredItems, isLoading } = api.data.getFeatured.useQuery()
 
     return (
         <Flex

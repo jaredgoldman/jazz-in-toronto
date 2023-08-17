@@ -1,5 +1,7 @@
 // Componenets
 import AdminLayout from '~/layouts/AdminLayout'
+// Utils
+import { api } from '~/utils/api'
 
 export default function AdminHome() {
     return (
