@@ -21,7 +21,7 @@ export async function getStaticProps() {
         transformer: superjson
     })
 
-    await helpers.featured.getFeatured.prefetch()
+    await helpers.data.getFeatured.prefetch()
     return {
         props: {
             trpcState: helpers.dehydrate()
