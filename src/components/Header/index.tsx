@@ -2,7 +2,7 @@
 import { signOut, useSession } from 'next-auth/react'
 // Components
 import Link from 'next/link'
-import { Button, Heading } from '@radix-ui/themes'
+import { Button, Heading, Box } from '@radix-ui/themes'
 
 interface Props {
     headerType: HeaderType
@@ -31,9 +31,11 @@ export default function Header({
             )}
 
             <div className="mx-auto w-3/4 justify-center border-b-2 border-white pt-8">
-                <Link className="text-3xl font-bold" href="/">
-                    JAZZINTORONTO
-                </Link>
+                <Box mb="2">
+                    <Link className="text-3xl font-bold" href="/">
+                        JAZZINTORONTO
+                    </Link>
+                </Box>
                 <Heading size="2" align="center">
                     Connecting Toronto&apos;s Jazz Musicians, Audiences, Venues
                     and Presenters
