@@ -5,8 +5,8 @@ import { Table } from '@radix-ui/themes'
 import {
     EventHeader,
     EventRow,
-    BandHeader,
-    BandRow,
+    ArtistHeader,
+    ArtistRow,
     VenueHeader,
     VenueRow
 } from './SearchTableRows'
@@ -14,8 +14,8 @@ import {
 import { type QueryObserverResult } from '@tanstack/react-query'
 import { DataType } from '~/types/enums'
 import {
-    type Band,
-    type EventWithBandVenue,
+    type Artist,
+    type EventWithArtistVenue,
     type Venue,
     type Item
 } from '~/types/data'
@@ -31,7 +31,7 @@ interface Props {
 
 const headers = {
     [DataType.EVENT]: <EventHeader />,
-    [DataType.BAND]: <BandHeader />,
+    [DataType.ARTIST]: <ArtistHeader />,
     [DataType.VENUE]: <VenueHeader />,
     [DataType.ADMIN]: null
 }
@@ -44,7 +44,7 @@ export default function SearchTable({
 }: Props): JSX.Element {
     const eventSetFeaturedMutation = api.event.setFeatured.useMutation()
     const venueSetFeaturedMutation = api.venue.setFeatured.useMutation()
-    const bandSetFeaturedMutation = api.band.setFeatured.useMutation()
+    const bandSetFeaturedMutation = api.artist.setFeatured.useMutation()
     const [featured, setFeatured] = useState<string | undefined>(
         featuredItem?.id
     )
@@ -58,7 +58,7 @@ export default function SearchTable({
             case DataType.VENUE:
                 venueSetFeaturedMutation.mutate({ id })
                 break
-            case DataType.BAND:
+            case DataType.ARTIST:
                 bandSetFeaturedMutation.mutate({ id })
                 break
         }
@@ -69,17 +69,17 @@ export default function SearchTable({
         if (dataType === DataType.EVENT) {
             return (
                 <EventRow
-                    item={item as EventWithBandVenue}
+                    item={item as EventWithArtistVenue}
                     key={item.id}
                     featured={featured}
                     setFeatured={handleSetFeatured}
                     refetch={refetch}
                 />
             )
-        } else if (dataType === DataType.BAND) {
+        } else if (dataType === DataType.ARTIST) {
             return (
-                <BandRow
-                    item={item as Band}
+                <ArtistRow
+                    item={item as Artist}
                     key={item.id}
                     featured={featured}
                     setFeatured={handleSetFeatured}

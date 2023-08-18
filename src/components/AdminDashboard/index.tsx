@@ -9,7 +9,7 @@ interface Props {
         upcomingEventsCount: number
         allEventsCount: number
         eventsThisWeekCount: number
-        bandCount: number
+        artistCount: number
         venueCount: number
     }
 }
@@ -42,8 +42,8 @@ export default function AdminDashboard({ data }: Props): JSX.Element {
                 />
                 <StatBox
                     label="All Artists"
-                    data={data.bandCount}
-                    dataType={DataType.BAND}
+                    data={data.artistCount}
+                    dataType={DataType.ARTIST}
                 />
                 <StatBox
                     label="All Venues"

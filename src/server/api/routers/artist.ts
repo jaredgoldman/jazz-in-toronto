@@ -6,7 +6,7 @@ import {
     protectedProcedure
 } from '~/server/api/trpc'
 
-export const bandRouter = createTRPCRouter({
+export const artistRouter = createTRPCRouter({
     create: publicProcedure
         .input(
             z.object({
@@ -19,7 +19,7 @@ export const bandRouter = createTRPCRouter({
             })
         )
         .mutation(({ ctx, input }) => {
-            return ctx.prisma.band.create({
+            return ctx.prisma.artist.create({
                 data: input
             })
         }),
@@ -27,13 +27,13 @@ export const bandRouter = createTRPCRouter({
     get: publicProcedure
         .input(z.object({ id: z.string().cuid() }))
         .query(({ ctx, input }) => {
-            return ctx.prisma.band.findUnique({
+            return ctx.prisma.artist.findUnique({
                 where: { id: input.id }
             })
         }),
 
     getAll: publicProcedure.query(({ ctx }) => {
-        return ctx.prisma.band.findMany()
+        return ctx.prisma.artist.findMany()
     }),
 
     update: protectedProcedure
@@ -49,17 +49,17 @@ export const bandRouter = createTRPCRouter({
             })
         )
         .mutation(({ ctx, input }) => {
-            const { id, ...bandData } = input
-            return ctx.prisma.band.update({
+            const { id, ...artistData } = input
+            return ctx.prisma.artist.update({
                 where: { id },
-                data: bandData
+                data: artistData
             })
         }),
 
     delete: protectedProcedure
         .input(z.object({ id: z.string().cuid() }))
         .mutation(({ ctx, input }) => {
-            return ctx.prisma.band.delete({
+            return ctx.prisma.artist.delete({
                 where: { id: input.id }
             })
         }),
@@ -67,14 +67,14 @@ export const bandRouter = createTRPCRouter({
     deletePhoto: protectedProcedure
         .input(z.object({ id: z.string().cuid() }))
         .mutation(({ ctx, input }) => {
-            return ctx.prisma.band.update({
+            return ctx.prisma.artist.update({
                 where: { id: input.id },
                 data: { photoPath: null }
             })
         }),
 
     getFeatured: publicProcedure.query(({ ctx }) => {
-        return ctx.prisma.band.findFirst({
+        return ctx.prisma.artist.findFirst({
             where: { featured: true }
         })
     }),
@@ -83,12 +83,12 @@ export const bandRouter = createTRPCRouter({
         .input(z.object({ id: z.string().cuid() }))
         .mutation(async ({ ctx, input }) => {
             // First remove any other features
-            // Only one band hsould be featured at a time
-            await ctx.prisma.band.updateMany({
+            // Only one artist hsould be featured at a time
+            await ctx.prisma.artist.updateMany({
                 where: { featured: true },
                 data: { featured: false }
             })
-            return ctx.prisma.band.update({
+            return ctx.prisma.artist.update({
                 where: { id: input.id },
                 data: { featured: true }
             })

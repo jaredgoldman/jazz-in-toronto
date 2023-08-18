@@ -1,13 +1,14 @@
 // Componenets
 import RootLayout from '~/layouts/RootLayout'
+import { Container, Heading, Text } from '@radix-ui/themes'
 
 // TODO: Convert this comp to radix-ui componenets and link in UI
 export default function PrivacyPolicy() {
     return (
         <RootLayout pageTitle="Jazz In Toronto | Privacy Policy">
-            <main>
-                <h1>Privacy Policy</h1>
-                <p>
+            <Container>
+                <Heading>Privacy Policy</Heading>
+                <Text>
                     <br />
                     Last updated: August 1st, 2023
                     <br />
@@ -21,10 +22,10 @@ export default function PrivacyPolicy() {
                     your Personal Information for providing and improving the
                     Service. By using the Service, you agree to the collection
                     and use of information in accordance with this policy.
-                </p>
+                </Text>
                 <br />
-                <h2>Information Collection and Use</h2>
-                <p>
+                <Heading size="2">Information Collection and Use</Heading>
+                <Text as="p">
                     <br />
                     While using our Service, we may ask you to provide us with
                     certain personally identifiable information that can be used
@@ -32,10 +33,10 @@ export default function PrivacyPolicy() {
                     information may include, but is not limited to, your email
                     address, name, phone number, postal address, or other
                     information ("Personal Information").
-                </p>
+                </Text>
                 <br />
-                <h2>Log Data</h2>
-                <p>
+                <Heading size="2">Log Data</Heading>
+                <Text>
                     <br />
                     We collect information that your browser sends whenever you
                     visit our Service ("Log Data"). This Log Data may include
@@ -43,10 +44,10 @@ export default function PrivacyPolicy() {
                     address, browser type, browser version, the pages of our
                     Service that you visit, the time and date of your visit, the
                     time spent on those pages and other statistics.
-                </p>
+                </Text>
                 <br />
-                <h2>Cookies</h2>
-                <p>
+                <Heading size="2">Cookies</Heading>
+                <Text>
                     <br />
                     Cookies are files with a small amount of data, which may
                     include an anonymous unique identifier. Cookies are sent to
@@ -59,10 +60,10 @@ export default function PrivacyPolicy() {
                     when receiving a new cookie. If you do not accept cookies,
                     you may not be able to use some features of our Service and
                     we recommend that you leave them turned on.
-                </p>
+                </Text>
                 <br />
-                <h2>Service Providers</h2>
-                <p>
+                <Heading size="2">Service Providers</Heading>
+                <Text>
                     <br />
                     We may employ third party companies and individuals to
                     facilitate our Service, to provide the Service on our
@@ -71,10 +72,10 @@ export default function PrivacyPolicy() {
                     have access to your Personal Information only to perform
                     specific tasks on our behalf and are obligated not to
                     disclose or use your information for any other purpose.
-                </p>
+                </Text>
                 <br />
-                <h2>Security</h2>
-                <p>
+                <Heading size="2">Security</Heading>
+                <Text>
                     <br />
                     The security of your Personal Information is important to
                     us, and we strive to implement and maintain reasonable,
@@ -86,10 +87,10 @@ export default function PrivacyPolicy() {
                     of electronic storage is 100% secure and we are unable to
                     guarantee the absolute security of the Personal Information
                     we have collected from you.
-                </p>
+                </Text>
                 <br />
-                <h2>Links to Other Sites</h2>
-                <p>
+                <Heading size="2">Links to Other Sites</Heading>
+                <Text>
                     <br />
                     Our Service may contain links to other sites. If you click
                     on a third-party link, you will be directed to that site.
@@ -99,10 +100,10 @@ export default function PrivacyPolicy() {
                     Policy of these websites. We have no control over, and
                     assume no responsibility for the content, privacy policies,
                     or practices of any third-party sites or services.
-                </p>
+                </Text>
                 <br />
-                <h2>Changes to This Privacy Policy</h2>
-                <p>
+                <Heading size="2">Changes to This Privacy Policy</Heading>
+                <Text>
                     <br />
                     This Privacy Policy is effective as of [Date] and will
                     remain in effect except concerning any changes in its
@@ -116,9 +117,9 @@ export default function PrivacyPolicy() {
                     will constitute your acknowledgment of the modifications and
                     your consent to abide and be bound by the modified Privacy
                     Policy.
-                </p>
+                </Text>
                 <br />
-            </main>
+            </Container>
         </RootLayout>
     )
 }

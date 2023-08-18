@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useEvent } from '~/hooks/useEvent'
 // Types
 import { SearchOption } from '../types'
-import { type EventWithBandVenue, type Item } from '~/types/data'
+import { type EventWithArtistVenue, type Item } from '~/types/data'
 import { DataType } from '~/types/enums'
 // Utils
 import { deepEqual } from '~/utils/shared'
@@ -70,7 +70,7 @@ export default function useSearch(
         )
     })
 
-    const filterVenue = useEvent((event: EventWithBandVenue) => {
+    const filterVenue = useEvent((event: EventWithArtistVenue) => {
         return (
             !searchData.venue ||
             (searchData.venue &&
@@ -108,7 +108,7 @@ export default function useSearch(
                     }
                     if (
                         itemIsEvent &&
-                        filterVenue(item as EventWithBandVenue)
+                        filterVenue(item as EventWithArtistVenue)
                     ) {
                         venueMatch = true
                     }

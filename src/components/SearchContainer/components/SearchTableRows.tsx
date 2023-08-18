@@ -3,10 +3,14 @@ import { useRef } from 'react'
 import { Table } from '@radix-ui/themes'
 import Dialogue from '~/components/Dialogue'
 import EventForm from '~/components/Forms/Event'
-import BandForm from '~/components/Forms/Band'
+import ArtistForm from '~/components/Forms/Artist'
 import VenueForm from '~/components/Forms/Venue'
 // Types
-import { type EventWithBandVenue, type Band, type Venue } from '~/types/data'
+import {
+    type EventWithArtistVenue,
+    type Artist,
+    type Venue
+} from '~/types/data'
 import { type QueryObserverResult } from '@tanstack/react-query'
 import { DataType } from '~/types/enums'
 // Utils
@@ -31,7 +35,7 @@ export const EventHeader = (): JSX.Element => {
             <Table.ColumnHeaderCell>Venue</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Date</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Time</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Band</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Artist</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Website</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Insta</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Cancelled</Table.ColumnHeaderCell>
@@ -46,7 +50,7 @@ export const EventRow = ({
     featured,
     setFeatured,
     refetch
-}: RowProps<EventWithBandVenue>): JSX.Element => {
+}: RowProps<EventWithArtistVenue>): JSX.Element => {
     const eventFormRef = useRef<InnerFormRef | null>(null)
     return (
         <Table.Row align="center">
@@ -57,7 +61,7 @@ export const EventRow = ({
             <Table.Cell>{`${getFormattedTime(
                 item.startDate
             )} - ${getFormattedTime(item.endDate)}`}</Table.Cell>
-            <Table.Cell>{item.band.name}</Table.Cell>
+            <Table.Cell>{item.artist.name}</Table.Cell>
             <Table.Cell>{item.website ? item.website : ''}</Table.Cell>
             <Table.Cell>
                 {item.instagramHandle ? item.instagramHandle : ''}
@@ -90,7 +94,7 @@ export const EventRow = ({
     )
 }
 
-export const BandHeader = (): JSX.Element => {
+export const ArtistHeader = (): JSX.Element => {
     return (
         <Table.Row align="center">
             <Table.RowHeaderCell>Name</Table.RowHeaderCell>
@@ -105,13 +109,13 @@ export const BandHeader = (): JSX.Element => {
     )
 }
 
-export const BandRow = ({
+export const ArtistRow = ({
     item,
     featured,
     setFeatured,
     refetch
-}: RowProps<Band>) => {
-    const bandFormRef = useRef<InnerFormRef | null>(null)
+}: RowProps<Artist>) => {
+    const artistFormRef = useRef<InnerFormRef | null>(null)
     return (
         <Table.Row align="center">
             <Table.Cell>{item.name}</Table.Cell>
@@ -125,7 +129,7 @@ export const BandRow = ({
                 <input
                     type="checkbox"
                     checked={item.id === featured}
-                    onChange={() => setFeatured(item.id, DataType.BAND)}
+                    onChange={() => setFeatured(item.id, DataType.ARTIST)}
                 />
             </Table.Cell>
 
@@ -133,11 +137,11 @@ export const BandRow = ({
                 <Dialogue
                     title="Edit"
                     triggerLabel="Edit"
-                    formRef={bandFormRef}
+                    formRef={artistFormRef}
                     refetch={refetch}
                     component={
-                        <BandForm
-                            ref={bandFormRef}
+                        <ArtistForm
+                            ref={artistFormRef}
                             currentValues={item}
                             externalSubmit={true}
                         />

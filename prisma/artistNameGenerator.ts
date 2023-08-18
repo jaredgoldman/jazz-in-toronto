@@ -1,4 +1,4 @@
-export class BandNameGenerator {
+export class ArtistNameGenerator {
     private readonly adjectives: string[]
     private readonly nouns: string[]
     private generatedNames: Set<string>
@@ -45,19 +45,19 @@ export class BandNameGenerator {
         this.generatedNames = new Set<string>()
     }
 
-    generateBandName(): string {
-        let bandName = ''
+    generateArtistName(): string {
+        let artistName = ''
 
         do {
             const randomAdjective = this.getRandomElement(this.adjectives)
             const randomNoun = this.getRandomElement(this.nouns)
 
-            bandName = `${randomAdjective} ${randomNoun}`
-        } while (this.generatedNames.has(bandName))
+            artistName = `${randomAdjective} ${randomNoun}`
+        } while (this.generatedNames.has(artistName))
 
-        this.generatedNames.add(bandName)
+        this.generatedNames.add(artistName)
 
-        return bandName
+        return artistName
     }
 
     private getRandomElement<T>(array: T[]): T {

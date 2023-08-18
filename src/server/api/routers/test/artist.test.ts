@@ -4,19 +4,19 @@ import { appRouter } from '~/server/api/root'
 import { createInnerTRPCContext } from '~/server/api/trpc'
 import { prisma } from '~/server/db'
 import { TRPCError } from '@trpc/server'
-import { type Admin, type Band } from '@prisma/client'
+import { type Admin, type Artist } from '@prisma/client'
 
-const testBandData = {
-    name: 'test band'
+const testartistData = {
+    name: 'test artist'
 }
-let band: Band
+let artist: Artist
 let admin: Admin
 
 beforeAll(async () => {
-    const bands = Array.from({ length: 25 }, (_, i) => {
-        return { name: `test band ${i}` }
+    const artists = Array.from({ length: 25 }, (_, i) => {
+        return { name: `test artist ${i}` }
     })
-    await prisma.band.createMany({ data: bands })
+    await prisma.artist.createMany({ data: artists })
     admin = await prisma.admin.create({
         data: {
             email: 'admin@test.com',
@@ -25,31 +25,31 @@ beforeAll(async () => {
     })
 })
 
-describe('Band Router', () => {
+describe('artist Router', () => {
     // CREATE
     it('allows a user to create an event', async () => {
         const ctx = createInnerTRPCContext({ session: null })
         const caller = appRouter.createCaller(ctx)
 
-        const input: RouterInputs['band']['create'] = testBandData
+        const input: RouterInputs['artist']['create'] = testartistData
 
-        band = await caller.band.create(input)
+        artist = await caller.artist.create(input)
 
-        const query = await prisma.band.findUnique({
-            where: { name: testBandData.name }
+        const query = await prisma.artist.findUnique({
+            where: { name: testartistData.name }
         })
-        expect(query?.name).toEqual(testBandData.name)
+        expect(query?.name).toEqual(testartistData.name)
     })
     // READ
-    it('allows a user to fetch a number of bands', async () => {
+    it('allows a user to fetch a number of artists', async () => {
         const ctx = createInnerTRPCContext({ session: null })
         const caller = appRouter.createCaller(ctx)
 
-        const bands = await caller.band.getAll()
+        const artists = await caller.artist.getAll()
         // XXX: For some reason the events test does not always clean up in time
-        // for this test run, leaving a nextra band in the above query
-        const enoughBands = bands.length === 26 || bands.length === 27
-        expect(enoughBands).toBeTruthy()
+        // for this test run, leaving a nextra artist in the above query
+        const enoughartists = artists.length === 26 || artists.length === 27
+        expect(enoughartists).toBeTruthy()
     })
     // uPDATE
     it('allows an admin to update an event', async () => {
@@ -63,36 +63,36 @@ describe('Band Router', () => {
         })
         const caller = appRouter.createCaller(ctx)
 
-        const input: RouterInputs['band']['update'] = {
-            id: band.id,
-            name: 'updated test band'
+        const input: RouterInputs['artist']['update'] = {
+            id: artist.id,
+            name: 'updated test artist'
         }
-        await caller.band.update(input)
+        await caller.artist.update(input)
 
-        const updatedBand = await prisma.band.findUnique({
-            where: { id: band.id }
+        const updatedartist = await prisma.artist.findUnique({
+            where: { id: artist.id }
         })
-        expect(updatedBand?.name).toEqual(input.name)
+        expect(updatedartist?.name).toEqual(input.name)
     })
     it('does not allow an unauthorized user to update an event', async () => {
         const ctx = createInnerTRPCContext({ session: null })
         const caller = appRouter.createCaller(ctx)
 
-        const input: RouterInputs['band']['update'] = {
-            id: band.id,
+        const input: RouterInputs['artist']['update'] = {
+            id: artist.id,
             name: 'updated name'
         }
 
         let res
         try {
-            band = await caller.band.update(input)
+            artist = await caller.artist.update(input)
         } catch (error) {
             expect(error).toStrictEqual(new TRPCError({ code: 'UNAUTHORIZED' }))
             expect(res).toBeUndefined()
         }
     })
     // DELETE
-    it('allows an admin to delete an band', async () => {
+    it('allows an admin to delete an artist', async () => {
         const ctx = createInnerTRPCContext({
             session: {
                 user: {
@@ -103,28 +103,28 @@ describe('Band Router', () => {
         })
         const caller = appRouter.createCaller(ctx)
 
-        const input: RouterInputs['band']['delete'] = {
-            id: band.id
+        const input: RouterInputs['artist']['delete'] = {
+            id: artist.id
         }
-        await caller.band.delete(input)
+        await caller.artist.delete(input)
 
-        const updatedBand = await prisma.band.findUnique({
-            where: { id: band.id }
+        const updatedartist = await prisma.artist.findUnique({
+            where: { id: artist.id }
         })
-        expect(updatedBand).toBeNull()
+        expect(updatedartist).toBeNull()
     })
 
     it('does not allow an unauthorized user to delete an event', async () => {
         const ctx = createInnerTRPCContext({ session: null })
         const caller = appRouter.createCaller(ctx)
 
-        const input: RouterInputs['band']['delete'] = {
-            id: band.id
+        const input: RouterInputs['artist']['delete'] = {
+            id: artist.id
         }
 
         let res
         try {
-            band = await caller.band.delete(input)
+            artist = await caller.artist.delete(input)
         } catch (error) {
             expect(error).toStrictEqual(new TRPCError({ code: 'UNAUTHORIZED' }))
             expect(res).toBeUndefined()
@@ -134,5 +134,7 @@ describe('Band Router', () => {
 
 afterAll(async () => {
     await prisma.admin.delete({ where: { id: admin.id } })
-    await prisma.band.deleteMany({ where: { name: { contains: 'test band' } } })
+    await prisma.artist.deleteMany({
+        where: { name: { contains: 'test artist' } }
+    })
 })

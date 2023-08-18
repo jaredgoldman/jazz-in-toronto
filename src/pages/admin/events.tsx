@@ -21,7 +21,6 @@ enum View {
 export default function AdminEvents(): JSX.Element {
     const [searchDate, setSearchDate] = useState<Date>(new Date())
     const [view, setView] = useState<View>(View.Search)
-
     // Queries
     const {
         data: events,

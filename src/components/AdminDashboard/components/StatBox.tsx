@@ -1,5 +1,7 @@
+// Components
 import { Card, Heading, Text } from '@radix-ui/themes'
-import { DataType } from '~/types/enums'
+// Types
+import { type DataType } from '~/types/enums'
 
 interface Props {
     label: string

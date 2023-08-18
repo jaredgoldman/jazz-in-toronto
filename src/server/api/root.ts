@@ -2,7 +2,7 @@ import { eventRouter } from './routers/event'
 import { createTRPCRouter } from '~/server/api/trpc'
 import { venueRouter } from './routers/venue'
 import { adminRouter } from './routers/admin'
-import { bandRouter } from './routers/band'
+import { artistRouter } from './routers/artist'
 import { dataRouter } from './routers/data'
 
 /**
@@ -19,7 +19,7 @@ export const appRouter = createTRPCRouter({
     event: eventRouter,
     venue: venueRouter,
     admin: adminRouter,
-    band: bandRouter,
+    artist: artistRouter,
     data: dataRouter
 })
 

@@ -6,11 +6,11 @@ import { api } from '~/utils/api'
 // Hooks
 import { useUploadThing } from '~/hooks/useUploadThing'
 // Types
-import { type FileData, type Band } from '~/types/data'
+import { type FileData, type Artist } from '~/types/data'
 // Assets
 import { env } from '~/env.mjs'
 
-export interface BandFormValues {
+export interface ArtistFormValues {
     name: string
     genre?: string
     photoPath?: string
@@ -22,17 +22,17 @@ export interface BandFormValues {
     }
 }
 
-export default function useBandForm(
-    currentValues: Band | undefined,
-    onAdd?: (values: Band) => Promise<void>
+export default function useArtistForm(
+    currentValues: Artist | undefined,
+    onAdd?: (values: Artist) => Promise<void>
 ) {
     const [error, setError] = useState<string>('')
-    const bandMutation = api.band.create.useMutation()
-    const editBandMutation = api.band.update.useMutation()
-    const deleteBandPhotoMutation = api.band.deletePhoto.useMutation()
+    const artistMutation = api.artist.create.useMutation()
+    const editartistMutation = api.artist.update.useMutation()
+    const deleteartistPhotoMutation = api.artist.deletePhoto.useMutation()
 
     const isEditing = !!currentValues
-    const defaultValues: BandFormValues = currentValues
+    const defaultValues: ArtistFormValues = currentValues
         ? {
               name: currentValues.name,
               instagramHandle: currentValues.instagramHandle || undefined,
@@ -55,14 +55,14 @@ export default function useBandForm(
         watch,
         setValue,
         formState: { errors }
-    } = useForm<BandFormValues>({
+    } = useForm<ArtistFormValues>({
         defaultValues
     })
 
     const handleDeletePhoto = async () => {
         if (currentValues?.photoPath) {
             try {
-                await deleteBandPhotoMutation.mutateAsync({
+                await deleteartistPhotoMutation.mutateAsync({
                     id: currentValues.id
                 })
             } catch {
@@ -81,11 +81,11 @@ export default function useBandForm(
         }
     })
 
-    const onSubmit = async (values: BandFormValues) => {
+    const onSubmit = async (values: ArtistFormValues) => {
         try {
             setError('')
             let newValues = values
-            let addedBand
+            let addedartist
             // if we have fileData in form Input
             // upload it first
             if (values?.fileData?.file) {
@@ -107,18 +107,18 @@ export default function useBandForm(
                 }
             }
             if (isEditing && currentValues) {
-                addedBand = await editBandMutation.mutateAsync({
+                addedartist = await editartistMutation.mutateAsync({
                     id: currentValues?.id,
                     ...newValues
                 })
             } else {
-                addedBand = await bandMutation.mutateAsync(newValues)
+                addedartist = await artistMutation.mutateAsync(newValues)
             }
             // XXX: simplify this process, we shouldn't have to prop drill like this
             // maybe pull the modal context into this form?
-            onAdd && (await onAdd(addedBand))
+            onAdd && (await onAdd(addedartist))
         } catch (e) {
-            setError('There was an error adding your band. Please try again.')
+            setError('There was an error adding your artist. Please try again.')
         }
     }
 
@@ -132,8 +132,8 @@ export default function useBandForm(
 
     return {
         isEditing,
-        bandMutation,
-        editBandMutation,
+        artistMutation,
+        editartistMutation,
         handleDeletePhoto,
         startUpload,
         error,

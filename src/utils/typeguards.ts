@@ -1,19 +1,25 @@
 // Types
-import { type EventWithBandVenue, type Band, type Venue } from '~/types/data'
+import {
+    type EventWithArtistVenue,
+    type Artist,
+    type Venue
+} from '~/types/data'
 
-type Item = EventWithBandVenue | Band | Venue
+type Item = EventWithArtistVenue | Artist | Venue
 
-export const isEvent = (item: Item | undefined): item is EventWithBandVenue => {
+export const isEvent = (
+    item: Item | undefined
+): item is EventWithArtistVenue => {
     return (
-        (item as EventWithBandVenue)?.startDate !== undefined &&
-        (item as EventWithBandVenue)?.endDate !== undefined &&
-        (item as EventWithBandVenue)?.band !== undefined &&
-        (item as EventWithBandVenue)?.venue !== undefined
+        (item as EventWithArtistVenue)?.startDate !== undefined &&
+        (item as EventWithArtistVenue)?.endDate !== undefined &&
+        (item as EventWithArtistVenue)?.artist !== undefined &&
+        (item as EventWithArtistVenue)?.venue !== undefined
     )
 }
 
-export const isBand = (item: Item | undefined): item is Band => {
-    return (item as Band)?.genre !== undefined
+export const isArtist = (item: Item | undefined): item is Artist => {
+    return (item as Artist)?.genre !== undefined
 }
 
 export const isVenue = (item: Item | undefined): item is Venue => {

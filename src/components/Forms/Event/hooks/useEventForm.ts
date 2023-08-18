@@ -1,20 +1,24 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
-import { type EventWithBandVenue, type Band, type Venue } from '~/types/data'
-import { isBand, isVenue } from '~/utils/typeguards'
+import {
+    type EventWithArtistVenue,
+    type Artist,
+    type Venue
+} from '~/types/data'
+import { isArtist, isVenue } from '~/utils/typeguards'
 
 export interface EventFormValues {
     name: string
     startDate: Date
     endDate: Date
-    bandId: string
+    artistId: string
     instagramHandle?: string
     website?: string
     venueId: string
 }
 
-export default function useEventForm(currentValues?: EventWithBandVenue) {
+export default function useEventForm(currentValues?: EventWithArtistVenue) {
     const [error, setError] = useState<string>('')
 
     const {
@@ -24,15 +28,15 @@ export default function useEventForm(currentValues?: EventWithBandVenue) {
     } = api.venue.getAll.useQuery()
 
     const {
-        data: bandData,
-        refetch: refetchBands,
-        isLoading: bandsLoading
-    } = api.band.getAll.useQuery()
+        data: artistData,
+        refetch: refetchArtists,
+        isLoading: artistsLoading
+    } = api.artist.getAll.useQuery()
 
     const eventMutation = api.event.create.useMutation()
     const editEventMutation = api.event.update.useMutation()
 
-    const isLoading = venuesLoading || bandsLoading
+    const isLoading = venuesLoading || artistsLoading
     const isEditing = !!currentValues
     const defaultValues: EventFormValues = currentValues
         ? {
@@ -44,7 +48,7 @@ export default function useEventForm(currentValues?: EventWithBandVenue) {
               name: '',
               startDate: new Date(),
               endDate: new Date(),
-              bandId: '',
+              artistId: '',
               venueId: '',
               instagramHandle: '',
               website: ''
@@ -74,13 +78,13 @@ export default function useEventForm(currentValues?: EventWithBandVenue) {
     }
 
     // TODO: Factor into single function
-    const onAddBand = async (value: Band | Venue) => {
-        if (isBand(value)) {
-            await refetchBands()
-            setValue('bandId', value.id)
+    const onAddArtist = async (value: Artist | Venue) => {
+        if (isArtist(value)) {
+            await refetchArtists()
+            setValue('artistId', value.id)
         }
     }
-    const onAddVenue = async (value: Band | Venue) => {
+    const onAddVenue = async (value: Artist | Venue) => {
         if (isVenue(value)) {
             await refetchVenues()
             setValue('venueId', value.id)
@@ -94,11 +98,11 @@ export default function useEventForm(currentValues?: EventWithBandVenue) {
     return {
         isEditing,
         venueData,
-        bandData,
+        artistData,
         eventMutation,
         editEventMutation,
         submit,
-        onAddBand,
+        onAddArtist,
         onAddVenue,
         isLoading,
         register,

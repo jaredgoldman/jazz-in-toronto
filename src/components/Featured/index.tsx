@@ -34,16 +34,16 @@ export default function Featured() {
                     )}
                     {featuredItems?.event && (
                         <FeaturedCard
-                            image={featuredItems.event.band.photoPath}
+                            image={featuredItems.event.artist.photoPath}
                             title={featuredItems.event.name}
                             link={featuredItems.event?.website}
                         />
                     )}
-                    {featuredItems?.band && (
+                    {featuredItems?.artist && (
                         <FeaturedCard
-                            image={featuredItems.band.photoPath}
-                            title={featuredItems.band.name}
-                            link={featuredItems.band?.website}
+                            image={featuredItems.artist.photoPath}
+                            title={featuredItems.artist.name}
+                            link={featuredItems.artist?.website}
                         />
                     )}
                 </Flex>

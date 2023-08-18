@@ -21,7 +21,7 @@ model Admin {
   role      String   @default("ADMIN")
 }
 
-model Band {
+model Artist {
   id              String   @id @default(cuid())
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -96,12 +96,12 @@ model Event {
   name            String
   startDate       DateTime
   endDate         DateTime
-  band            Band     @relation(fields: [bandId], references: [id])
+  artist          Artist     @relation(fields: [artistId], references: [id])
   featured        Boolean  @default(false)
   instagramHandle String?
   website         String?
   venue           Venue    @relation(fields: [venueId], references: [id])
-  bandId          String
+  artistId          String
   venueId         String
   cancelled       Boolean  @default(false)
   description     String?

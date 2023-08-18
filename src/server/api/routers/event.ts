@@ -18,16 +18,16 @@ export const eventRouter = createTRPCRouter({
                 featured: z.boolean().optional(),
                 instagramHandle: z.string().optional(),
                 website: z.string().optional(),
-                bandId: z.string().cuid(),
+                artistId: z.string().cuid(),
                 venueId: z.string().cuid()
             })
         )
         .mutation(({ ctx, input }) => {
-            const { bandId, venueId, ...eventData } = input
+            const { artistId, venueId, ...eventData } = input
             return ctx.prisma.event.create({
                 data: {
                     ...eventData,
-                    band: { connect: { id: bandId } },
+                    artist: { connect: { id: artistId } },
                     venue: { connect: { id: venueId } }
                 }
             })
@@ -44,7 +44,7 @@ export const eventRouter = createTRPCRouter({
     getAll: publicProcedure.query(({ ctx }) => {
         return ctx.prisma.event.findMany({
             include: {
-                band: true,
+                artist: true,
                 venue: true
             }
         })
@@ -61,7 +61,7 @@ export const eventRouter = createTRPCRouter({
                     }
                 },
                 include: {
-                    band: true,
+                    artist: true,
                     venue: true
                 }
             })
@@ -78,7 +78,7 @@ export const eventRouter = createTRPCRouter({
                     }
                 },
                 include: {
-                    band: true,
+                    artist: true,
                     venue: true
                 }
             })
@@ -94,7 +94,7 @@ export const eventRouter = createTRPCRouter({
                 featured: z.boolean().optional(),
                 instagramHandle: z.string().optional(),
                 website: z.string().optional(),
-                bandId: z.string().cuid().optional(),
+                artistId: z.string().cuid().optional(),
                 venueId: z.string().cuid().optional(),
                 cancelled: z.boolean().optional()
             })
@@ -147,11 +147,11 @@ export const eventRouter = createTRPCRouter({
                         ) {
                             continue
                         }
-                        let band
-                        // Create band for even name if band doesn't exist
+                        let artist
+                        // Create artist for even name if artist doesn't exist
                         // TODO: Clean name before this step
                         // XXX: This takes FOREVER - need to speed this query up
-                        band = await ctx.prisma.band.findFirst({
+                        artist = await ctx.prisma.artist.findFirst({
                             where: {
                                 name: {
                                     contains: event.name.toLowerCase(),
@@ -160,8 +160,8 @@ export const eventRouter = createTRPCRouter({
                             }
                         })
 
-                        if (!band) {
-                            band = await ctx.prisma.band.create({
+                        if (!artist) {
+                            artist = await ctx.prisma.artist.create({
                                 data: {
                                     name: event.name
                                 }
@@ -172,12 +172,12 @@ export const eventRouter = createTRPCRouter({
                             data: {
                                 name: event.name,
                                 venueId: input.venueId,
-                                bandId: band.id,
+                                artistId: artist.id,
                                 startDate: event.startDate,
                                 endDate: event.endDate
                             },
                             include: {
-                                band: true,
+                                artist: true,
                                 venue: true
                             }
                         })
@@ -210,7 +210,7 @@ export const eventRouter = createTRPCRouter({
         return ctx.prisma.event.findFirst({
             where: { featured: true },
             include: {
-                band: true,
+                artist: true,
                 venue: true
             }
         })
@@ -220,7 +220,7 @@ export const eventRouter = createTRPCRouter({
         .input(z.object({ id: z.string().cuid() }))
         .mutation(async ({ ctx, input }) => {
             // First remove any other features
-            // Only one band hsould be featured at a time
+            // Only one artist hsould be featured at a time
             await ctx.prisma.event.updateMany({
                 where: { featured: true },
                 data: { featured: false }

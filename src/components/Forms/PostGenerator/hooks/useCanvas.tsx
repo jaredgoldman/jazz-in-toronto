@@ -1,16 +1,29 @@
+// Libraries
 import { useCallback } from 'react'
-import { type EventWithBandVenue } from '~/types/data'
-import { getDaysOfTheWeek } from '~/utils/constants'
 import getDay from 'date-fns/getDay'
-import { getFormattedTime } from '~/utils/date'
+import { getDaysOfTheWeek } from '~/utils/constants'
+import { Poppins } from 'next/font/google'
+// Types
+import { type EventWithArtistVenue } from '~/types/data'
 import { type FileData } from '~/types/data'
+// utils
+import { getFormattedTime } from '~/utils/date'
+
+const poppins = Poppins({
+    weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+    variable: '--body-font',
+    subsets: ['latin'],
+    preload: true
+})
+
+console.log('POPPINS', poppins)
 
 // Returns and canvas element for the outer element to render
 export default function useCanvas() {
     const canvas = document.createElement('canvas')
     const createPostCanvas = useCallback(
         (
-            events: EventWithBandVenue[],
+            events: EventWithArtistVenue[],
             canvas: HTMLCanvasElement,
             ctx: CanvasRenderingContext2D,
             date: Date,
@@ -83,8 +96,8 @@ export default function useCanvas() {
 
                 // Print event dates
                 events.forEach((event) => {
-                    const { band, startDate, venue } = event
-                    const text = `${band.name} at ${
+                    const { artist, startDate, venue } = event
+                    const text = `${artist.name} at ${
                         venue.name
                     } - ${getFormattedTime(startDate)}`
                     ctx.fillText(text, eventTextX, currentY)
@@ -123,7 +136,7 @@ export default function useCanvas() {
     }
 
     const createCanvas = async (
-        events: EventWithBandVenue[],
+        events: EventWithArtistVenue[],
         index: number,
         date: Date
     ) => {

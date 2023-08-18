@@ -7,14 +7,14 @@ import { Flex, Text, Button } from '@radix-ui/themes'
 import FormLayout from '~/layouts/FormLayout'
 import Dialogue from '~/components/Dialogue'
 import VenueForm from '../Venue'
-import BandForm from '../Band'
+import ArtistForm from '../Artist'
 // Types
-import { type EventWithBandVenue } from '~/types/data'
+import { type EventWithArtistVenue } from '~/types/data'
 // Hooks
 import useEventForm, { type EventFormValues } from './hooks/useEventForm'
 
 interface Props {
-    currentValues?: EventWithBandVenue
+    currentValues?: EventWithArtistVenue
     externalSubmit?: boolean
 }
 
@@ -32,13 +32,13 @@ export default forwardRef(function EventForm(
         eventMutation,
         editEventMutation,
         venueData,
-        bandData,
+        artistData,
         error,
         errors,
         submit,
         isLoading,
         control,
-        onAddBand,
+        onAddArtist,
         onAddVenue
     } = useEventForm(currentValues)
 
@@ -108,14 +108,14 @@ export default forwardRef(function EventForm(
                             />
                         </>
                     )}
-                    {bandData && (
+                    {artistData && (
                         <>
                             <Select
-                                name="bandId"
+                                name="artistId"
                                 label="Select a band"
-                                optionData={bandData}
+                                optionData={artistData}
                                 control={control}
-                                error={errors.bandId}
+                                error={errors.artistId}
                                 required="Please select a band for your event"
                             />
                             <Dialogue
@@ -123,9 +123,9 @@ export default forwardRef(function EventForm(
                                 triggerLabel="Add your band"
                                 formRef={bandFormRef}
                                 component={
-                                    <BandForm
+                                    <ArtistForm
                                         ref={bandFormRef}
-                                        onAdd={onAddBand}
+                                        onAdd={onAddArtist}
                                         externalSubmit={true}
                                     />
                                 }

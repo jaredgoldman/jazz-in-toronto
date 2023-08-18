@@ -11,16 +11,16 @@ export const dataRouter = createTRPCRouter({
         const venue = await ctx.prisma.venue.findFirst({
             where: { featured: true }
         })
-        const band = await ctx.prisma.band.findFirst({
+        const artist = await ctx.prisma.artist.findFirst({
             where: { featured: true }
         })
         const event = await ctx.prisma.event.findFirst({
             where: { featured: true },
-            include: { band: true, venue: true }
+            include: { artist: true, venue: true }
         })
         return {
             venue,
-            band,
+            artist,
             event
         }
     }),
@@ -55,7 +55,7 @@ export const dataRouter = createTRPCRouter({
             }
         })
 
-        const bandCount = await ctx.prisma.band.count({
+        const artistCount = await ctx.prisma.artist.count({
             where: {
                 active: true
             }
@@ -66,7 +66,7 @@ export const dataRouter = createTRPCRouter({
             upcomingEventsCount,
             eventsThisWeekCount,
             venueCount,
-            bandCount
+            artistCount
         }
     })
 })

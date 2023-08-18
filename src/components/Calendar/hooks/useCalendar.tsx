@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { addMonths, getDaysInMonth } from 'date-fns'
 // Types
 import { type DailyEventData } from '../types'
-import { type EventWithBandVenue } from '~/types/data'
+import { type EventWithArtistVenue } from '~/types/data'
 import { type QueryObserverResult } from '@tanstack/react-query'
 // Utils
 import { getDaysOfTheWeek } from '~/utils/constants'
@@ -20,12 +20,12 @@ interface ReturnType {
  * rows to venue mappings. Also counts events per day
  */
 export default function useCalendar(
-    events: EventWithBandVenue[] | undefined,
+    events: EventWithArtistVenue[] | undefined,
     currentYear: number,
     currentMonth: number,
     selectedDate: Date,
     setSelectedDate: (date: Date) => void,
-    refetch?: () => Promise<QueryObserverResult<EventWithBandVenue[]>>
+    refetch?: () => Promise<QueryObserverResult<EventWithArtistVenue[]>>
 ): ReturnType {
     const [monthlyEvents, setDailyEvents] = useState<DailyEventData[]>([])
 
@@ -79,13 +79,13 @@ const months = Array.from({ length: 12 }, (_, i) => {
 // TODO: Optimize or maybe move to backend?
 const mapEventsToDaysAndVenue = (
     daysInMonth: number,
-    monthlyEvents: EventWithBandVenue[],
+    monthlyEvents: EventWithArtistVenue[],
     monthIndex: number,
     year: number
 ): DailyEventData[] => {
     const dailyEvents: {
         [key: number]: {
-            events: { [key: string]: EventWithBandVenue[] }
+            events: { [key: string]: EventWithArtistVenue[] }
             numOfEvents: number
         }
     } = {}

@@ -11,7 +11,7 @@ import {
     SelectLabel
 } from '@radix-ui/themes'
 // Types
-import type { Venue, Band } from '~/types/data'
+import type { Venue, Artist } from '~/types/data'
 // Context
 import {
     type FieldValues,
@@ -24,7 +24,7 @@ import {
 interface Props<T extends FieldValues> {
     label: string
     name: Path<T>
-    optionData: Venue[] | Band[]
+    optionData: Venue[] | Artist[]
     control: Control<T>
     error?: FieldError
     required?: boolean | string

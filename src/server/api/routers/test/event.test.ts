@@ -6,7 +6,7 @@ import { prisma } from '~/server/db'
 import {
     Area,
     type Admin,
-    type Band,
+    type Artist,
     type Event,
     type Venue
 } from '@prisma/client'
@@ -22,19 +22,19 @@ const testVenueData = {
     area: Area.ANNEX
 }
 
-const testBandData = {
+const testArtistData = {
     name: 'test event band'
 }
 
 let venue: Venue
-let band: Band
+let artist: Artist
 let event: Event
 let admin: Admin
 let testEventData: RouterInputs['event']['create']
 
 beforeAll(async () => {
     venue = await prisma.venue.create({ data: testVenueData })
-    band = await prisma.band.create({ data: testBandData })
+    artist = await prisma.artist.create({ data: testArtistData })
     admin = await prisma.admin.create({
         data: { email: 'eventtest@test.com', password: 'password' }
     })
@@ -42,7 +42,7 @@ beforeAll(async () => {
         name: 'event test event',
         startDate: new Date(Date.now()),
         endDate: new Date(Date.now() + 1000 * 60 * 60 * 2),
-        bandId: band.id,
+        artistId: artist.id,
         venueId: venue.id
     }
 })
@@ -138,7 +138,7 @@ describe('Event Router', () => {
 })
 
 afterAll(async () => {
-    await prisma.band.delete({ where: { id: band.id } })
+    await prisma.artist.delete({ where: { id: artist.id } })
     await prisma.venue.delete({ where: { id: venue.id } })
     await prisma.admin.delete({ where: { id: admin.id } })
 }, 100)

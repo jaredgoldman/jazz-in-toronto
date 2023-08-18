@@ -1,7 +1,7 @@
 import { Table, Heading, Box } from '@radix-ui/themes'
 // Types
 import { type DailyEventData } from '../types'
-import { type EventWithBandVenue } from '~/types/data'
+import { type EventWithArtistVenue } from '~/types/data'
 // Utils
 import { getFormattedTime } from '~/utils/date'
 
@@ -20,14 +20,14 @@ export default function ModalDay({ dailyEvents: { date, events } }: Props) {
                 <Table.Row key={venueName}>
                     <Table.Cell className="text-lg">{venueName}</Table.Cell>
                 </Table.Row>
-                {events.map((event: EventWithBandVenue) => {
+                {events.map((event: EventWithArtistVenue) => {
                     return (
                         <Table.Row className="m-2" key={event.id}>
                             <Table.Cell>
                                 <span className="mr-6">
                                     {`${getFormattedTime(event.startDate)}`}
                                 </span>
-                                <span>{event.band.name}</span>
+                                <span>{event.artist.name}</span>
                             </Table.Cell>
                         </Table.Row>
                     )

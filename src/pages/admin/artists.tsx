@@ -6,27 +6,27 @@ import Loading from '~/components/Loading'
 import { api } from '~/utils/api'
 import { DataType } from '~/types/enums'
 
-export default function AdminBands() {
+export default function Adminartists() {
     const {
-        data: bands,
-        isLoading: bandsLoading,
+        data: artists,
+        isLoading: artistsLoading,
         refetch
-    } = api.band.getAll.useQuery()
+    } = api.artist.getAll.useQuery()
     const { data: featuredItem, isLoading: featuredLoading } =
-        api.band.getFeatured.useQuery()
+        api.artist.getFeatured.useQuery()
 
-    const isLoading = bandsLoading || featuredLoading
+    const isLoading = artistsLoading || featuredLoading
 
     return (
-        <AdminLayout pageTitle="Jazz In Toronto | Admin - Bands">
+        <AdminLayout pageTitle="Jazz In Toronto | Admin - artists">
             <>
-                {bands && !isLoading && (
+                {artists && !isLoading && (
                     <SearchContainer
-                        heading="Find Bands"
-                        items={bands}
+                        heading="Find artists"
+                        items={artists}
                         featuredItem={featuredItem}
                         isLoading={isLoading}
-                        itemType={DataType.BAND}
+                        itemType={DataType.ARTIST}
                         refetch={refetch}
                     />
                 )}

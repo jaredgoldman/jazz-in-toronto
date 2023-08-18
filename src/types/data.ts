@@ -1,17 +1,17 @@
 import {
     type Prisma,
-    type Band,
+    type Artist,
     type Venue,
     type Event,
     type Admin
 } from '@prisma/client'
 
-export type EventWithBandVenue = Prisma.EventGetPayload<{
-    include: { band: true; venue: true }
+export type EventWithArtistVenue = Prisma.EventGetPayload<{
+    include: { artist: true; venue: true }
 }>
 
-export type Item = EventWithBandVenue | Band | Venue
-export type Items = EventWithBandVenue[] | Band[] | Venue[] | []
+export type Item = EventWithArtistVenue | Artist | Venue
+export type Items = EventWithArtistVenue[] | Artist[] | Venue[] | []
 
 // This type represents the data that is scraped from a venue's website
 export type PartialEvent = Pick<
@@ -19,7 +19,7 @@ export type PartialEvent = Pick<
     'startDate' | 'endDate' | 'name' | 'venueId'
 >
 
-export type { Band, Venue, Event, Admin }
+export type { Artist, Venue, Event, Admin }
 
 export interface FileData {
     file: File

@@ -1,4 +1,4 @@
-// componenets
+// Componenets
 import { DatePicker } from '../Fields'
 import { Input } from '../Fields'
 import FormLayout from '~/layouts/FormLayout'
@@ -16,7 +16,7 @@ export default function PostGenerator(): JSX.Element {
     return (
         <FormLayout>
             <Flex align="center" direction="column" grow="1">
-                <Form.Root onSubmit={void submit} className="max-w-7xl">
+                <Form.Root onSubmit={submit} className="max-w-7xl">
                     <Heading mb="3">Generate an Instagram Post</Heading>
                     <DatePicker
                         label="Select a day to generate a post for"
@@ -52,7 +52,7 @@ export default function PostGenerator(): JSX.Element {
                         </Form.Submit>
                     </Flex>
                 </Form.Root>
-                {files.length ? (
+                {files?.length ? (
                     <Flex mt="5" direction={{ initial: 'column', md: 'row' }}>
                         {files.map((file) => {
                             return (

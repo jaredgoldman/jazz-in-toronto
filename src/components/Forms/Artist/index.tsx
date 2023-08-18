@@ -7,30 +7,30 @@ import Upload from '../Fields/Upload'
 import FormLayout from '~/layouts/FormLayout'
 import { Heading, Flex, Text } from '@radix-ui/themes'
 // Types
-import { type Band } from '~/types/data'
+import { type Artist } from '~/types/data'
 // hooks
-import useBandForm from './hooks/useBandForm'
+import useArtistForm from './hooks/useArtistForm'
 
 interface Props {
-    currentValues?: Band
-    onAdd?: (value: Band) => Promise<void>
+    currentValues?: Artist
+    onAdd?: (value: Artist) => Promise<void>
     externalSubmit?: boolean
 }
 
-export default forwardRef(function BandForm(
+export default forwardRef(function ArtistForm(
     { currentValues, onAdd, externalSubmit = false }: Props,
     ref: Ref<unknown> | undefined
 ): JSX.Element {
     const {
-        bandMutation,
-        editBandMutation,
+        artistMutation,
+        editartistMutation,
         handleDeletePhoto,
         error,
         submit,
         errors,
         control,
         onUpload
-    } = useBandForm(currentValues, onAdd)
+    } = useArtistForm(currentValues, onAdd)
 
     /*
      * useImperative handle helps reference methods
@@ -46,8 +46,8 @@ export default forwardRef(function BandForm(
             <Form.Root onSubmit={submit}>
                 <Heading>
                     {currentValues
-                        ? `Edit band`
-                        : 'Add your band to our database'}
+                        ? `Edit artist`
+                        : 'Add your artist to our database'}
                 </Heading>
                 <Flex direction="column" gap="3">
                     <Input
@@ -55,7 +55,7 @@ export default forwardRef(function BandForm(
                         label="Name"
                         error={errors.name}
                         control={control}
-                        required="You must enter a band name"
+                        required="You must enter a artist name"
                     />
                     <Input
                         name="genre"
@@ -65,7 +65,7 @@ export default forwardRef(function BandForm(
                     />
                     <Upload
                         name="fileData"
-                        label="Upload a band photo"
+                        label="Upload a artist photo"
                         onUpload={onUpload}
                         onDeletePhoto={handleDeletePhoto}
                         control={control}
@@ -83,12 +83,12 @@ export default forwardRef(function BandForm(
                         control={control}
                     />
                     <Flex width="100%" align="center" mt="3">
-                        {bandMutation.isSuccess && (
+                        {artistMutation.isSuccess && (
                             <Text size="2" color="green" align="center">
                                 Event submitted succesfully
                             </Text>
                         )}
-                        {editBandMutation.isSuccess && (
+                        {editartistMutation.isSuccess && (
                             <Text size="2" color="green" align="center">
                                 Event edited succesfully
                             </Text>

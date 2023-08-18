@@ -8,6 +8,7 @@ interface PostGeneratorValues {
     date: Date
     caption: string
 }
+
 export default function usePostGenerator() {
     const [error, setError] = useState<string>('')
     const { isLoading, data, mutate, isSuccess } = api.event.post.useMutation()
@@ -23,11 +24,13 @@ export default function usePostGenerator() {
         watch
     } = useForm({ defaultValues })
 
+    const date = watch('date')
+
     const { data: events } = api.event.getAllByDay.useQuery({
-        date: watch('date')
+        date
     })
 
-    const { files } = usePostImages(events, watch('date'))
+    const { files } = usePostImages(events, date)
 
     const { startUpload } = useUploadThing({
         endpoint: 'uploadPosts',
