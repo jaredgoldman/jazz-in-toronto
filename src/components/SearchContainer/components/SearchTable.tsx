@@ -13,19 +13,14 @@ import {
 // Types
 import { type QueryObserverResult } from '@tanstack/react-query'
 import { DataType } from '~/types/enums'
-import {
-    type Artist,
-    type EventWithArtistVenue,
-    type Venue,
-    type Item
-} from '~/types/data'
+import type { Artist, EventWithArtistVenue, Venue, Event } from '~/types/data'
 // Utils
 import { api } from '~/utils/api'
 
 interface Props {
-    items: Array<Item>
+    items: Array<Venue | Artist | EventWithArtistVenue | Event>
     dataType: DataType
-    featuredItem?: Item | null
+    featuredItem?: Venue | Artist | EventWithArtistVenue | Event | null
     refetch?: () => Promise<QueryObserverResult<unknown>>
 }
 

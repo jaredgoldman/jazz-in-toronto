@@ -3,7 +3,7 @@ import SearchBar from './components/SearchBar'
 import SearchTable from './components/SearchTable'
 import { Container, Heading } from '@radix-ui/themes'
 // Types
-import { type Items, type Item } from '~/types/data'
+import type { EventWithArtistVenue, Venue, Artist } from '~/types/data'
 import { type QueryObserverResult } from '@tanstack/react-query'
 import { type DataType } from '~/types/enums'
 // Hooks
@@ -11,10 +11,10 @@ import useSearch from './hooks/useSearch'
 
 interface Props<T> {
     heading?: string
-    items?: Items
+    items?: Array<EventWithArtistVenue | Venue | Artist>
     itemType: DataType
     isLoading: boolean
-    featuredItem?: Item | null
+    featuredItem?: EventWithArtistVenue | Venue | Artist | null
     searchDate?: Date
     setSearchDate?: (date: Date) => void
     refetch?: () => Promise<QueryObserverResult<T>>

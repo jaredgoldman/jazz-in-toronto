@@ -3,7 +3,7 @@ import { cheerioJsonMapper, type JsonTemplate } from 'cheerio-json-mapper'
 import { TRPCError } from '@trpc/server'
 import puppeterr, { type Page } from 'puppeteer-core'
 // types
-import type { Venue, PartialEvent } from '~/types/data'
+import type { Venue, Event, EventWithArtistVenue } from '~/types/data'
 import { type PrismaClient } from '@prisma/client'
 // Utils
 import chromium from '@sparticuz/chromium-min'
@@ -37,7 +37,7 @@ export default class ScraperService {
         this.initialized = true
     }
 
-    public async getEvents(date: Date): Promise<PartialEvent[]> {
+    public async getEvents(date: Date): Promise<EventWithArtistVenue[]> {
         if (!this.initialized) {
             throw new TRPCError({
                 message: 'Scraper not initialized',
@@ -144,7 +144,7 @@ export default class ScraperService {
         return hashHex
     }
 
-    private async scrapeRexEvents(date: Date): Promise<PartialEvent[]> {
+    private async scrapeRexEvents(date: Date): Promise<EventWithArtistVenue[]> {
         if (!this.page) {
             throw new Error('No page loaded')
         }
@@ -186,6 +186,7 @@ export default class ScraperService {
         const noChange = await this.compareAndSaveHashedEvents(eventsHash, date)
 
         if (noChange) {
+            console.warn('No change in event hash')
             return []
         }
 
@@ -210,7 +211,7 @@ export default class ScraperService {
         const month = new Date(`${monthString} 1 ${year}`).getMonth()
 
         // Map partial events, convert strings to numbers where necessary
-        const processedEvents: PartialEvent[] = []
+        const processedEvents: EventWithArtistVenue[] = []
         dailyEvents.forEach(({ date, sets }: RexEvent) => {
             if (date && sets?.each) {
                 // map through sets in each daily events object
@@ -230,11 +231,37 @@ export default class ScraperService {
                         minutes
                     )
 
+                    const createdAt = new Date()
+                    const updatedAt = new Date()
+                    // Shape data like event with placeholder ids
                     processedEvents.push({
+                        id: '',
+                        createdAt,
+                        updatedAt,
+                        featured: false,
                         startDate,
                         endDate,
-                        name: name,
-                        venueId: this.venue.id
+                        name,
+                        venueId: this.venue.id,
+                        artistId: '',
+                        website: null,
+                        instagramHandle: null,
+                        cancelled: false,
+                        description: null,
+                        venue: this.venue,
+                        artist: {
+                            id: '',
+                            name,
+                            createdAt,
+                            updatedAt,
+                            photoPath: null,
+                            instagramHandle: null,
+                            website: null,
+                            featured: false,
+                            active: true,
+                            description: null,
+                            genre: null
+                        }
                     })
                 })
             }

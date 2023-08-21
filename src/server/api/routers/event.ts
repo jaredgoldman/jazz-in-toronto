@@ -7,6 +7,8 @@ import {
 } from '~/server/api/trpc'
 // Utils
 import addDays from 'date-fns/addDays'
+// Types
+import { Event } from '~/types/data'
 
 export const eventRouter = createTRPCRouter({
     create: publicProcedure
@@ -127,67 +129,70 @@ export const eventRouter = createTRPCRouter({
             if (venue && ctx.scraperService) {
                 await ctx.scraperService.init(venue)
                 const events = await ctx.scraperService.getEvents(input.date)
-                const processedEvents = []
-                if (events) {
-                    //  Tranform partialEvent to Event
-                    for (const event of events) {
-                        const existingEvent = await ctx.prisma.event.findUnique(
-                            {
-                                where: {
-                                    startDate_venueId: {
-                                        venueId: input.venueId,
-                                        startDate: input.date
-                                    }
-                                }
-                            }
-                        )
-
-                        if (
-                            existingEvent &&
-                            existingEvent.name
-                                .toLowerCase()
-                                .includes(event.name.toLowerCase())
-                        ) {
-                            continue
-                        }
-                        let artist
-                        // Create artist for even name if artist doesn't exist
-                        // TODO: Clean name before this step
-                        // XXX: This takes FOREVER - need to speed this query up
-                        artist = await ctx.prisma.artist.findFirst({
-                            where: {
-                                name: {
-                                    contains: event.name.toLowerCase(),
-                                    mode: 'insensitive'
-                                }
-                            }
-                        })
-
-                        if (!artist) {
-                            artist = await ctx.prisma.artist.create({
-                                data: {
-                                    name: event.name
-                                }
-                            })
-                        }
-
-                        const processedEvent = await ctx.prisma.event.create({
-                            data: {
-                                name: event.name,
-                                venueId: input.venueId,
-                                artistId: artist.id,
-                                startDate: event.startDate,
-                                endDate: event.endDate
-                            },
-                            include: {
-                                artist: true,
-                                venue: true
-                            }
-                        })
-                        processedEvents.push(processedEvent)
-                    }
-                    return processedEvents
-                }
+                console.log('EVENTS', events)
+                return events
+                // const processedEvents = []
+                // if (events) {
+                //  Tranform partialEvent to Event
+                // for (const event of events) {
+                // processedEvents.push(new Event)
+                // const existingEvent = await ctx.prisma.event.findUnique(
+                //     {
+                //         where: {
+                //             startDate_venueId: {
+                //                 venueId: input.venueId,
+                //                 startDate: input.date
+                //             }
+                //         }
+                //     }
+                // )
+                //
+                // if (
+                //     existingEvent &&
+                //     existingEvent.name
+                //         .toLowerCase()
+                //         .includes(event.name.toLowerCase())
+                // ) {
+                //     continue
+                // }
+                // let artist
+                // // Create artist for even name if artist doesn't exist
+                // // TODO: Clean name before this step
+                // // XXX: This takes FOREVER - need to speed this query up
+                // artist = await ctx.prisma.artist.findFirst({
+                //     where: {
+                //         name: {
+                //             contains: event.name.toLowerCase(),
+                //             mode: 'insensitive'
+                //         }
+                //     }
+                // })
+                //
+                // if (!artist) {
+                //     artist = await ctx.prisma.artist.create({
+                //         data: {
+                //             name: event.name
+                //         }
+                //     })
+                // }
+                //
+                // const processedEvent = await ctx.prisma.event.create({
+                //     data: {
+                //         name: event.name,
+                //         venueId: input.venueId,
+                //         artistId: artist.id,
+                //         startDate: event.startDate,
+                //         endDate: event.endDate
+                //     },
+                //     include: {
+                //         artist: true,
+                //         venue: true
+                //     }
+                // })
+                // processedEvents.push(processedEvent)
+                // }
+                // return processedEvents
+                // }
             }
         }),
 

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useEvent } from '~/hooks/useEvent'
 // Types
 import { SearchOption } from '../types'
-import { type EventWithArtistVenue, type Item } from '~/types/data'
+import type { EventWithArtistVenue, Item, Venue, Artist } from '~/types/data'
 import { DataType } from '~/types/enums'
 // Utils
 import { deepEqual } from '~/utils/shared'
@@ -25,7 +25,7 @@ const initialSearchData = {
 
 export default function useSearch(
     itemType: DataType,
-    items?: Array<Item>,
+    items?: Array<EventWithArtistVenue | Venue | Artist>,
     searchDate?: Date,
     setSearchDate?: (date: Date) => void
 ) {
