@@ -18,13 +18,12 @@ export default function usePostImages(
         const files: FileData[] = []
 
         const mapPostImages = async () => {
-            if (!events?.length) return
             const eventLength = events?.length || 0
             const postImageEventsNeeded = Math.ceil(
                 eventLength / eventsPerCanvas
             )
 
-            const eventsCopy = [...events]
+            const eventsCopy = [...events!!]
             for (let i = 0; i < postImageEventsNeeded; i++) {
                 const eventsSlice = eventsCopy.splice(0, eventsPerCanvas)
                 const fileData = await createCanvas(eventsSlice, i, date)
@@ -33,7 +32,7 @@ export default function usePostImages(
             setFiles(files)
         }
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        events?.length && mapPostImages()
+        events && mapPostImages()
     }, [date, events, createCanvas, eventsPerCanvas])
 
     return {

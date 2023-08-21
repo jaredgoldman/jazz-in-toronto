@@ -69,7 +69,7 @@ export default function Header({
                                     <Link href="/admin/events">Events</Link>
                                 </li>
                                 <li className="p-2">
-                                    <Link href="/admin/bands">Bands</Link>
+                                    <Link href="/admin/artists">Artists</Link>
                                 </li>
                                 <li className="p-2">
                                     <Link href="/admin/venues">Venues</Link>

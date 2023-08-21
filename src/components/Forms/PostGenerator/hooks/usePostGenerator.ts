@@ -24,13 +24,11 @@ export default function usePostGenerator() {
         watch
     } = useForm({ defaultValues })
 
-    const date = watch('date')
-
-    const { data: events } = api.event.getAllByDay.useQuery({
-        date
+    const { data: events, refetch } = api.event.getAllByDay.useQuery({
+        date: watch('date')
     })
 
-    const { files } = usePostImages(events, date)
+    const { files } = usePostImages(events, watch('date'))
 
     const { startUpload } = useUploadThing({
         endpoint: 'uploadPosts',
@@ -65,6 +63,7 @@ export default function usePostGenerator() {
         submit,
         events,
         files,
-        error
+        error,
+        refetch
     }
 }

@@ -63,6 +63,9 @@ export const eventRouter = createTRPCRouter({
                 include: {
                     artist: true,
                     venue: true
+                },
+                orderBy: {
+                    startDate: 'asc'
                 }
             })
         }),

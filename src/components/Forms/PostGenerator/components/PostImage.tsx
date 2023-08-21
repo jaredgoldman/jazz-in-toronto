@@ -12,13 +12,13 @@ interface Props {
 
 export default function PostImage({
     key,
-    width = 200,
-    height = 200,
+    width = 400,
+    height = 400,
     src,
     removePostImage
 }: Props) {
     return (
-        <Card m="3" key={key}>
+        <Card m="3" key={key} className="bg-gray-200 p-0">
             {src && (
                 <Box className="border-1 relative border-black">
                     {removePostImage && (

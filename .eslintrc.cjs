@@ -23,6 +23,7 @@ const config = {
     extends: ['next/core-web-vitals', 'plugin:@typescript-eslint/recommended'],
     rules: {
         'react/no-unescaped-entities': 'off',
+        '@typescript-eslint/no-extra-non-null-assertion': 'off',
         '@typescript-eslint/no-misused-promises': [
             2,
             {
