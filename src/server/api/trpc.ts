@@ -63,7 +63,7 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 
     return createInnerTRPCContext({
         session,
-        scraperService: new ScraperService(prisma),
+        scraperService: new ScraperService(),
         postService: new PostService()
     })
 }

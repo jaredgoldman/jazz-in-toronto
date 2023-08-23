@@ -16,6 +16,7 @@ import useEventForm, { type EventFormValues } from './hooks/useEventForm'
 interface Props {
     currentValues?: EventWithArtistVenue
     externalSubmit?: boolean
+    externalOnSubmit?: (values: EventFormValues) => void
 }
 
 interface InnerFormRef {
@@ -23,7 +24,11 @@ interface InnerFormRef {
 }
 
 export default forwardRef(function EventForm(
-    { currentValues, externalSubmit = false }: Props,
+    {
+        currentValues,
+        externalSubmit = false,
+        externalOnSubmit = undefined
+    }: Props,
     ref: Ref<unknown> | undefined
 ): JSX.Element {
     const venueFormRef = useRef<InnerFormRef | null>(null)
@@ -40,7 +45,7 @@ export default forwardRef(function EventForm(
         control,
         onAddArtist,
         onAddVenue
-    } = useEventForm(currentValues)
+    } = useEventForm(currentValues, externalOnSubmit)
 
     /*
      * useImperative handle helps reference methods

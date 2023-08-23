@@ -15,41 +15,26 @@ import { type QueryObserverResult } from '@tanstack/react-query'
 import { DataType } from '~/types/enums'
 // Utils
 import { getFormattedTime } from '~/utils/date'
+import { type EventFormValues } from '~/components/Forms/Event/hooks/useEventForm'
 
 interface RowProps<T> {
     item: T
     featured?: string
     setFeatured: (id: string, type: DataType) => void
     refetch?: () => Promise<QueryObserverResult<unknown>>
+    editCallback?: (data: EventFormValues) => void
 }
 
 interface InnerFormRef {
     submitForm: () => Promise<void>
 }
 
-export const EventHeader = (): JSX.Element => {
-    return (
-        <Table.Row align="center">
-            <Table.ColumnHeaderCell>Event Name</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Featured</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Venue</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Date</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Time</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Artist</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Website</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Insta</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Cancelled</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Featured</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
-        </Table.Row>
-    )
-}
-
 export const EventRow = ({
     item,
     featured,
     setFeatured,
-    refetch
+    refetch,
+    editCallback
 }: RowProps<EventWithArtistVenue>): JSX.Element => {
     const eventFormRef = useRef<InnerFormRef | null>(null)
     return (
@@ -83,6 +68,7 @@ export const EventRow = ({
                     refetch={refetch}
                     component={
                         <EventForm
+                            externalOnSubmit={editCallback}
                             ref={eventFormRef}
                             currentValues={item}
                             externalSubmit={true}
@@ -90,21 +76,6 @@ export const EventRow = ({
                     }
                 />
             </Table.Cell>
-        </Table.Row>
-    )
-}
-
-export const ArtistHeader = (): JSX.Element => {
-    return (
-        <Table.Row align="center">
-            <Table.RowHeaderCell>Name</Table.RowHeaderCell>
-            <Table.RowHeaderCell>Genre</Table.RowHeaderCell>
-            <Table.RowHeaderCell>instagramHandle</Table.RowHeaderCell>
-            <Table.RowHeaderCell>Website</Table.RowHeaderCell>
-            <Table.RowHeaderCell>Active</Table.RowHeaderCell>
-            <Table.RowHeaderCell>Featured</Table.RowHeaderCell>
-
-            <Table.RowHeaderCell></Table.RowHeaderCell>
         </Table.Row>
     )
 }
@@ -148,21 +119,6 @@ export const ArtistRow = ({
                     }
                 />
             </Table.Cell>
-        </Table.Row>
-    )
-}
-
-export const VenueHeader = (): JSX.Element => {
-    return (
-        <Table.Row align="center">
-            <Table.RowHeaderCell>Name</Table.RowHeaderCell>
-            <Table.RowHeaderCell>Address</Table.RowHeaderCell>
-            <Table.RowHeaderCell>City</Table.RowHeaderCell>
-            <Table.RowHeaderCell>Website</Table.RowHeaderCell>
-            <Table.RowHeaderCell>instagramHandle</Table.RowHeaderCell>
-            <Table.RowHeaderCell>Active</Table.RowHeaderCell>
-            <Table.RowHeaderCell>Featured</Table.RowHeaderCell>
-            <Table.RowHeaderCell></Table.RowHeaderCell>
         </Table.Row>
     )
 }

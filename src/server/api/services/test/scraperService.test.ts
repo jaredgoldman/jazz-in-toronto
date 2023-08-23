@@ -26,7 +26,7 @@ beforeAll(async () => {
 
 describe('Scraper service', () => {
     it('should be able to scrape a website and return an array of events', async () => {
-        const scraperService = new ScraperService(prisma)
+        const scraperService = new ScraperService()
         await scraperService.init(venue)
         const events = await scraperService.getEvents(addMonths(new Date(), 1))
         expect(events.length).toBeGreaterThan(0)

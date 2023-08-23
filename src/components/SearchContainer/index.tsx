@@ -48,7 +48,7 @@ export default function SearchContainer<T>({
             />
             {filteredItems && (
                 <SearchTable
-                    items={filteredItems}
+                    itemsData={filteredItems}
                     dataType={itemType}
                     featuredItem={featuredItem}
                     refetch={refetch}

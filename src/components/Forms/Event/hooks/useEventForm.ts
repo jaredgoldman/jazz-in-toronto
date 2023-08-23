@@ -18,7 +18,10 @@ export interface EventFormValues {
     venueId: string
 }
 
-export default function useEventForm(currentValues?: EventWithArtistVenue) {
+export default function useEventForm(
+    currentValues?: EventWithArtistVenue,
+    externalOnSubmit?: (values: EventFormValues) => void
+) {
     const [error, setError] = useState<string>('')
 
     const {
@@ -63,17 +66,25 @@ export default function useEventForm(currentValues?: EventWithArtistVenue) {
     } = useForm<EventFormValues>({ defaultValues })
 
     const onSubmit = async (values: EventFormValues) => {
-        try {
-            if (isEditing && currentValues && editEventMutation) {
-                await editEventMutation.mutateAsync({
-                    id: currentValues?.id,
-                    ...values
-                })
-            } else if (eventMutation) {
-                await eventMutation.mutateAsync(values)
+        if (externalOnSubmit) {
+            // if this is true, user can edit row in state without mutating
+            // Used for eventScraper to edit items before submission
+            console.log('FIRING EDIT CALLBACK', externalOnSubmit)
+            return externalOnSubmit(values)
+        } else {
+            // Otherwise, mutate!
+            try {
+                if (isEditing && currentValues && editEventMutation) {
+                    await editEventMutation.mutateAsync({
+                        id: currentValues?.id,
+                        ...values
+                    })
+                } else if (eventMutation) {
+                    await eventMutation.mutateAsync(values)
+                }
+            } catch (e) {
+                setError('There was an error submitting. Please try again')
             }
-        } catch (e) {
-            setError('There was an error submitting. Please try again')
         }
     }
 

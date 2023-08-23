@@ -41,6 +41,7 @@ export default function Dialogue({
     triggerButtonVariant = 'classic'
 }: Props) {
     const [open, setOpen] = useState(false)
+
     const handleOnSave = async () => {
         if (formRef?.current?.submitForm) {
             await formRef.current?.submitForm()

@@ -2,9 +2,9 @@
 import { cheerioJsonMapper, type JsonTemplate } from 'cheerio-json-mapper'
 import { TRPCError } from '@trpc/server'
 import puppeterr, { type Page } from 'puppeteer-core'
+import { createId } from '@paralleldrive/cuid2'
 // types
-import type { Venue, Event, EventWithArtistVenue } from '~/types/data'
-import { type PrismaClient } from '@prisma/client'
+import type { Venue, EventWithArtistVenue } from '~/types/data'
 // Utils
 import chromium from '@sparticuz/chromium-min'
 import { wait } from '~/utils/shared'
@@ -17,11 +17,6 @@ export default class ScraperService {
     private venue!: Venue
     private page?: Page
     private initialized = false
-    private prisma: PrismaClient
-
-    constructor(prisma: PrismaClient) {
-        this.prisma = prisma
-    }
 
     public async init(venue: Venue): Promise<void> {
         if (!venue.website || !venue.eventsPath) {
@@ -89,61 +84,77 @@ export default class ScraperService {
         return (await cheerioJsonMapper(html, json)) as T
     }
 
-    private async compareAndSaveHashedEvents(
-        hash: string,
-        startDate: Date
-    ): Promise<boolean> {
-        const venueHash = await this.prisma.venueHash.findUnique({
-            where: {
-                startDate_venueId: {
-                    startDate,
-                    venueId: this.venue.id
-                }
-            }
-        })
-        if (!venueHash) {
-            await this.prisma.venueHash.create({
-                data: {
-                    startDate,
-                    venueId: this.venue.id,
-                    hash
-                }
+    private titleArticles = ['in', 'for', 'of', 'and', 'a', 'an', 'to']
+
+    private formatName(name: string) {
+        return name
+            .split(' ')
+            .map((word) => {
+                const lowerWord = word.toLowerCase()
+                if (this.titleArticles.includes(lowerWord)) return lowerWord
+                return lowerWord.charAt(0).toUpperCase() + lowerWord.slice(1)
             })
-            return false
-        }
-        if (venueHash.hash === hash) {
-            return true
-        } else {
-            await this.prisma.venueHash.update({
-                where: {
-                    startDate_venueId: {
-                        venueId: this.venue.id,
-                        startDate
-                    }
-                },
-                data: { hash }
-            })
-        }
-        return false
+            .join(' ')
     }
 
-    private async hashString(input: string): Promise<string> {
-        // Convert the string to a Uint8Array
-        const encoder = new TextEncoder()
-        const data = encoder.encode(input)
+    // private async compareAndSaveHashedEvents(
+    //     hash: string,
+    //     startDate: Date
+    // ): Promise<boolean> {
+    //     const venueHash = await this.prisma.venueHash.findUnique({
+    //         where: {
+    //             startDate_venueId: {
+    //                 startDate,
+    //                 venueId: this.venue.id
+    //             }
+    //         }
+    //     })
+    //     if (!venueHash) {
+    //         await this.prisma.venueHash.create({
+    //             data: {
+    //                 startDate,
+    //                 venueId: this.venue.id,
+    //                 hash
+    //             }
+    //         })
+    //         return false
+    //     }
+    //     if (venueHash.hash === hash) {
+    //         return true
+    //     } else {
+    //         await this.prisma.venueHash.update({
+    //             where: {
+    //                 startDate_venueId: {
+    //                     venueId: this.venue.id,
+    //                     startDate
+    //                 }
+    //             },
+    //             data: { hash }
+    //         })
+    //     }
+    //     return false
+    // }
+    //
+    // private async hashString(input: string): Promise<string> {
+    //     // Convert the string to a Uint8Array
+    //     const encoder = new TextEncoder()
+    //     const data = encoder.encode(input)
+    //
+    //     // Hash the data using the SHA-256 algorithm
+    //     const hashBuffer = await crypto.subtle.digest('SHA-256', data)
+    //
+    //     // Convert the hash to a hex string
+    //     const hashArray = Array.from(new Uint8Array(hashBuffer))
+    //     const hashHex = hashArray
+    //         .map((b) => b.toString(16).padStart(2, '0'))
+    //         .join('')
+    //
+    //     return hashHex
+    // }
 
-        // Hash the data using the SHA-256 algorithm
-        const hashBuffer = await crypto.subtle.digest('SHA-256', data)
-
-        // Convert the hash to a hex string
-        const hashArray = Array.from(new Uint8Array(hashBuffer))
-        const hashHex = hashArray
-            .map((b) => b.toString(16).padStart(2, '0'))
-            .join('')
-
-        return hashHex
-    }
-
+    /*
+     * TODO: Modularize this process
+     */
     private async scrapeRexEvents(date: Date): Promise<EventWithArtistVenue[]> {
         if (!this.page) {
             throw new Error('No page loaded')
@@ -182,14 +193,14 @@ export default class ScraperService {
             monthlyEvents: { dailyEvents }
         } = await this.mapEvents<VenueEvents<RexEvent>>(html, rexJson)
 
-        const eventsHash = await this.hashString(JSON.stringify(dailyEvents))
-        const noChange = await this.compareAndSaveHashedEvents(eventsHash, date)
-
-        if (noChange) {
-            console.warn('No change in event hash')
-            return []
-        }
-
+        // const eventsHash = await this.hashString(JSON.stringify(dailyEvents))
+        // const noChange = await this.compareAndSaveHashedEvents(eventsHash, date)
+        //
+        // if (noChange) {
+        //     console.warn('No change in event hash')
+        //     return []
+        // }
+        //
         if (!dailyEvents.length) {
             throw new Error('Error getting daily events')
         }
@@ -233,15 +244,17 @@ export default class ScraperService {
 
                     const createdAt = new Date()
                     const updatedAt = new Date()
+                    const formattedName = this.formatName(name)
+
                     // Shape data like event with placeholder ids
                     processedEvents.push({
-                        id: '',
+                        id: createId(),
                         createdAt,
                         updatedAt,
                         featured: false,
                         startDate,
                         endDate,
-                        name,
+                        name: formattedName,
                         venueId: this.venue.id,
                         artistId: '',
                         website: null,
@@ -250,8 +263,8 @@ export default class ScraperService {
                         description: null,
                         venue: this.venue,
                         artist: {
-                            id: '',
-                            name,
+                            id: createId(),
+                            name: '',
                             createdAt,
                             updatedAt,
                             photoPath: null,

@@ -1,48 +1,46 @@
 // Libraries
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Table } from '@radix-ui/themes'
+import SearchTableHeader from './SearchTableHeader'
+import tableSchema from '../data/tableSchema'
 // Components
-import {
-    EventHeader,
-    EventRow,
-    ArtistHeader,
-    ArtistRow,
-    VenueHeader,
-    VenueRow
-} from './SearchTableRows'
+import { EventRow, ArtistRow, VenueRow } from './SearchTableRows'
 // Types
 import { type QueryObserverResult } from '@tanstack/react-query'
 import { DataType } from '~/types/enums'
-import type { Artist, EventWithArtistVenue, Venue, Event } from '~/types/data'
+import type { Artist, EventWithArtistVenue, Venue } from '~/types/data'
 // Utils
 import { api } from '~/utils/api'
 
 interface Props {
-    items: Array<Venue | Artist | EventWithArtistVenue | Event>
+    itemsData: Array<Venue | Artist | EventWithArtistVenue>
     dataType: DataType
-    featuredItem?: Venue | Artist | EventWithArtistVenue | Event | null
+    featuredItem?: Venue | Artist | EventWithArtistVenue | null
     refetch?: () => Promise<QueryObserverResult<unknown>>
-}
-
-const headers = {
-    [DataType.EVENT]: <EventHeader />,
-    [DataType.ARTIST]: <ArtistHeader />,
-    [DataType.VENUE]: <VenueHeader />,
-    [DataType.ADMIN]: null
+    canEditBeforeMutation?: boolean
 }
 
 export default function SearchTable({
-    items,
+    itemsData,
     dataType,
     featuredItem,
     refetch
 }: Props): JSX.Element {
+    const [items, setItems] = useState<
+        Array<Venue | EventWithArtistVenue | Artist>
+    >([])
     const eventSetFeaturedMutation = api.event.setFeatured.useMutation()
     const venueSetFeaturedMutation = api.venue.setFeatured.useMutation()
     const bandSetFeaturedMutation = api.artist.setFeatured.useMutation()
     const [featured, setFeatured] = useState<string | undefined>(
         featuredItem?.id
     )
+
+    useEffect(() => {
+        if (itemsData) {
+            setItems(itemsData)
+        }
+    }, [itemsData])
 
     const handleSetFeatured = (id: string, type: DataType) => {
         setFeatured(id)
@@ -94,11 +92,9 @@ export default function SearchTable({
         }
     })
 
-    const header = headers[dataType]
-
     return (
         <Table.Root>
-            <Table.Header>{header}</Table.Header>
+            <SearchTableHeader cols={tableSchema[dataType]} />
             <Table.Body>
                 {items.length ? (
                     rows
