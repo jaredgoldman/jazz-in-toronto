@@ -61,6 +61,7 @@ export default function EventScraper({ venues }: Props): JSX.Element {
                     <Flex direction="column" justify="center" mt="5">
                         <Heading align="center">Results</Heading>
                         <SearchTable
+                            canEditFormState={true}
                             isLoading={isLoading}
                             data={{ type: DataType.EVENT, items: data }}
                         />

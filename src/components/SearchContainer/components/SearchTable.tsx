@@ -19,13 +19,15 @@ interface Props {
     isLoading: boolean
     onEdit?: () => Promise<void>
     featuredItem?: Venue | Artist | EventWithArtistVenue | null
+    canEditFormState?: boolean
 }
 
 export default function SearchTable({
     data,
     isLoading,
     featuredItem,
-    onEdit
+    onEdit,
+    canEditFormState = false
 }: Props): JSX.Element {
     const [items, setItems] = useState<
         Array<Venue | EventWithArtistVenue | Artist>
@@ -78,6 +80,9 @@ export default function SearchTable({
                 setFeatured={handleSetFeatured}
                 onEdit={onEdit}
                 editFormHook={getFormHook(data.type)}
+                canEditFormState={canEditFormState}
+                setItems={setItems}
+                items={items}
             />
         )
     })

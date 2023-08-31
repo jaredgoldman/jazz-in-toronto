@@ -66,6 +66,7 @@ export default function useVenueForm(
         handleSubmit,
         setValue,
         control,
+        getValues,
         formState: { errors }
     } = useForm<VenueFormValues>({
         defaultValues
@@ -167,6 +168,7 @@ export default function useVenueForm(
         control,
         submit,
         onUpload,
-        onSelectLocation
+        onSelectLocation,
+        getValues
     }
 }

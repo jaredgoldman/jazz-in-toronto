@@ -63,6 +63,7 @@ export default function useEventForm(currentValues?: EventWithArtistVenue) {
         handleSubmit,
         setValue,
         control,
+        getValues,
         formState: { errors }
     } = useForm<EventFormValues>({ defaultValues })
 
@@ -113,6 +114,7 @@ export default function useEventForm(currentValues?: EventWithArtistVenue) {
         error,
         errors,
         setValue,
+        getValues,
         control
     }
 }

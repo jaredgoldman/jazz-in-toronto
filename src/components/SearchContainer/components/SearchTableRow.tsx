@@ -7,23 +7,25 @@ import VenueForm from '~/components/Forms/Venue'
 // Types
 import { DataType } from '~/types/enums'
 import { type RowData } from '../types'
+import type { EventWithArtistVenue, Artist, Venue } from '~/types/data'
 import type useEventForm from '~/components/Forms/Event/hooks/useEventForm'
 import type useArtistForm from '~/components/Forms/Artist/hooks/useArtistForm'
 import type useVenueForm from '~/components/Forms/Venue/hooks/useVenueForm'
 // Utils
 import { getFormattedTime } from '~/utils/date'
-// Hooks
 
 interface Props {
     data: RowData
-    key: string
     featured?: string
     onEdit?: () => Promise<void>
     setFeatured: (id: string, type: DataType) => void
+    canEditFormState?: boolean
     editFormHook:
         | typeof useEventForm
         | typeof useArtistForm
         | typeof useVenueForm
+    setItems: (items: Array<EventWithArtistVenue | Artist | Venue>) => void
+    items: Array<EventWithArtistVenue | Artist | Venue>
 }
 
 const getEditFormCellandProps = (
@@ -66,11 +68,13 @@ const getEditFormCellandProps = (
 
 export default function SearchTableRow({
     data,
-    key,
     featured,
     setFeatured,
     onEdit,
-    editFormHook
+    editFormHook,
+    canEditFormState = false,
+    setItems,
+    items
 }: Props) {
     let cols
 
@@ -141,12 +145,30 @@ export default function SearchTableRow({
     }
 
     const onEditRow = async () => {
-        await editFormProps.submit()
-        onEdit && (await onEdit())
+        // Allow for form state to be edited before <submission
+        // Added the eventscraper logic currently
+        if (canEditFormState) {
+            const editedRow = editFormProps.getValues()
+            const updatedItems = items.map(
+                (stateItem: EventWithArtistVenue | Artist | Venue) => {
+                    if (stateItem.id === item.id) {
+                        return editedRow
+                    } else {
+                        return stateItem
+                    }
+                }
+            )
+            setItems(
+                updatedItems as Array<EventWithArtistVenue | Artist | Venue>
+            )
+        } else {
+            await editFormProps.submit()
+            onEdit && (await onEdit())
+        }
     }
 
     return (
-        <Table.Row align="center" key={key}>
+        <Table.Row align="center" key={item.id}>
             <Table.Cell key="featured">
                 <input
                     type="checkbox"
