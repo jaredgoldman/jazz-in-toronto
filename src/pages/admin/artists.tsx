@@ -6,7 +6,7 @@ import Loading from '~/components/Loading'
 import { api } from '~/utils/api'
 import { DataType } from '~/types/enums'
 
-export default function Adminartists() {
+export default function AdminArtists() {
     const {
         data: artists,
         isLoading: artistsLoading,
@@ -17,17 +17,20 @@ export default function Adminartists() {
 
     const isLoading = artistsLoading || featuredLoading
 
+    const onEdit = async () => {
+        await refetch()
+    }
+
     return (
         <AdminLayout pageTitle="Jazz In Toronto | Admin - artists">
             <>
                 {artists && !isLoading && (
                     <SearchContainer
+                        data={{ type: DataType.ARTIST, items: artists }}
                         heading="Find artists"
-                        items={artists}
                         featuredItem={featuredItem}
                         isLoading={isLoading}
-                        itemType={DataType.ARTIST}
-                        refetch={refetch}
+                        onEdit={onEdit}
                     />
                 )}
                 {isLoading && <Loading />}

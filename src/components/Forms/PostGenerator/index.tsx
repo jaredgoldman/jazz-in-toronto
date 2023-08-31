@@ -20,8 +20,7 @@ export default function PostGenerator(): JSX.Element {
         isLoading,
         isSuccess,
         error,
-        events,
-        refetch
+        events
     } = usePostGenerator()
 
     return (
@@ -87,12 +86,12 @@ export default function PostGenerator(): JSX.Element {
                 </Flex>
             </FormLayout>
             <Heading>Events in this post</Heading>
-            <SearchContainer
-                isLoading={isLoading}
-                items={events}
-                itemType={DataType.EVENT}
-                refetch={refetch}
-            />
+            {events && (
+                <SearchContainer
+                    data={{ type: DataType.EVENT, items: events }}
+                    isLoading={isLoading}
+                />
+            )}
         </>
     )
 }

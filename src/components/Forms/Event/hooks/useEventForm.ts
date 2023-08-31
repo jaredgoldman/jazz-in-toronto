@@ -33,8 +33,12 @@ export default function useEventForm(currentValues?: EventWithArtistVenue) {
         isLoading: artistsLoading
     } = api.artist.getAll.useQuery()
 
-    const eventMutation = api.event.create.useMutation()
-    const editEventMutation = api.event.update.useMutation()
+    const { mutateAsync: eventMutation, isSuccess: eventMutationIsSuccess } =
+        api.event.create.useMutation()
+    const {
+        mutateAsync: editEventMutation,
+        isSuccess: editEventMutationIsSuccess
+    } = api.event.update.useMutation()
 
     const isLoading = venuesLoading || artistsLoading
     const isEditing = !!currentValues
@@ -65,12 +69,12 @@ export default function useEventForm(currentValues?: EventWithArtistVenue) {
     const onSubmit = async (values: EventFormValues) => {
         try {
             if (isEditing && currentValues && editEventMutation) {
-                await editEventMutation.mutateAsync({
+                await editEventMutation({
                     id: currentValues?.id,
                     ...values
                 })
             } else if (eventMutation) {
-                await eventMutation.mutateAsync(values)
+                await eventMutation(values)
             }
         } catch (e) {
             setError('There was an error submitting. Please try again')
@@ -99,8 +103,8 @@ export default function useEventForm(currentValues?: EventWithArtistVenue) {
         isEditing,
         venueData,
         artistData,
-        eventMutation,
-        editEventMutation,
+        eventMutationIsSuccess,
+        editEventMutationIsSuccess,
         submit,
         onAddArtist,
         onAddVenue,

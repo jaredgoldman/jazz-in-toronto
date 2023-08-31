@@ -3,8 +3,6 @@ import { useState } from 'react'
 // Components
 import { Dialog, Button, Box } from '@radix-ui/themes'
 // Types
-import { type QueryObserverResult } from '@tanstack/react-query'
-import { type RefObject } from 'react'
 
 interface Props {
     title: string
@@ -12,12 +10,7 @@ interface Props {
     component: JSX.Element
     closeLabel?: string
     description?: string
-    // Reference to previous form submition method
-    formRef?: RefObject<{
-        submitForm: () => Promise<void>
-    }>
-    // refetch function for re-updating state a previous form
-    refetch?: () => Promise<QueryObserverResult<unknown>>
+    onSubmit?: () => Promise<void>
     showSave?: boolean
     triggerButtonClassName?: string
     triggerButtonVariant?:
@@ -33,19 +26,16 @@ export default function Dialogue({
     title,
     triggerLabel,
     description,
+    onSubmit,
     component,
-    formRef,
-    refetch,
     showSave = true,
     triggerButtonClassName,
     triggerButtonVariant = 'classic'
 }: Props) {
     const [open, setOpen] = useState(false)
+
     const handleOnSave = async () => {
-        if (formRef?.current?.submitForm) {
-            await formRef.current?.submitForm()
-            refetch && (await refetch())
-        }
+        onSubmit && (await onSubmit())
         setOpen(false)
     }
 

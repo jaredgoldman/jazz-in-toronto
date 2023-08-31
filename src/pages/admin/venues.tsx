@@ -15,18 +15,22 @@ export default function AdminVenues() {
     const { data: featuredItem, isLoading: featuredLoading } =
         api.venue.getFeatured.useQuery()
 
+    const onEdit = async () => {
+        await refetch()
+    }
+
     const isLoading = venuesLoading || featuredLoading
+
     return (
         <AdminLayout pageTitle="Jazz In Toronto | Admin - Venues">
             <>
                 {events && !isLoading && (
                     <SearchContainer
+                        data={{ type: DataType.VENUE, items: events }}
+                        onEdit={onEdit}
                         heading="Find Venues"
-                        refetch={refetch}
-                        items={events}
                         featuredItem={featuredItem}
                         isLoading={isLoading}
-                        itemType={DataType.VENUE}
                     />
                 )}
                 {isLoading && <Loading />}

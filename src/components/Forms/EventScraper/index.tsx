@@ -48,6 +48,7 @@ export default function EventScraper({ venues }: Props): JSX.Element {
                         <Form.Submit asChild>
                             <Button>Scrape Events</Button>
                         </Form.Submit>
+                        <Button ml="2">Add Artists</Button>
                     </Flex>
                 </Form.Root>
                 {error && (
@@ -59,7 +60,10 @@ export default function EventScraper({ venues }: Props): JSX.Element {
                 {isSuccess && data && (
                     <Flex direction="column" justify="center" mt="5">
                         <Heading align="center">Results</Heading>
-                        <SearchTable items={data} dataType={DataType.EVENT} />
+                        <SearchTable
+                            isLoading={isLoading}
+                            data={{ type: DataType.EVENT, items: data }}
+                        />
                     </Flex>
                 )}
             </Flex>

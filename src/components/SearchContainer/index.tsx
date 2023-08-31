@@ -4,34 +4,31 @@ import SearchTable from './components/SearchTable'
 import { Container, Heading } from '@radix-ui/themes'
 // Types
 import type { EventWithArtistVenue, Venue, Artist } from '~/types/data'
-import { type QueryObserverResult } from '@tanstack/react-query'
-import { type DataType } from '~/types/enums'
+import { type TableData } from './types'
 // Hooks
 import useSearch from './hooks/useSearch'
 
-interface Props<T> {
-    heading?: string
-    items?: Array<EventWithArtistVenue | Venue | Artist>
-    itemType: DataType
+interface Props {
+    data: TableData
     isLoading: boolean
+    heading?: string
     featuredItem?: EventWithArtistVenue | Venue | Artist | null
     searchDate?: Date
+    onEdit?: () => Promise<void>
     setSearchDate?: (date: Date) => void
-    refetch?: () => Promise<QueryObserverResult<T>>
 }
 
-export default function SearchContainer<T>({
+export default function SearchContainer({
+    data,
+    isLoading,
     heading,
-    items,
     featuredItem,
-    itemType,
     searchDate,
     setSearchDate,
-    refetch
-}: Props<T>): JSX.Element {
+    onEdit
+}: Props): JSX.Element {
     const { filteredItems, handleSearch } = useSearch(
-        itemType,
-        items,
+        data,
         searchDate,
         setSearchDate
     )
@@ -44,14 +41,16 @@ export default function SearchContainer<T>({
             <SearchBar
                 onSearch={handleSearch}
                 searchDate={searchDate}
-                itemType={itemType}
+                itemType={data.type}
             />
             {filteredItems && (
                 <SearchTable
-                    items={filteredItems}
-                    dataType={itemType}
+                    data={
+                        { type: data.type, items: filteredItems } as TableData
+                    }
+                    isLoading={isLoading}
                     featuredItem={featuredItem}
-                    refetch={refetch}
+                    onEdit={onEdit}
                 />
             )}
         </Container>

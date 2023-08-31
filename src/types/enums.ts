@@ -7,6 +7,5 @@ export enum AdminRole {
 export enum DataType {
     ARTIST = 'ARTIST',
     VENUE = 'VENUE',
-    EVENT = 'EVENT',
-    ADMIN = 'ADMIN'
+    EVENT = 'EVENT'
 }
