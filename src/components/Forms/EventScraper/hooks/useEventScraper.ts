@@ -23,8 +23,11 @@ export default function useEventScraper() {
     const {
         handleSubmit,
         control,
-        formState: { errors }
+        formState: { errors },
+        watch
     } = useForm({ defaultValues })
+
+    const venueId = watch('venueId')
 
     const submit = handleSubmit((data) => {
         try {
@@ -41,6 +44,7 @@ export default function useEventScraper() {
         errors,
         data,
         isSuccess,
-        error
+        error,
+        venueId
     }
 }

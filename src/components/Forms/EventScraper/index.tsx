@@ -17,8 +17,16 @@ interface Props {
 }
 
 export default function EventScraper({ venues }: Props): JSX.Element {
-    const { submit, isLoading, control, error, errors, data, isSuccess } =
-        useEventScraper()
+    const {
+        submit,
+        isLoading,
+        control,
+        error,
+        errors,
+        data,
+        isSuccess,
+        venueId
+    } = useEventScraper()
 
     return (
         <FormLayout isLoading={isLoading}>
@@ -64,6 +72,7 @@ export default function EventScraper({ venues }: Props): JSX.Element {
                             canEditFormState={true}
                             isLoading={isLoading}
                             data={{ type: DataType.EVENT, items: data }}
+                            venueId={venueId}
                         />
                     </Flex>
                 )}

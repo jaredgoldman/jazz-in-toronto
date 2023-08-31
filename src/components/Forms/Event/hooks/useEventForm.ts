@@ -96,6 +96,16 @@ export default function useEventForm(currentValues?: EventWithArtistVenue) {
         }
     }
 
+    // Grab the specific artist data from the artist data array
+    // Helpful when editing an event in state in the eventScraper
+    const getSpecificArtistData = () => {
+        if (artistData) {
+            return artistData.filter(
+                (artist) => artist.id === getValues().artistId
+            )[0]
+        }
+    }
+
     const submit = handleSubmit(async (data) => {
         await onSubmit(data)
     })
@@ -115,6 +125,7 @@ export default function useEventForm(currentValues?: EventWithArtistVenue) {
         errors,
         setValue,
         getValues,
-        control
+        control,
+        getSpecificArtistData
     }
 }

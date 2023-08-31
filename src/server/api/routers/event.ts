@@ -41,8 +41,8 @@ export const eventRouter = createTRPCRouter({
                     startDate: z.date(),
                     endDate: z.date(),
                     featured: z.boolean().optional(),
-                    instagramHandle: z.string().nullable(),
-                    website: z.string().nullable(),
+                    instagramHandle: z.string().nullable().optional(),
+                    website: z.string().nullable().optional(),
                     artistId: z.string().cuid(),
                     venueId: z.string().cuid()
                 })

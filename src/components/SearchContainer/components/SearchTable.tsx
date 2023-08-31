@@ -1,11 +1,12 @@
 // Libraries
 import { useEffect, useState } from 'react'
-import { Button, Table } from '@radix-ui/themes'
+import { Flex, Button, Callout, Table } from '@radix-ui/themes'
 import SearchTableHeader from './SearchTableHeader'
 import tableSchema from '../data/tableSchema'
 // Components
 import SearchTableRow from './SearchTableRow'
 import Loading from '~/components/Loading'
+import { InfoCircledIcon } from '@radix-ui/react-icons'
 // Types
 import type { TableData, RowData } from '../types'
 import { DataType } from '~/types/enums'
@@ -20,6 +21,7 @@ interface Props {
     onEdit?: () => Promise<void>
     featuredItem?: Venue | Artist | EventWithArtistVenue | null
     canEditFormState?: boolean
+    venueId?: string
 }
 
 export default function SearchTable({
@@ -27,11 +29,13 @@ export default function SearchTable({
     isLoading,
     featuredItem,
     onEdit,
-    canEditFormState = false
+    canEditFormState = false,
+    venueId
 }: Props): JSX.Element {
     const [items, setItems] = useState<
         Array<Venue | EventWithArtistVenue | Artist>
     >([])
+    const [canSubmit, setCanSubmit] = useState<boolean>(false)
     const eventSetFeaturedMutation = api.event.setFeatured.useMutation()
     const venueSetFeaturedMutation = api.venue.setFeatured.useMutation()
     const bandSetFeaturedMutation = api.artist.setFeatured.useMutation()
@@ -42,6 +46,7 @@ export default function SearchTable({
         featuredItem?.id
     )
 
+    // Keep items in state so we can edit them in place and submit them all at once
     useEffect(() => {
         if (data.items.length) {
             setItems(data.items)
@@ -55,7 +60,7 @@ export default function SearchTable({
                     return {
                         ...item,
                         artistId: item.artist.id,
-                        venueId: item.venue.id
+                        venueId: venueId || item.venue.id
                     }
                 })
                 await addEventMutation.mutateAsync(events)
@@ -111,6 +116,18 @@ export default function SearchTable({
         )
     })
 
+    useEffect(() => {
+        if (data.type === DataType.EVENT) {
+            const itemMissingData = (items as EventWithArtistVenue[]).some(
+                (item) => {
+                    return !item.artistId || !item.venueId
+                }
+            )
+
+            setCanSubmit(!itemMissingData)
+        }
+    }, [items])
+
     return (
         <>
             {isLoading ? (
@@ -130,12 +147,25 @@ export default function SearchTable({
                 </Table.Root>
             )}
             {canEditFormState && (
-                <Button
-                    disabled={!items.length}
-                    onClick={handleSubmitStateEntries}
-                >
-                    Save Events
-                </Button>
+                <Flex width="100%" direction="column">
+                    {!canSubmit && (
+                        <Callout.Root mb="2">
+                            <Callout.Icon>
+                                <InfoCircledIcon />
+                            </Callout.Icon>
+                            <Callout.Text>
+                                You must add a venue and artist to each event
+                                before you can submit
+                            </Callout.Text>
+                        </Callout.Root>
+                    )}
+                    <Button
+                        disabled={!canSubmit}
+                        onClick={handleSubmitStateEntries}
+                    >
+                        Save Events
+                    </Button>
+                </Flex>
             )}
         </>
     )

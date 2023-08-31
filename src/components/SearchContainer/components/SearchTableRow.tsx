@@ -8,6 +8,7 @@ import VenueForm from '~/components/Forms/Venue'
 import { DataType } from '~/types/enums'
 import { type RowData } from '../types'
 import type { EventWithArtistVenue, Artist, Venue } from '~/types/data'
+import { type EventFormValues } from '~/components/Forms/Event/hooks/useEventForm'
 import type useEventForm from '~/components/Forms/Event/hooks/useEventForm'
 import type useArtistForm from '~/components/Forms/Artist/hooks/useArtistForm'
 import type useVenueForm from '~/components/Forms/Venue/hooks/useVenueForm'
@@ -90,10 +91,7 @@ export default function SearchTableRow({
                 <>
                     <Table.Cell key="name">{item.name}</Table.Cell>
                     <Table.Cell key="venueName">{item.venue.name}</Table.Cell>
-                    <Table.Cell key="startDate">
-                        {item.startDate.toDateString()}
-                    </Table.Cell>
-                    <Table.Cell>{`${getFormattedTime(
+                    <Table.Cell key="date">{`${item.startDate.toDateString()} - ${getFormattedTime(
                         item.startDate
                     )} - ${getFormattedTime(item.endDate)}`}</Table.Cell>
                     <Table.Cell key="artistName">{item.artist.name}</Table.Cell>
@@ -147,12 +145,20 @@ export default function SearchTableRow({
     const onEditRow = async () => {
         // Allow for form state to be edited before <submission
         // Added the eventscraper logic currently
-        if (canEditFormState) {
-            const editedRow = editFormProps.getValues()
-            const updatedItems = items.map(
-                (stateItem: EventWithArtistVenue | Artist | Venue) => {
+        if (canEditFormState && type === DataType.EVENT) {
+            const editedRow = editFormProps.getValues() as EventFormValues
+            const updatedItems = (items as EventWithArtistVenue[]).map(
+                (stateItem) => {
                     if (stateItem.id === item.id) {
-                        return editedRow
+                        const data = {
+                            ...stateItem,
+                            ...editedRow,
+                            artist: (
+                                editFormProps as ReturnType<typeof useEventForm>
+                            ).getSpecificArtistData()
+                        }
+                        console.log('DATA', data)
+                        return data
                     } else {
                         return stateItem
                     }
@@ -169,6 +175,7 @@ export default function SearchTableRow({
 
     return (
         <Table.Row align="center" key={item.id}>
+            {cols}
             <Table.Cell key="featured">
                 <input
                     type="checkbox"
@@ -176,7 +183,6 @@ export default function SearchTableRow({
                     onChange={() => setFeatured(item.id, type)}
                 />
             </Table.Cell>
-            {cols}
             <Table.Cell key="edit">
                 <Dialogue
                     title="Edit"

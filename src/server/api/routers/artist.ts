@@ -32,8 +32,8 @@ export const artistRouter = createTRPCRouter({
                     genre: z.string().nullable(),
                     photoPath: z.string().nullable(),
                     featured: z.boolean().optional(),
-                    instagramHandle: z.string().nullable(),
-                    website: z.string().nullable()
+                    instagramHandle: z.string().nullable().optional(),
+                    website: z.string().nullable().optional()
                 })
             )
         )
