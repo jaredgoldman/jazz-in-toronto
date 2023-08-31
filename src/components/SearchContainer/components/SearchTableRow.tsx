@@ -8,12 +8,12 @@ import VenueForm from '~/components/Forms/Venue'
 import { DataType } from '~/types/enums'
 import { type RowData } from '../types'
 import type { EventWithArtistVenue, Artist, Venue } from '~/types/data'
-import { type EventFormValues } from '~/components/Forms/Event/hooks/useEventForm'
 import type useEventForm from '~/components/Forms/Event/hooks/useEventForm'
 import type useArtistForm from '~/components/Forms/Artist/hooks/useArtistForm'
 import type useVenueForm from '~/components/Forms/Venue/hooks/useVenueForm'
 // Utils
 import { getFormattedTime } from '~/utils/date'
+import { isUseEventFormProps } from '~/utils/typeguards'
 
 interface Props {
     data: RowData
@@ -142,12 +142,6 @@ export default function SearchTableRow({
             break
     }
 
-    const isUseEventFormProps = (editFormProps: {
-        [key: string]: unknown
-    }): editFormProps is ReturnType<typeof useEventForm> => {
-        return editFormProps.hasOwnProperty('getSpecificArtistData')
-    }
-
     const onEditRow = async () => {
         // Allow for form state to be edited before <submission
         // Added the eventscraper logic currently
@@ -171,6 +165,9 @@ export default function SearchTableRow({
             })
             setItems(updatedItems as EventWithArtistVenue[])
         } else {
+            // Otherwise just update indiivudal row and
+            // run onEdit which is currently usually a call to
+            // refetch data
             await editFormProps.submit()
             onEdit && (await onEdit())
         }

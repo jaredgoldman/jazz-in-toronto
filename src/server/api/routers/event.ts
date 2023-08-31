@@ -48,10 +48,56 @@ export const eventRouter = createTRPCRouter({
                 })
             )
         )
-        .mutation(({ ctx, input }) => {
-            return ctx.prisma.event.createMany({
-                data: input
-            })
+        .mutation(async ({ ctx, input }) => {
+            for (const row of input) {
+                // if event already exists at that venue at that time
+                const maybeEvent = await ctx.prisma.event.findUnique({
+                    where: {
+                        startDate_venueId: {
+                            venueId: row.venueId,
+                            startDate: row.startDate
+                        }
+                    },
+                    include: {
+                        artist: true,
+                        venue: true
+                    }
+                })
+
+                if (maybeEvent) {
+                    // if event name or artist is the same, skip, keep artist entered event
+                    if (
+                        maybeEvent.artistId === row.artistId ||
+                        maybeEvent.artist.name.toLowerCase() ===
+                            row.name.toLowerCase()
+                    ) {
+                        continue
+                    }
+                    // if event name is different, deactive previous event and create new one
+                    else {
+                        console.log(
+                            `Found duplicate event - ${
+                                row.name
+                            } - ${row.startDate.toDateString()} - ${
+                                row.venueId
+                            }`
+                        )
+                        await ctx.prisma.event.update({
+                            where: { id: maybeEvent.id },
+                            data: { cancelled: true }
+                        })
+                    }
+                }
+
+                const { artistId, venueId, ...eventData } = row
+                await ctx.prisma.event.create({
+                    data: {
+                        ...eventData,
+                        artist: { connect: { id: artistId } },
+                        venue: { connect: { id: venueId } }
+                    }
+                })
+            }
         }),
 
     get: publicProcedure

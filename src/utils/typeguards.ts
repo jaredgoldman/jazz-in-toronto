@@ -4,10 +4,11 @@ import {
     type Artist,
     type Venue
 } from '~/types/data'
+import type useEventForm from '~/components/Forms/Event/hooks/useEventForm'
 
 type Item = EventWithArtistVenue | Artist | Venue
 
-export const isEvent = (
+export const isEventWithArtistVenue = (
     item: Item | undefined
 ): item is EventWithArtistVenue => {
     return (
@@ -28,4 +29,10 @@ export const isVenue = (item: Item | undefined): item is Venue => {
 
 export const nonNullable = <T>(value: T): value is NonNullable<T> => {
     return value !== null && value !== undefined
+}
+
+export const isUseEventFormProps = (editFormProps: {
+    [key: string]: unknown
+}): editFormProps is ReturnType<typeof useEventForm> => {
+    return editFormProps.hasOwnProperty('getSpecificArtistData')
 }
