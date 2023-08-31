@@ -1,5 +1,3 @@
-// Libraries
-import { forwardRef, useImperativeHandle, type Ref } from 'react'
 // Components
 import * as Form from '@radix-ui/react-form'
 import { Input } from '../Fields'
@@ -7,45 +5,42 @@ import Upload from '../Fields/Upload'
 import FormLayout from '~/layouts/FormLayout'
 import { Heading, Flex, Text } from '@radix-ui/themes'
 // Types
-import { type Artist } from '~/types/data'
+import type { FileData } from '~/types/data'
 // hooks
-import useArtistForm from './hooks/useArtistForm'
+import { type BaseSyntheticEvent } from 'react'
+import { type ArtistFormValues } from './hooks/useArtistForm'
+import type { Control, FieldErrors } from 'react-hook-form'
 
 interface Props {
-    currentValues?: Artist
-    onAdd?: (value: Artist) => Promise<void>
-    externalSubmit?: boolean
+    artistMutationIsSuccess: boolean
+    editArtistMutationIsSuccess: boolean
+    handleDeletePhoto: () => Promise<void>
+    submit?: (e: BaseSyntheticEvent) => Promise<void>
+    error?: string
+    errors: FieldErrors<ArtistFormValues>
+    control: Control<ArtistFormValues>
+    onUpload: (data: FileData) => void
+    isEditing: boolean
+    showSubmitButton?: boolean
 }
 
-export default forwardRef(function ArtistForm(
-    { currentValues, onAdd, externalSubmit = false }: Props,
-    ref: Ref<unknown> | undefined
-): JSX.Element {
-    const {
-        artistMutation,
-        editartistMutation,
-        handleDeletePhoto,
-        error,
-        submit,
-        errors,
-        control,
-        onUpload
-    } = useArtistForm(currentValues, onAdd)
-
-    /*
-     * useImperative handle helps reference methods
-     * in a sibling or parents components
-     * helpful for nested forms like this one
-     */
-    useImperativeHandle(ref, () => ({
-        submitForm: submit
-    }))
-
+export default function ArtistForm({
+    artistMutationIsSuccess,
+    editArtistMutationIsSuccess,
+    handleDeletePhoto,
+    submit,
+    errors,
+    error,
+    control,
+    onUpload,
+    isEditing,
+    showSubmitButton = true
+}: Props): JSX.Element {
     return (
         <FormLayout>
             <Form.Root onSubmit={submit}>
                 <Heading>
-                    {currentValues
+                    {isEditing
                         ? `Edit artist`
                         : 'Add your artist to our database'}
                 </Heading>
@@ -83,12 +78,12 @@ export default forwardRef(function ArtistForm(
                         control={control}
                     />
                     <Flex width="100%" align="center" mt="3">
-                        {artistMutation.isSuccess && (
+                        {artistMutationIsSuccess && (
                             <Text size="2" color="green" align="center">
                                 Event submitted succesfully
                             </Text>
                         )}
-                        {editartistMutation.isSuccess && (
+                        {editArtistMutationIsSuccess && (
                             <Text size="2" color="green" align="center">
                                 Event edited succesfully
                             </Text>
@@ -100,7 +95,7 @@ export default forwardRef(function ArtistForm(
                         )}
                     </Flex>
                 </Flex>
-                {!externalSubmit && (
+                {showSubmitButton && (
                     <Flex width="100%" justify="center">
                         <Form.Submit>Submit</Form.Submit>
                     </Flex>
@@ -108,4 +103,4 @@ export default forwardRef(function ArtistForm(
             </Form.Root>
         </FormLayout>
     )
-})
+}

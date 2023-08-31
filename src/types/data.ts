@@ -13,12 +13,6 @@ export type EventWithArtistVenue = Prisma.EventGetPayload<{
 export type Item = EventWithArtistVenue | Artist | Venue
 export type Items = EventWithArtistVenue[] | Artist[] | Venue[] | []
 
-// This type represents the data that is scraped from a venue's website
-export type PartialEvent = Pick<
-    Event,
-    'startDate' | 'endDate' | 'name' | 'venueId'
->
-
 export type { Artist, Venue, Event, Admin }
 
 export interface FileData {

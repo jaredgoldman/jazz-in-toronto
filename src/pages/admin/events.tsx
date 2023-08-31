@@ -21,7 +21,7 @@ enum View {
 export default function AdminEvents(): JSX.Element {
     const [searchDate, setSearchDate] = useState<Date>(new Date())
     const [view, setView] = useState<View>(View.Search)
-    // Queries
+
     const {
         data: events,
         isLoading: isLoadingEvents,
@@ -35,6 +35,10 @@ export default function AdminEvents(): JSX.Element {
         api.event.getFeatured.useQuery()
 
     const isLoading = isLoadingEvents || isLoadingVenues || featuredLoading
+
+    const onEdit = async () => {
+        await refetch()
+    }
 
     return (
         <AdminLayout pageTitle="Jazz In Toronto | Admin - Events">
@@ -61,16 +65,15 @@ export default function AdminEvents(): JSX.Element {
                 </Button>
             </Flex>
             <Container size="3">
-                {view === View.Search && (
+                {view === View.Search && events && (
                     <SearchContainer
+                        data={{ type: DataType.EVENT, items: events }}
                         heading="Find Events"
-                        items={events}
+                        onEdit={onEdit}
                         featuredItem={featuredItem}
-                        itemType={DataType.EVENT}
                         isLoading={isLoadingEvents}
                         searchDate={searchDate}
                         setSearchDate={setSearchDate}
-                        refetch={refetch}
                     />
                 )}
                 {view === View.Scrape && venues && (

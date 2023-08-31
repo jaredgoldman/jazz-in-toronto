@@ -18,10 +18,7 @@ export interface EventFormValues {
     venueId: string
 }
 
-export default function useEventForm(
-    currentValues?: EventWithArtistVenue,
-    externalOnSubmit?: (values: EventFormValues) => void
-) {
+export default function useEventForm(currentValues?: EventWithArtistVenue) {
     const [error, setError] = useState<string>('')
 
     const {
@@ -36,8 +33,12 @@ export default function useEventForm(
         isLoading: artistsLoading
     } = api.artist.getAll.useQuery()
 
-    const eventMutation = api.event.create.useMutation()
-    const editEventMutation = api.event.update.useMutation()
+    const { mutateAsync: eventMutation, isSuccess: eventMutationIsSuccess } =
+        api.event.create.useMutation()
+    const {
+        mutateAsync: editEventMutation,
+        isSuccess: editEventMutationIsSuccess
+    } = api.event.update.useMutation()
 
     const isLoading = venuesLoading || artistsLoading
     const isEditing = !!currentValues
@@ -66,25 +67,17 @@ export default function useEventForm(
     } = useForm<EventFormValues>({ defaultValues })
 
     const onSubmit = async (values: EventFormValues) => {
-        if (externalOnSubmit) {
-            // if this is true, user can edit row in state without mutating
-            // Used for eventScraper to edit items before submission
-            console.log('FIRING EDIT CALLBACK', externalOnSubmit)
-            return externalOnSubmit(values)
-        } else {
-            // Otherwise, mutate!
-            try {
-                if (isEditing && currentValues && editEventMutation) {
-                    await editEventMutation.mutateAsync({
-                        id: currentValues?.id,
-                        ...values
-                    })
-                } else if (eventMutation) {
-                    await eventMutation.mutateAsync(values)
-                }
-            } catch (e) {
-                setError('There was an error submitting. Please try again')
+        try {
+            if (isEditing && currentValues && editEventMutation) {
+                await editEventMutation({
+                    id: currentValues?.id,
+                    ...values
+                })
+            } else if (eventMutation) {
+                await eventMutation(values)
             }
+        } catch (e) {
+            setError('There was an error submitting. Please try again')
         }
     }
 
@@ -110,8 +103,8 @@ export default function useEventForm(
         isEditing,
         venueData,
         artistData,
-        eventMutation,
-        editEventMutation,
+        eventMutationIsSuccess,
+        editEventMutationIsSuccess,
         submit,
         onAddArtist,
         onAddVenue,

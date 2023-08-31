@@ -23,12 +23,16 @@ export interface ArtistFormValues {
 }
 
 export default function useArtistForm(
-    currentValues: Artist | undefined,
+    currentValues?: Artist | undefined,
     onAdd?: (values: Artist) => Promise<void>
 ) {
     const [error, setError] = useState<string>('')
-    const artistMutation = api.artist.create.useMutation()
-    const editartistMutation = api.artist.update.useMutation()
+    const { mutateAsync: artistMutation, isSuccess: artistMutationIsSuccess } =
+        api.artist.create.useMutation()
+    const {
+        mutateAsync: editArtistMutation,
+        isSuccess: editArtistMutationIsSuccess
+    } = api.artist.update.useMutation()
     const deleteartistPhotoMutation = api.artist.deletePhoto.useMutation()
 
     const isEditing = !!currentValues
@@ -85,7 +89,7 @@ export default function useArtistForm(
         try {
             setError('')
             let newValues = values
-            let addedartist
+            let addedArtist
             // if we have fileData in form Input
             // upload it first
             if (values?.fileData?.file) {
@@ -107,16 +111,16 @@ export default function useArtistForm(
                 }
             }
             if (isEditing && currentValues) {
-                addedartist = await editartistMutation.mutateAsync({
+                addedArtist = await editArtistMutation({
                     id: currentValues?.id,
                     ...newValues
                 })
             } else {
-                addedartist = await artistMutation.mutateAsync(newValues)
+                addedArtist = await artistMutation(newValues)
             }
             // XXX: simplify this process, we shouldn't have to prop drill like this
             // maybe pull the modal context into this form?
-            onAdd && (await onAdd(addedartist))
+            onAdd && (await onAdd(addedArtist))
         } catch (e) {
             setError('There was an error adding your artist. Please try again.')
         }
@@ -132,8 +136,8 @@ export default function useArtistForm(
 
     return {
         isEditing,
-        artistMutation,
-        editartistMutation,
+        artistMutationIsSuccess,
+        editArtistMutationIsSuccess,
         handleDeletePhoto,
         startUpload,
         error,

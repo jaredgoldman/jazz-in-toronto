@@ -1,18 +1,14 @@
 import { DataType } from '~/types/enums'
 
-export default {
+const tableSchema = {
     [DataType.EVENT]: [
         {
             label: 'Event Name',
             key: 'name'
         },
         {
-            label: 'Featured',
-            key: 'featured'
-        },
-        {
             label: 'Venue',
-            key: 'venueName'
+            key: 'venue.name'
         },
         {
             label: 'Date',
@@ -20,7 +16,7 @@ export default {
         },
         {
             label: 'Artist',
-            key: 'artistName'
+            key: 'artist.name'
         },
         {
             label: 'Website',
@@ -36,11 +32,11 @@ export default {
         },
         {
             label: 'Featured',
-            key: 'featured'
+            key: ''
         },
         {
             label: 'Edit',
-            key: 'edit'
+            key: ''
         }
     ],
     [DataType.ARTIST]: [
@@ -73,8 +69,12 @@ export default {
             key: 'instagramHandle'
         },
         {
+            label: 'Featured',
+            key: ''
+        },
+        {
             label: 'Edit',
-            key: 'edit'
+            key: ''
         }
     ],
     [DataType.VENUE]: [
@@ -99,12 +99,12 @@ export default {
             key: 'active'
         },
         {
-            label: 'Featured',
-            key: 'featured'
-        },
-        {
             label: 'Instagram',
             key: 'instagramHandle'
+        },
+        {
+            label: 'Featured',
+            key: 'featured'
         },
         {
             label: 'Edit',
@@ -112,3 +112,5 @@ export default {
         }
     ]
 }
+
+export default tableSchema

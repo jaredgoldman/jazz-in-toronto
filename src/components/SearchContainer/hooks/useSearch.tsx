@@ -2,8 +2,8 @@
 import { useEffect, useState } from 'react'
 import { useEvent } from '~/hooks/useEvent'
 // Types
-import { SearchOption } from '../types'
-import type { EventWithArtistVenue, Item, Venue, Artist } from '~/types/data'
+import { SearchOption, type TableData } from '../types'
+import type { EventWithArtistVenue, Artist, Venue } from '~/types/data'
 import { DataType } from '~/types/enums'
 // Utils
 import { deepEqual } from '~/utils/shared'
@@ -24,8 +24,7 @@ const initialSearchData = {
 }
 
 export default function useSearch(
-    itemType: DataType,
-    items?: Array<EventWithArtistVenue | Venue | Artist>,
+    data: TableData,
     searchDate?: Date,
     setSearchDate?: (date: Date) => void
 ) {
@@ -37,38 +36,48 @@ export default function useSearch(
         venue: ''
     })
 
-    const [filteredItems, setFilteredItems] = useState<Array<Item>>(items || [])
+    const [filteredItems, setFilteredItems] = useState<TableData['items']>(
+        data.items || []
+    )
 
     // Filter functions
-    const filterName = useEvent((item: Item) => {
-        return (
-            !searchData.name ||
-            (searchData.name &&
-                item.name.toLowerCase().includes(searchData.name.toLowerCase()))
-        )
-    })
+    const filterName = useEvent(
+        (item: Artist | Venue | EventWithArtistVenue) => {
+            return (
+                !searchData.name ||
+                (searchData.name &&
+                    item.name
+                        .toLowerCase()
+                        .includes(searchData.name.toLowerCase()))
+            )
+        }
+    )
 
-    const filterWebsite = useEvent((item: Item) => {
-        return (
-            !searchData.website ||
-            (searchData.website &&
-                item.website &&
-                item.website
-                    .toLowerCase()
-                    .includes(searchData.website.toLowerCase()))
-        )
-    })
+    const filterWebsite = useEvent(
+        (item: Artist | Venue | EventWithArtistVenue) => {
+            return (
+                !searchData.website ||
+                (searchData.website &&
+                    item.website &&
+                    item.website
+                        .toLowerCase()
+                        .includes(searchData.website.toLowerCase()))
+            )
+        }
+    )
 
-    const filterInstagramHandle = useEvent((item: Item) => {
-        return (
-            !searchData.instagramHandle ||
-            (searchData.instagramHandle &&
-                item.instagramHandle &&
-                item.instagramHandle
-                    .toLowerCase()
-                    .includes(searchData.instagramHandle.toLowerCase()))
-        )
-    })
+    const filterInstagramHandle = useEvent(
+        (item: Artist | Venue | EventWithArtistVenue) => {
+            return (
+                !searchData.instagramHandle ||
+                (searchData.instagramHandle &&
+                    item.instagramHandle &&
+                    item.instagramHandle
+                        .toLowerCase()
+                        .includes(searchData.instagramHandle.toLowerCase()))
+            )
+        }
+    )
 
     const filterVenue = useEvent((event: EventWithArtistVenue) => {
         return (
@@ -83,56 +92,94 @@ export default function useSearch(
 
     useEffect(() => {
         // If we havne't searched yet or if we've cleared the search, return all items
-        if (deepEqual(searchData, initialSearchData) && items?.length) {
-            return setFilteredItems(items)
+        if (deepEqual(searchData, initialSearchData) && data.items?.length) {
+            return setFilteredItems(data.items)
         }
 
-        if (items && searchData) {
+        if (data.items && searchData) {
+            // TODO: Dry this up
             const filterItems = () => {
-                // XXX: Fix this
-                return items.filter((item: Item) => {
-                    const itemIsEvent = itemType === DataType.EVENT
+                if (data.type === DataType.EVENT) {
                     let nameMatch = false
                     let websiteMatch = false
                     let instagramHandleMatch = false
-                    let venueMatch = itemIsEvent ? false : true
+                    let venueMatch = false
 
-                    if (filterName(item)) {
-                        nameMatch = true
-                    }
-                    if (filterWebsite(item)) {
-                        websiteMatch = true
-                    }
-                    if (filterInstagramHandle(item)) {
-                        instagramHandleMatch = true
-                    }
-                    if (
-                        itemIsEvent &&
-                        filterVenue(item as EventWithArtistVenue)
-                    ) {
-                        venueMatch = true
-                    }
-                    if (
-                        nameMatch &&
-                        websiteMatch &&
-                        instagramHandleMatch &&
-                        venueMatch
-                    ) {
-                        return item
-                    }
-                })
+                    return data.items.filter((item: EventWithArtistVenue) => {
+                        if (filterName(item)) {
+                            nameMatch = true
+                        }
+                        if (filterWebsite(item)) {
+                            websiteMatch = true
+                        }
+                        if (filterInstagramHandle(item)) {
+                            instagramHandleMatch = true
+                        }
+                        if (filterVenue(item)) {
+                            venueMatch = true
+                        }
+                        if (
+                            nameMatch &&
+                            websiteMatch &&
+                            instagramHandleMatch &&
+                            venueMatch
+                        ) {
+                            return item
+                        }
+                    })
+                } else if (data.type === DataType.ARTIST) {
+                    let nameMatch = false
+                    let websiteMatch = false
+                    let instagramHandleMatch = false
+
+                    return data.items.filter((item: Artist) => {
+                        if (filterName(item)) {
+                            nameMatch = true
+                        }
+                        if (filterWebsite(item)) {
+                            websiteMatch = true
+                        }
+                        if (filterInstagramHandle(item)) {
+                            instagramHandleMatch = true
+                        }
+                        if (nameMatch && websiteMatch && instagramHandleMatch) {
+                            return item
+                        }
+                    })
+                } else if (data.type === DataType.VENUE) {
+                    let nameMatch = false
+                    let websiteMatch = false
+                    let instagramHandleMatch = false
+
+                    return data.items.filter((item: Venue) => {
+                        if (filterName(item)) {
+                            nameMatch = true
+                        }
+                        if (filterWebsite(item)) {
+                            websiteMatch = true
+                        }
+                        if (filterInstagramHandle(item)) {
+                            instagramHandleMatch = true
+                        }
+                        if (nameMatch && websiteMatch && instagramHandleMatch) {
+                            return item
+                        }
+                    })
+                } else {
+                    return []
+                }
             }
             const filteredItems = filterItems()
             setFilteredItems(filteredItems.sort())
         }
     }, [
         searchData,
-        items,
+        data.items,
         filterInstagramHandle,
         filterName,
         filterVenue,
         filterWebsite,
-        itemType
+        data.type
     ])
 
     // const sortItems = (items: Array<Item>) => {}

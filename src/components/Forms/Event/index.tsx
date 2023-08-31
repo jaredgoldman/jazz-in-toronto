@@ -1,5 +1,3 @@
-// Libraries
-import { useRef, forwardRef, useImperativeHandle, type Ref } from 'react'
 // Components
 import * as Form from '@radix-ui/react-form'
 import { DatePicker, Input, Select } from '../Fields'
@@ -9,52 +7,45 @@ import Dialogue from '~/components/Dialogue'
 import VenueForm from '../Venue'
 import ArtistForm from '../Artist'
 // Types
-import { type EventWithArtistVenue } from '~/types/data'
+import { type BaseSyntheticEvent } from 'react'
+import type { Venue, Artist } from '~/types/data'
+import type { Control, FieldErrors } from 'react-hook-form'
+import { type EventFormValues } from './hooks/useEventForm'
 // Hooks
-import useEventForm, { type EventFormValues } from './hooks/useEventForm'
+import useArtistForm from '../Artist/hooks/useArtistForm'
+import useVenueForm from '../Venue/hooks/useVenueForm'
 
 interface Props {
-    currentValues?: EventWithArtistVenue
-    externalSubmit?: boolean
-    externalOnSubmit?: (values: EventFormValues) => void
+    eventMutationIsSuccess: boolean
+    editEventMutationIsSuccess: boolean
+    artistData: Artist[] | undefined
+    venueData: Venue[] | undefined
+    isLoading: boolean
+    control: Control<EventFormValues>
+    errors: FieldErrors<EventFormValues>
+    error?: string
+    showSubmitButton?: boolean
+    submit: (e: BaseSyntheticEvent) => Promise<void>
+    onAddArtist: (data: Artist) => Promise<void>
+    onAddVenue: (data: Venue) => Promise<void>
 }
 
-interface InnerFormRef {
-    submitForm: () => Promise<void>
-}
-
-export default forwardRef(function EventForm(
-    {
-        currentValues,
-        externalSubmit = false,
-        externalOnSubmit = undefined
-    }: Props,
-    ref: Ref<unknown> | undefined
-): JSX.Element {
-    const venueFormRef = useRef<InnerFormRef | null>(null)
-    const bandFormRef = useRef<InnerFormRef | null>(null)
-    const {
-        eventMutation,
-        editEventMutation,
-        venueData,
-        artistData,
-        error,
-        errors,
-        submit,
-        isLoading,
-        control,
-        onAddArtist,
-        onAddVenue
-    } = useEventForm(currentValues, externalOnSubmit)
-
-    /*
-     * useImperative handle helps reference methods
-     * in a sibling or parents components
-     * helpful for nested forms like this one
-     */
-    useImperativeHandle(ref, () => ({
-        submitForm: submit
-    }))
+export default function EventForm({
+    eventMutationIsSuccess,
+    editEventMutationIsSuccess,
+    venueData,
+    artistData,
+    error,
+    errors,
+    submit,
+    isLoading,
+    control,
+    showSubmitButton = true,
+    onAddArtist,
+    onAddVenue
+}: Props): JSX.Element {
+    const artistFormProps = useArtistForm(undefined, onAddArtist)
+    const venueFormProps = useVenueForm(undefined, onAddVenue)
 
     return (
         <FormLayout maxWidth="max-w-md" isLoading={isLoading}>
@@ -102,12 +93,11 @@ export default forwardRef(function EventForm(
                             <Dialogue
                                 title="Add a venue"
                                 triggerLabel="Add your venue"
-                                formRef={venueFormRef}
+                                onSubmit={venueFormProps.submit}
                                 component={
                                     <VenueForm
-                                        ref={venueFormRef}
-                                        onAdd={onAddVenue}
-                                        externalSubmit={true}
+                                        {...venueFormProps}
+                                        showSubmitButton={false}
                                     />
                                 }
                             />
@@ -126,12 +116,11 @@ export default forwardRef(function EventForm(
                             <Dialogue
                                 title="Add your band"
                                 triggerLabel="Add your band"
-                                formRef={bandFormRef}
+                                onSubmit={artistFormProps.submit}
                                 component={
                                     <ArtistForm
-                                        ref={bandFormRef}
-                                        onAdd={onAddArtist}
-                                        externalSubmit={true}
+                                        {...artistFormProps}
+                                        showSubmitButton={false}
                                     />
                                 }
                             />
@@ -153,12 +142,12 @@ export default forwardRef(function EventForm(
                     />
                 </Flex>
                 <Flex width="100%" justify="center" mt="3">
-                    {eventMutation.isSuccess && (
+                    {eventMutationIsSuccess && (
                         <Text size="2" color="green" align="center">
                             Event submitted succesfully
                         </Text>
                     )}
-                    {editEventMutation.isSuccess && (
+                    {editEventMutationIsSuccess && (
                         <Text size="2" color="green" align="center">
                             Event edited succesfully
                         </Text>
@@ -169,7 +158,7 @@ export default forwardRef(function EventForm(
                         </Text>
                     )}
                 </Flex>
-                {!externalSubmit && (
+                {showSubmitButton && (
                     <Flex width="100%" justify="center" mt="3">
                         <Form.Submit asChild>
                             <Button>Submit</Button>
@@ -179,4 +168,4 @@ export default forwardRef(function EventForm(
             </Form.Root>
         </FormLayout>
     )
-})
+}

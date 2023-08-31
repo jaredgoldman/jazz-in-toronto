@@ -6,42 +6,47 @@ import Upload from '../Fields/Upload'
 import FormLayout from '~/layouts/FormLayout'
 import { Heading, Text, Flex } from '@radix-ui/themes'
 // Types
-import { type Venue } from '~/types/data'
-import { forwardRef, useImperativeHandle, type Ref } from 'react'
-// Hooks
-import useVenueForm from './hooks/useVenueForm'
+import type { FileData } from '~/types/data'
+import { type VenueFormValues } from './hooks/useVenueForm'
+import type { Control, FieldErrors } from 'react-hook-form'
+import { type BaseSyntheticEvent } from 'react'
 
 interface Props {
-    currentValues?: Venue
-    onAdd?: (value: Venue) => Promise<void>
-    externalSubmit?: boolean
+    venueMutationIsSuccess: boolean
+    editVenueMutationIsSuccess: boolean
+    handleDeletePhoto: () => Promise<void>
+    errors: FieldErrors<VenueFormValues>
+    error?: string
+    control: Control<VenueFormValues>
+    onSelectLocation: (
+        address: string,
+        latitude: number,
+        longitude: number,
+        city: string
+    ) => void
+    submit?: (e: BaseSyntheticEvent) => Promise<void>
+    onUpload: (data: FileData) => void
+    isEditing: boolean
+    showSubmitButton?: boolean
 }
 
-export default forwardRef(function VenueForm(
-    { currentValues, onAdd, externalSubmit = false }: Props,
-    ref: Ref<unknown> | undefined
-): JSX.Element {
-    const {
-        venueMutation,
-        editVenueMutation,
-        handleDeletePhoto,
-        errors,
-        submit,
-        control,
-        onUpload,
-        onSelectLocation,
-        error
-    } = useVenueForm(currentValues, onAdd)
-
-    // Leverage useImperitiveHandle to pass submission to parent component
-    useImperativeHandle(ref, () => ({
-        submitForm: submit
-    }))
-
+export default function VenueForm({
+    venueMutationIsSuccess,
+    editVenueMutationIsSuccess,
+    handleDeletePhoto,
+    errors,
+    error,
+    control,
+    submit,
+    onUpload,
+    isEditing = false,
+    onSelectLocation,
+    showSubmitButton
+}: Props): JSX.Element {
     return (
         <FormLayout>
             <Heading>
-                {currentValues ? 'Edit venue' : 'Add your venue here!'}
+                {isEditing ? 'Edit venue' : 'Add your venue here!'}
             </Heading>
             <Form.Root onSubmit={submit}>
                 <Flex direction="column" gap="3">
@@ -86,12 +91,12 @@ export default forwardRef(function VenueForm(
                     />
                 </Flex>
                 <Flex width="100%" align="center" mt="3">
-                    {venueMutation.isSuccess && (
+                    {venueMutationIsSuccess && (
                         <Text size="2" color="green" align="center">
                             Venue submitted succesfully
                         </Text>
                     )}
-                    {editVenueMutation.isSuccess && (
+                    {editVenueMutationIsSuccess && (
                         <Text size="2" color="green" align="center">
                             Venue edited succesfully
                         </Text>
@@ -102,7 +107,7 @@ export default forwardRef(function VenueForm(
                         </Text>
                     )}
                 </Flex>
-                {!externalSubmit && (
+                {showSubmitButton && (
                     <Flex width="100%" justify="center">
                         <Form.Submit>Submit</Form.Submit>
                     </Flex>
@@ -110,4 +115,4 @@ export default forwardRef(function VenueForm(
             </Form.Root>
         </FormLayout>
     )
-})
+}

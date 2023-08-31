@@ -27,14 +27,18 @@ export interface VenueFormValues {
 }
 
 export default function useVenueForm(
-    currentValues: Venue | undefined,
-    onAdd?: (venue: Venue) => Promise<void>
+    currentValues?: Venue,
+    onAdd?: (data: Venue) => Promise<void>
 ) {
     // State
     const [error, setError] = useState<string>('')
     // Mutations
-    const venueMutation = api.venue.create.useMutation()
-    const editVenueMutation = api.venue.update.useMutation()
+    const { mutateAsync: venueMutation, isSuccess: venueMutationIsSuccess } =
+        api.venue.create.useMutation()
+    const {
+        mutateAsync: editVenueMutation,
+        isSuccess: editVenueMutationIsSuccess
+    } = api.venue.update.useMutation()
     const deleteVenuePhotoMutation = api.venue.deletePhoto.useMutation()
 
     const isEditing = !!currentValues
@@ -107,7 +111,6 @@ export default function useVenueForm(
     })
 
     const onSubmit = async (values: VenueFormValues) => {
-        console.log('SUBMITTING')
         try {
             setError('')
             // Make coapy of values and conver phoneNumber to string
@@ -136,12 +139,12 @@ export default function useVenueForm(
                 }
             }
             if (isEditing && currentValues) {
-                addedVenue = await editVenueMutation.mutateAsync({
+                addedVenue = await editVenueMutation({
                     id: currentValues?.id,
                     ...newValues
                 })
             } else {
-                addedVenue = await venueMutation.mutateAsync(newValues)
+                addedVenue = await venueMutation(newValues)
             }
             // If we're in a modal form, handle accordingly
             onAdd && (await onAdd(addedVenue))
@@ -154,8 +157,8 @@ export default function useVenueForm(
 
     return {
         isEditing,
-        venueMutation,
-        editVenueMutation,
+        venueMutationIsSuccess,
+        editVenueMutationIsSuccess,
         handleDeletePhoto,
         startUpload,
         setError,
