@@ -142,31 +142,34 @@ export default function SearchTableRow({
             break
     }
 
+    const isUseEventFormProps = (editFormProps: {
+        [key: string]: unknown
+    }): editFormProps is ReturnType<typeof useEventForm> => {
+        return editFormProps.hasOwnProperty('getSpecificArtistData')
+    }
+
     const onEditRow = async () => {
         // Allow for form state to be edited before <submission
         // Added the eventscraper logic currently
-        if (canEditFormState && type === DataType.EVENT) {
-            const editedRow = editFormProps.getValues() as EventFormValues
-            const updatedItems = (items as EventWithArtistVenue[]).map(
-                (stateItem) => {
-                    if (stateItem.id === item.id) {
-                        const data = {
-                            ...stateItem,
-                            ...editedRow,
-                            artist: (
-                                editFormProps as ReturnType<typeof useEventForm>
-                            ).getSpecificArtistData()
-                        }
-                        console.log('DATA', data)
-                        return data
-                    } else {
-                        return stateItem
+        if (
+            canEditFormState &&
+            type === DataType.EVENT &&
+            isUseEventFormProps(editFormProps)
+        ) {
+            const editedRow = editFormProps.getValues()
+            const updatedItems = items.map((stateItem) => {
+                if (stateItem.id === item.id) {
+                    const data = {
+                        ...stateItem,
+                        ...editedRow,
+                        artist: editFormProps.getSpecificArtistData()
                     }
+                    return data
+                } else {
+                    return stateItem
                 }
-            )
-            setItems(
-                updatedItems as Array<EventWithArtistVenue | Artist | Venue>
-            )
+            })
+            setItems(updatedItems as EventWithArtistVenue[])
         } else {
             await editFormProps.submit()
             onEdit && (await onEdit())

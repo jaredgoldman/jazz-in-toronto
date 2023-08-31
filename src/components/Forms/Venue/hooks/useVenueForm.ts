@@ -150,7 +150,7 @@ export default function useVenueForm(
             // If we're in a modal form, handle accordingly
             onAdd && (await onAdd(addedVenue))
         } catch (e) {
-            setError('There was an error adding your band. Please try again.')
+            setError('There was an error adding your artist. Please try again.')
         }
     }
 
