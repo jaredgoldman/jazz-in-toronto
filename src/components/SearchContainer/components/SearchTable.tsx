@@ -1,6 +1,6 @@
 // Libraries
 import { useEffect, useState } from 'react'
-import { Table } from '@radix-ui/themes'
+import { Button, Table } from '@radix-ui/themes'
 import SearchTableHeader from './SearchTableHeader'
 import tableSchema from '../data/tableSchema'
 // Components
@@ -35,6 +35,9 @@ export default function SearchTable({
     const eventSetFeaturedMutation = api.event.setFeatured.useMutation()
     const venueSetFeaturedMutation = api.venue.setFeatured.useMutation()
     const bandSetFeaturedMutation = api.artist.setFeatured.useMutation()
+    const addEventMutation = api.event.createMany.useMutation()
+    const addVenueMutation = api.venue.createMany.useMutation()
+    const addBandMutation = api.artist.createMany.useMutation()
     const [featured, setFeatured] = useState<string | undefined>(
         featuredItem?.id
     )
@@ -44,6 +47,27 @@ export default function SearchTable({
             setItems(data.items)
         }
     }, [data.items])
+
+    const handleSubmitStateEntries = async () => {
+        switch (data.type) {
+            case DataType.EVENT:
+                const events = (items as EventWithArtistVenue[]).map((item) => {
+                    return {
+                        ...item,
+                        artistId: item.artist.id,
+                        venueId: item.venue.id
+                    }
+                })
+                await addEventMutation.mutateAsync(events)
+                break
+            case DataType.VENUE:
+                await addVenueMutation.mutateAsync(items as Venue[])
+                break
+            case DataType.ARTIST:
+                await addBandMutation.mutateAsync(items as Artist[])
+                break
+        }
+    }
 
     const handleSetFeatured = (id: string) => {
         setFeatured(id)
@@ -104,6 +128,14 @@ export default function SearchTable({
                         )}
                     </Table.Body>
                 </Table.Root>
+            )}
+            {canEditFormState && (
+                <Button
+                    disabled={!items.length}
+                    onClick={handleSubmitStateEntries}
+                >
+                    Save Events
+                </Button>
             )}
         </>
     )

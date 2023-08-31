@@ -33,6 +33,27 @@ export const eventRouter = createTRPCRouter({
             })
         }),
 
+    createMany: protectedProcedure
+        .input(
+            z.array(
+                z.object({
+                    name: z.string(),
+                    startDate: z.date(),
+                    endDate: z.date(),
+                    featured: z.boolean().optional(),
+                    instagramHandle: z.string().nullable(),
+                    website: z.string().nullable(),
+                    artistId: z.string().cuid(),
+                    venueId: z.string().cuid()
+                })
+            )
+        )
+        .mutation(({ ctx, input }) => {
+            return ctx.prisma.event.createMany({
+                data: input
+            })
+        }),
+
     get: publicProcedure
         .input(z.object({ id: z.string().cuid() }))
         .query(({ ctx, input }) => {

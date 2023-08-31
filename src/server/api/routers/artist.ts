@@ -24,6 +24,25 @@ export const artistRouter = createTRPCRouter({
             })
         }),
 
+    createMany: protectedProcedure
+        .input(
+            z.array(
+                z.object({
+                    name: z.string(),
+                    genre: z.string().nullable(),
+                    photoPath: z.string().nullable(),
+                    featured: z.boolean().optional(),
+                    instagramHandle: z.string().nullable(),
+                    website: z.string().nullable()
+                })
+            )
+        )
+        .mutation(({ ctx, input }) => {
+            return ctx.prisma.artist.createMany({
+                data: input
+            })
+        }),
+
     get: publicProcedure
         .input(z.object({ id: z.string().cuid() }))
         .query(({ ctx, input }) => {

@@ -40,6 +40,41 @@ export const venueRouter = createTRPCRouter({
             })
         }),
 
+    createMany: protectedProcedure
+        .input(
+            z.array(
+                z.object({
+                    name: z.string(),
+                    address: z.string(),
+                    city: z.string(),
+                    latitude: z.number(),
+                    longitude: z.number(),
+                    photoPath: z.string().nullable(),
+                    featured: z.boolean().optional(),
+                    instagramHandle: z.string().nullable(),
+                    website: z.string(),
+                    active: z.boolean().optional(),
+                    phoneNumber: z.string(),
+                    area: z.enum([
+                        'JUNCTION',
+                        'LITTLE_PORTUGAL',
+                        'ANNEX',
+                        'KENSINGTON',
+                        'DOWNTOWN',
+                        'RIVERDALE',
+                        'BEACHES',
+                        'NORTH_YORK',
+                        'DAVISVILLE'
+                    ])
+                })
+            )
+        )
+        .mutation(({ ctx, input }) => {
+            return ctx.prisma.venue.createMany({
+                data: input
+            })
+        }),
+
     get: publicProcedure
         .input(z.object({ id: z.string().cuid() }))
         .query(({ ctx, input }) => {
