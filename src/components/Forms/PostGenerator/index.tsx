@@ -6,7 +6,7 @@ import { Heading, Flex, Button, Text, Box } from '@radix-ui/themes'
 import PostImage from './components/PostImage'
 import Loading from '~/components/Loading'
 import * as Form from '@radix-ui/react-form'
-import SearchContainer from '~/components/SearchContainer'
+import SearchTable from '~/components/SearchContainer/components/SearchTable'
 // Hooks
 import usePostGenerator from './hooks/usePostGenerator'
 import { DataType } from '~/types/enums'
@@ -20,8 +20,13 @@ export default function PostGenerator(): JSX.Element {
         isLoading,
         isSuccess,
         error,
-        events
+        events,
+        refetch
     } = usePostGenerator()
+
+    const onEdit = async () => {
+        await refetch()
+    }
 
     return (
         <>
@@ -87,9 +92,10 @@ export default function PostGenerator(): JSX.Element {
             </FormLayout>
             <Heading>Events in this post</Heading>
             {events && (
-                <SearchContainer
+                <SearchTable
                     data={{ type: DataType.EVENT, items: events }}
                     isLoading={isLoading}
+                    onEdit={onEdit}
                 />
             )}
         </>

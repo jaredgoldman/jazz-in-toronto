@@ -27,6 +27,7 @@ interface Props {
         | typeof useVenueForm
     setItems: (items: Items) => void
     items: Array<EventWithArtistVenue | Artist | Venue>
+    showFeatured?: boolean
 }
 
 const getEditFormCellandProps = (
@@ -75,7 +76,8 @@ export default function SearchTableRow({
     editFormHook,
     canEditFormState = false,
     setItems,
-    items
+    items,
+    showFeatured
 }: Props) {
     let cols
 
@@ -182,13 +184,15 @@ export default function SearchTableRow({
     return (
         <Table.Row align="center" key={item.id} className={editFormStateStyles}>
             {cols}
-            <Table.Cell key="featured">
-                <input
-                    type="checkbox"
-                    checked={item.id === featured}
-                    onChange={() => setFeatured(item.id, type)}
-                />
-            </Table.Cell>
+            {showFeatured && (
+                <Table.Cell key="featured">
+                    <input
+                        type="checkbox"
+                        checked={item.id === featured}
+                        onChange={() => setFeatured(item.id, type)}
+                    />
+                </Table.Cell>
+            )}
             <Table.Cell key="edit">
                 <Dialogue
                     title="Edit"

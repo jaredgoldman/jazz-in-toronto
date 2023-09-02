@@ -28,6 +28,7 @@ export default function EventScraper({ venues, artists }: Props): JSX.Element {
         isSuccess,
         venueId
     } = useEventScraper()
+
     return (
         <FormLayout isLoading={isLoading}>
             <Flex align="center" direction="column" grow="1">
@@ -74,6 +75,7 @@ export default function EventScraper({ venues, artists }: Props): JSX.Element {
                             isLoading={isLoading}
                             data={{ type: DataType.EVENT, items: data }}
                             venueId={venueId}
+                            showFeatured={false}
                         />
                     </Flex>
                 )}

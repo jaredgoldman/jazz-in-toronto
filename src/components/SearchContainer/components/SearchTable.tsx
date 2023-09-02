@@ -24,6 +24,7 @@ interface Props {
     featuredItem?: Venue | Artist | EventWithArtistVenue | null
     canEditFormState?: boolean
     venueId?: string
+    showFeatured?: boolean
 }
 
 export default function SearchTable({
@@ -33,7 +34,8 @@ export default function SearchTable({
     featuredItem,
     onEdit,
     canEditFormState = false,
-    venueId
+    venueId,
+    showFeatured = true
 }: Props): JSX.Element {
     const [items, setItems] = useState<Items>([])
     const [canSubmit, setCanSubmit] = useState<boolean>(false)
@@ -137,6 +139,7 @@ export default function SearchTable({
                 canEditFormState={canEditFormState}
                 setItems={setItems}
                 items={items}
+                showFeatured={showFeatured}
             />
         )
     })
@@ -161,7 +164,10 @@ export default function SearchTable({
                 <Loading />
             ) : (
                 <Table.Root>
-                    <SearchTableHeader cols={tableSchema[data.type]} />
+                    <SearchTableHeader
+                        cols={tableSchema[data.type]}
+                        showFeatured={showFeatured}
+                    />
                     <Table.Body>
                         {rows.length ? (
                             rows
