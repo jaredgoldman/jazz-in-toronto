@@ -7,13 +7,13 @@ import VenueForm from '~/components/Forms/Venue'
 // Types
 import { DataType } from '~/types/enums'
 import { type RowData } from '../types'
-import type { EventWithArtistVenue, Artist, Venue } from '~/types/data'
+import type { EventWithArtistVenue, Artist, Venue, Items } from '~/types/data'
 import type useEventForm from '~/components/Forms/Event/hooks/useEventForm'
 import type useArtistForm from '~/components/Forms/Artist/hooks/useArtistForm'
 import type useVenueForm from '~/components/Forms/Venue/hooks/useVenueForm'
 // Utils
 import { getFormattedTime } from '~/utils/date'
-import { isUseEventFormProps } from '~/utils/typeguards'
+import { isEventWithArtistVenue, isUseEventFormProps } from '~/utils/typeguards'
 
 interface Props {
     data: RowData
@@ -25,7 +25,7 @@ interface Props {
         | typeof useEventForm
         | typeof useArtistForm
         | typeof useVenueForm
-    setItems: (items: Array<EventWithArtistVenue | Artist | Venue>) => void
+    setItems: (items: Items) => void
     items: Array<EventWithArtistVenue | Artist | Venue>
 }
 
@@ -173,8 +173,14 @@ export default function SearchTableRow({
         }
     }
 
+    // If form state is editable, show rows that have an artist as green
+    const editFormStateStyles =
+        canEditFormState && isEventWithArtistVenue(item) && item.artistId
+            ? 'bg-green-100'
+            : ''
+
     return (
-        <Table.Row align="center" key={item.id}>
+        <Table.Row align="center" key={item.id} className={editFormStateStyles}>
             {cols}
             <Table.Cell key="featured">
                 <input

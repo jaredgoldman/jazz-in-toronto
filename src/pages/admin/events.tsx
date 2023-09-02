@@ -33,8 +33,11 @@ export default function AdminEvents(): JSX.Element {
         api.venue.getAllCrawlable.useQuery()
     const { data: featuredItem, isLoading: featuredLoading } =
         api.event.getFeatured.useQuery()
+    const { data: artists, isLoading: artistsLoading } =
+        api.artist.getAll.useQuery()
 
-    const isLoading = isLoadingEvents || isLoadingVenues || featuredLoading
+    const isLoading =
+        isLoadingEvents || isLoadingVenues || featuredLoading || artistsLoading
 
     const onEdit = async () => {
         await refetch()
@@ -76,8 +79,8 @@ export default function AdminEvents(): JSX.Element {
                         setSearchDate={setSearchDate}
                     />
                 )}
-                {view === View.Scrape && venues && (
-                    <EventScraper venues={venues} />
+                {view === View.Scrape && venues && artists && (
+                    <EventScraper venues={venues} artists={artists} />
                 )}
                 {view === View.Post && <PostGenerator />}
                 {isLoading && <Loading />}

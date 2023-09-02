@@ -7,16 +7,17 @@ import DatePickerField from '../Fields/DatePicker'
 import Loading from '~/components/Loading'
 import * as Form from '@radix-ui/react-form'
 // Types
-import { type Venue } from '~/types/data'
+import type { Venue, Artist } from '~/types/data'
 import { DataType } from '~/types/enums'
 // Hooks
 import useEventScraper from './hooks/useEventScraper'
 
 interface Props {
     venues: Venue[]
+    artists: Artist[]
 }
 
-export default function EventScraper({ venues }: Props): JSX.Element {
+export default function EventScraper({ venues, artists }: Props): JSX.Element {
     const {
         submit,
         isLoading,
@@ -27,7 +28,6 @@ export default function EventScraper({ venues }: Props): JSX.Element {
         isSuccess,
         venueId
     } = useEventScraper()
-
     return (
         <FormLayout isLoading={isLoading}>
             <Flex align="center" direction="column" grow="1">
@@ -70,6 +70,7 @@ export default function EventScraper({ venues }: Props): JSX.Element {
                         <Heading align="center">Results</Heading>
                         <SearchTable
                             canEditFormState={true}
+                            artists={artists}
                             isLoading={isLoading}
                             data={{ type: DataType.EVENT, items: data }}
                             venueId={venueId}

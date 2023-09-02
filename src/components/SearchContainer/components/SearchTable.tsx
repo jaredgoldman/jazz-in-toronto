@@ -10,13 +10,15 @@ import { InfoCircledIcon } from '@radix-ui/react-icons'
 // Types
 import type { TableData, RowData } from '../types'
 import { DataType } from '~/types/enums'
-import type { Artist, EventWithArtistVenue, Venue } from '~/types/data'
+import type { Artist, EventWithArtistVenue, Items, Venue } from '~/types/data'
 // Utils
 import { api } from '~/utils/api'
 import useEventForm from '~/components/Forms/Event/hooks/useEventForm'
+import { isEventWithArtistVenue } from '~/utils/typeguards'
 
 interface Props {
     data: TableData
+    artists?: Artist[]
     isLoading: boolean
     onEdit?: () => Promise<void>
     featuredItem?: Venue | Artist | EventWithArtistVenue | null
@@ -26,22 +28,21 @@ interface Props {
 
 export default function SearchTable({
     data,
+    artists,
     isLoading,
     featuredItem,
     onEdit,
     canEditFormState = false,
     venueId
 }: Props): JSX.Element {
-    const [items, setItems] = useState<
-        Array<Venue | EventWithArtistVenue | Artist>
-    >([])
+    const [items, setItems] = useState<Items>([])
     const [canSubmit, setCanSubmit] = useState<boolean>(false)
     const eventSetFeaturedMutation = api.event.setFeatured.useMutation()
     const venueSetFeaturedMutation = api.venue.setFeatured.useMutation()
     const bandSetFeaturedMutation = api.artist.setFeatured.useMutation()
-    const addEventMutation = api.event.createMany.useMutation()
-    const addVenueMutation = api.venue.createMany.useMutation()
-    const addBandMutation = api.artist.createMany.useMutation()
+    const addEventsMutation = api.event.createMany.useMutation()
+    const addVenuesMutation = api.venue.createMany.useMutation()
+    const addBandsMutation = api.artist.createMany.useMutation()
     const [featured, setFeatured] = useState<string | undefined>(
         featuredItem?.id
     )
@@ -53,6 +54,30 @@ export default function SearchTable({
         }
     }, [data.items])
 
+    // Search through current artists and attempt to add an artist to each event
+    useEffect(() => {
+        if (canEditFormState && artists?.length && items.length) {
+            addArtistToStateItems(items)
+        }
+    }, [items])
+
+    const addArtistToStateItems = (items: Items) => {
+        items.forEach((item) => {
+            if (isEventWithArtistVenue(item) && artists) {
+                const artist = artists.find((artist) => {
+                    return item.name
+                        .toLowerCase()
+                        .includes(artist.name.toLowerCase())
+                })
+                if (artist) {
+                    item.artistId = artist.id
+                    item.artist = artist
+                }
+            }
+        })
+        setItems(items)
+    }
+
     const handleSubmitStateEntries = async () => {
         switch (data.type) {
             case DataType.EVENT:
@@ -63,13 +88,13 @@ export default function SearchTable({
                         venueId: venueId || item.venue.id
                     }
                 })
-                await addEventMutation.mutateAsync(events)
+                await addEventsMutation.mutateAsync(events)
                 break
             case DataType.VENUE:
-                await addVenueMutation.mutateAsync(items as Venue[])
+                await addVenuesMutation.mutateAsync(items as Venue[])
                 break
             case DataType.ARTIST:
-                await addBandMutation.mutateAsync(items as Artist[])
+                await addBandsMutation.mutateAsync(items as Artist[])
                 break
         }
     }
@@ -116,6 +141,8 @@ export default function SearchTable({
         )
     })
 
+    // If we can edit items in state and all events have a artist added
+    // let admin submmit
     useEffect(() => {
         if (data.type === DataType.EVENT) {
             const itemMissingData = (items as EventWithArtistVenue[]).some(
@@ -154,8 +181,8 @@ export default function SearchTable({
                                 <InfoCircledIcon />
                             </Callout.Icon>
                             <Callout.Text>
-                                You must add a venue and artist to each event
-                                before you can submit
+                                You must add an artist to each event before you
+                                can submit
                             </Callout.Text>
                         </Callout.Root>
                     )}
