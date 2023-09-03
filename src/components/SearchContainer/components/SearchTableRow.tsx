@@ -103,7 +103,9 @@ export default function SearchTableRow({
                     <Table.Cell key="instagramHandle">
                         {item.instagramHandle ? item.instagramHandle : ''}
                     </Table.Cell>
-                    <Table.Cell key="cancelled">{item.cancelled}</Table.Cell>
+                    <Table.Cell key="cancelled">
+                        {item.cancelled ? 'Yes' : 'No'}
+                    </Table.Cell>
                 </>
             )
             break

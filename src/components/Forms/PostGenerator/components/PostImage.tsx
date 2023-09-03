@@ -12,8 +12,8 @@ interface Props {
 
 export default function PostImage({
     key,
-    width = 400,
-    height = 400,
+    width = 500,
+    height = 500,
     src,
     removePostImage
 }: Props) {
@@ -30,7 +30,13 @@ export default function PostImage({
                         </Button>
                     )}
 
-                    <Image src={src} width={width} height={height} alt="post" />
+                    <Image
+                        src={src}
+                        width={width}
+                        height={height}
+                        alt="post"
+                        className="h-auto min-w-[500px]"
+                    />
                 </Box>
             )}
         </Card>

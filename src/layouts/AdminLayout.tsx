@@ -32,7 +32,7 @@ export default function AdminLayout({
                     headerType={HeaderType.Admin}
                     showLinks={showHeaderLinks}
                 />
-                <Container size="3" className="flex-grow">
+                <Container size="3" className="flex-grow overflow-x-hidden">
                     {session ? (
                         children
                     ) : (

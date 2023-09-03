@@ -12,6 +12,7 @@ interface PostGeneratorValues {
 export default function usePostGenerator() {
     const [error, setError] = useState<string>('')
     const { isLoading, data, mutate, isSuccess } = api.event.post.useMutation()
+
     const defaultValues = {
         date: new Date(),
         caption: ''

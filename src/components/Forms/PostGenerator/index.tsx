@@ -1,3 +1,4 @@
+import { useState } from 'react'
 // Componenets
 import { DatePicker } from '../Fields'
 import { Input } from '../Fields'
@@ -7,11 +8,16 @@ import PostImage from './components/PostImage'
 import Loading from '~/components/Loading'
 import * as Form from '@radix-ui/react-form'
 import SearchTable from '~/components/SearchContainer/components/SearchTable'
+import { Card } from '@radix-ui/themes'
 // Hooks
 import usePostGenerator from './hooks/usePostGenerator'
 import { DataType } from '~/types/enums'
+import FileUploadButton from '~/components/FileUploadButton'
+import { type FileData } from '~/types/data'
 
 export default function PostGenerator(): JSX.Element {
+    const [srcs, setSrcs] = useState<Set<string>>(new Set())
+
     const {
         files,
         control,
@@ -28,10 +34,26 @@ export default function PostGenerator(): JSX.Element {
         await refetch()
     }
 
+    const removeImage = (index: number) => {
+        setSrcs((prev) => {
+            const newSet = new Set(prev)
+            newSet.delete(Array.from(prev)[index] as string)
+            return newSet
+        })
+    }
+
+    const onUpload = (data: FileData) => {
+        setSrcs((prev) => {
+            const newSet = new Set(prev)
+            newSet.add(data.dataURL)
+            return newSet
+        })
+    }
+
     return (
         <>
             <FormLayout>
-                <Flex align="center" direction="column" grow="1">
+                <Flex align="center" direction="column" grow="1" mb="5">
                     <Form.Root onSubmit={submit} className="max-w-7xl">
                         <Heading mb="3">Generate an Instagram Post</Heading>
                         <DatePicker
@@ -72,6 +94,7 @@ export default function PostGenerator(): JSX.Element {
                         <Flex
                             mt="5"
                             direction={{ initial: 'column', md: 'row' }}
+                            className="max-w-screen-2xl overflow-x-auto"
                         >
                             {files.map((file) => {
                                 return (
@@ -81,6 +104,43 @@ export default function PostGenerator(): JSX.Element {
                                     />
                                 )
                             })}
+                            {srcs?.size
+                                ? Array.from(srcs).map((src, i) => {
+                                      return (
+                                          <Flex key={i}>
+                                              <div className="relative">
+                                                  <Button
+                                                      className="absolute left-0 top-0 z-50"
+                                                      size="1"
+                                                      onClick={() =>
+                                                          removeImage(i)
+                                                      }
+                                                  >
+                                                      X
+                                                  </Button>
+                                                  <PostImage
+                                                      key={src}
+                                                      src={src}
+                                                  />
+                                              </div>
+                                          </Flex>
+                                      )
+                                  })
+                                : null}
+                            <Card m="3" className="bg-gray-200 p-0">
+                                <Flex
+                                    align="center"
+                                    justify="center"
+                                    grow="1"
+                                    height="100%"
+                                    px="5"
+                                >
+                                    <FileUploadButton
+                                        label="+"
+                                        onUpload={onUpload}
+                                    />
+                                </Flex>
+                            </Card>
                         </Flex>
                     ) : (
                         <Box my="5">
@@ -90,12 +150,18 @@ export default function PostGenerator(): JSX.Element {
                     {isLoading && <Loading />}
                 </Flex>
             </FormLayout>
-            <Heading>Events in this post</Heading>
+            <Box mb="4">
+                <Heading>Events in this post</Heading>
+                <Text size="5">
+                    You can edit events that appear in the post here
+                </Text>
+            </Box>
             {events && (
                 <SearchTable
                     data={{ type: DataType.EVENT, items: events }}
                     isLoading={isLoading}
                     onEdit={onEdit}
+                    showFeatured={false}
                 />
             )}
         </>

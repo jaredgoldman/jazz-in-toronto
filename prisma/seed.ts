@@ -23,7 +23,7 @@ const seed = async () => {
     for (let i = 0; i < 10; i++) {
         const events = artistsData.map((artist, j) => {
             return {
-                name: `Event ${j + 1}`,
+                name: artist.name,
                 startDate: new Date(Date.now() + j * oneDay),
                 endDate: new Date(Date.now() + j * oneDay + oneDay),
                 instagramHandle: `@event${i + 1}`,
