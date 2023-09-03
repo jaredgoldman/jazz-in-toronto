@@ -1,4 +1,7 @@
-export {default as Input} from "./Input"
-export {default as Select} from "./Select"
-export {default as DatePicker} from "./DatePicker"
-export {default as PlacesAutocomplete} from "./PlacesAutoComplete"
+export { default as Input } from './Input'
+export { default as Select } from './Select'
+export { default as DatePicker } from './DatePicker'
+export { default as PlacesAutocomplete } from './PlacesAutoComplete'
+export { default as Toggle } from './Toggle'
+export { default as Upload } from './Upload'
+export { default as ColorPicker } from './ColorPicker'

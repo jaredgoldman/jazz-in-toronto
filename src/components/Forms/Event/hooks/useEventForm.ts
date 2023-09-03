@@ -16,6 +16,7 @@ export interface EventFormValues {
     instagramHandle?: string
     website?: string
     venueId: string
+    featured: boolean
 }
 
 export default function useEventForm(currentValues?: EventWithArtistVenue) {
@@ -55,7 +56,8 @@ export default function useEventForm(currentValues?: EventWithArtistVenue) {
               artistId: '',
               venueId: '',
               instagramHandle: '',
-              website: ''
+              website: '',
+              featured: false
           }
 
     const {

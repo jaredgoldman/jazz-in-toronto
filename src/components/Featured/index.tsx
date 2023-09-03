@@ -1,7 +1,7 @@
 // Components
 import Loading from '../Loading'
 import FeaturedCard from './FeaturedCard'
-import { Flex, Heading } from '@radix-ui/themes'
+import { Flex, Heading, Grid } from '@radix-ui/themes'
 // Utisl
 import { api } from '~/utils/api'
 
@@ -20,11 +20,7 @@ export default function Featured() {
                 Our Faves
             </Heading>
             {featuredItems && !isLoading ? (
-                <Flex
-                    direction={{ initial: 'column', md: 'row' }}
-                    m="3"
-                    className="justify-center"
-                >
+                <Grid columns="3" rows="1" m="3" className="justify-center">
                     {featuredItems?.venue && (
                         <FeaturedCard
                             image={featuredItems.venue?.photoPath}
@@ -46,7 +42,7 @@ export default function Featured() {
                             link={featuredItems.artist?.website}
                         />
                     )}
-                </Flex>
+                </Grid>
             ) : (
                 <Loading />
             )}
