@@ -1,9 +1,9 @@
 // Components
 import * as Form from '@radix-ui/react-form'
-import { Input } from '../Fields'
+import { Input, Toggle } from '../Fields'
 import Upload from '../Fields/Upload'
 import FormLayout from '~/layouts/FormLayout'
-import { Heading, Flex, Text } from '@radix-ui/themes'
+import { Heading, Flex, Text, Separator } from '@radix-ui/themes'
 // Types
 import type { FileData } from '~/types/data'
 // hooks
@@ -44,6 +44,7 @@ export default function ArtistForm({
                         ? `Edit artist`
                         : 'Add your artist to our database'}
                 </Heading>
+                <Separator size="4" mb="5" />
                 <Flex direction="column" gap="3">
                     <Input
                         name="name"
@@ -77,6 +78,15 @@ export default function ArtistForm({
                         error={errors.website}
                         control={control}
                     />
+                    {isEditing && (
+                        <Toggle
+                            label="Featured"
+                            name="featured"
+                            control={control}
+                            error={errors.featured}
+                        />
+                    )}
+
                     <Flex width="100%" align="center" mt="3">
                         {artistMutationIsSuccess && (
                             <Text size="2" color="green" align="center">

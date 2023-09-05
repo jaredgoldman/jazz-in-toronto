@@ -1,7 +1,7 @@
 // Components
 import * as Form from '@radix-ui/react-form'
-import { DatePicker, Input, Select } from '../Fields'
-import { Flex, Text, Button } from '@radix-ui/themes'
+import { DatePicker, Input, Select, Toggle } from '../Fields'
+import { Flex, Text, Button, Heading, Separator } from '@radix-ui/themes'
 import FormLayout from '~/layouts/FormLayout'
 import Dialogue from '~/components/Dialogue'
 import VenueForm from '../Venue'
@@ -23,6 +23,7 @@ interface Props {
     isLoading: boolean
     control: Control<EventFormValues>
     errors: FieldErrors<EventFormValues>
+    isEditing: boolean
     error?: string
     showSubmitButton?: boolean
     submit: (e: BaseSyntheticEvent) => Promise<void>
@@ -33,13 +34,14 @@ interface Props {
 export default function EventForm({
     eventMutationIsSuccess,
     editEventMutationIsSuccess,
-    venueData,
     artistData,
-    error,
-    errors,
-    submit,
+    venueData,
     isLoading,
     control,
+    errors,
+    isEditing,
+    error,
+    submit,
     showSubmitButton = true,
     onAddArtist,
     onAddVenue
@@ -48,7 +50,9 @@ export default function EventForm({
     const venueFormProps = useVenueForm(undefined, onAddVenue)
 
     return (
-        <FormLayout maxWidth="max-w-md" isLoading={isLoading}>
+        <FormLayout maxWidth="max-w-md" isLoading={isLoading} hasCard={true}>
+            <Heading>Book Your Gig</Heading>
+            <Separator size="4" mb="5" />
             <Form.Root onSubmit={submit}>
                 <Flex direction="column" gap="3">
                     <Input
@@ -91,7 +95,6 @@ export default function EventForm({
                                 error={errors.venueId}
                             />
                             <Dialogue
-                                title="Add a venue"
                                 triggerLabel="Add your venue"
                                 onSubmit={venueFormProps.submit}
                                 component={
@@ -114,7 +117,6 @@ export default function EventForm({
                                 required="Please select a band for your event"
                             />
                             <Dialogue
-                                title="Add your band"
                                 triggerLabel="Add your band"
                                 onSubmit={artistFormProps.submit}
                                 component={
@@ -140,6 +142,14 @@ export default function EventForm({
                         error={errors.website}
                         control={control}
                     />
+                    {isEditing && (
+                        <Toggle
+                            label="Featured"
+                            name="featured"
+                            control={control}
+                            error={errors.featured}
+                        />
+                    )}
                 </Flex>
                 <Flex width="100%" justify="center" mt="3">
                     {eventMutationIsSuccess && (

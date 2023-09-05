@@ -47,7 +47,8 @@ export default function useEventForm(currentValues?: EventWithArtistVenue) {
         ? {
               ...currentValues,
               instagramHandle: currentValues.instagramHandle || undefined,
-              website: currentValues.website || undefined
+              website: currentValues.website || undefined,
+              featured: currentValues.featured || false
           }
         : {
               name: '',

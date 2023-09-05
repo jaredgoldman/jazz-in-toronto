@@ -10,6 +10,7 @@ import {
 import ReactDatePicker, { type ReactDatePickerProps } from 'react-datepicker'
 import * as Form from '@radix-ui/react-form'
 import { Flex, Text } from '@radix-ui/themes'
+import Input from './Input'
 // Assets
 import 'react-datepicker/dist/react-datepicker.css'
 

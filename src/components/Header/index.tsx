@@ -2,7 +2,13 @@
 import { signOut, useSession } from 'next-auth/react'
 // Components
 import Link from 'next/link'
-import { Button, Heading, Box } from '@radix-ui/themes'
+import {
+    Button,
+    Heading,
+    Box,
+    Separator,
+    Link as RLink
+} from '@radix-ui/themes'
 
 interface Props {
     headerType: HeaderType
@@ -20,7 +26,7 @@ export default function Header({
 }: Props): JSX.Element {
     const { data: session } = useSession()
     return (
-        <header className="mb-5 w-full flex-col items-center pb-2 text-center">
+        <header className="mb-5 w-full flex-col items-center py-3 text-center">
             {headerType === HeaderType.Admin && session && (
                 <Button
                     className="absolute right-2 top-2"
@@ -29,50 +35,68 @@ export default function Header({
                     Sign Out
                 </Button>
             )}
-
-            <div className="mx-auto w-3/4 justify-center border-b-2 border-white pt-8">
-                <Box mb="2">
+            <Box>
+                <Box mb="4">
                     <Link className="text-3xl font-bold" href="/">
                         JAZZINTORONTO
                     </Link>
                 </Box>
-                <Heading size="2" align="center">
+                <Heading size="2" align="center" mb="4" className="text-3xl">
                     Connecting Toronto&apos;s Jazz Musicians, Audiences, Venues
                     and Presenters
                 </Heading>
-            </div>
+                <Separator size="4" />
+            </Box>
             {showLinks && (
                 <nav className="flex justify-center border-y-black">
                     <ul className="flex text-sm">
                         {headerType === HeaderType.Public && (
                             <>
                                 <li className="p-2">
-                                    <Link href="/book">Add Your Gig</Link>
+                                    <RLink size="3" asChild>
+                                        <Link href="/book">Add Your Gig</Link>
+                                    </RLink>
                                 </li>
                                 <li className="p-2">
-                                    <Link href="/listings">Listings</Link>
+                                    <RLink size="3" asChild>
+                                        <Link href="/listings">Listings</Link>
+                                    </RLink>
                                 </li>
                                 <li className="p-2">
-                                    <Link href="/venues">Venues</Link>
+                                    <RLink size="3" asChild>
+                                        <Link href="/venues">Venues</Link>
+                                    </RLink>
                                 </li>
                                 <li className="p-2">
-                                    <Link href="/about">About Us</Link>
+                                    <RLink size="3" asChild>
+                                        <Link href="/about">About Us</Link>
+                                    </RLink>
                                 </li>
                             </>
                         )}
                         {headerType === HeaderType.Admin && (
                             <>
                                 <li className="p-2">
-                                    <Link href="/admin">Dashboard</Link>
+                                    <RLink size="3" asChild>
+                                        <Link href="/admin">Dashboard</Link>
+                                    </RLink>
                                 </li>
                                 <li className="p-2">
-                                    <Link href="/admin/events">Events</Link>
+                                    <RLink size="3" asChild>
+                                        <Link href="/admin/events">Events</Link>
+                                    </RLink>
                                 </li>
                                 <li className="p-2">
-                                    <Link href="/admin/artists">Artists</Link>
+                                    <RLink size="3" asChild>
+                                        <Link href="/admin/artists">
+                                            Artists
+                                        </Link>
+                                    </RLink>
                                 </li>
                                 <li className="p-2">
-                                    <Link href="/admin/venues">Venues</Link>
+                                    <RLink size="3" asChild>
+                                        <Link href="/admin/venues">Venues</Link>
+                                    </RLink>
                                 </li>
                             </>
                         )}

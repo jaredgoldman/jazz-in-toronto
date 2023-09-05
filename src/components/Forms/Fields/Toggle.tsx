@@ -7,7 +7,7 @@ import {
     FieldError
 } from 'react-hook-form'
 // Components
-import { Switch, Text } from '@radix-ui/themes'
+import { Switch, Text, Flex } from '@radix-ui/themes'
 import * as Form from '@radix-ui/react-form'
 
 interface Props<T extends FieldValues> {
@@ -32,10 +32,17 @@ export default function Toggle<T extends FieldValues>({
             name={name}
             render={({ field }) => (
                 <Form.Field name={name}>
-                    <Form.Label>{label}</Form.Label>
-                    <Form.Control asChild>
-                        <Switch {...field} />
-                    </Form.Control>
+                    <Flex justify="center" mt="3">
+                        <Form.Label>{label}</Form.Label>
+                        <Form.Control asChild>
+                            <Switch
+                                {...field}
+                                ml="5"
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                            />
+                        </Form.Control>
+                    </Flex>
                     {error && (
                         <Text size="2" color="red">
                             {error.message}

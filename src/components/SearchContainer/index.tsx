@@ -12,7 +12,6 @@ interface Props {
     data: TableData
     isLoading: boolean
     heading?: string
-    featuredItem?: EventWithArtistVenue | Venue | Artist | null
     searchDate?: Date
     onEdit?: () => Promise<void>
     setSearchDate?: (date: Date) => void
@@ -22,7 +21,6 @@ export default function SearchContainer({
     data,
     isLoading,
     heading,
-    featuredItem,
     searchDate,
     setSearchDate,
     onEdit
@@ -49,7 +47,6 @@ export default function SearchContainer({
                         { type: data.type, items: filteredItems } as TableData
                     }
                     isLoading={isLoading}
-                    featuredItem={featuredItem}
                     onEdit={onEdit}
                 />
             )}

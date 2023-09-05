@@ -20,6 +20,7 @@ export interface ArtistFormValues {
         file: File
         dataURL: string
     }
+    featured: boolean
 }
 
 export default function useArtistForm(
@@ -42,7 +43,8 @@ export default function useArtistForm(
               instagramHandle: currentValues.instagramHandle || undefined,
               genre: currentValues.genre || undefined,
               website: currentValues.website || undefined,
-              photoPath: currentValues.photoPath || undefined
+              photoPath: currentValues.photoPath || undefined,
+              featured: currentValues.featured || false
           }
         : {
               name: '',
@@ -50,7 +52,8 @@ export default function useArtistForm(
               genre: '',
               website: '',
               photoPath: '',
-              fileData: undefined
+              fileData: undefined,
+              featured: false
           }
 
     const {

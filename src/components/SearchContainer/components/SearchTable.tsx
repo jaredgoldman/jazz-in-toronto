@@ -21,7 +21,6 @@ interface Props {
     artists?: Artist[]
     isLoading: boolean
     onEdit?: () => Promise<void>
-    featuredItem?: Venue | Artist | EventWithArtistVenue | null
     canEditFormState?: boolean
     venueId?: string
     showFeatured?: boolean
@@ -31,7 +30,6 @@ export default function SearchTable({
     data,
     artists,
     isLoading,
-    featuredItem,
     onEdit,
     canEditFormState = false,
     venueId,
@@ -39,15 +37,9 @@ export default function SearchTable({
 }: Props): JSX.Element {
     const [items, setItems] = useState<Items>([])
     const [canSubmit, setCanSubmit] = useState<boolean>(false)
-    const eventSetFeaturedMutation = api.event.setFeatured.useMutation()
-    const venueSetFeaturedMutation = api.venue.setFeatured.useMutation()
-    const bandSetFeaturedMutation = api.artist.setFeatured.useMutation()
     const addEventsMutation = api.event.createMany.useMutation()
     const addVenuesMutation = api.venue.createMany.useMutation()
     const addBandsMutation = api.artist.createMany.useMutation()
-    const [featured, setFeatured] = useState<string | undefined>(
-        featuredItem?.id
-    )
 
     // Keep items in state so we can edit them in place and submit them all at once
     useEffect(() => {
@@ -101,21 +93,6 @@ export default function SearchTable({
         }
     }
 
-    const handleSetFeatured = (id: string) => {
-        setFeatured(id)
-        switch (data.type) {
-            case DataType.EVENT:
-                eventSetFeaturedMutation.mutate({ id })
-                break
-            case DataType.VENUE:
-                venueSetFeaturedMutation.mutate({ id })
-                break
-            case DataType.ARTIST:
-                bandSetFeaturedMutation.mutate({ id })
-                break
-        }
-    }
-
     const getFormHook = (type: DataType) => {
         switch (type) {
             case DataType.EVENT:
@@ -132,8 +109,6 @@ export default function SearchTable({
             <SearchTableRow
                 key={item.id}
                 data={{ type: data.type, item } as RowData}
-                featured={featured}
-                setFeatured={handleSetFeatured}
                 onEdit={onEdit}
                 editFormHook={getFormHook(data.type)}
                 canEditFormState={canEditFormState}

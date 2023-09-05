@@ -1,10 +1,10 @@
 // Components
 import PlacesAutocomplete from '../Fields/PlacesAutoComplete'
-import { Input } from '../Fields'
+import { Input, Toggle } from '../Fields'
 import * as Form from '@radix-ui/react-form'
 import Upload from '../Fields/Upload'
 import FormLayout from '~/layouts/FormLayout'
-import { Heading, Text, Flex } from '@radix-ui/themes'
+import { Heading, Text, Flex, Separator } from '@radix-ui/themes'
 // Types
 import type { FileData } from '~/types/data'
 import { type VenueFormValues } from './hooks/useVenueForm'
@@ -48,6 +48,7 @@ export default function VenueForm({
             <Heading>
                 {isEditing ? 'Edit venue' : 'Add your venue here!'}
             </Heading>
+            <Separator size="4" mb="5" />
             <Form.Root onSubmit={submit}>
                 <Flex direction="column" gap="3">
                     <Input
@@ -89,6 +90,14 @@ export default function VenueForm({
                         error={errors.website}
                         control={control}
                     />
+                    {isEditing && (
+                        <Toggle
+                            label="Featured"
+                            name="featured"
+                            control={control}
+                            error={errors.featured}
+                        />
+                    )}
                 </Flex>
                 <Flex width="100%" align="center" mt="3">
                     {venueMutationIsSuccess && (

@@ -111,8 +111,15 @@ export const venueRouter = createTRPCRouter({
                 active: z.boolean().optional()
             })
         )
-        .mutation(({ ctx, input }) => {
-            const { id, ...venueData } = input
+        .mutation(async ({ ctx, input }) => {
+            const { id, featured, ...venueData } = input
+
+            if (featured) {
+                await ctx.prisma.venue.updateMany({
+                    where: { featured: true },
+                    data: { featured: false }
+                })
+            }
             return ctx.prisma.venue.update({
                 where: { id },
                 data: venueData

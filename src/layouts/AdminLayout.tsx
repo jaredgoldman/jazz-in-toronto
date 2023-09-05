@@ -33,7 +33,7 @@ export default function AdminLayout({
                     showLinks={showHeaderLinks}
                 />
                 <Container size="3" className="flex-grow overflow-x-hidden">
-                    {session ? (
+                    {true ? (
                         children
                     ) : (
                         <Flex direction="column" align="center">

@@ -7,7 +7,7 @@ import { type AppType } from 'next/app'
 import { api } from '~/utils/api'
 // Assets
 import { Poppins } from 'next/font/google'
-import { Theme } from '@radix-ui/themes'
+import { Theme, ThemePanel } from '@radix-ui/themes'
 import '~/styles/globals.css'
 import '@radix-ui/themes/styles.css'
 
@@ -22,13 +22,16 @@ const MyApp: AppType<{ session: Session | null }> = ({
     Component,
     pageProps: { session, ...pageProps }
 }) => {
+    const showPanel = false
+
     return (
-        <Theme>
+        <Theme accentColor="blue" radius="medium" appearance="dark">
             <SessionProvider session={session}>
                 <main className={`w-full ${poppins.variable}`}>
                     <Component {...pageProps} />
                 </main>
             </SessionProvider>
+            {showPanel && <ThemePanel />}
         </Theme>
     )
 }

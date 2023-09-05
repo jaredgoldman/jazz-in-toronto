@@ -31,13 +31,10 @@ export default function AdminEvents(): JSX.Element {
     })
     const { data: venues, isLoading: isLoadingVenues } =
         api.venue.getAllCrawlable.useQuery()
-    const { data: featuredItem, isLoading: featuredLoading } =
-        api.event.getFeatured.useQuery()
     const { data: artists, isLoading: artistsLoading } =
         api.artist.getAll.useQuery()
 
-    const isLoading =
-        isLoadingEvents || isLoadingVenues || featuredLoading || artistsLoading
+    const isLoading = isLoadingEvents || isLoadingVenues || artistsLoading
 
     const onEdit = async () => {
         await refetch()
@@ -73,7 +70,6 @@ export default function AdminEvents(): JSX.Element {
                         data={{ type: DataType.EVENT, items: events }}
                         heading="Find Events"
                         onEdit={onEdit}
-                        featuredItem={featuredItem}
                         isLoading={isLoadingEvents}
                         searchDate={searchDate}
                         setSearchDate={setSearchDate}

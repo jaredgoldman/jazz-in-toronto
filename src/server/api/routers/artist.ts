@@ -67,8 +67,14 @@ export const artistRouter = createTRPCRouter({
                 website: z.string().optional()
             })
         )
-        .mutation(({ ctx, input }) => {
-            const { id, ...artistData } = input
+        .mutation(async ({ ctx, input }) => {
+            const { id, featured, ...artistData } = input
+            if (featured) {
+                await ctx.prisma.artist.updateMany({
+                    where: { featured: true },
+                    data: { featured: false }
+                })
+            }
             return ctx.prisma.artist.update({
                 where: { id },
                 data: artistData

@@ -16,7 +16,7 @@ export default function Featured() {
             justify="center"
             className="max-w-5xl"
         >
-            <Heading align="center" mb="5">
+            <Heading align="center" mb="7">
                 Our Faves
             </Heading>
             {featuredItems && !isLoading ? (

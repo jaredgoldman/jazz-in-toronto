@@ -19,7 +19,6 @@ interface Props {
     data: RowData
     featured?: string
     onEdit?: () => Promise<void>
-    setFeatured: (id: string, type: DataType) => void
     canEditFormState?: boolean
     editFormHook:
         | typeof useEventForm
@@ -70,8 +69,6 @@ const getEditFormCellandProps = (
 
 export default function SearchTableRow({
     data,
-    featured,
-    setFeatured,
     onEdit,
     editFormHook,
     canEditFormState = false,
@@ -188,11 +185,7 @@ export default function SearchTableRow({
             {cols}
             {showFeatured && (
                 <Table.Cell key="featured">
-                    <input
-                        type="checkbox"
-                        checked={item.id === featured}
-                        onChange={() => setFeatured(item.id, type)}
-                    />
+                    {item?.featured ? 'Yes' : 'No'}
                 </Table.Cell>
             )}
             <Table.Cell key="edit">

@@ -5,11 +5,11 @@ import { Dialog, Button, Box } from '@radix-ui/themes'
 // Types
 
 interface Props {
-    title: string
     triggerLabel: string | number
     component: JSX.Element
     closeLabel?: string
     description?: string
+    title?: string
     onSubmit?: () => Promise<void>
     showSave?: boolean
     triggerButtonClassName?: string
@@ -23,9 +23,9 @@ interface Props {
 }
 
 export default function Dialogue({
-    title,
     triggerLabel,
     description,
+    title,
     onSubmit,
     component,
     showSave = true,
@@ -50,7 +50,7 @@ export default function Dialogue({
                 </Button>
             </Dialog.Trigger>
             <Dialog.Content className="max-w-4xl">
-                <Dialog.Title>{title}</Dialog.Title>
+                {title && <Dialog.Title>{title}</Dialog.Title>}
                 <Dialog.Description size="2" mb="4">
                     {description}
                 </Dialog.Description>

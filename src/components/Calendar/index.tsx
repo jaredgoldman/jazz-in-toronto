@@ -1,7 +1,7 @@
 import { useState } from 'react'
 // Components
 import CalendarDay from './components/CalendarDay'
-import { Flex, Button, Table, Heading } from '@radix-ui/themes'
+import { Flex, Button, Table, Heading, Card } from '@radix-ui/themes'
 import Loading from '../Loading'
 // Hooks
 import useCalendar from './hooks/useCalendar'
@@ -60,40 +60,42 @@ export default function Calendar(): JSX.Element {
     const eventRows = mapEventsToCalendarRows()
 
     return (
-        <Flex direction="column" justify="center">
-            <Heading
-                align="center"
-                mb="5"
-            >{`Events on ${currentMonthName}, ${currentYear}`}</Heading>
-            <Flex mb="5" justify="center">
-                <Button mr="2" onClick={() => changeMonth(-1)}>
-                    Previous
-                </Button>
-                <Button ml="2" onClick={() => changeMonth(1)}>
-                    Next
-                </Button>
+        <Card>
+            <Flex direction="column" justify="center" p="5">
+                <Heading
+                    align="center"
+                    mb="5"
+                >{`Events on ${currentMonthName}, ${currentYear}`}</Heading>
+                <Flex mb="5" justify="center">
+                    <Button mr="2" onClick={() => changeMonth(-1)}>
+                        Previous
+                    </Button>
+                    <Button ml="2" onClick={() => changeMonth(1)}>
+                        Next
+                    </Button>
+                </Flex>
+                {isLoading ? (
+                    <Loading />
+                ) : (
+                    <Table.Root className="border-collapse">
+                        <Table.Header>
+                            <Table.Row>
+                                {getDaysOfTheWeek('short').map((day) => (
+                                    <Table.Cell
+                                        className="w-1/7 text-center"
+                                        key={day}
+                                        justify="center"
+                                        width="7rem"
+                                    >
+                                        {day}
+                                    </Table.Cell>
+                                ))}
+                            </Table.Row>
+                        </Table.Header>
+                        <Table.Body>{eventRows}</Table.Body>
+                    </Table.Root>
+                )}
             </Flex>
-            {isLoading ? (
-                <Loading />
-            ) : (
-                <Table.Root className="border-collapse">
-                    <Table.Header>
-                        <Table.Row>
-                            {getDaysOfTheWeek('short').map((day) => (
-                                <Table.Cell
-                                    className="w-1/7 text-center"
-                                    key={day}
-                                    justify="center"
-                                    width="7rem"
-                                >
-                                    {day}
-                                </Table.Cell>
-                            ))}
-                        </Table.Row>
-                    </Table.Header>
-                    <Table.Body>{eventRows}</Table.Body>
-                </Table.Root>
-            )}
-        </Flex>
+        </Card>
     )
 }

@@ -3,7 +3,7 @@ import superjson from 'superjson'
 // Components
 import RootLayout from '~/layouts/RootLayout'
 import Featured from '~/components/Featured'
-import { Flex, Heading, Link } from '@radix-ui/themes'
+import { Button, Flex, Heading, Link } from '@radix-ui/themes'
 // Utils
 import { createServerSideHelpers } from '@trpc/react-query/server'
 import { appRouter } from '~/server/api/root'
@@ -33,15 +33,21 @@ export async function getStaticProps() {
 export default function Home() {
     return (
         <RootLayout pageTitle="Jazz In Toronto | Home">
-            <Heading align="center" mb="5">
+            <Heading align="center" mb="7">
                 Follow us!
             </Heading>
-            <Flex justify="center" mb="5">
-                <Link mx="2" href="https://www.instagram.com/jazzintoronto/ ">
-                    instagram
+            <Flex justify="center" mb="7">
+                <Link
+                    mx="3"
+                    className="bg-gray-100 p-5 "
+                    href="https://www.instagram.com/jazzintoronto/ "
+                >
+                    <Button size="4">Instagram</Button>
                 </Link>
-                <Link mx="2" href="https://www.facebook.com/jazzintoronto/ ">
-                    Facebook
+                <Link mx="3" href="https://www.facebook.com/jazzintoronto/ ">
+                    <Button size="4" color="yellow">
+                        Facebook
+                    </Button>
                 </Link>
             </Flex>
             <Featured />

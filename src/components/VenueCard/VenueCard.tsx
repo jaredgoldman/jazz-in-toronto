@@ -1,7 +1,7 @@
 // Components
 import Image from 'next/image'
 import Link from 'next/link'
-import { Card, Flex } from '@radix-ui/themes'
+import { Card, Flex, Box, Link as RLink } from '@radix-ui/themes'
 // Types
 import { type Venue } from '~/types/data'
 
@@ -74,7 +74,7 @@ export default function VenueCard({ venue }: Props): JSX.Element {
     return (
         <Card mb="2" size="3">
             <Flex>
-                <div className="relative h-[10rem] w-[10rem] object-contain">
+                <Box className="relative h-[10rem] w-[10rem] object-contain">
                     {venue.photoPath && (
                         <Image
                             fill={true}
@@ -82,21 +82,20 @@ export default function VenueCard({ venue }: Props): JSX.Element {
                             src={venue.photoPath}
                         />
                     )}
-                </div>
+                </Box>
                 <Flex my="2" ml="5" direction="column">
-                    <div className="mb-5 text-lg">{venue.name}</div>
-                    <div className="mb-7 text-xs">
-                        <div>{venue.address}</div>
-                        <div>{venue.phoneNumber}</div>
-                        <div className="flex flex-col sm:flex-row">
+                    <Box className="mb-5 text-lg">{venue.name}</Box>
+                    <Box className="mb-7 text-xs">
+                        <Box>{venue.address}</Box>
+                        <Box>{venue.phoneNumber}</Box>
+                        <Box className="flex flex-col sm:flex-row">
                             {venue.instagramHandle && (
                                 <span>
                                     IG:{' '}
                                     <Link
-                                        className="text-blue-500"
                                         href={`https://instagram.com/${withoutAt}`}
                                     >
-                                        {withAt}
+                                        <RLink>{withAt}</RLink>
                                     </Link>
                                 </span>
                             )}
@@ -107,14 +106,16 @@ export default function VenueCard({ venue }: Props): JSX.Element {
                                         className="text-blue-500"
                                         href={venue.facebookLink}
                                     >
-                                        {stripFbUrl(venue.facebookLink)}
+                                        <RLink>
+                                            {stripFbUrl(venue.facebookLink)}
+                                        </RLink>
                                     </Link>
                                 </span>
                             )}
-                        </div>
-                    </div>
+                        </Box>
+                    </Box>
                     <Link className="text-xs" href={venue.website}>
-                        {simplifyURL(venue.website)}
+                        <RLink>{simplifyURL(venue.website)}</RLink>
                     </Link>
                 </Flex>
             </Flex>

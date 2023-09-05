@@ -24,6 +24,7 @@ export interface VenueFormValues {
     photoPath?: string
     phoneNumber: string
     area: Area
+    featured: boolean
 }
 
 export default function useVenueForm(
@@ -46,7 +47,8 @@ export default function useVenueForm(
         ? {
               ...currentValues,
               photoPath: currentValues.photoPath || undefined,
-              instagramHandle: currentValues.instagramHandle || undefined
+              instagramHandle: currentValues.instagramHandle || undefined,
+              featured: currentValues.featured || false
           }
         : {
               name: '',
@@ -59,7 +61,8 @@ export default function useVenueForm(
               website: '',
               fileData: undefined,
               phoneNumber: '',
-              area: Area.DOWNTOWN
+              area: Area.DOWNTOWN,
+              featured: false
           }
 
     const {

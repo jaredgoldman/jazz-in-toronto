@@ -12,10 +12,6 @@ export default function AdminArtists() {
         isLoading: artistsLoading,
         refetch
     } = api.artist.getAll.useQuery()
-    const { data: featuredItem, isLoading: featuredLoading } =
-        api.artist.getFeatured.useQuery()
-
-    const isLoading = artistsLoading || featuredLoading
 
     const onEdit = async () => {
         await refetch()
@@ -24,16 +20,15 @@ export default function AdminArtists() {
     return (
         <AdminLayout pageTitle="Jazz In Toronto | Admin - artists">
             <>
-                {artists && !isLoading && (
+                {artists && !artistsLoading && (
                     <SearchContainer
                         data={{ type: DataType.ARTIST, items: artists }}
                         heading="Find artists"
-                        featuredItem={featuredItem}
-                        isLoading={isLoading}
+                        isLoading={artistsLoading}
                         onEdit={onEdit}
                     />
                 )}
-                {isLoading && <Loading />}
+                {artistsLoading && <Loading />}
             </>
         </AdminLayout>
     )
