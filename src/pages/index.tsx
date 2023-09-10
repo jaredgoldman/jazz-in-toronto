@@ -16,7 +16,8 @@ export async function getStaticProps() {
             prisma,
             session: null,
             scraperService: undefined,
-            postService: undefined
+            postService: undefined,
+            emailService: undefined
         },
         transformer: superjson
     })

@@ -97,61 +97,6 @@ export default class ScraperService {
             .join(' ')
     }
 
-    // private async compareAndSaveHashedEvents(
-    //     hash: string,
-    //     startDate: Date
-    // ): Promise<boolean> {
-    //     const venueHash = await this.prisma.venueHash.findUnique({
-    //         where: {
-    //             startDate_venueId: {
-    //                 startDate,
-    //                 venueId: this.venue.id
-    //             }
-    //         }
-    //     })
-    //     if (!venueHash) {
-    //         await this.prisma.venueHash.create({
-    //             data: {
-    //                 startDate,
-    //                 venueId: this.venue.id,
-    //                 hash
-    //             }
-    //         })
-    //         return false
-    //     }
-    //     if (venueHash.hash === hash) {
-    //         return true
-    //     } else {
-    //         await this.prisma.venueHash.update({
-    //             where: {
-    //                 startDate_venueId: {
-    //                     venueId: this.venue.id,
-    //                     startDate
-    //                 }
-    //             },
-    //             data: { hash }
-    //         })
-    //     }
-    //     return false
-    // }
-    //
-    // private async hashString(input: string): Promise<string> {
-    //     // Convert the string to a Uint8Array
-    //     const encoder = new TextEncoder()
-    //     const data = encoder.encode(input)
-    //
-    //     // Hash the data using the SHA-256 algorithm
-    //     const hashBuffer = await crypto.subtle.digest('SHA-256', data)
-    //
-    //     // Convert the hash to a hex string
-    //     const hashArray = Array.from(new Uint8Array(hashBuffer))
-    //     const hashHex = hashArray
-    //         .map((b) => b.toString(16).padStart(2, '0'))
-    //         .join('')
-    //
-    //     return hashHex
-    // }
-
     /*
      * TODO: Modularize this process
      */
@@ -193,14 +138,6 @@ export default class ScraperService {
             monthlyEvents: { dailyEvents }
         } = await this.mapEvents<VenueEvents<RexEvent>>(html, rexJson)
 
-        // const eventsHash = await this.hashString(JSON.stringify(dailyEvents))
-        // const noChange = await this.compareAndSaveHashedEvents(eventsHash, date)
-        //
-        // if (noChange) {
-        //     console.warn('No change in event hash')
-        //     return []
-        // }
-        //
         if (!dailyEvents.length) {
             throw new Error('Error getting daily events')
         }
@@ -262,6 +199,7 @@ export default class ScraperService {
                         cancelled: false,
                         description: null,
                         venue: this.venue,
+                        approved: true,
                         artist: {
                             id: createId(),
                             name: '',
