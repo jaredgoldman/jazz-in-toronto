@@ -20,7 +20,8 @@ const initialSearchData = {
     name: '',
     date: null,
     website: '',
-    instagramHandle: ''
+    instagramHandle: '',
+    venue: ''
 }
 
 export default function useSearch(
@@ -39,6 +40,10 @@ export default function useSearch(
     const [filteredItems, setFilteredItems] = useState<TableData['items']>(
         data.items || []
     )
+
+    const clearSearchData = () => {
+        setSearchData(initialSearchData)
+    }
 
     // Filter functions
     const filterName = useEvent(
@@ -96,81 +101,36 @@ export default function useSearch(
             return setFilteredItems(data.items)
         }
 
-        if (data.items && searchData) {
+        if (data.items) {
             // TODO: Dry this up
             const filterItems = () => {
                 if (data.type === DataType.EVENT) {
-                    let nameMatch = false
-                    let websiteMatch = false
-                    let instagramHandleMatch = false
-                    let venueMatch = false
-
-                    return data.items.filter((item: EventWithArtistVenue) => {
-                        if (filterName(item)) {
-                            nameMatch = true
-                        }
-                        if (filterWebsite(item)) {
-                            websiteMatch = true
-                        }
-                        if (filterInstagramHandle(item)) {
-                            instagramHandleMatch = true
-                        }
-                        if (filterVenue(item)) {
-                            venueMatch = true
-                        }
-                        if (
-                            nameMatch &&
-                            websiteMatch &&
-                            instagramHandleMatch &&
-                            venueMatch
-                        ) {
-                            return item
-                        }
-                    })
+                    return data.items.filter(
+                        (item: EventWithArtistVenue) =>
+                            filterName(item) &&
+                            filterVenue(item) &&
+                            filterWebsite(item) &&
+                            filterInstagramHandle(item)
+                    )
                 } else if (data.type === DataType.ARTIST) {
-                    let nameMatch = false
-                    let websiteMatch = false
-                    let instagramHandleMatch = false
-
-                    return data.items.filter((item: Artist) => {
-                        if (filterName(item)) {
-                            nameMatch = true
-                        }
-                        if (filterWebsite(item)) {
-                            websiteMatch = true
-                        }
-                        if (filterInstagramHandle(item)) {
-                            instagramHandleMatch = true
-                        }
-                        if (nameMatch && websiteMatch && instagramHandleMatch) {
-                            return item
-                        }
-                    })
+                    return data.items.filter(
+                        (item: Artist) =>
+                            filterName(item) &&
+                            filterInstagramHandle(item) &&
+                            filterWebsite(item)
+                    )
                 } else if (data.type === DataType.VENUE) {
-                    let nameMatch = false
-                    let websiteMatch = false
-                    let instagramHandleMatch = false
-
-                    return data.items.filter((item: Venue) => {
-                        if (filterName(item)) {
-                            nameMatch = true
-                        }
-                        if (filterWebsite(item)) {
-                            websiteMatch = true
-                        }
-                        if (filterInstagramHandle(item)) {
-                            instagramHandleMatch = true
-                        }
-                        if (nameMatch && websiteMatch && instagramHandleMatch) {
-                            return item
-                        }
-                    })
+                    return data.items.filter(
+                        (item: Venue) =>
+                            filterName(item) &&
+                            filterInstagramHandle(item) &&
+                            filterWebsite(item)
+                    )
                 } else {
                     return []
                 }
             }
-            const filteredItems = filterItems()
-            setFilteredItems(filteredItems.sort())
+            setFilteredItems(filterItems().sort())
         }
     }, [
         searchData,
@@ -229,6 +189,7 @@ export default function useSearch(
         searchData,
         setSearchData,
         handleSearch,
-        filteredItems
+        filteredItems,
+        clearSearchData
     }
 }

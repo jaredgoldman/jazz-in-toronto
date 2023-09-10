@@ -7,6 +7,7 @@ import {
 } from '~/server/api/trpc'
 // Utils
 import addDays from 'date-fns/addDays'
+import { env } from '~/env.mjs'
 
 export const eventRouter = createTRPCRouter({
     create: publicProcedure
@@ -200,77 +201,7 @@ export const eventRouter = createTRPCRouter({
             })
             if (venue && ctx.scraperService) {
                 await ctx.scraperService.init(venue)
-                const events = await ctx.scraperService.getEvents(input.date)
-                if (events) {
-                    // add artist to listing if name is exact
-                    for (const event of events) {
-                        const maybeArtist = await ctx.prisma.artist.findUnique({
-                            where: {
-                                name: event.artist.name
-                            }
-                        })
-                        if (maybeArtist) {
-                            event.artist = maybeArtist
-                        }
-                    }
-                    return events
-                    // const existingEvent = await ctx.prisma.event.findUnique(
-                    //     {
-                    //         where: {
-                    //             startDate_venueId: {
-                    //                 venueId: input.venueId,
-                    //                 startDate: input.date
-                    //             }
-                    //         }
-                    //     }
-                    // )
-                    //
-                    // if (
-                    //     existingEvent &&
-                    //     existingEvent.name
-                    //         .toLowerCase()
-                    //         .includes(event.name.toLowerCase())
-                    // ) {
-                    //     continue
-                    // }
-                    // let artist
-                    // // Create artist for even name if artist doesn't exist
-                    // // TODO: Clean name before this step
-                    // // XXX: This takes FOREVER - need to speed this query up
-                    // artist = await ctx.prisma.artist.findFirst({
-                    //     where: {
-                    //         name: {
-                    //             contains: event.name.toLowerCase(),
-                    //             mode: 'insensitive'
-                    //         }
-                    //     }
-                    // })
-                    //
-                    // if (!artist) {
-                    //     artist = await ctx.prisma.artist.create({
-                    //         data: {
-                    //             name: event.name
-                    //         }
-                    //     })
-                    // }
-                    //
-                    // const processedEvent = await ctx.prisma.event.create({
-                    //     data: {
-                    //         name: event.name,
-                    //         venueId: input.venueId,
-                    //         artistId: artist.id,
-                    //         startDate: event.startDate,
-                    //         endDate: event.endDate
-                    //     },
-                    //     include: {
-                    //         artist: true,
-                    //         venue: true
-                    //     }
-                    // })
-                    // processedEvents.push(processedEvent)
-                    // }
-                    // return processedEvents
-                }
+                return await ctx.scraperService.getEvents(input.date)
             }
         }),
 
@@ -315,5 +246,22 @@ export const eventRouter = createTRPCRouter({
                 where: { id: input.id },
                 data: { featured: true }
             })
-        })
+        }),
+
+    emailUnapproved: protectedProcedure.mutation(async ({ ctx }) => {
+        if (ctx.emailService) {
+            const admins = await ctx.prisma.admin.findMany()
+            const unapproved = await ctx.prisma.event.count({
+                where: { approved: false, startDate: { gte: new Date() } }
+            })
+            for (const admin of admins) {
+                await ctx.emailService.sendEmail(
+                    env.EMAIL_FROM,
+                    admin.email,
+                    'ACTION: Unapproved Events',
+                    `There are ${unapproved} unapproved events. Please visit ${env.BASE_URL}/admin/events to approve them.`
+                )
+            }
+        }
+    })
 })

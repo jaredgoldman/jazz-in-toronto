@@ -4,7 +4,7 @@ import VenueCard from '~/components/VenueCard/VenueCard'
 import Loading from '~/components/Loading'
 // Uti;s
 import { api } from '~/utils/api'
-import { Flex, Heading, Box } from '@radix-ui/themes'
+import { Flex, Heading } from '@radix-ui/themes'
 
 export default function Venues(): JSX.Element {
     const { data: venues, isLoading } = api.venue.getAll.useQuery()

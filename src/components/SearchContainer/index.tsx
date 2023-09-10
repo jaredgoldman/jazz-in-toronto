@@ -1,9 +1,8 @@
 // Components
 import SearchBar from './components/SearchBar'
 import SearchTable from './components/SearchTable'
-import { Container, Heading } from '@radix-ui/themes'
+import { Container, Heading, Card, Box } from '@radix-ui/themes'
 // Types
-import type { EventWithArtistVenue, Venue, Artist } from '~/types/data'
 import { type TableData } from './types'
 // Hooks
 import useSearch from './hooks/useSearch'
@@ -33,23 +32,30 @@ export default function SearchContainer({
 
     return (
         <Container size="4">
-            <Heading mb="3" ml="3">
-                {heading}
-            </Heading>
-            <SearchBar
-                onSearch={handleSearch}
-                searchDate={searchDate}
-                itemType={data.type}
-            />
-            {filteredItems && (
-                <SearchTable
-                    data={
-                        { type: data.type, items: filteredItems } as TableData
-                    }
-                    isLoading={isLoading}
-                    onEdit={onEdit}
+            <Card>
+                <Heading mb="3" ml="3">
+                    {heading}
+                </Heading>
+                <SearchBar
+                    onSearch={handleSearch}
+                    searchDate={searchDate}
+                    itemType={data.type}
                 />
-            )}
+                {filteredItems && (
+                    <Box mt="3">
+                        <SearchTable
+                            data={
+                                {
+                                    type: data.type,
+                                    items: filteredItems
+                                } as TableData
+                            }
+                            isLoading={isLoading}
+                            onEdit={onEdit}
+                        />
+                    </Box>
+                )}
+            </Card>
         </Container>
     )
 }

@@ -1,7 +1,7 @@
 // Libraries
 import { useState } from 'react'
 // Components
-import { Container, Flex } from '@radix-ui/themes'
+import { Button, Container, Flex } from '@radix-ui/themes'
 // Types
 import { SearchOption } from '../../types'
 import { DataType } from '~/types/enums'
@@ -12,12 +12,18 @@ interface Props {
         searchData: string | Date | null,
         searchOption: SearchOption
     ) => void
+    clearSearchData?: () => void
     searchDate?: Date
     itemType: DataType
     refetch?: () => Promise<void>
 }
 // TODO: recator so search fields take up entire width of viewport
-export default function SearchBar({ onSearch, searchDate, itemType }: Props) {
+export default function SearchBar({
+    onSearch,
+    searchDate,
+    itemType
+}: // clearSearchData
+Props) {
     const [startDate, setStartDate] = useState<Date | null>(searchDate || null)
 
     const onSearchDate = (
@@ -62,6 +68,7 @@ export default function SearchBar({ onSearch, searchDate, itemType }: Props) {
                     type={SearchOption.InstagramHandle}
                     label="Instagram"
                 />
+                <Button>Clear</Button>
             </Flex>
         </Container>
     )

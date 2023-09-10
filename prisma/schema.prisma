@@ -96,18 +96,19 @@ model Event {
   name            String
   startDate       DateTime
   endDate         DateTime
-  artist          Artist     @relation(fields: [artistId], references: [id])
+  artist          Artist   @relation(fields: [artistId], references: [id])
   featured        Boolean  @default(false)
   instagramHandle String?
   website         String?
   venue           Venue    @relation(fields: [venueId], references: [id])
-  artistId          String
+  artistId        String
   venueId         String
   cancelled       Boolean  @default(false)
   description     String?
+  approved        Boolean @default(false)
 
-  @@index([featured, name])
   @@unique([startDate, venueId])
+  @@index([featured, name])
 }
 
 // NextAuth

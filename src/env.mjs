@@ -24,7 +24,8 @@ export const env = createEnv({
         CMS_API_URL: z.string(),
         CHROME_EXECUTABLE_PATH: z.string(),
         MAX_FILE_SIZE: z.number(),
-        MAX_FILE_SIZE_READABLE: z.enum(['2KB', '2MB', '2GB'])
+        MAX_FILE_SIZE_READABLE: z.enum(['2KB', '2MB', '2GB']),
+        BASE_URL: z.string().url()
     },
 
     /**
@@ -61,7 +62,10 @@ export const env = createEnv({
         CHROME_EXECUTABLE_PATH: process.env.CHROME_EXECUTABLE_PATH,
         MAX_FILE_SIZE: Number(process.env.MAX_FILE_SIZE),
         MAX_FILE_SIZE_READABLE: process.env.MAX_FILE_SIZE_READABLE,
-        NEXT_PUBLIC_MAX_FILE_SIZE: Number(process.env.NEXT_PUBLIC_MAX_FILE_SIZE)
+        NEXT_PUBLIC_MAX_FILE_SIZE: Number(
+            process.env.NEXT_PUBLIC_MAX_FILE_SIZE
+        ),
+        BASE_URL: process.env.BASE_URL
     },
     /**
      * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

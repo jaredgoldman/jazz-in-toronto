@@ -1,6 +1,6 @@
 // Libraries
 import { useEffect, useState } from 'react'
-import { Flex, Button, Callout, Table } from '@radix-ui/themes'
+import { Flex, Button, Callout, Table, Box } from '@radix-ui/themes'
 import SearchTableHeader from './SearchTableHeader'
 import tableSchema from '../data/tableSchema'
 // Components
@@ -13,6 +13,7 @@ import { DataType } from '~/types/enums'
 import type { Artist, EventWithArtistVenue, Items, Venue } from '~/types/data'
 // Utils
 import { api } from '~/utils/api'
+import { useEvent } from '~/hooks/useEvent'
 import useEventForm from '~/components/Forms/Event/hooks/useEventForm'
 import { isEventWithArtistVenue } from '~/utils/typeguards'
 
@@ -43,19 +44,12 @@ export default function SearchTable({
 
     // Keep items in state so we can edit them in place and submit them all at once
     useEffect(() => {
-        if (data.items.length) {
+        if (data.items) {
             setItems(data.items)
         }
     }, [data.items])
 
-    // Search through current artists and attempt to add an artist to each event
-    useEffect(() => {
-        if (canEditFormState && artists?.length && items.length) {
-            addArtistToStateItems(items)
-        }
-    }, [items])
-
-    const addArtistToStateItems = (items: Items) => {
+    const addArtistToStateItems = useEvent((items: Items) => {
         items.forEach((item) => {
             if (isEventWithArtistVenue(item) && artists) {
                 const artist = artists.find((artist) => {
@@ -70,7 +64,14 @@ export default function SearchTable({
             }
         })
         setItems(items)
-    }
+    })
+
+    // Search through current artists and attempt to add an artist to each event
+    useEffect(() => {
+        if (canEditFormState && artists?.length && items.length) {
+            addArtistToStateItems(items)
+        }
+    }, [items, artists, addArtistToStateItems, canEditFormState])
 
     const handleSubmitStateEntries = async () => {
         switch (data.type) {
@@ -131,10 +132,10 @@ export default function SearchTable({
 
             setCanSubmit(!itemMissingData)
         }
-    }, [items])
+    }, [items, data.type])
 
     return (
-        <>
+        <Box px="3" pb="3">
             {isLoading ? (
                 <Loading />
             ) : (
@@ -175,6 +176,6 @@ export default function SearchTable({
                     </Button>
                 </Flex>
             )}
-        </>
+        </Box>
     )
 }

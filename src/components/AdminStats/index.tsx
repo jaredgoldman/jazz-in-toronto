@@ -14,7 +14,7 @@ interface Props {
     }
 }
 
-export default function AdminDashboard({ data }: Props): JSX.Element {
+export default function AdminStats({ data }: Props): JSX.Element {
     return (
         <Box m="auto">
             <Grid

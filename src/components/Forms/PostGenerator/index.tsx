@@ -127,7 +127,7 @@ export default function PostGenerator(): JSX.Element {
                                       )
                                   })
                                 : null}
-                            <Card m="3" className="bg-gray-200 p-0">
+                            <Card m="3" className="p-0">
                                 <Flex
                                     align="center"
                                     justify="center"
