@@ -1,4 +1,4 @@
-import { Table, Heading, Box } from '@radix-ui/themes'
+import { Table, Heading, Box, Text, Flex } from '@radix-ui/themes'
 // Types
 import { type DailyEventData } from '../types'
 import { type EventWithArtistVenue } from '~/types/data'
@@ -41,7 +41,15 @@ export default function ModalDay({ dailyEvents: { date, events } }: Props) {
             <Heading align="center">{`Events on ${readableDate}`}</Heading>
             <div className="h-[60vh] overflow-y-auto">
                 <Table.Root>
-                    <Table.Body>{venueEvents}</Table.Body>
+                    <Table.Body>
+                        {venueEvents.length ? (
+                            venueEvents
+                        ) : (
+                            <Flex justify="center" align="center" mt="5">
+                                <Text>No events on this date</Text>
+                            </Flex>
+                        )}
+                    </Table.Body>
                 </Table.Root>
             </div>
         </Box>

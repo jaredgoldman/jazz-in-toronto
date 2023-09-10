@@ -146,7 +146,8 @@ export const eventRouter = createTRPCRouter({
                     startDate: {
                         gte: new Date(input.year, input.month, 1),
                         lt: new Date(input.year, input.month + 1, 1)
-                    }
+                    },
+                    approved: true
                 },
                 include: {
                     artist: true,

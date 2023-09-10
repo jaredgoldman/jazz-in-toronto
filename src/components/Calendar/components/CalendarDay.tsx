@@ -40,7 +40,6 @@ export default function CalendarDay({ dailyEvents }: Props) {
             justify="center"
         >
             <Dialogue
-                title="Events"
                 triggerLabel={dayText}
                 component={modalDay}
                 showSave={false}
