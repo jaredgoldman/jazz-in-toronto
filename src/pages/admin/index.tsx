@@ -13,7 +13,7 @@ export default function AdminHome() {
     return (
         <AdminLayout pageTitle="Jazz In Toronto | Admin - Bands">
             <Heading mt="2" mb="7" align="center">
-                Stats
+                Dashboard
             </Heading>
             {isLoading && <Loading />}
             {data && <AdminStats data={data} />}

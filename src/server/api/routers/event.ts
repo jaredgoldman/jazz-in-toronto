@@ -182,7 +182,7 @@ export const eventRouter = createTRPCRouter({
             }
             return ctx.prisma.event.update({
                 where: { id },
-                data: eventData
+                data: { featured, ...eventData }
             })
         }),
 
