@@ -5,7 +5,7 @@ import AdminLayout from '~/layouts/AdminLayout'
 import SearchContainer from '~/components/SearchContainer'
 import PostGenerator from '~/components/Forms/PostGenerator'
 import EventScraper from '~/components/Forms/EventScraper'
-import { Button, Container, Flex, Tabs } from '@radix-ui/themes'
+import { Container, Tabs } from '@radix-ui/themes'
 import Loading from '~/components/Loading'
 // Types
 import { DataType } from '~/types/enums'
@@ -74,7 +74,7 @@ export default function AdminEvents(): JSX.Element {
                                 heading="Approve Events"
                                 onEdit={onEdit}
                                 isLoading={isLoadingUnapproved}
-                                canEditFormState={true}
+                                successAttribute="approved"
                             />
                         )}
                     </Tabs.Content>

@@ -13,6 +13,7 @@ interface Props {
     heading?: string
     searchDate?: Date
     canEditFormState?: boolean
+    successAttribute?: 'artistId' | 'approved'
     onEdit?: () => Promise<void>
     setSearchDate?: (date: Date) => void
 }
@@ -23,6 +24,7 @@ export default function SearchContainer({
     heading,
     searchDate,
     canEditFormState,
+    successAttribute,
     setSearchDate,
     onEdit
 }: Props): JSX.Element {
@@ -55,6 +57,7 @@ export default function SearchContainer({
                             isLoading={isLoading}
                             onEdit={onEdit}
                             canEditFormState={canEditFormState}
+                            successAttribute={successAttribute}
                         />
                     </Box>
                 )}

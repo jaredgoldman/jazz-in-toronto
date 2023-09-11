@@ -23,6 +23,7 @@ interface Props {
     isLoading: boolean
     onEdit?: () => Promise<void>
     canEditFormState?: boolean
+    successAttribute?: 'artistId' | 'approved'
     venueId?: string
     showFeatured?: boolean
 }
@@ -33,6 +34,7 @@ export default function SearchTable({
     isLoading,
     onEdit,
     canEditFormState = false,
+    successAttribute,
     venueId,
     showFeatured = true
 }: Props): JSX.Element {
@@ -113,6 +115,7 @@ export default function SearchTable({
                 onEdit={onEdit}
                 editFormHook={getFormHook(data.type)}
                 canEditFormState={canEditFormState}
+                successAttribute={successAttribute}
                 setItems={setItems}
                 items={items}
                 showFeatured={showFeatured}

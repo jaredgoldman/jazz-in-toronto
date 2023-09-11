@@ -168,7 +168,8 @@ export const eventRouter = createTRPCRouter({
                 website: z.string().optional(),
                 artistId: z.string().cuid().optional(),
                 venueId: z.string().cuid().optional(),
-                cancelled: z.boolean().optional()
+                cancelled: z.boolean().optional(),
+                approved: z.boolean().optional()
             })
         )
         .mutation(async ({ ctx, input }) => {

@@ -1,5 +1,6 @@
+import { useState } from 'react'
 // Components
-import { Table } from '@radix-ui/themes'
+import { Table, Button } from '@radix-ui/themes'
 import Dialogue from '~/components/Dialogue'
 import EventForm from '~/components/Forms/Event'
 import ArtistForm from '~/components/Forms/Artist'
@@ -14,12 +15,15 @@ import type useVenueForm from '~/components/Forms/Venue/hooks/useVenueForm'
 // Utils
 import { getFormattedTime } from '~/utils/date'
 import { isEventWithArtistVenue, isUseEventFormProps } from '~/utils/typeguards'
+import { useTheme } from 'next-themes'
+import { api } from '~/utils/api'
 
 interface Props {
     data: RowData
     featured?: string
     onEdit?: () => Promise<void>
     canEditFormState?: boolean
+    successAttribute?: 'artistId' | 'approved'
     editFormHook:
         | typeof useEventForm
         | typeof useArtistForm
@@ -72,10 +76,14 @@ export default function SearchTableRow({
     onEdit,
     editFormHook,
     canEditFormState = false,
+    successAttribute = 'artistId',
     setItems,
     items,
     showFeatured
 }: Props) {
+    const { theme } = useTheme()
+    const { mutateAsync } = api.event.update.useMutation()
+
     let cols
 
     const { item, type } = data
@@ -175,26 +183,52 @@ export default function SearchTableRow({
     }
 
     // If form state is editable, show rows that have an artist as green
-    const editFormStateStyles =
-        canEditFormState && isEventWithArtistVenue(item) && item.artistId
-            ? 'bg-green-100'
+    const successShade = theme === 'dark' ? 'bg-green-900' : 'bg-green-100'
+
+    const rowShadeStyle =
+        canEditFormState &&
+        isEventWithArtistVenue(item) &&
+        item[successAttribute]
+            ? successShade
             : ''
 
+    const [rowShade, setRowShade] = useState<
+        'bg-green-900' | 'bg-green-100' | ''
+    >(rowShadeStyle)
+
+    const handleApprove = async () => {
+        if (!isEventWithArtistVenue(item)) return
+        await mutateAsync({
+            id: item.id,
+            approved: !item.approved
+        })
+        setRowShade(rowShade === successShade ? '' : successShade)
+    }
+
     return (
-        <Table.Row align="center" key={item.id} className={editFormStateStyles}>
+        <Table.Row align="center" key={item.id} className={rowShade}>
             {cols}
             {showFeatured && (
                 <Table.Cell key="featured">
                     {item?.featured ? 'Yes' : 'No'}
                 </Table.Cell>
             )}
-            <Table.Cell key="edit">
+            <Table.Cell key="edit" align="center">
                 <Dialogue
                     title="Edit"
                     triggerLabel="Edit"
                     onSubmit={onEditRow}
                     component={editComp}
                 />
+
+                {isEventWithArtistVenue(item) &&
+                    successAttribute === 'approved' && (
+                        <Button mt="2" onClick={handleApprove}>
+                            {item.approved || rowShade
+                                ? 'Unapprove'
+                                : 'Approve'}
+                        </Button>
+                    )}
             </Table.Cell>
         </Table.Row>
     )
