@@ -264,5 +264,19 @@ export const eventRouter = createTRPCRouter({
                 )
             }
         }
+    }),
+
+    getAllUnapproved: protectedProcedure.query(({ ctx }) => {
+        return ctx.prisma.event.findMany({
+            where: { approved: false, startDate: { gte: new Date() } },
+            take: 10,
+            include: {
+                artist: true,
+                venue: true
+            },
+            orderBy: {
+                startDate: 'asc'
+            }
+        })
     })
 })

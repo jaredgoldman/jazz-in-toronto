@@ -31,7 +31,8 @@ export async function getStaticProps() {
     }
 }
 
-export default function Home() {
+export default function Home(props: any) {
+    console.log(props)
     return (
         <RootLayout pageTitle="Jazz In Toronto | Home">
             <Heading align="center" mb="7">

@@ -1,3 +1,4 @@
+import { ThemeProvider } from 'next-themes'
 // Components
 import { SessionProvider } from 'next-auth/react'
 // Types
@@ -25,14 +26,16 @@ const MyApp: AppType<{ session: Session | null }> = ({
     const showPanel = false
 
     return (
-        <Theme accentColor="blue" radius="medium" appearance="dark">
-            <SessionProvider session={session}>
-                <main className={`w-full ${poppins.variable}`}>
-                    <Component {...pageProps} />
-                </main>
-            </SessionProvider>
-            {showPanel && <ThemePanel />}
-        </Theme>
+        <ThemeProvider attribute="class">
+            <Theme accentColor="blue" radius="medium" appearance="dark">
+                <SessionProvider session={session}>
+                    <main className={`w-full ${poppins.variable}`}>
+                        <Component {...pageProps} />
+                    </main>
+                </SessionProvider>
+                {showPanel && <ThemePanel />}
+            </Theme>
+        </ThemeProvider>
     )
 }
 

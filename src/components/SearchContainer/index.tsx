@@ -12,6 +12,7 @@ interface Props {
     isLoading: boolean
     heading?: string
     searchDate?: Date
+    canEditFormState?: boolean
     onEdit?: () => Promise<void>
     setSearchDate?: (date: Date) => void
 }
@@ -21,6 +22,7 @@ export default function SearchContainer({
     isLoading,
     heading,
     searchDate,
+    canEditFormState,
     setSearchDate,
     onEdit
 }: Props): JSX.Element {
@@ -52,6 +54,7 @@ export default function SearchContainer({
                             }
                             isLoading={isLoading}
                             onEdit={onEdit}
+                            canEditFormState={canEditFormState}
                         />
                     </Box>
                 )}

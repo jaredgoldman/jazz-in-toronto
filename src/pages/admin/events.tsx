@@ -5,7 +5,7 @@ import AdminLayout from '~/layouts/AdminLayout'
 import SearchContainer from '~/components/SearchContainer'
 import PostGenerator from '~/components/Forms/PostGenerator'
 import EventScraper from '~/components/Forms/EventScraper'
-import { Button, Container, Flex } from '@radix-ui/themes'
+import { Button, Container, Flex, Tabs } from '@radix-ui/themes'
 import Loading from '~/components/Loading'
 // Types
 import { DataType } from '~/types/enums'
@@ -15,12 +15,12 @@ import { api } from '~/utils/api'
 enum View {
     Search = 'Search',
     Scrape = 'Scrape',
+    Approval = 'Approval',
     Post = 'Post'
 }
 
 export default function AdminEvents(): JSX.Element {
     const [searchDate, setSearchDate] = useState<Date>(new Date())
-    const [view, setView] = useState<View>(View.Search)
 
     const {
         data: events,
@@ -33,6 +33,8 @@ export default function AdminEvents(): JSX.Element {
         api.venue.getAllCrawlable.useQuery()
     const { data: artists, isLoading: artistsLoading } =
         api.artist.getAll.useQuery()
+    const { data: unapproved, isLoading: isLoadingUnapproved } =
+        api.event.getAllUnapproved.useQuery()
 
     const isLoading = isLoadingEvents || isLoadingVenues || artistsLoading
 
@@ -42,45 +44,51 @@ export default function AdminEvents(): JSX.Element {
 
     return (
         <AdminLayout pageTitle="Jazz In Toronto | Admin - Events">
-            <Flex mb="5" justify="center">
-                <Button
-                    mr="2"
-                    onClick={() => setView(View.Search)}
-                    disabled={view === View.Search}
-                >
-                    Search
-                </Button>
-                <Button
-                    onClick={() => setView(View.Scrape)}
-                    disabled={view === View.Scrape}
-                >
-                    Scrape
-                </Button>
-                <Button
-                    ml="2"
-                    onClick={() => setView(View.Post)}
-                    disabled={view === View.Post}
-                >
-                    Post
-                </Button>
-            </Flex>
-            <Container size="3">
-                {view === View.Search && events && (
-                    <SearchContainer
-                        data={{ type: DataType.EVENT, items: events }}
-                        heading="Find Events"
-                        onEdit={onEdit}
-                        isLoading={isLoadingEvents}
-                        searchDate={searchDate}
-                        setSearchDate={setSearchDate}
-                    />
-                )}
-                {view === View.Scrape && venues && artists && (
-                    <EventScraper venues={venues} artists={artists} />
-                )}
-                {view === View.Post && <PostGenerator />}
-                {isLoading && <Loading />}
-            </Container>
+            <Tabs.Root defaultValue={View.Search}>
+                <Tabs.List>
+                    <Tabs.Trigger value={View.Search}>Search</Tabs.Trigger>
+                    <Tabs.Trigger value={View.Approval}>Approval</Tabs.Trigger>
+                    <Tabs.Trigger value={View.Scrape}>Scrape</Tabs.Trigger>
+                    <Tabs.Trigger value={View.Post}>Post</Tabs.Trigger>
+                </Tabs.List>
+                <Container size="3">
+                    <Tabs.Content value={View.Search}>
+                        {events && (
+                            <SearchContainer
+                                data={{ type: DataType.EVENT, items: events }}
+                                heading="Find Events"
+                                onEdit={onEdit}
+                                isLoading={isLoadingEvents}
+                                searchDate={searchDate}
+                                setSearchDate={setSearchDate}
+                            />
+                        )}
+                    </Tabs.Content>
+                    <Tabs.Content value={View.Approval}>
+                        {unapproved && (
+                            <SearchContainer
+                                data={{
+                                    type: DataType.EVENT,
+                                    items: unapproved
+                                }}
+                                heading="Approve Events"
+                                onEdit={onEdit}
+                                isLoading={isLoadingUnapproved}
+                                canEditFormState={true}
+                            />
+                        )}
+                    </Tabs.Content>
+                    <Tabs.Content value={View.Scrape}>
+                        {venues && artists && (
+                            <EventScraper venues={venues} artists={artists} />
+                        )}
+                    </Tabs.Content>
+                    <Tabs.Content value={View.Post}>
+                        <PostGenerator />
+                    </Tabs.Content>
+                    {isLoading && <Loading />}
+                </Container>
+            </Tabs.Root>
         </AdminLayout>
     )
 }

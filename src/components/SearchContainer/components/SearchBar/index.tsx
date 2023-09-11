@@ -68,7 +68,6 @@ Props) {
                     type={SearchOption.InstagramHandle}
                     label="Instagram"
                 />
-                <Button>Clear</Button>
             </Flex>
         </Container>
     )

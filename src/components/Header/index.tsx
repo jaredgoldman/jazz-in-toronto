@@ -7,8 +7,12 @@ import {
     Heading,
     Box,
     Separator,
-    Link as RLink
+    Link as RLink,
+    Switch,
+    Flex,
 } from '@radix-ui/themes'
+import { ComponentBooleanIcon } from '@radix-ui/react-icons'
+import { useTheme } from 'next-themes'
 
 interface Props {
     headerType: HeaderType
@@ -25,8 +29,22 @@ export default function Header({
     showLinks = true
 }: Props): JSX.Element {
     const { data: session } = useSession()
+    const { theme, setTheme } = useTheme()
     return (
         <header className="mb-5 w-full flex-col items-center py-3 text-center">
+            <Flex
+                className="absolute left-2 top-2"
+                align="center"
+                justify="center"
+            >
+                <Switch
+                    onCheckedChange={() =>
+                        theme === 'dark' ? setTheme('light') : setTheme('dark')
+                    }
+                />
+                <Box mx="1"></Box>
+                <ComponentBooleanIcon />
+            </Flex>
             {headerType === HeaderType.Admin && session && (
                 <Button
                     className="absolute right-2 top-2"
