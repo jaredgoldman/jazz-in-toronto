@@ -7,9 +7,18 @@ import { api } from '~/utils/api'
 import { useForm } from 'react-hook-form'
 
 export default function useEventScraper() {
+    const { data: venues, isLoading: isLoadingVenues } =
+        api.venue.getAllCrawlable.useQuery()
+    const { data: artists, isLoading: artistsLoading } =
+        api.artist.getAll.useQuery()
+
     const [error, setError] = useState<string>('')
-    const { isLoading, mutate, data, isSuccess } =
-        api.event.getVenueEvents.useMutation()
+    const {
+        isLoading: isLoadingMutation,
+        mutate,
+        data,
+        isSuccess
+    } = api.event.getVenueEvents.useMutation()
 
     const defaultValues = {
         venueId: '',
@@ -37,14 +46,19 @@ export default function useEventScraper() {
         }
     })
 
+    const isLoading = isLoadingVenues || artistsLoading
+
     return {
         submit,
         isLoading,
+        isLoadingMutation,
         control,
         errors,
         data,
         isSuccess,
         error,
-        venueId
+        venueId,
+        venues,
+        artists
     }
 }

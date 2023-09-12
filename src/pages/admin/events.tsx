@@ -7,11 +7,8 @@ import PostGenerator from '~/components/Forms/PostGenerator'
 import EventScraper from '~/components/Forms/EventScraper'
 import { Container, Tabs } from '@radix-ui/themes'
 import Loading from '~/components/Loading'
-import SearchApprovedEvents from '~/components/SearchApprovedEvents'
-// Types
-import { DataType } from '~/types/enums'
-// Utils
-import { api } from '~/utils/api'
+import SearchApproveEvents from '~/components/SearchApproveEvents'
+import SearchEvents from '~/components/SearchEvents'
 
 enum View {
     Search = 'Search',
@@ -21,26 +18,6 @@ enum View {
 }
 
 export default function AdminEvents(): JSX.Element {
-    const [searchDate, setSearchDate] = useState<Date>(new Date())
-
-    const {
-        data: events,
-        isLoading: isLoadingEvents,
-        refetch
-    } = api.event.getAllByDay.useQuery({
-        date: searchDate
-    })
-    const { data: venues, isLoading: isLoadingVenues } =
-        api.venue.getAllCrawlable.useQuery()
-    const { data: artists, isLoading: artistsLoading } =
-        api.artist.getAll.useQuery()
-
-    const isLoading = isLoadingEvents || isLoadingVenues || artistsLoading
-
-    const onEdit = async () => {
-        await refetch()
-    }
-
     return (
         <AdminLayout pageTitle="Jazz In Toronto | Admin - Events">
             <Tabs.Root defaultValue={View.Search}>
@@ -52,29 +29,17 @@ export default function AdminEvents(): JSX.Element {
                 </Tabs.List>
                 <Container size="3">
                     <Tabs.Content value={View.Search}>
-                        {events && (
-                            <SearchContainer
-                                data={{ type: DataType.EVENT, items: events }}
-                                heading="Find Events"
-                                onEdit={onEdit}
-                                isLoading={isLoadingEvents}
-                                searchDate={searchDate}
-                                setSearchDate={setSearchDate}
-                            />
-                        )}
+                        <SearchEvents />
                     </Tabs.Content>
                     <Tabs.Content value={View.Approval}>
-                        <SearchApprovedEvents />
+                        <SearchApproveEvents />
                     </Tabs.Content>
                     <Tabs.Content value={View.Scrape}>
-                        {venues && artists && (
-                            <EventScraper venues={venues} artists={artists} />
-                        )}
+                        <EventScraper />
                     </Tabs.Content>
                     <Tabs.Content value={View.Post}>
                         <PostGenerator />
                     </Tabs.Content>
-                    {isLoading && <Loading />}
                 </Container>
             </Tabs.Root>
         </AdminLayout>

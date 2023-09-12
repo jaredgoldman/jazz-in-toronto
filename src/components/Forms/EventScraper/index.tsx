@@ -12,12 +12,7 @@ import { DataType } from '~/types/enums'
 // Hooks
 import useEventScraper from './hooks/useEventScraper'
 
-interface Props {
-    venues: Venue[]
-    artists: Artist[]
-}
-
-export default function EventScraper({ venues, artists }: Props): JSX.Element {
+export default function EventScraper(): JSX.Element {
     const {
         submit,
         isLoading,
@@ -26,7 +21,9 @@ export default function EventScraper({ venues, artists }: Props): JSX.Element {
         errors,
         data,
         isSuccess,
-        venueId
+        venueId,
+        venues,
+        artists
     } = useEventScraper()
 
     return (
@@ -45,14 +42,16 @@ export default function EventScraper({ venues, artists }: Props): JSX.Element {
                             showPreviousMonths: false
                         }}
                     />
-                    <Select
-                        name="venueId"
-                        label="Select a venue to scrape"
-                        control={control}
-                        optionData={venues}
-                        error={errors.venueId}
-                        required="You must select a venue to scrape"
-                    />
+                    {venues && (
+                        <Select
+                            name="venueId"
+                            label="Select a venue to scrape"
+                            control={control}
+                            optionData={venues}
+                            error={errors.venueId}
+                            required="You must select a venue to scrape"
+                        />
+                    )}
                     <Flex width="100%" justify="center" mt="5">
                         <Form.Submit asChild>
                             <Button>Scrape Events</Button>

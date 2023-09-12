@@ -32,6 +32,7 @@ export interface PaginationProps {
     setPage: (page: number) => void
     rowsPerPage: number
     setRowsPerPage: (rowsPerPage: number) => void
+    rowsPerPageOptions: number[]
 }
 
 export default function SearchContainer({

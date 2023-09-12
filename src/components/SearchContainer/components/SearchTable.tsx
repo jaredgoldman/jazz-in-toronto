@@ -3,7 +3,20 @@ import { useEffect, useState } from 'react'
 import SearchTableHeader from './SearchTableHeader'
 import tableSchema from '../data/tableSchema'
 // Components
-import { Flex, Button, Callout, Table, Box, Text } from '@radix-ui/themes'
+import {
+    Flex,
+    Button,
+    Callout,
+    Table,
+    Box,
+    Text,
+    SelectRoot,
+    SelectTrigger,
+    SelectContent,
+    SelectItem,
+    SelectGroup,
+    SelectLabel
+} from '@radix-ui/themes'
 import SearchTableRow from './SearchTableRow'
 import Loading from '~/components/Loading'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
@@ -43,10 +56,12 @@ export default function SearchTable({
 }: Props): JSX.Element {
     const [items, setItems] = useState<Items>([])
     const [canSubmit, setCanSubmit] = useState<boolean>(false)
+    const pageCount = page ? Math.ceil(page.itemCount / page.rowsPerPage) : 0
+
     const addEventsMutation = api.event.createMany.useMutation()
     const addVenuesMutation = api.venue.createMany.useMutation()
     const addBandsMutation = api.artist.createMany.useMutation()
-    const pageCount = page ? Math.ceil(page.itemCount / page.rowsPerPage) : 0
+
     // Keep items in state so we can edit them in place and submit them all at once
     useEffect(() => {
         if (data.items) {
@@ -186,6 +201,35 @@ export default function SearchTable({
             {page && (
                 <Box position="relative">
                     <Flex mt="3" justify="center" align="center">
+                        <Box position="absolute" left="0">
+                            <SelectRoot
+                                value={page.rowsPerPage.toString()}
+                                onValueChange={(value) => {
+                                    page.setRowsPerPage(Number(value))
+                                }}
+                            >
+                                <SelectTrigger></SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectLabel>
+                                            Items Per Page
+                                        </SelectLabel>
+                                        {page.rowsPerPageOptions.map(
+                                            (option) => {
+                                                return (
+                                                    <SelectItem
+                                                        key={option}
+                                                        value={option.toString()}
+                                                    >
+                                                        {option}
+                                                    </SelectItem>
+                                                )
+                                            }
+                                        )}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </SelectRoot>
+                        </Box>
                         <Button
                             disabled={
                                 page.page === 1 ||
@@ -207,7 +251,7 @@ export default function SearchTable({
                         >
                             Next
                         </Button>
-                        <Box position="absolute" top="50%" right="0">
+                        <Box position="absolute" right="0">
                             <Text>{`${page.page} ... ${pageCount}`}</Text>
                         </Box>
                     </Flex>

@@ -8,7 +8,7 @@ import { DataType } from '~/types/enums'
 // Utils
 import { api } from '~/utils/api'
 
-export default function SearchApprovedEvents() {
+export default function SearchApproveEvents() {
     const [page, setPage] = useState<number>(1)
     const [rowsPerPage, setRowsPerPage] = useState<number>(10)
 
@@ -42,7 +42,8 @@ export default function SearchApprovedEvents() {
                         page,
                         setPage,
                         rowsPerPage,
-                        setRowsPerPage
+                        setRowsPerPage,
+                        rowsPerPageOptions: [10, 25, 50]
                     }}
                 />
             )}
