@@ -1,7 +1,7 @@
 // Libraries
 import { useState } from 'react'
 // Components
-import { Button, Container, Flex } from '@radix-ui/themes'
+import { Container, Flex } from '@radix-ui/themes'
 // Types
 import { SearchOption } from '../../types'
 import { DataType } from '~/types/enums'
@@ -12,6 +12,7 @@ interface Props {
         searchData: string | Date | null,
         searchOption: SearchOption
     ) => void
+    showDateFilter?: boolean
     clearSearchData?: () => void
     searchDate?: Date
     itemType: DataType
@@ -21,7 +22,8 @@ interface Props {
 export default function SearchBar({
     onSearch,
     searchDate,
-    itemType
+    itemType,
+    showDateFilter = true
 }: // clearSearchData
 Props) {
     const [startDate, setStartDate] = useState<Date | null>(searchDate || null)
@@ -39,13 +41,15 @@ Props) {
             <Flex ml="3">
                 {itemType === DataType.EVENT && (
                     <>
-                        <SearchFilter
-                            onSearch={onSearchDate}
-                            type={SearchOption.Date}
-                            label="Date"
-                            setStartDate={setStartDate}
-                            startDate={startDate}
-                        />
+                        {showDateFilter && (
+                            <SearchFilter
+                                onSearch={onSearchDate}
+                                type={SearchOption.Date}
+                                label="Date"
+                                setStartDate={setStartDate}
+                                startDate={startDate}
+                            />
+                        )}
                         <SearchFilter
                             onSearch={onSearch}
                             type={SearchOption.Venue}

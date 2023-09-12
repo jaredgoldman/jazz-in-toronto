@@ -10,6 +10,8 @@ import {
 import ReactDatePicker, { type ReactDatePickerProps } from 'react-datepicker'
 import * as Form from '@radix-ui/react-form'
 import { Flex, Text } from '@radix-ui/themes'
+// Utils
+import { useTheme } from 'next-themes'
 // Assets
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -31,6 +33,10 @@ export default function DatePickerField<T extends FieldValues>({
     required = false,
     datePickerProps
 }: Props<T>): JSX.Element {
+    const { theme } = useTheme()
+    const borderColor = theme === 'dark' ? 'gray-1000' : 'gray-300'
+    const backgroundColor = theme === 'dark' ? 'gray-800' : 'white'
+    const textColor = theme === 'dark' ? 'white-300' : 'gray-700'
     return (
         <Controller
             control={control}
@@ -41,7 +47,7 @@ export default function DatePickerField<T extends FieldValues>({
                     <Flex direction="column" width="100%" mb="3">
                         <Form.Label>{label}</Form.Label>
                         <ReactDatePicker
-                            className="min-w-full rounded-[4px] border-[1px] border-gray-300 p-[0.325rem] text-sm"
+                            className={`min-w-full rounded-[4px] border-[1px] border-${borderColor}-300 p-[0.325rem] bg-${backgroundColor} text-${textColor}}`}
                             onChange={onChange}
                             onBlur={onBlur}
                             selected={value}

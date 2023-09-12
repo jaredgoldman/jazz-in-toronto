@@ -45,7 +45,7 @@ export const authOptions: NextAuthOptions = {
             if (maybeUser) {
                 return true
             } else {
-                return false
+                return '/'
             }
         }
     },

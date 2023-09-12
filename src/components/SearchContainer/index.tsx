@@ -15,20 +15,36 @@ interface Props {
     searchDate?: Date
     canEditFormState?: boolean
     successAttribute?: 'artistId' | 'approved'
+    showDateFilter?: boolean
+    page?: number
+    rowsPerPage?: number
+    itemCount?: number
     onEdit?: () => Promise<void>
     setSearchDate?: (date: Date) => void
+    setPage?: (page: number) => void
+    setRowsPerPage?: (rowsPerPage: number) => void
+    paginationProps?: PaginationProps
+}
+
+export interface PaginationProps {
+    itemCount: number
+    page: number
+    setPage: (page: number) => void
+    rowsPerPage: number
+    setRowsPerPage: (rowsPerPage: number) => void
 }
 
 export default function SearchContainer({
     data,
     isLoading,
-    paginate,
     heading,
     searchDate,
     canEditFormState,
     successAttribute,
+    showDateFilter = true,
+    onEdit,
     setSearchDate,
-    onEdit
+    paginationProps
 }: Props): JSX.Element {
     const { filteredItems, handleSearch } = useSearch(
         data,
@@ -46,6 +62,7 @@ export default function SearchContainer({
                     onSearch={handleSearch}
                     searchDate={searchDate}
                     itemType={data.type}
+                    showDateFilter={showDateFilter}
                 />
                 {filteredItems && (
                     <Box mt="3">
@@ -60,7 +77,7 @@ export default function SearchContainer({
                             onEdit={onEdit}
                             canEditFormState={canEditFormState}
                             successAttribute={successAttribute}
-                            paginate={paginate}
+                            paginationProps={paginationProps}
                         />
                     </Box>
                 )}

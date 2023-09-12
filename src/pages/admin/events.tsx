@@ -7,6 +7,7 @@ import PostGenerator from '~/components/Forms/PostGenerator'
 import EventScraper from '~/components/Forms/EventScraper'
 import { Container, Tabs } from '@radix-ui/themes'
 import Loading from '~/components/Loading'
+import SearchApprovedEvents from '~/components/SearchApprovedEvents'
 // Types
 import { DataType } from '~/types/enums'
 // Utils
@@ -33,8 +34,6 @@ export default function AdminEvents(): JSX.Element {
         api.venue.getAllCrawlable.useQuery()
     const { data: artists, isLoading: artistsLoading } =
         api.artist.getAll.useQuery()
-    const { data: unapproved, isLoading: isLoadingUnapproved } =
-        api.event.getAllUnapproved.useQuery()
 
     const isLoading = isLoadingEvents || isLoadingVenues || artistsLoading
 
@@ -65,19 +64,7 @@ export default function AdminEvents(): JSX.Element {
                         )}
                     </Tabs.Content>
                     <Tabs.Content value={View.Approval}>
-                        {unapproved && (
-                            <SearchContainer
-                                data={{
-                                    type: DataType.EVENT,
-                                    items: unapproved
-                                }}
-                                heading="Approve Events"
-                                onEdit={onEdit}
-                                isLoading={isLoadingUnapproved}
-                                successAttribute="approved"
-                                paginate={true}
-                            />
-                        )}
+                        <SearchApprovedEvents />
                     </Tabs.Content>
                     <Tabs.Content value={View.Scrape}>
                         {venues && artists && (

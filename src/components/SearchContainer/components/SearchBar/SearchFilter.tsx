@@ -4,6 +4,8 @@ import { Flex, TextField } from '@radix-ui/themes'
 // Types
 import { type ChangeEvent } from 'react'
 import { SearchOption } from '../../types'
+// Utils
+import { useTheme } from 'next-themes'
 
 interface Props {
     onSearch: (searchData: string | Date, searchOption: SearchOption) => void
@@ -20,9 +22,11 @@ export default function SearchFilter({
     startDate,
     setStartDate
 }: Props): JSX.Element {
+    const { theme } = useTheme()
     let Component: React.ElementType = 'input'
     let componentProps = {}
     const className = 'w-28 text-black'
+    const datePickerTextColor = theme === 'dark' ? 'white-300' : 'gray-700'
 
     switch (type) {
         case SearchOption.Date:
@@ -34,8 +38,7 @@ export default function SearchFilter({
                 },
                 selected: startDate,
                 startDate,
-                className:
-                    'lg:min-w-full min-w-0 rounded-[4px] border-[1px] border-gray-300 p-[0.325rem] text-sm text-black'
+                className: `lg:min-w-full min-w-0 rounded-[4px] border-[1px] p-[0.325rem] text-sm text-${datePickerTextColor}`
             }
             break
         case SearchOption.Venue:

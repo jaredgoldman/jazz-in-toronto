@@ -1,9 +1,9 @@
 // Libraries
 import { useEffect, useState } from 'react'
-import { Flex, Button, Callout, Table, Box } from '@radix-ui/themes'
 import SearchTableHeader from './SearchTableHeader'
 import tableSchema from '../data/tableSchema'
 // Components
+import { Flex, Button, Callout, Table, Box, Text } from '@radix-ui/themes'
 import SearchTableRow from './SearchTableRow'
 import Loading from '~/components/Loading'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
@@ -11,6 +11,7 @@ import { InfoCircledIcon } from '@radix-ui/react-icons'
 import type { TableData, RowData } from '../types'
 import { DataType } from '~/types/enums'
 import type { Artist, EventWithArtistVenue, Items, Venue } from '~/types/data'
+import type { PaginationProps } from '..'
 // Utils
 import { api } from '~/utils/api'
 import { useEvent } from '~/hooks/useEvent'
@@ -26,7 +27,7 @@ interface Props {
     successAttribute?: 'artistId' | 'approved'
     venueId?: string
     showFeatured?: boolean
-    paginate?: boolean
+    paginationProps?: PaginationProps
 }
 
 export default function SearchTable({
@@ -38,16 +39,14 @@ export default function SearchTable({
     successAttribute,
     venueId,
     showFeatured = true,
-    paginate = false
+    paginationProps: page
 }: Props): JSX.Element {
     const [items, setItems] = useState<Items>([])
-    const [page, setPage] = useState<number>(1)
-    const [rowsPerPage, setRowsPerPage] = useState<number>(10)
     const [canSubmit, setCanSubmit] = useState<boolean>(false)
     const addEventsMutation = api.event.createMany.useMutation()
     const addVenuesMutation = api.venue.createMany.useMutation()
     const addBandsMutation = api.artist.createMany.useMutation()
-
+    const pageCount = page ? Math.ceil(page.itemCount / page.rowsPerPage) : 0
     // Keep items in state so we can edit them in place and submit them all at once
     useEffect(() => {
         if (data.items) {
@@ -164,6 +163,7 @@ export default function SearchTable({
             )}
             {canEditFormState && (
                 <Flex width="100%" direction="column">
+                    JAZZINTORONTO{' '}
                     {!canSubmit && (
                         <Callout.Root mb="2">
                             <Callout.Icon>
@@ -183,23 +183,35 @@ export default function SearchTable({
                     </Button>
                 </Flex>
             )}
-            {paginate && (
-                <Flex mt="3" justify="center">
-                    <Button
-                        disabled={page === 1}
-                        onClick={() => setPage(page - 1)}
-                    >
-                        Prev
-                    </Button>
-                    <Button
-                        disabled={
-                            page === Math.ceil(items.length / rowsPerPage)
-                        }
-                        onClick={() => setPage(page + 1)}
-                    >
-                        Next
-                    </Button>
-                </Flex>
+            {page && (
+                <Box position="relative">
+                    <Flex mt="3" justify="center" align="center">
+                        <Button
+                            disabled={
+                                page.page === 1 ||
+                                data.items.length < page.rowsPerPage
+                            }
+                            onClick={() => page.setPage(page.page - 1)}
+                        >
+                            Prev
+                        </Button>
+                        <span className="mx-2">{page.page}</span>
+                        <Button
+                            disabled={
+                                page.page ===
+                                    Math.ceil(
+                                        page.itemCount / page.rowsPerPage
+                                    ) || data.items.length < page.rowsPerPage
+                            }
+                            onClick={() => page.setPage(page.page + 1)}
+                        >
+                            Next
+                        </Button>
+                        <Box position="absolute" top="50%" right="0">
+                            <Text>{`${page.page} ... ${pageCount}`}</Text>
+                        </Box>
+                    </Flex>
+                </Box>
             )}
         </Box>
     )

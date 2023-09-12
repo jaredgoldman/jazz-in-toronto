@@ -267,16 +267,24 @@ export const eventRouter = createTRPCRouter({
         }
     }),
 
-    getAllUnapproved: protectedProcedure.query(({ ctx }) => {
-        return ctx.prisma.event.findMany({
-            where: { approved: false, startDate: { gte: new Date() } },
-            include: {
-                artist: true,
-                venue: true
-            },
-            orderBy: {
-                startDate: 'asc'
-            }
+    getUnapproved: protectedProcedure
+        .input(z.object({ skip: z.number(), take: z.number() }))
+        .query(async ({ ctx, input }) => {
+            const unapprovedCount = await ctx.prisma.event.count({
+                where: { approved: false, startDate: { gte: new Date() } }
+            })
+            const paginatedEvents = await ctx.prisma.event.findMany({
+                where: { approved: false, startDate: { gte: new Date() } },
+                include: {
+                    artist: true,
+                    venue: true
+                },
+                skip: input.skip,
+                take: input.take,
+                orderBy: {
+                    startDate: 'asc'
+                }
+            })
+            return { unapprovedCount, paginatedEvents }
         })
-    })
 })
