@@ -205,6 +205,9 @@ export default function SearchTableRow({
         setRowShade(rowShade === successShade ? '' : successShade)
     }
 
+    const isApproved =
+        isEventWithArtistVenue(item) && (item?.approved || rowShade)
+
     return (
         <Table.Row align="center" key={item.id} className={rowShade}>
             {cols}
@@ -223,10 +226,12 @@ export default function SearchTableRow({
 
                 {isEventWithArtistVenue(item) &&
                     successAttribute === 'approved' && (
-                        <Button mt="2" onClick={handleApprove}>
-                            {item.approved || rowShade
-                                ? 'Unapprove'
-                                : 'Approve'}
+                        <Button
+                            mt="2"
+                            onClick={handleApprove}
+                            color={isApproved ? 'red' : 'green'}
+                        >
+                            {isApproved ? 'Unapprove' : 'Approve'}
                         </Button>
                     )}
             </Table.Cell>

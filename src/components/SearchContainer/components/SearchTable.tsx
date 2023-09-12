@@ -199,7 +199,7 @@ export default function SearchTable({
                 </Flex>
             )}
             {page && (
-                <Box position="relative">
+                <Box position="relative" mt="4">
                     <Flex mt="3" justify="center" align="center">
                         <Box position="absolute" left="0">
                             <SelectRoot
