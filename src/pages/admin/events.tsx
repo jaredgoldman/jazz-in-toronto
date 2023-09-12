@@ -75,6 +75,7 @@ export default function AdminEvents(): JSX.Element {
                                 onEdit={onEdit}
                                 isLoading={isLoadingUnapproved}
                                 successAttribute="approved"
+                                paginate={true}
                             />
                         )}
                     </Tabs.Content>

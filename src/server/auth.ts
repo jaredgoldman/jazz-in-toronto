@@ -35,6 +35,18 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         session: ({ session }) => {
             return session
+        },
+        signIn: async ({ user }) => {
+            const maybeUser = user?.email
+                ? await prisma.admin.findUnique({
+                      where: { email: user.email }
+                  })
+                : null
+            if (maybeUser) {
+                return true
+            } else {
+                return false
+            }
         }
     },
     adapter: PrismaAdapter(prisma),

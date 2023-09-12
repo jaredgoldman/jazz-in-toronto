@@ -26,6 +26,7 @@ interface Props {
     successAttribute?: 'artistId' | 'approved'
     venueId?: string
     showFeatured?: boolean
+    paginate?: boolean
 }
 
 export default function SearchTable({
@@ -36,9 +37,12 @@ export default function SearchTable({
     canEditFormState = false,
     successAttribute,
     venueId,
-    showFeatured = true
+    showFeatured = true,
+    paginate = false
 }: Props): JSX.Element {
     const [items, setItems] = useState<Items>([])
+    const [page, setPage] = useState<number>(1)
+    const [rowsPerPage, setRowsPerPage] = useState<number>(10)
     const [canSubmit, setCanSubmit] = useState<boolean>(false)
     const addEventsMutation = api.event.createMany.useMutation()
     const addVenuesMutation = api.venue.createMany.useMutation()
@@ -176,6 +180,24 @@ export default function SearchTable({
                         onClick={handleSubmitStateEntries}
                     >
                         Save Events
+                    </Button>
+                </Flex>
+            )}
+            {paginate && (
+                <Flex mt="3" justify="center">
+                    <Button
+                        disabled={page === 1}
+                        onClick={() => setPage(page - 1)}
+                    >
+                        Prev
+                    </Button>
+                    <Button
+                        disabled={
+                            page === Math.ceil(items.length / rowsPerPage)
+                        }
+                        onClick={() => setPage(page + 1)}
+                    >
+                        Next
                     </Button>
                 </Flex>
             )}

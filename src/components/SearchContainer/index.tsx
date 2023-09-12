@@ -10,6 +10,7 @@ import useSearch from './hooks/useSearch'
 interface Props {
     data: TableData
     isLoading: boolean
+    paginate?: boolean
     heading?: string
     searchDate?: Date
     canEditFormState?: boolean
@@ -21,6 +22,7 @@ interface Props {
 export default function SearchContainer({
     data,
     isLoading,
+    paginate,
     heading,
     searchDate,
     canEditFormState,
@@ -58,6 +60,7 @@ export default function SearchContainer({
                             onEdit={onEdit}
                             canEditFormState={canEditFormState}
                             successAttribute={successAttribute}
+                            paginate={paginate}
                         />
                     </Box>
                 )}
