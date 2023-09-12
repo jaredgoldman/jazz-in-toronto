@@ -145,7 +145,9 @@ export default function SearchTableRow({
                     <Table.Cell key="website">
                         {item.website ? item.website : ''}
                     </Table.Cell>
-                    <Table.Cell key="active">{item.active}</Table.Cell>
+                    <Table.Cell key="active">
+                        {item.active ? 'Yes' : 'No'}
+                    </Table.Cell>
                 </>
             )
             break
@@ -207,7 +209,7 @@ export default function SearchTableRow({
 
     const isApproved =
         isEventWithArtistVenue(item) && (item?.approved || rowShade)
-
+    console.log('SHOW FEATURED', item)
     return (
         <Table.Row align="center" key={item.id} className={rowShade}>
             {cols}

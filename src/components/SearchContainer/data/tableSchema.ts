@@ -65,14 +65,6 @@ const tableSchema = {
             key: 'featured'
         },
         {
-            label: 'Instagram',
-            key: 'instagramHandle'
-        },
-        {
-            label: 'Featured',
-            key: ''
-        },
-        {
             label: 'Edit',
             key: ''
         }
