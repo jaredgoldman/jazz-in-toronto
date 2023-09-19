@@ -4,9 +4,9 @@ import Link from 'next/link'
 
 export default function Footer(): JSX.Element {
     return (
-        <footer className="mt-16 w-full">
+        <footer className="w-full">
             <Separator size="4" />
-            <Box p="2">
+            <Box p="4">
                 <Text as="span" align="left" size="2">
                     Made by{' '}
                     <RLink asChild>

@@ -60,7 +60,7 @@ export default function Calendar(): JSX.Element {
     const eventRows = mapEventsToCalendarRows()
 
     return (
-        <Card>
+        <Card mt="9">
             <Flex direction="column" justify="center" p="5">
                 <Heading
                     align="center"

@@ -16,9 +16,6 @@ export default function Featured() {
             justify="center"
             className="max-w-5xl"
         >
-            <Heading align="center" mb="7">
-                Our Faves
-            </Heading>
             {featuredItems && !isLoading ? (
                 <Grid columns="3" rows="1" m="3" className="justify-center">
                     {featuredItems?.venue && (

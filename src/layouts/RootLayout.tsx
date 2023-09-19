@@ -11,11 +11,13 @@ import { type ReactNode } from 'react'
 interface Props {
     pageTitle: string
     children: ReactNode | string
+    fullWidth?: boolean
 }
 
 export default function RootLayout({
     children,
-    pageTitle
+    pageTitle,
+    fullWidth = false
 }: Props): JSX.Element {
     return (
         <>
@@ -24,9 +26,13 @@ export default function RootLayout({
             </Head>
             <Flex direction="column" className="h-screen">
                 <Header headerType={HeaderType.Public} />
-                <Container size="3" className="flex-grow">
-                    {children}
-                </Container>
+                {fullWidth ? (
+                    children
+                ) : (
+                    <Container size="3" className="flex-grow">
+                        {children}
+                    </Container>
+                )}
                 <Footer />
             </Flex>
         </>
