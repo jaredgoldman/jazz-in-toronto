@@ -8,7 +8,7 @@ import { DataType } from '~/types/enums'
 // Utils
 import { deepEqual } from '~/utils/shared'
 
-interface SearchData {
+export interface SearchData {
     name: string
     date: Date | null
     website: string
