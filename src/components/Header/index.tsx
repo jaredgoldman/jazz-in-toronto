@@ -27,7 +27,7 @@ export default function Header({
             <Flex width="100%" align="center" px="4" py="5">
                 {headerType === HeaderType.Admin && session && (
                     <Button
-                        className="absolute right-2 top-2"
+                        className="center absolute right-24"
                         onClick={() => void signOut()}
                     >
                         Sign Out
