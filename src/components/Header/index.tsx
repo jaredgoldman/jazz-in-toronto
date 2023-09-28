@@ -3,7 +3,7 @@ import { signOut, useSession } from 'next-auth/react'
 // Components
 import Link from '../Link'
 import { default as NextLink } from 'next/link'
-import { Button, Heading, Flex, Separator } from '@radix-ui/themes'
+import { Button, Heading, Flex, Separator, Box } from '@radix-ui/themes'
 // Utils
 import DarkModeToggle from '../DarkModeToggle'
 
@@ -25,14 +25,6 @@ export default function Header({
     return (
         <header>
             <Flex width="100%" align="center" px="4" py="5">
-                {headerType === HeaderType.Admin && session && (
-                    <Button
-                        className="center absolute right-24"
-                        onClick={() => void signOut()}
-                    >
-                        Sign Out
-                    </Button>
-                )}
                 <Flex align="center">
                     <Heading ml="1" mr="6" size="7">
                         <NextLink
@@ -100,6 +92,11 @@ export default function Header({
                                 )}
                             </ul>
                         </nav>
+                    )}
+                </Flex>
+                <Flex justify="end" gap="4">
+                    {headerType === HeaderType.Admin && session && (
+                        <Button onClick={() => void signOut()}>Sign Out</Button>
                     )}
                     <DarkModeToggle />
                 </Flex>
