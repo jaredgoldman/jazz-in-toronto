@@ -3,7 +3,7 @@ import { signOut, useSession } from 'next-auth/react'
 // Components
 import Link from '../Link'
 import { default as NextLink } from 'next/link'
-import { Button, Heading, Flex, Separator, Box } from '@radix-ui/themes'
+import { Button, Heading, Flex, Separator } from '@radix-ui/themes'
 // Utils
 import DarkModeToggle from '../DarkModeToggle'
 
