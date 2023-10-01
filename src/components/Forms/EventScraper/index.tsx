@@ -7,7 +7,6 @@ import DatePickerField from '../Fields/DatePicker'
 import Loading from '~/components/Loading'
 import * as Form from '@radix-ui/react-form'
 // Types
-import type { Venue, Artist } from '~/types/data'
 import { DataType } from '~/types/enums'
 // Hooks
 import useEventScraper from './hooks/useEventScraper'

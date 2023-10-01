@@ -61,16 +61,16 @@ export const getStaticProps: GetStaticProps<{
 export default function About({
     data
 }: InferGetStaticPropsType<typeof getStaticProps>): JSX.Element {
-    const aboutData = data?.about?.data?.attributes
-    const teamImagePath = aboutData?.teamImage?.data?.attributes?.url || null
+    const cmsData = data?.about?.data?.attributes
+    const teamImagePath = cmsData?.teamImage?.data?.attributes?.url || null
     const imageCollagePath =
-        aboutData?.imageCollage?.data?.attributes?.url || null
+        cmsData?.imageCollage?.data?.attributes?.url || null
 
     return (
         <RootLayout pageTitle="Jazz In Toronto | About Us">
             <Flex direction="column" align="center" width="100%" mx="auto">
                 <Heading mb="5" align="center">
-                    {aboutData?.heading}
+                    {cmsData?.heading}
                 </Heading>
                 <Text
                     mb="5"
@@ -78,12 +78,12 @@ export default function About({
                     mx={{ initial: '4', md: '0' }}
                     className="max-w-2xl"
                 >
-                    {aboutData?.description}
+                    {cmsData?.description}
                 </Text>
                 <Flex justify="start" mt="5" align="center">
                     <div className="flex-1 border-b"></div>
                     <Heading align="center" className="px-3">
-                        {aboutData?.teamHeading}
+                        {cmsData?.teamHeading}
                     </Heading>
                     <div className="flex-1 border-b"></div>
                 </Flex>
@@ -96,7 +96,7 @@ export default function About({
                         gapY="5"
                         mx={{ initial: '3', md: '0' }}
                     >
-                        {aboutData?.staffMembers?.data?.map((member) => {
+                        {cmsData?.staffMembers?.data?.map((member) => {
                             return (
                                 <Box key={member.attributes?.name}>
                                     <Heading className="font-bold">
@@ -121,7 +121,7 @@ export default function About({
                 <Flex justify="start" mb="5" align="center">
                     <div className="flex-1 border-b"></div>
                     <Heading align="center" className="px-4">
-                        {aboutData?.supportHeading}
+                        {cmsData?.supportHeading}
                     </Heading>
                     <div className="flex-1 border-b"></div>
                 </Flex>
@@ -131,7 +131,7 @@ export default function About({
                     className="max-w-2xl"
                     mx={{ initial: '4', md: '0' }}
                 >
-                    {aboutData?.supportDescription}
+                    {cmsData?.supportDescription}
                 </Text>
                 <Flex justify="center">
                     <Flex
@@ -140,7 +140,7 @@ export default function About({
                         gap={{ initial: '3', md: '9' }}
                         my="6"
                     >
-                        {aboutData?.paypalProfileUrl && (
+                        {cmsData?.paypalProfileUrl && (
                             <Flex
                                 direction="column"
                                 mb={{ initial: '5', md: '0' }}
@@ -148,30 +148,30 @@ export default function About({
                                 <Heading size="3">Paypal</Heading>
                                 <Link
                                     className="text-blue-500"
-                                    href={`https://${aboutData?.paypalProfileUrl}`}
+                                    href={`https://${cmsData?.paypalProfileUrl}`}
                                 >
-                                    {aboutData?.paypalProfileUrl}
+                                    {cmsData?.paypalProfileUrl}
                                 </Link>
                             </Flex>
                         )}
-                        {aboutData?.eTransferAddress && (
+                        {cmsData?.eTransferAddress && (
                             <Flex direction="column">
                                 <Heading size="3">ETransfer</Heading>
                                 <Link
                                     className="text-blue-500"
-                                    href={`mailto:${aboutData?.eTransferAddress}`}
+                                    href={`mailto:${cmsData?.eTransferAddress}`}
                                 >
-                                    {aboutData?.eTransferAddress}
+                                    {cmsData?.eTransferAddress}
                                 </Link>
                             </Flex>
                         )}
                     </Flex>
                 </Flex>
                 <Flex mb="9" justify="center">
-                    {aboutData?.ctaText && aboutData?.paypalProfileUrl && (
+                    {cmsData?.ctaText && cmsData?.paypalProfileUrl && (
                         <Badge>
-                            <Link href={aboutData.paypalProfileUrl}>
-                                {aboutData.ctaText}
+                            <Link href={cmsData.paypalProfileUrl}>
+                                {cmsData.ctaText}
                             </Link>
                         </Badge>
                     )}

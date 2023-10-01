@@ -1,7 +1,7 @@
 // Components
 import Loading from '../Loading'
 import FeaturedCard from './FeaturedCard'
-import { Flex, Heading, Grid } from '@radix-ui/themes'
+import { Flex, Grid } from '@radix-ui/themes'
 // Utisl
 import { api } from '~/utils/api'
 
