@@ -7,12 +7,14 @@ import {
     Flex,
     AspectRatio
 } from '@radix-ui/themes'
+import Image from 'next/image'
 import {
     type ComponentGigRecurringGig,
     Enum_Componentgigrecurringgig_Day as Day,
     type ListingPageQuery
 } from '~/gql/graphql'
 import { convertAndFormatTime } from '~/utils/date'
+
 interface Props {
     cmsData: ListingPageQuery
 }
@@ -44,11 +46,11 @@ export default function RecurringGigs({ cmsData }: Props) {
                 {Object.entries(days).map(([day, gigs]) => {
                     if (gigs.length) {
                         return (
-                            <>
+                            <Container key={day}>
                                 <Heading size="8" mb="4">
                                     {day}
                                 </Heading>
-                                <Card mb="5" key={day}>
+                                <Card mb="5">
                                     {gigs.map((gig) => {
                                         const gigImage =
                                             gig.image?.data?.attributes?.url
@@ -76,15 +78,11 @@ export default function RecurringGigs({ cmsData }: Props) {
                                                         <AspectRatio
                                                             ratio={1 / 1}
                                                         >
-                                                            <img
+                                                            <Image
                                                                 src={gigImage}
                                                                 alt={`image for ${gigString}`}
-                                                                style={{
-                                                                    objectFit:
-                                                                        'cover',
-                                                                    width: '100%',
-                                                                    height: '100%'
-                                                                }}
+                                                                className="h-full w-full object-cover"
+                                                                fill={true}
                                                             />
                                                         </AspectRatio>
                                                     </Box>
@@ -93,7 +91,7 @@ export default function RecurringGigs({ cmsData }: Props) {
                                         )
                                     })}
                                 </Card>
-                            </>
+                            </Container>
                         )
                     }
                 })}
