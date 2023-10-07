@@ -57,7 +57,7 @@ export default function RecurringGigs({ cmsData }: Props) {
                                         )} - ${gig.artist} @ ${gig.venue}`
                                         return (
                                             <Flex key={gig.id}>
-                                                <Box className="max-w-xl">
+                                                <Box className="max-w-xl" p="2">
                                                     <Heading mb="4" mt="1">
                                                         {gigString}
                                                     </Heading>
