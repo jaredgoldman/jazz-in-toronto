@@ -1,11 +1,19 @@
-import { Box, Container, Heading, Card, Text, Flex } from '@radix-ui/themes'
+import {
+    Box,
+    Container,
+    Heading,
+    Card,
+    Text,
+    Flex,
+    Separator
+} from '@radix-ui/themes'
 import Image from 'next/image'
 import {
     type ComponentGigRecurringGig,
     Enum_Componentgigrecurringgig_Day as Day,
     type ListingPageQuery
 } from '~/gql/graphql'
-
+import { convertAndFormatTime } from '~/utils/date'
 interface Props {
     cmsData: ListingPageQuery
 }
@@ -33,26 +41,22 @@ export default function RecurringGigs({ cmsData }: Props) {
 
     return (
         <Container py="7">
-            {data?.Heading && (
-                <Heading mb="5" align="center">
-                    {data.Heading}
-                </Heading>
-            )}
             <Box>
                 {Object.entries(days).map(([day, gigs]) => {
                     if (gigs.length) {
                         return (
                             <Card mb="5" key={day}>
                                 <Heading>{day}</Heading>
+                                <Separator size="4" mb="3" mt="1" />
                                 {gigs.map((gig) => {
                                     const gigImage =
                                         gig.image?.data?.attributes?.url
-                                    const gigString = `${
+                                    const gigString = `${convertAndFormatTime(
                                         gig.time as string
-                                    } - ${gig.artist} @ ${gig.venue}`
+                                    )} - ${gig.artist} @ ${gig.venue}`
                                     return (
                                         <Flex key={gig.id}>
-                                            <Box>
+                                            <Box className="max-w-xl">
                                                 <Heading>{gigString}</Heading>
                                                 <Text>{gig.description}</Text>
                                             </Box>
@@ -61,8 +65,12 @@ export default function RecurringGigs({ cmsData }: Props) {
                                                     <Image
                                                         src={gigImage}
                                                         alt={`image for ${gigString}`}
-                                                        width={400}
-                                                        height={400}
+                                                        width={200}
+                                                        height={200}
+                                                        objectFit="contain"
+                                                        style={{
+                                                            minWidth: '10rem'
+                                                        }}
                                                     />
                                                 </Box>
                                             )}

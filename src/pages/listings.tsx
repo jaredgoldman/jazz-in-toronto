@@ -2,6 +2,7 @@
 import RootLayout from '~/layouts/RootLayout'
 import Calendar from '~/components/Calendar'
 import RecurringGigs from '~/components/RecurringGigs'
+import { Heading } from '@radix-ui/themes'
 // Utils
 import { graphQlWithAuth } from '~/utils/gql'
 import { graphql } from '~/gql'
@@ -50,8 +51,18 @@ export default function Listings({
 }: InferGetStaticPropsType<typeof getStaticProps>): JSX.Element {
     return (
         <RootLayout pageTitle="Jazz In Toronto | Event Listings">
+            <Heading size="9" mt="8">
+                Listings
+            </Heading>
             <Calendar />
-            {data && <RecurringGigs cmsData={data} />}
+            {data && (
+                <>
+                    <Heading size="9" mt="8">
+                        Recurring Gigs
+                    </Heading>
+                    <RecurringGigs cmsData={data} />
+                </>
+            )}
         </RootLayout>
     )
 }
