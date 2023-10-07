@@ -5,9 +5,8 @@ import {
     Card,
     Text,
     Flex,
-    Separator
+    AspectRatio
 } from '@radix-ui/themes'
-import Image from 'next/image'
 import {
     type ComponentGigRecurringGig,
     Enum_Componentgigrecurringgig_Day as Day,
@@ -45,39 +44,56 @@ export default function RecurringGigs({ cmsData }: Props) {
                 {Object.entries(days).map(([day, gigs]) => {
                     if (gigs.length) {
                         return (
-                            <Card mb="5" key={day}>
-                                <Heading>{day}</Heading>
-                                <Separator size="4" mb="3" mt="1" />
-                                {gigs.map((gig) => {
-                                    const gigImage =
-                                        gig.image?.data?.attributes?.url
-                                    const gigString = `${convertAndFormatTime(
-                                        gig.time as string
-                                    )} - ${gig.artist} @ ${gig.venue}`
-                                    return (
-                                        <Flex key={gig.id}>
-                                            <Box className="max-w-xl">
-                                                <Heading>{gigString}</Heading>
-                                                <Text>{gig.description}</Text>
-                                            </Box>
-                                            {gigImage && (
-                                                <Box m="auto" p="3">
-                                                    <Image
-                                                        src={gigImage}
-                                                        alt={`image for ${gigString}`}
-                                                        width={200}
-                                                        height={200}
-                                                        objectFit="contain"
-                                                        style={{
-                                                            minWidth: '10rem'
-                                                        }}
-                                                    />
+                            <>
+                                <Heading size="8" mb="4">
+                                    {day}
+                                </Heading>
+                                <Card mb="5" key={day}>
+                                    {gigs.map((gig) => {
+                                        const gigImage =
+                                            gig.image?.data?.attributes?.url
+                                        const gigString = `${convertAndFormatTime(
+                                            gig.time as string
+                                        )} - ${gig.artist} @ ${gig.venue}`
+                                        return (
+                                            <Flex key={gig.id}>
+                                                <Box className="max-w-xl">
+                                                    <Heading mb="4" mt="1">
+                                                        {gigString}
+                                                    </Heading>
+                                                    <Box className="max-w-[90%]">
+                                                        <Text size="4">
+                                                            {gig.description}
+                                                        </Text>
+                                                    </Box>
                                                 </Box>
-                                            )}
-                                        </Flex>
-                                    )
-                                })}
-                            </Card>
+                                                {gigImage && (
+                                                    <Box
+                                                        width="100%"
+                                                        height="auto"
+                                                        p="6"
+                                                    >
+                                                        <AspectRatio
+                                                            ratio={1 / 1}
+                                                        >
+                                                            <img
+                                                                src={gigImage}
+                                                                alt={`image for ${gigString}`}
+                                                                style={{
+                                                                    objectFit:
+                                                                        'cover',
+                                                                    width: '100%',
+                                                                    height: '100%'
+                                                                }}
+                                                            />
+                                                        </AspectRatio>
+                                                    </Box>
+                                                )}
+                                            </Flex>
+                                        )
+                                    })}
+                                </Card>
+                            </>
                         )
                     }
                 })}
