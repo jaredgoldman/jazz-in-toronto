@@ -1,3 +1,4 @@
+// Components
 import {
     Box,
     Container,
@@ -8,11 +9,13 @@ import {
     AspectRatio
 } from '@radix-ui/themes'
 import Image from 'next/image'
+// Types
 import {
     type ComponentGigRecurringGig,
     Enum_Componentgigrecurringgig_Day as Day,
     type ListingPageQuery
 } from '~/gql/graphql'
+// Utils
 import { convertAndFormatTime } from '~/utils/date'
 
 interface Props {
