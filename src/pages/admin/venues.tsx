@@ -1,6 +1,7 @@
 // Components
 import AdminLayout from '~/layouts/AdminLayout'
 import SearchContainer from '~/components/SearchContainer'
+import { Heading } from '@radix-ui/themes'
 // Utils
 import { api } from '~/utils/api'
 import { DataType } from '~/types/enums'
@@ -16,6 +17,9 @@ export default function AdminVenues() {
     return (
         <AdminLayout pageTitle="Jazz In Toronto | Admin - Venues">
             <>
+                <Heading align="center" size="9" mb="9">
+                    Venues
+                </Heading>
                 {events && !isLoading && (
                     <SearchContainer
                         data={{ type: DataType.VENUE, items: events }}

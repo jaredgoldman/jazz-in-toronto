@@ -51,13 +51,13 @@ export default function Listings({
 }: InferGetStaticPropsType<typeof getStaticProps>): JSX.Element {
     return (
         <RootLayout pageTitle="Jazz In Toronto | Event Listings">
-            <Heading size="9" mt="8">
+            <Heading size="9" align="center" mb="9">
                 Listings
             </Heading>
             <Calendar />
             {data && (
                 <>
-                    <Heading size="9" mt="8">
+                    <Heading size="9" align="center" mb="9">
                         Recurring Gigs
                     </Heading>
                     <RecurringGigs cmsData={data} />
