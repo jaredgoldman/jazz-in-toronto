@@ -209,7 +209,7 @@ export default function SearchTableRow({
 
     const isApproved =
         isEventWithArtistVenue(item) && (item?.approved || rowShade)
-    console.log('SHOW FEATURED', item)
+
     return (
         <Table.Row align="center" key={item.id} className={rowShade}>
             {cols}

@@ -25,14 +25,6 @@ export default function Header({
     return (
         <header>
             <Flex width="100%" align="center" px="4" py="5">
-                {headerType === HeaderType.Admin && session && (
-                    <Button
-                        className="absolute right-2 top-2"
-                        onClick={() => void signOut()}
-                    >
-                        Sign Out
-                    </Button>
-                )}
                 <Flex align="center">
                     <Heading ml="1" mr="6" size="7">
                         <NextLink
@@ -100,6 +92,11 @@ export default function Header({
                                 )}
                             </ul>
                         </nav>
+                    )}
+                </Flex>
+                <Flex justify="end" gap="4">
+                    {headerType === HeaderType.Admin && session && (
+                        <Button onClick={() => void signOut()}>Sign Out</Button>
                     )}
                     <DarkModeToggle />
                 </Flex>
