@@ -48,4 +48,4 @@ yarn-error.log*
 .idea
 
 # gql codegen
-/src/gql/*
+# /src/gql/*
