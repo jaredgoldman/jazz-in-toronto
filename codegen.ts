@@ -1,8 +1,9 @@
 import type { CodegenConfig } from '@graphql-codegen/cli'
+import { env } from '~/env.mjs'
 
 const config: CodegenConfig = {
     overwrite: true,
-    schema: 'http://127.0.0.1:1337/graphql',
+    schema: `${env.CMS_API_URL}/graphql`,
     documents: 'src/**/*.ts?(x)',
     generates: {
         'src/gql/': {
