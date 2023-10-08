@@ -1,5 +1,5 @@
 import { default as NextLink } from 'next/link'
-import { Link as RadixLink, Responsive } from '@radix-ui/themes'
+import { Link as RadixLink, type Responsive } from '@radix-ui/themes'
 
 interface Props {
     href: string
