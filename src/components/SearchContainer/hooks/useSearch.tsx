@@ -7,7 +7,7 @@ import type { Artist, EventWithArtistVenue, Venue } from '~/types/data'
 import { DataType } from '~/types/enums'
 // Utils
 import { deepEqual } from '~/utils/shared'
-import accept from 'attr-accept'
+// import accept from 'attr-accept'
 
 interface SearchData {
     name: string
@@ -99,43 +99,83 @@ export default function useSearch(
     })
 
     //sort functions
-    const sortName = useEvent(
-        (items: Artist[] | Venue[] | EventWithArtistVenue[]) => {
-            return items.sort()
-        }
-    )
+    // const sortName = useEvent(
+    //     (items: Artist[] | Venue[] | EventWithArtistVenue[]) => {
+    //         return items.sort()
+    //     }
+    // )
 
     useEffect(() => {
-        // If we havne't searched yet or if we've cleared the search, return all items
+        // If we haven't searched yet or if we've cleared the search, return all items
         if (deepEqual(searchData, initialSearchData) && data.items?.length) {
             return setFilteredItems(data.items)
         }
-
+        const sortFilteredData = {
+            name: (a: Artist | Venue, b: Artist | Venue) => {
+                const aName = a.name
+                const bName = b.name
+                if (sorting.ascending) {
+                    return aName.localeCompare(bName)
+                } else {
+                    return bName.localeCompare(aName)
+                }
+            },
+            date: (a: EventWithArtistVenue, b: EventWithArtistVenue) => {
+                const aDate = a.startDate.toString()
+                const bDate = b.startDate.toString()
+                if (sorting.ascending) {
+                    return aDate.localeCompare(bDate, undefined, {
+                        numeric: true,
+                        sensitivity: 'base'
+                    })
+                } else {
+                    return bDate.localeCompare(aDate, undefined, {
+                        numeric: true,
+                        sensitivity: 'base'
+                    })
+                }
+            }
+            // instagram: (a: Artist | Venue, b: Artist | Venue) => {
+            //   const aInsta = a.instagramHandle;
+            //   const bInsta = b.instagramHandle;
+            //   if (sorting.ascending) {
+            //     return aInsta.localeCompare(bInsta)
+            //   } else {
+            //     return bInsta.localeCompare(aInsta)
+            //   }
+            // }
+        }
         if (data.items) {
             // TODO: Dry this up
             const filterItems = () => {
                 if (data.type === DataType.EVENT) {
-                    return data.items.filter(
-                        (item: EventWithArtistVenue) =>
-                            filterName(item) &&
-                            filterVenue(item) &&
-                            filterWebsite(item) &&
-                            filterInstagramHandle(item)
-                    )
+                    return data.items
+                        .filter(
+                            (item: EventWithArtistVenue) =>
+                                filterName(item) &&
+                                filterVenue(item) &&
+                                filterWebsite(item) &&
+                                filterInstagramHandle(item)
+                        )
+                        .sort(sortFilteredData['date'])
                 } else if (data.type === DataType.ARTIST) {
-                    return data.items.filter(
-                        (item: Artist) =>
-                            filterName(item) &&
-                            filterInstagramHandle(item) &&
-                            filterWebsite(item)
-                    )
+                    return data.items
+                        .filter(
+                            (item: Artist) =>
+                                filterName(item) &&
+                                filterInstagramHandle(item) &&
+                                filterWebsite(item)
+                        )
+                        .sort(sortFilteredData['name'])
                 } else if (data.type === DataType.VENUE) {
-                    return data.items.filter(
-                        (item: Venue) =>
-                            filterName(item) &&
-                            filterInstagramHandle(item) &&
-                            filterWebsite(item)
-                    )
+                    return data.items
+                        .filter(
+                            (item: Venue) =>
+                                filterName(item) &&
+                                filterInstagramHandle(item) &&
+                                filterWebsite(item)
+                        )
+                        .sort(sortFilteredData['name'])
                 } else {
                     return []
                 }
