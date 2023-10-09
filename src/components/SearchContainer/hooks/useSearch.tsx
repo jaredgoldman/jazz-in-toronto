@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react'
 import { useEvent } from '~/hooks/useEvent'
 // Types
 import { SearchOption, type TableData } from '../types'
-import type { EventWithArtistVenue, Artist, Venue } from '~/types/data'
+import type { Artist, EventWithArtistVenue, Venue } from '~/types/data'
 import { DataType } from '~/types/enums'
 // Utils
 import { deepEqual } from '~/utils/shared'
+import accept from 'attr-accept'
 
-export interface SearchData {
+interface SearchData {
     name: string
     date: Date | null
     website: string
@@ -40,6 +41,8 @@ export default function useSearch(
     const [filteredItems, setFilteredItems] = useState<TableData['items']>(
         data.items || []
     )
+
+    const [sorting, setSorting] = useState({ key: '', ascending: true })
 
     const clearSearchData = () => {
         setSearchData(initialSearchData)
@@ -95,6 +98,13 @@ export default function useSearch(
         )
     })
 
+    //sort functions
+    const sortName = useEvent(
+        (items: Artist[] | Venue[] | EventWithArtistVenue[]) => {
+            return items.sort()
+        }
+    )
+
     useEffect(() => {
         // If we havne't searched yet or if we've cleared the search, return all items
         if (deepEqual(searchData, initialSearchData) && data.items?.length) {
@@ -130,7 +140,7 @@ export default function useSearch(
                     return []
                 }
             }
-            setFilteredItems(filterItems().sort())
+            setFilteredItems(filterItems())
         }
     }, [
         searchData,
@@ -139,10 +149,11 @@ export default function useSearch(
         filterName,
         filterVenue,
         filterWebsite,
-        data.type
+        data.type,
+        filteredItems,
+        sorting.ascending,
+        sorting.key
     ])
-
-    // const sortItems = (items: Array<Item>) => {}
 
     // TODO: replace with reducer
     const handleSearch = (
@@ -185,11 +196,21 @@ export default function useSearch(
         }
     }
 
+    const handleSort = (k: string) => {
+        const a = !sorting.ascending
+        setSorting({
+            ascending: a,
+            key: k
+        })
+        console.log('button clicked ', sorting.key, sorting.ascending)
+    }
+
     return {
         searchData,
         setSearchData,
         handleSearch,
         filteredItems,
-        clearSearchData
+        clearSearchData,
+        handleSort
     }
 }

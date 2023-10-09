@@ -1,13 +1,16 @@
-import { Table } from '@radix-ui/themes'
+import { useState } from 'react'
+import { Button, Table } from '@radix-ui/themes'
 
 interface Props {
     cols: Array<{ label?: string | null; key: string }>
     showFeatured?: boolean
+    onSort: (key: string, ascending?: boolean) => void
 }
 
 export default function SearchTableHeader({
     cols,
-    showFeatured = true
+    showFeatured = true,
+    onSort
 }: Props): JSX.Element {
     return (
         <Table.Header>
@@ -19,6 +22,9 @@ export default function SearchTableHeader({
                     return (
                         <Table.ColumnHeaderCell key={col.label}>
                             {col.label}
+                            <Button onClick={() => onSort(col.key)}>
+                                sort
+                            </Button>
                         </Table.ColumnHeaderCell>
                     )
                 })}

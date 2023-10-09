@@ -36,6 +36,7 @@ interface Props {
     artists?: Artist[]
     isLoading: boolean
     onEdit?: () => Promise<void>
+    onSort: (key: string, ascending: boolean) => void
     canEditFormState?: boolean
     successAttribute?: 'artistId' | 'approved'
     venueId?: string
@@ -48,6 +49,7 @@ export default function SearchTable({
     artists,
     isLoading,
     onEdit,
+    onSort,
     canEditFormState = false,
     successAttribute,
     venueId,
@@ -164,6 +166,7 @@ export default function SearchTable({
                     <SearchTableHeader
                         cols={tableSchema[data.type]}
                         showFeatured={showFeatured}
+                        onSort={onSort}
                     />
                     <Table.Body>
                         {rows.length ? (

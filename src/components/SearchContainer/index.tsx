@@ -47,7 +47,7 @@ export default function SearchContainer({
     setSearchDate,
     paginationProps
 }: Props): JSX.Element {
-    const { filteredItems, handleSearch } = useSearch(
+    const { filteredItems, handleSearch, handleSort } = useSearch(
         data,
         searchDate,
         setSearchDate
@@ -74,6 +74,7 @@ export default function SearchContainer({
                                     items: filteredItems
                                 } as TableData
                             }
+                            onSort={handleSort}
                             isLoading={isLoading}
                             onEdit={onEdit}
                             canEditFormState={canEditFormState}
