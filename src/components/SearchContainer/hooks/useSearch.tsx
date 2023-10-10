@@ -157,7 +157,7 @@ export default function useSearch(
                                 filterWebsite(item) &&
                                 filterInstagramHandle(item)
                         )
-                        .sort(sortFilteredData['date'])
+                        .sort(sortFilteredData[sorting.key])
                 } else if (data.type === DataType.ARTIST) {
                     return data.items
                         .filter(
@@ -166,7 +166,7 @@ export default function useSearch(
                                 filterInstagramHandle(item) &&
                                 filterWebsite(item)
                         )
-                        .sort(sortFilteredData['name'])
+                        .sort(sortFilteredData[sorting.key])
                 } else if (data.type === DataType.VENUE) {
                     return data.items
                         .filter(
@@ -175,7 +175,7 @@ export default function useSearch(
                                 filterInstagramHandle(item) &&
                                 filterWebsite(item)
                         )
-                        .sort(sortFilteredData['name'])
+                        .sort(sortFilteredData[sorting.key])
                 } else {
                     return []
                 }
