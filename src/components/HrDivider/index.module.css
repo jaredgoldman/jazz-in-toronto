@@ -1,6 +1,5 @@
 .dot {
     width: 8px;
-    margin: 0 auto;
     height: 8px;
     border-radius: 50%;
     background-color: rgb(31, 29, 26);
@@ -12,6 +11,18 @@
 .dot::before,
 .dot::after {
     content: '';
-    border-top: 2px solid rgb(31, 29, 26);
     width: 100%;
+    height: 2px;
+    background-color: rgb(31, 29, 26);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.dot::before {
+    left: -100%; /* Lines on the left */
+}
+
+.dot::after {
+    right: -100%; /* Lines on the right */
 }
