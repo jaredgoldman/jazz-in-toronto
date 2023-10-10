@@ -47,7 +47,7 @@ export default function Home() {
                             className="bg-gray-100"
                             href="https://www.instagram.com/jazzintoronto/ "
                         >
-                            <Button size="4">
+                            <Button size="4" color="orange">
                                 <FontAwesomeIcon
                                     className="my-3 h-8"
                                     icon={['fab', 'instagram']}
@@ -59,9 +59,9 @@ export default function Home() {
                             mx="3"
                             href="https://www.facebook.com/jazzintoronto/ "
                         >
-                            <Button size="4" color="yellow">
+                            <Button size="4" color="indigo">
                                 <FontAwesomeIcon
-                                    className="my-3 h-8"
+                                    className="my-3 h-8 text-white"
                                     icon={['fab', 'facebook']}
                                 />
                                 {/* Facebook */}
