@@ -11,6 +11,7 @@ export default function Document() {
                 <meta name="description" content="Jazz In Toronto" />
                 <script async src={src} />
                 <link rel="icon" href="/favicon.ico" />
+
                 <link
                     rel="preconnect"
                     href="https://fonts.googleapis.com"

@@ -6,11 +6,16 @@ import { type Session } from 'next-auth'
 import { type AppType } from 'next/app'
 // Utils
 import { api } from '~/utils/api'
+import { ReactElement } from 'react'
 // Assets
 import { Poppins } from 'next/font/google'
 import { Theme, ThemePanel } from '@radix-ui/themes'
 import '~/styles/globals.css'
 import '@radix-ui/themes/styles.css'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fab } from '@fortawesome/free-brands-svg-icons'
+
+library.add(fab) // makes brand icons globally available to all components
 
 const poppins = Poppins({
     weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],

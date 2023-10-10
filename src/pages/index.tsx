@@ -12,6 +12,8 @@ import {
     Container
 } from '@radix-ui/themes'
 // Utils
+import { ReactElement } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function Home() {
     return (
@@ -42,17 +44,27 @@ export default function Home() {
                     <Flex justify="center" mb="7">
                         <Link
                             mx="3"
-                            className="bg-gray-100 p-5 "
+                            className="bg-gray-100"
                             href="https://www.instagram.com/jazzintoronto/ "
                         >
-                            <Button size="4">Instagram</Button>
+                            <Button size="4">
+                                <FontAwesomeIcon
+                                    className="my-3 h-8"
+                                    icon={['fab', 'instagram']}
+                                />
+                                {/* Instagram */}
+                            </Button>
                         </Link>
                         <Link
                             mx="3"
                             href="https://www.facebook.com/jazzintoronto/ "
                         >
                             <Button size="4" color="yellow">
-                                Facebook
+                                <FontAwesomeIcon
+                                    className="my-3 h-8"
+                                    icon={['fab', 'facebook']}
+                                />
+                                {/* Facebook */}
                             </Button>
                         </Link>
                     </Flex>
