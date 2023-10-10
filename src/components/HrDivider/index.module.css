@@ -1,0 +1,17 @@
+.dot {
+    width: 8px;
+    margin: 0 auto;
+    height: 8px;
+    border-radius: 50%;
+    background-color: rgb(31, 29, 26);
+    display: inline-block;
+    margin: 0 5px;
+    position: relative;
+}
+
+.dot::before,
+.dot::after {
+    content: '';
+    border-top: 2px solid rgb(31, 29, 26);
+    width: 100%;
+}

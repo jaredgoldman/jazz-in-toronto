@@ -6,7 +6,6 @@ import { type Session } from 'next-auth'
 import { type AppType } from 'next/app'
 // Utils
 import { api } from '~/utils/api'
-import { ReactElement } from 'react'
 // Assets
 import { Poppins } from 'next/font/google'
 import { Theme, ThemePanel } from '@radix-ui/themes'

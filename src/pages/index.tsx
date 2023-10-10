@@ -11,8 +11,8 @@ import {
     Text,
     Container
 } from '@radix-ui/themes'
+import HrDivider from '~/components/HrDivider'
 // Utils
-import { ReactElement } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function Home() {
@@ -36,14 +36,21 @@ export default function Home() {
                     </Text>
                 </Container>
             </Box>
-            <Box className="bg-gray-200 dark:bg-gray-900" p="7">
-                <Container size="3" className="flex-grow" py="8">
+            <Box p="7">
+                <Container
+                    size="3"
+                    className="flex-grow rounded-lg bg-gray-200 dark:bg-gray-900"
+                    py="9"
+                >
                     <Heading size="8" align="center" mb="7">
                         Follow us on our socials!
                     </Heading>
                     <Flex justify="center" mb="7">
+                        <HrDivider />
+                    </Flex>
+                    <Flex justify="center" mb="7">
                         <Link
-                            mx="3"
+                            mx="2"
                             className="bg-gray-100"
                             href="https://www.instagram.com/jazzintoronto/ "
                         >
@@ -60,7 +67,7 @@ export default function Home() {
                             </Button>
                         </Link>
                         <Link
-                            mx="3"
+                            mx="2"
                             href="https://www.facebook.com/jazzintoronto/ "
                         >
                             <Button
