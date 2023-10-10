@@ -47,9 +47,13 @@ export default function Home() {
                             className="bg-gray-100"
                             href="https://www.instagram.com/jazzintoronto/ "
                         >
-                            <Button size="4" color="orange">
+                            <Button
+                                size="4"
+                                color="orange"
+                                style={{ padding: '8px 12px' }}
+                            >
                                 <FontAwesomeIcon
-                                    className="my-3 h-8"
+                                    className="h-8"
                                     icon={['fab', 'instagram']}
                                 />
                                 {/* Instagram */}
@@ -59,9 +63,13 @@ export default function Home() {
                             mx="3"
                             href="https://www.facebook.com/jazzintoronto/ "
                         >
-                            <Button size="4" color="indigo">
+                            <Button
+                                size="4"
+                                color="indigo"
+                                style={{ padding: '8px 10px' }}
+                            >
                                 <FontAwesomeIcon
-                                    className="my-3 h-8 text-white"
+                                    className="h-8 text-white"
                                     icon={['fab', 'facebook']}
                                 />
                                 {/* Facebook */}
