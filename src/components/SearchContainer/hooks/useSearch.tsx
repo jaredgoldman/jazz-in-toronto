@@ -117,7 +117,13 @@ export default function useSearch(
       }
     }
 
-    function compareName(ascending: boolean, a: string, b: string) {
+    function compareString(ascending: boolean, a: string | null, b: string | null) {
+      if (a == null) {
+        a = "" 
+      }
+      if (b == null) {
+        b = ""
+      }
       if (ascending) {
         return a.localeCompare(b)
       } else {
@@ -130,11 +136,7 @@ export default function useSearch(
             name: (a: Artist | Venue, b: Artist | Venue) => {
                 const aName = a.name
                 const bName = b.name
-                if (sorting.ascending) {
-                    return aName.localeCompare(bName)
-                } else {
-                    return bName.localeCompare(aName)
-                }
+                return compareString(sorting.ascending, aName, bName)
             },
             featured: (a: Artist | Venue, b: Artist | Venue) => {
                 const aFeatured = a.featured
@@ -145,6 +147,21 @@ export default function useSearch(
                 const aActive = a.active
                 const bActive = b.active
                 return compareBool(sorting.ascending, aActive, bActive)
+            },
+            address: (a: Venue, b: Venue) => {
+                const aAddress = a.address
+                const bAddress = b.address
+                return compareString(sorting.ascending, aAddress, bAddress)
+            },
+            city: (a: Venue, b: Venue) => {
+                const aCity = a.city
+                const bCity = b.city
+                return compareString(sorting.ascending, aCity, bCity)
+            },
+            website: (a: Artist | Venue, b: Artist | Venue) => {
+                const aWebsite = a.website?.replace(/http(s)?(:)?(\/\/)?|(\/\/)?(www\.)?/g, '')
+                const bWebsite = b.website?.replace(/http(s)?(:)?(\/\/)?|(\/\/)?(www\.)?/g, '')
+                return compareString(sorting.ascending, aWebsite, bWebsite)
             },
             date: (a: EventWithArtistVenue, b: EventWithArtistVenue) => {
                 const aDate = a.startDate.toString()
@@ -164,37 +181,24 @@ export default function useSearch(
             'venue.name': (a: EventWithArtistVenue, b: EventWithArtistVenue) => {
                 const aName = a.venue.name;
                 const bName = b.venue.name;
-                if (sorting.ascending) {
-                  return aName.localeCompare(bName)
-                } else {
-                  return bName.localeCompare(aName)
-              }
+                return compareString(sorting.ascending, aName, bName)
             },
             'artist.name': (a: EventWithArtistVenue, b: EventWithArtistVenue) => {
                 const aName = a.artist.name;
                 const bName = b.artist.name;
-                if (sorting.ascending) {
-                  return aName.localeCompare(bName)
-                } else {
-                  return bName.localeCompare(aName)
-              }
+                return compareString(sorting.ascending, aName, bName)
             },
-            // instagram: (a: Artist | Venue, b: Artist | Venue) => {
-            //   const aInsta = a.instagramHandle;
-            //   const bInsta = b.instagramHandle;
-            //   if (sorting.ascending) {
-            //     return aInsta.localeCompare(bInsta)
-            //   } else {
-            //     return bInsta.localeCompare(aInsta)
-            //   }
-            // }
+            instagram: (a: Artist | Venue | EventWithArtistVenue, b: Artist | Venue | EventWithArtistVenue) => {
+              const aInsta = a.instagramHandle?.replace('@', '');
+              const bInsta = b.instagramHandle?.replace('@', '');
+              return compareString(sorting.ascending, aInsta, bInsta)
+            }
         }
       // If we haven't searched yet or if we've cleared the search, return all items
         if (deepEqual(searchData, initialSearchData) && data.items?.length) {
             return setFilteredItems(data.items.sort(sortFilteredData[sorting.key]))
         }
 
-        
         if (data.items) {
             // TODO: Dry this up
             const filterItems = () => {
