@@ -7,6 +7,9 @@ import type { Artist, EventWithArtistVenue, Venue } from '~/types/data'
 import { DataType } from '~/types/enums'
 // Utils
 import { deepEqual } from '~/utils/shared'
+import { P } from 'pino'
+import { boolean } from 'zod'
+import el from 'date-fns/locale/el'
 // import accept from 'attr-accept'
 
 interface SearchData {
@@ -104,13 +107,26 @@ export default function useSearch(
     //         return items.sort()
     //     }
     // )
+    
+    //compare functions
+    function compareBool(ascending: boolean, a: boolean, b: boolean) {
+      if (ascending) {
+        return (a === b)? 0 : a? -1 : 1;
+      } else {
+        return (a === b)? 0 : a? 1 : -1;
+      }
+    }
 
+    function compareName(ascending: boolean, a: string, b: string) {
+      if (ascending) {
+        return a.localeCompare(b)
+      } else {
+        return b.localeCompare(a)
+      }
+    }
+    
     useEffect(() => {
-        // If we haven't searched yet or if we've cleared the search, return all items
-        if (deepEqual(searchData, initialSearchData) && data.items?.length) {
-            return setFilteredItems(data.items)
-        }
-        const sortFilteredData = {
+       const sortFilteredData = {
             name: (a: Artist | Venue, b: Artist | Venue) => {
                 const aName = a.name
                 const bName = b.name
@@ -119,6 +135,16 @@ export default function useSearch(
                 } else {
                     return bName.localeCompare(aName)
                 }
+            },
+            featured: (a: Artist | Venue, b: Artist | Venue) => {
+                const aFeatured = a.featured
+                const bFeatured = b.featured
+                return compareBool(sorting.ascending, aFeatured, bFeatured)
+            },
+            active: (a: Artist | Venue, b: Artist | Venue) => {
+                const aActive = a.active
+                const bActive = b.active
+                return compareBool(sorting.ascending, aActive, bActive)
             },
             date: (a: EventWithArtistVenue, b: EventWithArtistVenue) => {
                 const aDate = a.startDate.toString()
@@ -134,7 +160,25 @@ export default function useSearch(
                         sensitivity: 'base'
                     })
                 }
-            }
+            },
+            'venue.name': (a: EventWithArtistVenue, b: EventWithArtistVenue) => {
+                const aName = a.venue.name;
+                const bName = b.venue.name;
+                if (sorting.ascending) {
+                  return aName.localeCompare(bName)
+                } else {
+                  return bName.localeCompare(aName)
+              }
+            },
+            'artist.name': (a: EventWithArtistVenue, b: EventWithArtistVenue) => {
+                const aName = a.artist.name;
+                const bName = b.artist.name;
+                if (sorting.ascending) {
+                  return aName.localeCompare(bName)
+                } else {
+                  return bName.localeCompare(aName)
+              }
+            },
             // instagram: (a: Artist | Venue, b: Artist | Venue) => {
             //   const aInsta = a.instagramHandle;
             //   const bInsta = b.instagramHandle;
@@ -145,6 +189,12 @@ export default function useSearch(
             //   }
             // }
         }
+      // If we haven't searched yet or if we've cleared the search, return all items
+        if (deepEqual(searchData, initialSearchData) && data.items?.length) {
+            return setFilteredItems(data.items.sort(sortFilteredData[sorting.key]))
+        }
+
+        
         if (data.items) {
             // TODO: Dry this up
             const filterItems = () => {
@@ -157,7 +207,7 @@ export default function useSearch(
                                 filterWebsite(item) &&
                                 filterInstagramHandle(item)
                         )
-                        .sort(sortFilteredData[sorting.key])
+                        // .sort(sortFilteredData[key])
                 } else if (data.type === DataType.ARTIST) {
                     return data.items
                         .filter(
@@ -166,7 +216,7 @@ export default function useSearch(
                                 filterInstagramHandle(item) &&
                                 filterWebsite(item)
                         )
-                        .sort(sortFilteredData[sorting.key])
+                        // .sort(sortFilteredData[sorting.key])
                 } else if (data.type === DataType.VENUE) {
                     return data.items
                         .filter(
@@ -175,12 +225,12 @@ export default function useSearch(
                                 filterInstagramHandle(item) &&
                                 filterWebsite(item)
                         )
-                        .sort(sortFilteredData[sorting.key])
+                        /* .sort(sortFilteredData[sorting.key]) */
                 } else {
                     return []
                 }
             }
-            setFilteredItems(filterItems())
+            setFilteredItems(filterItems().sort(sortFilteredData[sorting.key]))
         }
     }, [
         searchData,
