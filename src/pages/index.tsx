@@ -14,6 +14,13 @@ import {
 import HrDivider from '~/components/HrDivider'
 // Utils
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Hepta_Slab } from 'next/font/google'
+
+const hepta_slab = Hepta_Slab({
+    weight: ['400', '500'],
+    subsets: ['latin'],
+    preload: true
+})
 
 export default function Home() {
     return (
@@ -39,10 +46,14 @@ export default function Home() {
             <Box p="7">
                 <Container
                     size="3"
-                    className="mx-auto w-[62%] flex-grow rounded-lg bg-gray-200 dark:bg-gray-900"
-                    py="9"
+                    className="mx-auto w-[62%] flex-grow rounded-lg bg-gray-100 px-4 pb-5 pt-10 shadow dark:border dark:border-gray-800 dark:bg-gray-900"
                 >
-                    <Heading size="8" align="center" mb="7">
+                    <Heading
+                        size="8"
+                        align="center"
+                        mb="7"
+                        className={hepta_slab.className}
+                    >
                         Follow us on our socials!
                     </Heading>
                     <Flex justify="center" mb="7">

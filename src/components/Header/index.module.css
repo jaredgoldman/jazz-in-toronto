@@ -1,0 +1,34 @@
+.noUnderline:hover {
+    text-decoration: none;
+}
+
+.underline {
+    position: relative;
+    text-decoration: none;
+    color: #333;
+}
+
+.underline:hover {
+    text-decoration: none;
+}
+
+.underline::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    opacity: 30%;
+    height: 2px;
+    background-color: #fb923c;
+    bottom: 0;
+    left: 6px;
+    transition: all cubic-bezier(0.19, 1, 0.22, 1) 0.4s;
+}
+
+.underline:hover::before {
+    width: 90%;
+    opacity: 90%;
+}
+
+nav .underline:not(:first-child):hover::before {
+    width: 85%;
+}
