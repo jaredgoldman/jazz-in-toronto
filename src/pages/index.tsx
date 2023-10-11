@@ -39,7 +39,7 @@ export default function Home() {
             <Box p="7">
                 <Container
                     size="3"
-                    className="flex-grow rounded-lg bg-gray-200 dark:bg-gray-900"
+                    className="mx-auto w-[62%] flex-grow rounded-lg bg-gray-200 dark:bg-gray-900"
                     py="9"
                 >
                     <Heading size="8" align="center" mb="7">
