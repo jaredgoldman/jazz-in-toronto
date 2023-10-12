@@ -20,15 +20,10 @@
     height: 2px;
     background-color: #fb923c;
     bottom: 0;
-    left: 6px;
     transition: all cubic-bezier(0.19, 1, 0.22, 1) 0.4s;
 }
 
 .underline:hover::before {
-    width: 90%;
+    width: 100%;
     opacity: 90%;
-}
-
-nav .underline:not(:first-child):hover::before {
-    width: 85%;
 }
