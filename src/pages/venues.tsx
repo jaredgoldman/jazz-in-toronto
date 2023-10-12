@@ -20,12 +20,10 @@ export default function Venues(): JSX.Element {
 
     return (
         <RootLayout pageTitle="Jazz In Toronto | Venues">
+            <Heading mb="5" align="center" size="9">
+                Venues
+            </Heading>
             <Flex direction="column" my="9">
-                <Flex mx="2">
-                    <Heading mb="5" align="center">
-                        Venue listings
-                    </Heading>
-                </Flex>
                 {venueCards}
             </Flex>
         </RootLayout>

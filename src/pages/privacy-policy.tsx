@@ -7,7 +7,9 @@ export default function PrivacyPolicy() {
     return (
         <RootLayout pageTitle="Jazz In Toronto | Privacy Policy">
             <Container>
-                <Heading>Privacy Policy</Heading>
+                <Heading align="center" mb="6" size="9">
+                    Privacy Policy
+                </Heading>
                 <Text>
                     <br />
                     Last updated: August 1st, 2023
@@ -23,6 +25,7 @@ export default function PrivacyPolicy() {
                     Service. By using the Service, you agree to the collection
                     and use of information in accordance with this policy.
                 </Text>
+                <br />
                 <br />
                 <Heading size="2">Information Collection and Use</Heading>
                 <Text as="p">
@@ -46,6 +49,7 @@ export default function PrivacyPolicy() {
                     time spent on those pages and other statistics.
                 </Text>
                 <br />
+                <br />
                 <Heading size="2">Cookies</Heading>
                 <Text>
                     <br />
@@ -62,6 +66,7 @@ export default function PrivacyPolicy() {
                     we recommend that you leave them turned on.
                 </Text>
                 <br />
+                <br />
                 <Heading size="2">Service Providers</Heading>
                 <Text>
                     <br />
@@ -73,6 +78,7 @@ export default function PrivacyPolicy() {
                     specific tasks on our behalf and are obligated not to
                     disclose or use your information for any other purpose.
                 </Text>
+                <br />
                 <br />
                 <Heading size="2">Security</Heading>
                 <Text>
@@ -89,6 +95,7 @@ export default function PrivacyPolicy() {
                     we have collected from you.
                 </Text>
                 <br />
+                <br />
                 <Heading size="2">Links to Other Sites</Heading>
                 <Text>
                     <br />
@@ -101,6 +108,7 @@ export default function PrivacyPolicy() {
                     assume no responsibility for the content, privacy policies,
                     or practices of any third-party sites or services.
                 </Text>
+                <br />
                 <br />
                 <Heading size="2">Changes to This Privacy Policy</Heading>
                 <Text>

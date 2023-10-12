@@ -69,7 +69,7 @@ export default function About({
     return (
         <RootLayout pageTitle="Jazz In Toronto | About Us">
             <Flex direction="column" align="center" width="100%" mx="auto">
-                <Heading mb="5" align="center">
+                <Heading mb="9" align="center" size="9">
                     {cmsData?.heading}
                 </Heading>
                 <Text

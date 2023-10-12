@@ -54,8 +54,8 @@ export default function SearchContainer({
     )
 
     return (
-        <Container size="4">
-            <Card>
+        <Card>
+            <Box p="3">
                 <Heading mb="3" ml="3">
                     {heading}
                 </Heading>
@@ -82,7 +82,7 @@ export default function SearchContainer({
                         />
                     </Box>
                 )}
-            </Card>
-        </Container>
+            </Box>
+        </Card>
     )
 }

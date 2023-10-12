@@ -51,8 +51,6 @@ export default function EventForm({
 
     return (
         <FormLayout maxWidth="max-w-md" isLoading={isLoading} hasCard={true}>
-            <Heading>Book Your Gig</Heading>
-            <Separator size="4" mb="5" />
             <Form.Root onSubmit={submit}>
                 <Flex direction="column" gap="3">
                     <Input

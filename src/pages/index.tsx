@@ -16,9 +16,9 @@ import {
 export default function Home() {
     return (
         <RootLayout pageTitle="Jazz In Toronto | Home" fullWidth={true}>
-            <Box p="7">
+            <Box pb="7">
                 <Container size="3" className="flex-grow" py="8">
-                    <Heading size="8" mb="6" align="center">
+                    <Heading size="9" mb="6" align="center">
                         We are JAZZINTORONTO
                     </Heading>
                     <Text size="6">
