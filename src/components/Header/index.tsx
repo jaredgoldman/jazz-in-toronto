@@ -32,7 +32,7 @@ export default function Header({
     const { data: session } = useSession()
     return (
         <header>
-            <div className="mx-auto inline-block flex w-[63%] justify-between">
+            <div className="mx-auto inline-block flex justify-between lg:w-[82%]">
                 <Flex
                     width="100%"
                     align="end"
