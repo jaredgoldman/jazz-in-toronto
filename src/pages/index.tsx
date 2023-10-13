@@ -46,7 +46,7 @@ export default function Home() {
             <Box p="7">
                 <Container
                     size="3"
-                    className="mx-auto w-[62%] flex-grow rounded-lg bg-gray-100 px-4 pb-5 pt-10 shadow dark:border dark:border-gray-800 dark:bg-gray-900"
+                    className="mx-auto w-[62%] flex-grow rounded-lg bg-gray-100 px-4 pb-3 pt-10 shadow dark:border dark:border-gray-800 dark:bg-gray-900"
                 >
                     <Heading
                         size="8"
