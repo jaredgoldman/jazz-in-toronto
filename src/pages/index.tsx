@@ -12,7 +12,6 @@ import {
     Container,
     Card
 } from '@radix-ui/themes'
-import HrDivider from '~/components/HrDivider'
 // Utils
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Hepta_Slab } from 'next/font/google'
@@ -29,11 +28,11 @@ export default function Home() {
             <Box p="7">
                 <Container size="3" className="flex-grow" py="8">
                     <Flex gap="3" width="100%">
-                        <div>
+                        <Flex direction="column" gap="2" align="start">
                             <Heading size="8" mb="6" align="center">
                                 We are JAZZINTORONTO
                             </Heading>
-                            <Text size="6">
+                            <Text size="3">
                                 Lorem ipsum dolor sit amet, consectetur
                                 adipiscing elit, sed do eiusmod tempor
                                 incididunt ut labore et dolore magna aliqua. Ut
@@ -45,32 +44,32 @@ export default function Home() {
                                 occaecat cupidatat non proident, sunt in culpa
                                 qui officia deserunt mollit anim id est laborum.
                             </Text>
-                        </div>
-                        <div>
-                            <Card size="5"></Card>
-                            <Card size="2"></Card>
-                            <Card size="2"></Card>
-                        </div>
+                        </Flex>
+                        <Flex>
+                            <Card size="5" variant="classic"></Card>
+                            <Card size="2" variant="classic"></Card>
+                            <Card size="2" variant="classic"></Card>
+                        </Flex>
                     </Flex>
                 </Container>
             </Box>
-            <Box p="7">
-                <Container
-                    size="3"
-                    className="mx-auto w-[62%] flex-grow rounded-lg bg-gray-100 px-4 pb-3 pt-10 shadow dark:border dark:border-gray-800 dark:bg-gray-900"
-                >
+            <Box p="7" className="flex items-center justify-center">
+                <Card size="3" variant="classic" className="w-[80%] shadow">
                     <Heading
                         size="8"
                         align="center"
                         mb="7"
+                        mt="3"
                         className={hepta_slab.className}
                     >
                         Follow us on our socials!
                     </Heading>
                     <Flex justify="center" mb="7">
-                        <HrDivider />
+                        <span className="mt-px inline-block h-px w-10 border-t border-gray-400 bg-opacity-30 dark:border-orange-400 sm:w-16 md:w-44"></span>
+                        <span className="mx-3 inline-block h-[4px] w-[4px] rounded-full bg-gray-800 bg-opacity-80 dark:bg-orange-400" />
+                        <span className="mt-px inline-block h-px w-10  border-t border-gray-400 bg-opacity-30 dark:border-orange-400 sm:w-16 md:w-44"></span>
                     </Flex>
-                    <Flex justify="center" mb="7">
+                    <Flex justify="center" mb="4">
                         <Link
                             mx="2"
                             className="bg-gray-100"
@@ -105,7 +104,7 @@ export default function Home() {
                             </Button>
                         </Link>
                     </Flex>
-                </Container>
+                </Card>
             </Box>
             <Box p="7">
                 <Container size="3" className="flex-grow" py="8">
