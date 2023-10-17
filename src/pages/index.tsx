@@ -54,7 +54,7 @@ export default function Home() {
                 </Container>
             </Box>
             <Box p="7" className="flex items-center justify-center">
-                <Card size="3" variant="classic" className="w-[80%] shadow">
+                <Card size="3" variant="classic" className="w-[84%] shadow">
                     <Heading
                         size="8"
                         align="center"
