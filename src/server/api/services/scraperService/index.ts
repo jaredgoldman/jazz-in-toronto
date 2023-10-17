@@ -1,7 +1,7 @@
 // Libraries
 import { cheerioJsonMapper, type JsonTemplate } from 'cheerio-json-mapper'
 import { TRPCError } from '@trpc/server'
-import puppeterr, { type Page } from 'puppeteer-core'
+import puppeteer, { type Page } from 'puppeteer-core'
 import { createId } from '@paralleldrive/cuid2'
 // types
 import type { Venue, EventWithArtistVenue } from '~/types/data'
@@ -56,7 +56,7 @@ export default class ScraperService {
                 this.venue?.eventsPath || ''
             }`
 
-            const browser = await puppeterr.launch({
+            const browser = await puppeteer.launch({
                 args: [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
@@ -66,7 +66,6 @@ export default class ScraperService {
                     env.CHROME_EXECUTABLE_PATH
                 )
             })
-
             const page = await browser.newPage()
             await page.goto(url, {
                 waitUntil: 'domcontentloaded'

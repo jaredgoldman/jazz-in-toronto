@@ -9,7 +9,8 @@ import {
     Link,
     Box,
     Text,
-    Container
+    Container,
+    Card
 } from '@radix-ui/themes'
 import HrDivider from '~/components/HrDivider'
 // Utils
@@ -27,20 +28,30 @@ export default function Home() {
         <RootLayout pageTitle="Jazz In Toronto | Home" fullWidth={true}>
             <Box p="7">
                 <Container size="3" className="flex-grow" py="8">
-                    <Heading size="8" mb="6" align="center">
-                        We are JAZZINTORONTO
-                    </Heading>
-                    <Text size="6">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua. Ut enim ad minim veniam, quis nostrud
-                        exercitation ullamco laboris nisi ut aliquip ex ea
-                        commodo consequat. Duis aute irure dolor in
-                        reprehenderit in voluptate velit esse cillum dolore eu
-                        fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                        non proident, sunt in culpa qui officia deserunt mollit
-                        anim id est laborum.
-                    </Text>
+                    <Flex gap="3" width="100%">
+                        <div>
+                            <Heading size="8" mb="6" align="center">
+                                We are JAZZINTORONTO
+                            </Heading>
+                            <Text size="6">
+                                Lorem ipsum dolor sit amet, consectetur
+                                adipiscing elit, sed do eiusmod tempor
+                                incididunt ut labore et dolore magna aliqua. Ut
+                                enim ad minim veniam, quis nostrud exercitation
+                                ullamco laboris nisi ut aliquip ex ea commodo
+                                consequat. Duis aute irure dolor in
+                                reprehenderit in voluptate velit esse cillum
+                                dolore eu fugiat nulla pariatur. Excepteur sint
+                                occaecat cupidatat non proident, sunt in culpa
+                                qui officia deserunt mollit anim id est laborum.
+                            </Text>
+                        </div>
+                        <div>
+                            <Card size="5"></Card>
+                            <Card size="2"></Card>
+                            <Card size="2"></Card>
+                        </div>
+                    </Flex>
                 </Container>
             </Box>
             <Box p="7">

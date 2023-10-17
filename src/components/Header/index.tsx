@@ -7,7 +7,6 @@ import { Button, Flex, Heading, Separator } from '@radix-ui/themes'
 // Utils
 import DarkModeToggle from '../DarkModeToggle'
 import { Hepta_Slab } from 'next/font/google'
-import styles from './index.module.css'
 
 const hepta_slab = Hepta_Slab({
     weight: ['400', '500'],
@@ -25,6 +24,10 @@ export enum HeaderType {
     Public = 'Public'
 }
 
+const LinkStyles = `
+  relative inline-block cursor-pointer text-3xl capitalize transition-all duration-500 before:absolute before:-bottom-0.5 before:left-0 before:h-0.5 before:w-0 before:rounded-full before:bg-orange-500 before:opacity-0 before:transition-all before:duration-500 before:content-[''] hover:before:w-full hover:before:opacity-100
+`
+
 export default function Header({
     headerType,
     showLinks = true
@@ -32,10 +35,10 @@ export default function Header({
     const { data: session } = useSession()
     return (
         <header>
-            <div className="mx-auto inline-block flex justify-between lg:w-[82%]">
+            <div className="mx-auto inline-block flex justify-between no-underline lg:w-[82%]">
                 <Flex
                     width="100%"
-                    align="end"
+                    align="center"
                     justify="between"
                     px="4"
                     mx="auto"
@@ -59,46 +62,38 @@ export default function Header({
                                 <ul className="flex gap-4">
                                     {headerType === HeaderType.Public && (
                                         <>
-                                            <li className={styles.underline}>
+                                            <li>
                                                 <Link
                                                     href="/book"
                                                     size="3"
-                                                    className={
-                                                        styles.noUnderline
-                                                    }
+                                                    className={LinkStyles}
                                                 >
                                                     Add Your Gig
                                                 </Link>
                                             </li>
-                                            <li className={styles.underline}>
+                                            <li>
                                                 <Link
                                                     href="/listings"
                                                     size="3"
-                                                    className={
-                                                        styles.noUnderline
-                                                    }
+                                                    className={LinkStyles}
                                                 >
                                                     Listings
                                                 </Link>
                                             </li>
-                                            <li className={styles.underline}>
+                                            <li>
                                                 <Link
                                                     href="/venues"
                                                     size="3"
-                                                    className={
-                                                        styles.noUnderline
-                                                    }
+                                                    className={LinkStyles}
                                                 >
                                                     Venues
                                                 </Link>
                                             </li>
-                                            <li className={styles.underline}>
+                                            <li>
                                                 <Link
                                                     href="/about"
                                                     size="3"
-                                                    className={
-                                                        styles.noUnderline
-                                                    }
+                                                    className={LinkStyles}
                                                 >
                                                     About Us
                                                 </Link>
@@ -147,7 +142,7 @@ export default function Header({
                     {headerType === HeaderType.Admin && session && (
                         <Button onClick={() => void signOut()}>Sign Out</Button>
                     )}
-                    <DarkModeToggle className="mb-[-10px]" />
+                    <DarkModeToggle />
                 </Flex>
             </div>
 
