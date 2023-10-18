@@ -12,6 +12,14 @@ export default {
                 spin: {
                     '0%': { transform: 'rotate(0deg)' },
                     '100%': { transform: 'rotate(360deg)' }
+                },
+                navlinkIn: {
+                    '0%': { width: '0' },
+                    '100%': { width: '100%' }
+                },
+                navlinkOut: {
+                    '0%': { width: '100%' },
+                    '100%': { width: '0' }
                 }
             },
             width: {
@@ -19,7 +27,9 @@ export default {
             }
         },
         animation: {
-            spin: 'spin 1s linear infinite'
+            spin: 'spin 1s linear infinite',
+            navlinkIn: 'navlinkIn 0.3s ease-in-out 1 forwards',
+            navlinkOut: 'navlinkOut 0.3s ease-in-out'
         }
     },
     plugins: []

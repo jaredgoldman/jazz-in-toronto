@@ -25,7 +25,7 @@ export enum HeaderType {
 }
 
 const LinkStyles = `
-  relative inline-block cursor-pointer text-3xl capitalize transition-all duration-500 before:absolute before:-bottom-0.5 before:left-0 before:h-0.5 before:w-0 before:rounded-full before:bg-orange-500 before:opacity-0 before:transition-all before:duration-500 before:content-[''] hover:before:w-full hover:before:opacity-100
+  relative inline-block cursor-pointer before:duration-500 transition-all before:absolute before:-bottom-0.5 before:left-0 before:h-0.5 before:w-0 before:rounded-full before:bg-orange-500 before:opacity-0 before:content-[''] before:animate-navlinkOut hover:before:animate-navlinkIn hover:before:opacity-100
 `
 
 export default function Header({
