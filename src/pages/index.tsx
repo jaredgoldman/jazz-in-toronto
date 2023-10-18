@@ -13,7 +13,7 @@ import {
     Card
 } from '@radix-ui/themes'
 // Utils
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Hepta_Slab } from 'next/font/google'
 
 const hepta_slab = Hepta_Slab({
@@ -65,9 +65,12 @@ export default function Home() {
                         Follow us on our socials!
                     </Heading>
                     <Flex justify="center" mb="7">
-                        <span className="mt-px inline-block h-px w-10 border-t border-gray-400 bg-opacity-30 dark:border-orange-400 sm:w-16 md:w-44"></span>
-                        <span className="mx-3 inline-block h-[4px] w-[4px] rounded-full bg-gray-800 bg-opacity-80 dark:bg-orange-400" />
-                        <span className="mt-px inline-block h-px w-10  border-t border-gray-400 bg-opacity-30 dark:border-orange-400 sm:w-16 md:w-44"></span>
+                        <Text className="mt-px inline-block h-px w-12 border-b border-gray-400 bg-opacity-30 dark:border-orange-400 sm:w-16 md:w-44"></Text>
+                        <Text
+                            mx="3"
+                            className="inline-block h-[4px] w-[4px] rounded-full bg-gray-800 bg-opacity-80 dark:bg-orange-400"
+                        />
+                        <Text className="mt-px inline-block h-px w-12 border-b border-gray-400 bg-opacity-30 dark:border-orange-400 sm:w-16 md:w-44"></Text>
                     </Flex>
                     <Flex justify="center" mb="4">
                         <Link
@@ -80,10 +83,10 @@ export default function Home() {
                                 color="orange"
                                 style={{ padding: '8px 12px' }}
                             >
-                                <FontAwesomeIcon
+                                {/* <FontAwesomeIcon
                                     className="h-8"
                                     icon={['fab', 'instagram']}
-                                />
+                                /> */}
                                 {/* Instagram */}
                             </Button>
                         </Link>
@@ -96,10 +99,10 @@ export default function Home() {
                                 color="indigo"
                                 style={{ padding: '8px 10px' }}
                             >
-                                <FontAwesomeIcon
+                                {/* <FontAwesomeIcon
                                     className="h-8 text-white"
                                     icon={['fab', 'facebook']}
-                                />
+                                /> */}
                                 {/* Facebook */}
                             </Button>
                         </Link>
