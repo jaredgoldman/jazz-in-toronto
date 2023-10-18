@@ -25,7 +25,7 @@ export enum HeaderType {
 }
 
 const LinkStyles = `
-  relative inline-block cursor-pointer before:duration-500 transition-all before:absolute before:-bottom-0.5 before:left-0 before:h-0.5 before:w-0 before:rounded-full before:bg-orange-500 before:opacity-0 before:content-[''] before:animate-navlinkOut hover:before:animate-navlinkIn hover:before:opacity-100
+  relative inline-block cursor-pointer hover:text-orange-600 dark:text-white text-orange-700 before:duration-500 transition-all before:absolute before:-bottom-[2px] before:left-0 before:h-[1px] before:w-0 before:rounded-1/2 before:bg-orange-600 before:opacity-0 before:content-[''] before:animate-navlinkOut hover:before:animate-navlinkIn hover:before:opacity-70
 `
 
 export default function Header({
@@ -48,7 +48,7 @@ export default function Header({
                         <Heading ml="1" mr="6" size="7">
                             <NextLink
                                 href="/"
-                                className="text-black hover:text-orange-400 dark:text-white dark:hover:text-orange-400 sm:text-[4.5vmin]"
+                                className="text-black transition-all duration-200 ease-in-out hover:text-orange-600 dark:text-white dark:hover:text-orange-400 sm:text-[4.5vmin]"
                             >
                                 JAZZINTORONTO
                             </NextLink>
@@ -63,40 +63,36 @@ export default function Header({
                                     {headerType === HeaderType.Public && (
                                         <>
                                             <li>
-                                                <Link
+                                                <NextLink
                                                     href="/book"
-                                                    size="3"
                                                     className={LinkStyles}
                                                 >
                                                     Add Your Gig
-                                                </Link>
+                                                </NextLink>
                                             </li>
                                             <li>
-                                                <Link
+                                                <NextLink
                                                     href="/listings"
-                                                    size="3"
                                                     className={LinkStyles}
                                                 >
                                                     Listings
-                                                </Link>
+                                                </NextLink>
                                             </li>
                                             <li>
-                                                <Link
+                                                <NextLink
                                                     href="/venues"
-                                                    size="3"
                                                     className={LinkStyles}
                                                 >
                                                     Venues
-                                                </Link>
+                                                </NextLink>
                                             </li>
                                             <li>
-                                                <Link
+                                                <NextLink
                                                     href="/about"
-                                                    size="3"
                                                     className={LinkStyles}
                                                 >
                                                     About Us
-                                                </Link>
+                                                </NextLink>
                                             </li>
                                         </>
                                     )}
