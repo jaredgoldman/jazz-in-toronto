@@ -25,7 +25,8 @@ export default function Home() {
                                 size="8"
                                 mb="6"
                                 align="center"
-                                className="font-sans font-medium text-slate-800"
+                                weight="medium"
+                                className="font-mono font-medium text-slate-800"
                             >
                                 We are JAZZINTORONTO
                             </Heading>

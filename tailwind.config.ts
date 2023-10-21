@@ -33,5 +33,6 @@ export default {
             navlinkOut: 'navlinkOut 0.3s ease-in-out'
         }
     },
-    plugins: []
+    plugins: [],
+    important: true
 } satisfies Config

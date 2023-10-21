@@ -11,6 +11,7 @@ import { Poppins, Hepta_Slab } from '@next/font/google'
 import { Theme, ThemePanel } from '@radix-ui/themes'
 import '~/styles/globals.css'
 import '@radix-ui/themes/styles.css'
+import '../../theme.config.css'
 
 const poppins = Poppins({
     weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
