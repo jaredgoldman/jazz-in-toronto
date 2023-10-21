@@ -4,10 +4,11 @@ export default {
     darkMode: 'class',
     content: ['./src/**/*.{js,ts,jsx,tsx}'],
     theme: {
-        fontFamily: {
-            body: 'var(--body-font)'
-        },
         extend: {
+            fontFamily: {
+                body: 'var(--body-font)',
+                secondary: 'var(--secondary-font)'
+            },
             keyframes: {
                 spin: {
                     '0%': { transform: 'rotate(0deg)' },
