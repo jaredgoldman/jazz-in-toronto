@@ -7,7 +7,7 @@ import { type AppType } from 'next/app'
 // Utils
 import { api } from '~/utils/api'
 // Assets
-import { Poppins } from 'next/font/google'
+import { Poppins, Hepta_Slab } from 'next/font/google'
 import { Theme, ThemePanel } from '@radix-ui/themes'
 import '~/styles/globals.css'
 import '@radix-ui/themes/styles.css'
@@ -19,6 +19,13 @@ import '@radix-ui/themes/styles.css'
 const poppins = Poppins({
     weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
     variable: '--body-font',
+    subsets: ['latin'],
+    preload: true
+})
+
+const hepta_slab = Hepta_Slab({
+    weight: ['400', '500'],
+    variable: '--secondary-font',
     subsets: ['latin'],
     preload: true
 })
