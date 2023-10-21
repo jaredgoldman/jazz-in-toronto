@@ -1,7 +1,6 @@
 // Libraries
 import { signOut, useSession } from 'next-auth/react'
 // Components
-import { default as NextLink } from 'next/link'
 import Link from '../Link'
 import { Button, Flex, Heading, Separator } from '@radix-ui/themes'
 // Utils

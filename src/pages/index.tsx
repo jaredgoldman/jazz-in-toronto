@@ -12,6 +12,7 @@ import {
     Container,
     Card
 } from '@radix-ui/themes'
+import { InstagramLogoIcon } from '@radix-ui/react-icons'
 // Utils
 
 export default function Home() {
@@ -84,29 +85,17 @@ export default function Home() {
                             <Button
                                 size="4"
                                 color="orange"
-                                style={{ padding: '8px 12px' }}
+                                className="rounded-full px-4 py-2 hover:bg-orange-400"
                             >
-                                {/* <FontAwesomeIcon
-                                    className="h-8"
-                                    icon={['fab', 'instagram']}
-                                /> */}
-                                {/* Instagram */}
+                                <InstagramLogoIcon />
                             </Button>
                         </Link>
                         <Link
                             mx="2"
                             href="https://www.facebook.com/jazzintoronto/ "
                         >
-                            <Button
-                                size="4"
-                                color="indigo"
-                                style={{ padding: '8px 10px' }}
-                            >
-                                {/* <FontAwesomeIcon
-                                    className="h-8 text-white"
-                                    icon={['fab', 'facebook']}
-                                /> */}
-                                {/* Facebook */}
+                            <Button size="4" color="indigo">
+                                Facebook
                             </Button>
                         </Link>
                     </Flex>
