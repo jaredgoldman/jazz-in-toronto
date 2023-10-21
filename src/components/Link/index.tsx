@@ -10,7 +10,7 @@ interface Props {
 
 export default function Link({ href, size = '5', children, className }: Props) {
     return (
-        <RadixLink size={size} asChild>
+        <RadixLink size={size} className="!no-underline" asChild>
             <NextLink href={href} className={className}>
                 {children}
             </NextLink>

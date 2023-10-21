@@ -20,13 +20,18 @@ export default function Home() {
             <Box p="7">
                 <Container size="3" className="flex-grow" py="8">
                     <Flex gap="3" width="100%">
-                        <Flex direction="column" gap="2" align="start">
+                        <Flex
+                            direction="column"
+                            gap="2"
+                            align="start"
+                            className="text-slate-800"
+                        >
                             <Heading
                                 size="8"
                                 mb="6"
                                 align="center"
                                 weight="medium"
-                                className="font-mono font-medium text-slate-800"
+                                className="!text-slate-800"
                             >
                                 We are JAZZINTORONTO
                             </Heading>
