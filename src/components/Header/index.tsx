@@ -1,18 +1,10 @@
 // Libraries
 import { signOut, useSession } from 'next-auth/react'
 // Components
-import Link from '../Link'
 import { default as NextLink } from 'next/link'
 import { Button, Flex, Heading, Separator } from '@radix-ui/themes'
 // Utils
 import DarkModeToggle from '../DarkModeToggle'
-import { Hepta_Slab } from 'next/font/google'
-
-const hepta_slab = Hepta_Slab({
-    weight: ['400', '500'],
-    subsets: ['latin'],
-    preload: true
-})
 
 interface Props {
     headerType: HeaderType
@@ -35,7 +27,7 @@ export default function Header({
     const { data: session } = useSession()
     return (
         <header>
-            <div className="mx-auto inline-block flex justify-between no-underline lg:w-[82%]">
+            <Flex mx="auto" justify="between" className="w-[82%]">
                 <Flex
                     width="100%"
                     align="center"
@@ -48,7 +40,7 @@ export default function Header({
                         <Heading ml="1" mr="6" size="7">
                             <NextLink
                                 href="/"
-                                className="text-black transition-all duration-200 ease-in-out hover:text-orange-600 dark:text-white dark:hover:text-orange-400 sm:text-[4.5vmin]"
+                                className="font-sans font-medium text-slate-800 transition-all duration-200 ease-in-out hover:text-orange-600 dark:text-white dark:hover:text-orange-400 sm:text-[4.5vmin]"
                             >
                                 JAZZINTORONTO
                             </NextLink>
@@ -56,9 +48,7 @@ export default function Header({
                     </Flex>
                     <Flex justify="end" mx="4" width="100%">
                         {showLinks && (
-                            <nav
-                                className={`flex ${hepta_slab.className} font-medium`}
-                            >
+                            <nav className="flex font-medium">
                                 <ul className="flex gap-4">
                                     {headerType === HeaderType.Public && (
                                         <>
@@ -98,34 +88,25 @@ export default function Header({
                                     )}
                                     {headerType === HeaderType.Admin && (
                                         <>
-                                            <li className="px-2">
-                                                <Link href="/admin" size="5">
+                                            <li className={LinkStyles}>
+                                                <NextLink href="/admin">
                                                     Dashboard
-                                                </Link>
+                                                </NextLink>
                                             </li>
-                                            <li className="px-2">
-                                                <Link
-                                                    href="/admin/events"
-                                                    size="5"
-                                                >
+                                            <li className={LinkStyles}>
+                                                <NextLink href="/admin/events">
                                                     Events
-                                                </Link>
+                                                </NextLink>
                                             </li>
-                                            <li className="px-2">
-                                                <Link
-                                                    href="/admin/artists"
-                                                    size="5"
-                                                >
+                                            <li className={LinkStyles}>
+                                                <NextLink href="/admin/artists">
                                                     Artists
-                                                </Link>
+                                                </NextLink>
                                             </li>
-                                            <li className="px-2">
-                                                <Link
-                                                    href="/admin/venues"
-                                                    size="5"
-                                                >
+                                            <li className={LinkStyles}>
+                                                <NextLink href="/admin/venues">
                                                     Venues
-                                                </Link>
+                                                </NextLink>
                                             </li>
                                         </>
                                     )}
@@ -140,7 +121,7 @@ export default function Header({
                     )}
                     <DarkModeToggle />
                 </Flex>
-            </div>
+            </Flex>
 
             <Separator size="4" />
         </header>

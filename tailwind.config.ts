@@ -6,8 +6,8 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                body: 'var(--body-font)',
-                secondary: 'var(--secondary-font)'
+                sans: ['var(--body-font)'],
+                mono: ['var(--secondary-font)']
             },
             keyframes: {
                 spin: {

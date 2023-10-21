@@ -13,14 +13,6 @@ import {
     Card
 } from '@radix-ui/themes'
 // Utils
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Hepta_Slab } from 'next/font/google'
-
-const hepta_slab = Hepta_Slab({
-    weight: ['400', '500'],
-    subsets: ['latin'],
-    preload: true
-})
 
 export default function Home() {
     return (
@@ -29,7 +21,12 @@ export default function Home() {
                 <Container size="3" className="flex-grow" py="8">
                     <Flex gap="3" width="100%">
                         <Flex direction="column" gap="2" align="start">
-                            <Heading size="8" mb="6" align="center">
+                            <Heading
+                                size="8"
+                                mb="6"
+                                align="center"
+                                className="font-sans font-medium text-slate-800"
+                            >
                                 We are JAZZINTORONTO
                             </Heading>
                             <Text size="3">
@@ -60,7 +57,7 @@ export default function Home() {
                         align="center"
                         mb="7"
                         mt="3"
-                        className={hepta_slab.className}
+                        className="font-mono text-slate-800"
                     >
                         Follow us on our socials!
                     </Heading>
