@@ -12,27 +12,27 @@ import {
     Container,
     Card
 } from '@radix-ui/themes'
-import { InstagramLogoIcon } from '@radix-ui/react-icons'
-// Utils
+import Image from 'next/image'
+//utils
+import { useTheme } from 'next-themes'
+//assets
+import instaLogo from '../../public/images/Instagram_Glyph_White.svg'
+import fbLogo from '../../public/images/facebook-svgrepo-com.svg'
 
 export default function Home() {
+    const { theme } = useTheme()
+    const textColor = theme === 'dark' ? 'white-200' : 'slate-800'
     return (
         <RootLayout pageTitle="Jazz In Toronto | Home" fullWidth={true}>
             <Box p="7">
                 <Container size="3" className="flex-grow" py="8">
-                    <Flex gap="3" width="100%">
-                        <Flex
-                            direction="column"
-                            gap="2"
-                            align="start"
-                            className="text-slate-800"
-                        >
+                    <Flex gap="3" width="100%" className={textColor}>
+                        <Flex direction="column" gap="2" align="start">
                             <Heading
                                 size="8"
                                 mb="6"
                                 align="center"
                                 weight="medium"
-                                className="!text-slate-800"
                             >
                                 We are JAZZINTORONTO
                             </Heading>
@@ -58,23 +58,24 @@ export default function Home() {
                 </Container>
             </Box>
             <Box p="7" className="flex items-center justify-center">
-                <Card size="3" className="w-[84%] shadow-lg">
+                <Card size="3" variant="ghost" className="w-[84%] shadow-lg">
                     <Heading
                         size="8"
                         align="center"
                         mb="7"
                         mt="3"
-                        className="font-mono text-slate-800"
+                        weight="medium"
+                        className="font-mono text-slate-800 dark:text-white"
                     >
                         Follow us on our socials!
                     </Heading>
                     <Flex justify="center" mb="7">
-                        <Text className="mt-px inline-block h-px w-12 border-b border-gray-400 bg-opacity-30 dark:border-orange-400 sm:w-16 md:w-44"></Text>
+                        <Text className="!mt-px inline-block h-px w-12 border-b border-gray-400 bg-opacity-30 dark:border-orange-400 sm:w-16 md:w-44"></Text>
                         <Text
                             mx="3"
                             className="inline-block h-[4px] w-[4px] rounded-full bg-gray-800 bg-opacity-80 dark:bg-orange-400"
                         />
-                        <Text className="mt-px inline-block h-px w-12 border-b border-gray-400 bg-opacity-30 dark:border-orange-400 sm:w-16 md:w-44"></Text>
+                        <Text className="!mt-px inline-block h-px w-12 border-b border-gray-400 bg-opacity-30 dark:border-orange-400 sm:w-16 md:w-44"></Text>
                     </Flex>
                     <Flex justify="center" mb="4">
                         <Link
@@ -85,17 +86,34 @@ export default function Home() {
                             <Button
                                 size="4"
                                 color="orange"
-                                className="rounded-full px-4 py-2 hover:bg-orange-400"
+                                className="!h-[60px] w-[90px] max-w-[90px] rounded-full px-4 py-4 shadow-md hover:bg-orange-400"
                             >
-                                <InstagramLogoIcon />
+                                <Image
+                                    // Temp, wanted to talk about typing the image data
+                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                                    src={instaLogo}
+                                    width={35}
+                                    height={40}
+                                    alt="Instagram logo"
+                                />
                             </Button>
                         </Link>
                         <Link
                             mx="2"
-                            href="https://www.facebook.com/jazzintoronto/ "
+                            href="https://www.facebook.com/jazzintoronto/"
                         >
-                            <Button size="4" color="indigo">
-                                Facebook
+                            <Button
+                                size="4"
+                                color="indigo"
+                                className="!h-[60px] max-w-[90px] rounded-full px-4 py-4 shadow-md"
+                            >
+                                <Image
+                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                                    src={fbLogo}
+                                    width={45}
+                                    height={45}
+                                    alt="Facebook logo"
+                                />
                             </Button>
                         </Link>
                     </Flex>

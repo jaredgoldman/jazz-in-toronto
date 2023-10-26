@@ -29,8 +29,8 @@ export default {
         },
         animation: {
             spin: 'spin 1s linear infinite',
-            navlinkIn: 'navlinkIn 0.3s ease-in-out 1 forwards',
-            navlinkOut: 'navlinkOut 0.3s ease-in-out'
+            navlinkIn: 'navlinkIn 0.4s ease-in-out 1 forwards',
+            navlinkOut: 'navlinkOut 0.4s ease-in-out'
         }
     },
     plugins: []
