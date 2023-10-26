@@ -50,15 +50,15 @@ export default function Home() {
                             </Text>
                         </Flex>
                         <Flex>
-                            <Card size="5" variant="classic"></Card>
-                            <Card size="2" variant="classic"></Card>
-                            <Card size="2" variant="classic"></Card>
+                            <Card size="5"></Card>
+                            <Card size="2"></Card>
+                            <Card size="2"></Card>
                         </Flex>
                     </Flex>
                 </Container>
             </Box>
             <Box p="7" className="flex items-center justify-center">
-                <Card size="3" variant="classic" className="w-[84%] shadow">
+                <Card size="3" className="w-[84%] shadow-lg">
                     <Heading
                         size="8"
                         align="center"

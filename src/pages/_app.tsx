@@ -7,7 +7,7 @@ import { type AppType } from 'next/app'
 // Utils
 import { api } from '~/utils/api'
 // Assets
-import { Poppins, Hepta_Slab } from '@next/font/google'
+import { Poppins, Hepta_Slab } from 'next/font/google'
 import { Theme, ThemePanel } from '@radix-ui/themes'
 import '~/styles/globals.css'
 import '@radix-ui/themes/styles.css'
