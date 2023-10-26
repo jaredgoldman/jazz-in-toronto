@@ -16,8 +16,6 @@ import Image from 'next/image'
 //utils
 import { useTheme } from 'next-themes'
 //assets
-import instaLogo from '../../public/images/Instagram_Glyph_White.svg'
-import fbLogo from '../../public/images/facebook-svgrepo-com.svg'
 
 export default function Home() {
     const { theme } = useTheme()
@@ -89,9 +87,7 @@ export default function Home() {
                                 className="!h-[60px] w-[90px] max-w-[90px] rounded-full px-4 py-4 shadow-md hover:bg-orange-400"
                             >
                                 <Image
-                                    // Temp, wanted to talk about typing the image data
-                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                                    src={instaLogo}
+                                    src="/images/Instagram_Glyph_White.svg"
                                     width={35}
                                     height={40}
                                     alt="Instagram logo"
@@ -108,8 +104,7 @@ export default function Home() {
                                 className="!h-[60px] max-w-[90px] rounded-full px-4 py-4 shadow-md"
                             >
                                 <Image
-                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                                    src={fbLogo}
+                                    src="/images/facebook-svgrepo-com.svg"
                                     width={45}
                                     height={45}
                                     alt="Facebook logo"
