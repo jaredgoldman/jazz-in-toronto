@@ -5,6 +5,7 @@ import EventScraper from '~/components/Forms/EventScraper'
 import { Container, Tabs } from '@radix-ui/themes'
 import SearchApproveEvents from '~/components/SearchApproveEvents'
 import SearchEvents from '~/components/SearchEvents'
+import { Heading } from '@radix-ui/themes'
 
 enum View {
     Search = 'Search',
@@ -16,6 +17,9 @@ enum View {
 export default function AdminEvents(): JSX.Element {
     return (
         <AdminLayout pageTitle="Jazz In Toronto | Admin - Events">
+            <Heading align="center" size="9" mb="9">
+                Events
+            </Heading>
             <Tabs.Root defaultValue={View.Search}>
                 <Tabs.List>
                     <Tabs.Trigger value={View.Search}>Search</Tabs.Trigger>

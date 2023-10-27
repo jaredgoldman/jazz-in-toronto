@@ -44,7 +44,7 @@ export default function RecurringGigs({ cmsData }: Props) {
     }
 
     return (
-        <Container py="7">
+        <Container>
             <Box>
                 {Object.entries(days).map(([day, gigs]) => {
                     if (gigs.length) {

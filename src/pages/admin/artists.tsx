@@ -1,4 +1,5 @@
 // Componentsj
+import { Heading } from '@radix-ui/themes'
 import AdminLayout from '~/layouts/AdminLayout'
 import SearchContainer from '~/components/SearchContainer'
 import Loading from '~/components/Loading'
@@ -20,6 +21,9 @@ export default function AdminArtists() {
     return (
         <AdminLayout pageTitle="Jazz In Toronto | Admin - artists">
             <>
+                <Heading align="center" size="9" mb="9">
+                    Artists
+                </Heading>
                 {artists && !artistsLoading && (
                     <SearchContainer
                         data={{ type: DataType.ARTIST, items: artists }}

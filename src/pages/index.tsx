@@ -22,7 +22,7 @@ export default function Home() {
     const textColor = theme === 'dark' ? 'white-200' : 'slate-800'
     return (
         <RootLayout pageTitle="Jazz In Toronto | Home" fullWidth={true}>
-            <Box p="7">
+            <Box pb="7">
                 <Container size="3" className="flex-grow" py="8">
                     <Flex gap="3" width="100%" className={textColor}>
                         <Flex direction="column" gap="2" align="start">
