@@ -75,7 +75,7 @@ export default function Home() {
                         />
                         <Text className="!mt-px inline-block h-px w-12 border-b border-gray-400 bg-opacity-30 dark:border-orange-400 sm:w-16 md:w-44"></Text>
                     </Flex>
-                    <Flex justify="center" mb="4">
+                    <Flex justify="center" mb="4" gap="2">
                         <Link
                             mx="2"
                             className="bg-gray-100"
@@ -84,7 +84,7 @@ export default function Home() {
                             <Button
                                 size="4"
                                 color="orange"
-                                className="!h-[60px] w-[90px] max-w-[90px] rounded-full px-4 py-4 shadow-md hover:bg-orange-400"
+                                className="!h-[60px] h-4 w-4 w-[90px] rounded-full py-4 shadow-md hover:bg-orange-400"
                             >
                                 <Image
                                     src="/images/Instagram_Glyph_White.svg"
@@ -101,7 +101,7 @@ export default function Home() {
                             <Button
                                 size="4"
                                 color="indigo"
-                                className="!h-[60px] max-w-[90px] rounded-full px-4 py-4 shadow-md"
+                                className="!h-[60px] h-4 w-4 w-[90px] rounded-full py-4 shadow-md"
                             >
                                 <Image
                                     src="/images/facebook-svgrepo-com.svg"
