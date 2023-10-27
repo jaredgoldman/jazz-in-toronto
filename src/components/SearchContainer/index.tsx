@@ -20,6 +20,7 @@ interface Props {
     rowsPerPage?: number
     itemCount?: number
     onEdit?: () => Promise<void>
+    onSort?: () => Promise<void>
     setSearchDate?: (date: Date) => void
     setPage?: (page: number) => void
     setRowsPerPage?: (rowsPerPage: number) => void

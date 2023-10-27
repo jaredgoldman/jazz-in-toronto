@@ -7,6 +7,7 @@ interface Props {
     onSort: (key: string, ascending?: boolean) => void
 }
 
+
 export default function SearchTableHeader({
     cols,
     showFeatured = true,

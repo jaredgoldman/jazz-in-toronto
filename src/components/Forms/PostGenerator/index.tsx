@@ -162,6 +162,7 @@ export default function PostGenerator(): JSX.Element {
                     isLoading={isLoading}
                     onEdit={onEdit}
                     showFeatured={false}
+                    onSort={onSort}
                 />
             )}
         </>
