@@ -1,16 +1,70 @@
-version: "3.8"
+version: '3'
 services:
-  db:
-    image: postgres
-    restart: always
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: jazzintoronto
-      POSTGRES_PASSWORD: jazzintoronto
-      POSTGRES_DB: jazzintoronto
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+    strapi:
+        container_name: strapi
+        build: .
+        image: jit-local-dev:latest
+        restart: unless-stopped
+        environment:
+            database_client: postgres
+            database_name: jazzintoronto
+            database_username: jazzintoronto
+            database_password: password
+            database_host: strapidb
+            database_port: 5433
+            database_ssl: 'false'
+            JWT_SECRET: 12345678
+            ADMIN_JWT_SECRET: adfasdfasdfasf
+            APP_KEYS: local1,local2
+            API_TOKEN_SALT: salt
+
+        volumes:
+            - ./src:/app/src
+            - ./public:/app/public
+        ports:
+            - '1337:1337'
+        networks:
+            - strapi
+        depends_on:
+            - strapidb
+
+    strapidb:
+        container_name: strapidb
+        platform: linux/amd64
+        restart: unless-stopped
+        image: postgres:12.0-alpine
+        command: postgres -p 5433
+        environment:
+            POSTGRES_USER: jazzintoronto
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: jazzintoronto
+        volumes:
+            - strapi-data:/var/lib/postgresql/data/
+        networks:
+            - strapi
+        ports:
+            - 5433:5433
+
+    jitdb:
+        container_name: jitdb
+        platform: linux/amd64
+        restart: unless-stopped
+        image: postgres:12.0-alpine
+        environment:
+            POSTGRES_USER: jazzintoronto
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: jazzintoronto
+        volumes:
+            - jitdb-data:/var/lib/postgresql/data/
+        ports:
+            - 5432:5432
 
 volumes:
-  pgdata:
+    strapidb:
+    strapi-data:
+    jitdb-data:
+
+networks:
+    strapi:
+        name: strapi
+        driver: bridge
