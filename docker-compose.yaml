@@ -30,7 +30,7 @@ services:
 
     strapidb:
         container_name: strapidb
-        platform: linux/amd64 #for platform error on apple m1 chips
+        platform: linux/amd64
         restart: unless-stopped
         image: postgres:12.0-alpine
         command: postgres -p 5433
@@ -39,8 +39,7 @@ services:
             POSTGRES_PASSWORD: password
             POSTGRES_DB: jazzintoronto
         volumes:
-            - strapi-data:/var/lib/postgresql/data/ #using a volume
-            #- ./data:/var/lib/postgresql/data/ # if you want to use a bind folder
+            - strapi-data:/var/lib/postgresql/data/
         networks:
             - strapi
         ports:
@@ -48,7 +47,7 @@ services:
 
     jitdb:
         container_name: jitdb
-        platform: linux/amd64 #for platform error on apple m1 chips
+        platform: linux/amd64
         restart: unless-stopped
         image: postgres:12.0-alpine
         environment:
