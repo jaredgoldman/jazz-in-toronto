@@ -15,6 +15,7 @@ RUN yarn global add node-gyp
 RUN yarn config set network-timeout 600000 -g && yarn install
 ENV PATH /opt/strapi-project/node_modules/.bin:$PATH
 
+# Build Strapi project
 RUN chown -R node:node /opt/strapi-project
 USER node
 RUN ["yarn", "build"]
