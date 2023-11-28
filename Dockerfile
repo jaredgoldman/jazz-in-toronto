@@ -12,10 +12,11 @@ RUN git clone https://github.com/jaredgoldman/jit-cms.git strapi-project
 # Navigate into the cloned Strapi directory
 WORKDIR /opt/strapi-project
 RUN yarn global add node-gyp
-RUN yarn config set network-timeout 600000 -g && yarn install
+RUN yarn config set network-timeout 600000 -g && yarn install --check-files
 ENV PATH /opt/strapi-project/node_modules/.bin:$PATH
 
 # Build Strapi project
+ENV DATABASE_URL=postgresql://jazzintoronto:password@strapidb:5433/jazzintoronto
 RUN chown -R node:node /opt/strapi-project
 USER node
 RUN ["yarn", "build"]

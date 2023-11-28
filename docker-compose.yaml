@@ -6,18 +6,14 @@ services:
         image: jit-local-dev:latest
         restart: unless-stopped
         environment:
-            database_client: postgres
-            database_name: jazzintoronto
-            database_username: jazzintoronto
-            database_password: password
-            database_host: strapidb
-            database_port: 5433
-            database_ssl: 'false'
             JWT_SECRET: 12345678
             ADMIN_JWT_SECRET: adfasdfasdfasf
             APP_KEYS: local1,local2
             API_TOKEN_SALT: salt
-
+            CLOUDINARY_NAME: dr0n9fnu1
+            CLOUDINARY_KEY: 452721889473484
+            CLOUDINARY_SECRET: XgTAQx1meJ2Vfd1OBbRk3rvcTXI
+            DATABASE_URL: postgresql://jazzintoronto:password@strapidb:5433/jazzintoronto
         volumes:
             - ./src:/app/src
             - ./public:/app/public
