@@ -20,8 +20,6 @@ export const env = createEnv({
         NEXTAUTH_SECRET: z.string(),
         UPLOADTHING_SECRET: z.string(),
         UPLOADTHING_APP_ID: z.string(),
-        CMS_API_KEY: z.string(),
-        CMS_API_URL: z.string(),
         CHROME_EXECUTABLE_PATH: z.string(),
         MAX_FILE_SIZE: z.number(),
         MAX_FILE_SIZE_READABLE: z.enum(['2KB', '2MB', '2GB']),
@@ -34,7 +32,6 @@ export const env = createEnv({
      * `NEXT_PUBLIC_`.
      */
     client: {
-        NEXT_PUBLIC_CMS_API_URL: z.string(),
         NEXT_PUBLIC_MAX_FILE_SIZE: z.number()
     },
 
@@ -56,9 +53,6 @@ export const env = createEnv({
         NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
         UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
         UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
-        CMS_API_KEY: process.env.CMS_API_KEY,
-        CMS_API_URL: process.env.CMS_API_URL,
-        NEXT_PUBLIC_CMS_API_URL: process.env.NEXT_PUBLIC_CMS_API_URL,
         CHROME_EXECUTABLE_PATH: process.env.CHROME_EXECUTABLE_PATH,
         MAX_FILE_SIZE: Number(process.env.MAX_FILE_SIZE),
         MAX_FILE_SIZE_READABLE: process.env.MAX_FILE_SIZE_READABLE,

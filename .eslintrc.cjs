@@ -22,6 +22,7 @@ const config = {
     plugins: ['@typescript-eslint'],
     extends: ['next/core-web-vitals', 'plugin:@typescript-eslint/recommended'],
     rules: {
+        '@typescript-eslint/consistent-type-imports': 'off',
         '@typescript-eslint/restrict-template-expressions': 'off',
         'react/no-unescaped-entities': 'off',
         '@typescript-eslint/no-extra-non-null-assertion': 'off',
@@ -35,13 +36,6 @@ const config = {
         ],
         '@typescript-eslint/no-floating-promises': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',
-        '@typescript-eslint/consistent-type-imports': [
-            'warn',
-            {
-                prefer: 'type-imports',
-                fixStyle: 'inline-type-imports'
-            }
-        ],
         '@typescript-eslint/no-unused-vars': [
             'warn',
             { argsIgnorePattern: '^_' }

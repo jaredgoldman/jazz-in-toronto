@@ -11,7 +11,6 @@ import {
     Text,
     Container
 } from '@radix-ui/themes'
-// Utils
 
 export default function Home() {
     return (

@@ -3,74 +3,32 @@ import RootLayout from '~/layouts/RootLayout'
 import Image from 'next/image'
 import { Badge, Link } from '@radix-ui/themes'
 import { Flex, Heading, Text, Grid, Box } from '@radix-ui/themes'
-// Types
-import { type AboutUsQuery } from '~/gql/graphql'
-import { type GetStaticProps, type InferGetStaticPropsType } from 'next'
-// Utils
-import { graphQlWithAuth } from '~/utils/gql'
-import { graphql } from '../gql'
 
-const query = graphql(`
-    query aboutUs {
-        about {
-            data {
-                attributes {
-                    heading
-                    description
-                    teamHeading
-                    staffMembers {
-                        data {
-                            attributes {
-                                position
-                                name
-                            }
-                        }
-                    }
-                    teamImage {
-                        data {
-                            attributes {
-                                url
-                            }
-                        }
-                    }
-                    supportHeading
-                    supportDescription
-                    paypalProfileUrl
-                    eTransferAddress
-                    imageCollage {
-                        data {
-                            attributes {
-                                url
-                            }
-                        }
-                    }
-                    ctaText
-                }
-            }
-        }
+const staffMembers = [
+    {
+        name: 'Lina Welch',
+        title: 'Founder, Managing Director'
+    },
+    {
+        name: 'Ori Dagan',
+        title: 'Founder, Managing Director'
+    },
+    {
+        name: 'Mark Lemieux',
+        title: 'Communications'
+    },
+    {
+        name: 'Camille Neirynck',
+        title: 'Marketing Director'
     }
-`)
+]
 
-export const getStaticProps: GetStaticProps<{
-    data: AboutUsQuery
-}> = async () => {
-    const data = await graphQlWithAuth<AboutUsQuery>(query)
-    return { props: { data } }
-}
-
-export default function About({
-    data
-}: InferGetStaticPropsType<typeof getStaticProps>): JSX.Element {
-    const cmsData = data?.about?.data?.attributes
-    const teamImagePath = cmsData?.teamImage?.data?.attributes?.url || null
-    const imageCollagePath =
-        cmsData?.imageCollage?.data?.attributes?.url || null
-
+export default function About() {
     return (
         <RootLayout pageTitle="Jazz In Toronto | About Us">
             <Flex direction="column" align="center" width="100%" mx="auto">
                 <Heading mb="9" align="center" size="9">
-                    {cmsData?.heading}
+                    About Us
                 </Heading>
                 <Text
                     mb="5"
@@ -78,12 +36,18 @@ export default function About({
                     mx={{ initial: '4', md: '0' }}
                     className="max-w-2xl"
                 >
-                    {cmsData?.description}
+                    JazzInToronto is a platform which promotes local jazz
+                    artists in the Greater Toronto Area, connecting audiences,
+                    musicians, venues and presenters. We offer a platform which
+                    bundles all jazz-related information and showcases a
+                    complete range of artists from new talents to established
+                    jazz musicians to increase the discoverability and access to
+                    the works of Canadian musicians.
                 </Text>
                 <Flex justify="start" mt="5" align="center">
                     <div className="flex-1 border-b"></div>
                     <Heading align="center" className="px-3">
-                        {cmsData?.teamHeading}
+                        Our Team
                     </Heading>
                     <div className="flex-1 border-b"></div>
                 </Flex>
@@ -96,32 +60,30 @@ export default function About({
                         gapY="5"
                         mx={{ initial: '3', md: '0' }}
                     >
-                        {cmsData?.staffMembers?.data?.map((member) => {
+                        {staffMembers.map((member) => {
                             return (
-                                <Box key={member.attributes?.name}>
+                                <Box key={member.name}>
                                     <Heading className="font-bold">
-                                        {member.attributes?.position}
+                                        {member.title}
                                     </Heading>
-                                    <Text>{member.attributes?.name}</Text>
+                                    <Text>{member.name}</Text>
                                 </Box>
                             )
                         })}
                     </Grid>
                 </Flex>
-                {teamImagePath && (
-                    <Flex mb="9" width="100%" justify="center">
-                        <Image
-                            src={teamImagePath}
-                            width={800}
-                            height={500}
-                            alt="Jazz In Toronto team"
-                        />
-                    </Flex>
-                )}
+                <Flex mb="9" width="100%" justify="center">
+                    <Image
+                        src="/images/team.jpg"
+                        width={800}
+                        height={500}
+                        alt="Jazz In Toronto team"
+                    />
+                </Flex>
                 <Flex justify="start" mb="5" align="center">
                     <div className="flex-1 border-b"></div>
                     <Heading align="center" className="px-4">
-                        {cmsData?.supportHeading}
+                        Support Us
                     </Heading>
                     <div className="flex-1 border-b"></div>
                 </Flex>
@@ -131,7 +93,10 @@ export default function About({
                     className="max-w-2xl"
                     mx={{ initial: '4', md: '0' }}
                 >
-                    {cmsData?.supportDescription}
+                    JazzInToronto Inc. is a volunteer-fueled community hub
+                    connecting Toronto’s jazz audiences, musicians, venues and
+                    presenters. Donations are highly appreciated, and support
+                    our programming, curation, and operational costs.
                 </Text>
                 <Flex justify="center">
                     <Flex
@@ -140,50 +105,39 @@ export default function About({
                         gap={{ initial: '3', md: '9' }}
                         my="6"
                     >
-                        {cmsData?.paypalProfileUrl && (
-                            <Flex
-                                direction="column"
-                                mb={{ initial: '5', md: '0' }}
+                        <Flex direction="column" mb={{ initial: '5', md: '0' }}>
+                            <Heading size="3">Paypal</Heading>
+                            <Link
+                                className="text-blue-500"
+                                href="https://paypal.me/JazzInToronto"
                             >
-                                <Heading size="3">Paypal</Heading>
-                                <Link
-                                    className="text-blue-500"
-                                    href={`https://${cmsData?.paypalProfileUrl}`}
-                                >
-                                    {cmsData?.paypalProfileUrl}
-                                </Link>
-                            </Flex>
-                        )}
-                        {cmsData?.eTransferAddress && (
-                            <Flex direction="column">
-                                <Heading size="3">ETransfer</Heading>
-                                <Link
-                                    className="text-blue-500"
-                                    href={`mailto:${cmsData?.eTransferAddress}`}
-                                >
-                                    {cmsData?.eTransferAddress}
-                                </Link>
-                            </Flex>
-                        )}
+                                paypal.me/JazzInToronto
+                            </Link>
+                        </Flex>
+                        <Flex direction="column">
+                            <Heading size="3">ETransfer</Heading>
+                            <Link
+                                className="text-blue-500"
+                                href="mailto:jazzintoronto@outlook.com"
+                            >
+                                jazzintoronto@outlook.com
+                            </Link>
+                        </Flex>
                     </Flex>
                 </Flex>
                 <Flex mb="9" justify="center">
-                    {cmsData?.ctaText && cmsData?.paypalProfileUrl && (
-                        <Badge>
-                            <Link href={cmsData.paypalProfileUrl}>
-                                {cmsData.ctaText}
-                            </Link>
-                        </Badge>
-                    )}
+                    <Badge>
+                        <Link href="https://paypal.me/JazzInToronto">
+                            Support JazzInToronto
+                        </Link>
+                    </Badge>
                 </Flex>
-                {imageCollagePath && (
-                    <Image
-                        src={imageCollagePath}
-                        height={1000}
-                        width={1000}
-                        alt="Jazz In Toronto team"
-                    />
-                )}
+                <Image
+                    src="/images/jit-collage.png"
+                    height={1000}
+                    width={1000}
+                    alt="Jazz In Toronto team"
+                />
             </Flex>
         </RootLayout>
     )
