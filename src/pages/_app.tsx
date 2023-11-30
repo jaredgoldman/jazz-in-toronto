@@ -23,7 +23,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
     Component,
     pageProps: { session, ...pageProps }
 }) => {
-    const showPanel = false
+    const showPanel = true
 
     return (
         <ThemeProvider attribute="class">

@@ -1,5 +1,5 @@
 // Libraries
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 // Components
 import { Dialog, Button, Box } from '@radix-ui/themes'
 // Types
@@ -20,17 +20,19 @@ interface Props {
         | 'surface'
         | 'outline'
         | 'ghost'
+    rawButton?: boolean
 }
 
 export default function Dialogue({
     triggerLabel,
-    description,
     title,
+    description,
     onSubmit,
     component,
     showSave = true,
     triggerButtonClassName,
-    triggerButtonVariant = 'classic'
+    triggerButtonVariant = 'classic',
+    rawButton = false
 }: Props) {
     const [open, setOpen] = useState(false)
 
@@ -42,12 +44,18 @@ export default function Dialogue({
     return (
         <Dialog.Root open={open} onOpenChange={setOpen}>
             <Dialog.Trigger>
-                <Button
-                    variant={triggerButtonVariant}
-                    className={triggerButtonClassName}
-                >
-                    {triggerLabel}
-                </Button>
+                {rawButton ? (
+                    <button className={triggerButtonClassName}>
+                        {triggerLabel}
+                    </button>
+                ) : (
+                    <Button
+                        variant={triggerButtonVariant}
+                        className={triggerButtonClassName}
+                    >
+                        {triggerLabel}
+                    </Button>
+                )}
             </Dialog.Trigger>
             <Dialog.Content className="max-w-4xl">
                 {title && <Dialog.Title>{title}</Dialog.Title>}

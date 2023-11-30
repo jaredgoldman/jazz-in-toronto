@@ -61,42 +61,39 @@ export default function Calendar(): JSX.Element {
     const eventRows = mapEventsToCalendarRows()
 
     return (
-        <Card mb="9">
-            <Flex direction="column" justify="center" p="5">
-                <Heading
-                    align="center"
-                    mb="5"
-                >{`Events on ${currentMonthName}, ${currentYear}`}</Heading>
-                <Flex mb="5" justify="center">
-                    <Button mr="2" onClick={() => changeMonth(-1)}>
-                        Previous
-                    </Button>
-                    <Button ml="2" onClick={() => changeMonth(1)}>
-                        Next
-                    </Button>
-                </Flex>
-                {isLoading ? (
-                    <Loading />
-                ) : (
-                    <Table.Root className="border-collapse">
-                        <Table.Header>
-                            <Table.Row>
-                                {getDaysOfTheWeek('short').map((day) => (
-                                    <Table.Cell
-                                        className="w-1/7 text-center"
-                                        key={day}
-                                        justify="center"
-                                        width="7rem"
-                                    >
-                                        {day}
-                                    </Table.Cell>
-                                ))}
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>{eventRows}</Table.Body>
-                    </Table.Root>
-                )}
+        <Flex direction="column" justify="center" m="9">
+            <Heading
+                align="center"
+                mb="5"
+            >{`Events on ${currentMonthName}, ${currentYear}`}</Heading>
+            <Flex mb="5" justify="center">
+                <Button mr="2" onClick={() => changeMonth(-1)}>
+                    Previous
+                </Button>
+                <Button ml="2" onClick={() => changeMonth(1)}>
+                    Next
+                </Button>
             </Flex>
-        </Card>
+            {isLoading ? (
+                <Loading />
+            ) : (
+                <Table.Root className="border-collapse">
+                    <Table.Header>
+                        <Table.Row>
+                            {getDaysOfTheWeek('short').map((day) => (
+                                <Table.Cell
+                                    key={day}
+                                    justify="center"
+                                    width="7rem"
+                                >
+                                    {day}
+                                </Table.Cell>
+                            ))}
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>{eventRows}</Table.Body>
+                </Table.Root>
+            )}
+        </Flex>
     )
 }
