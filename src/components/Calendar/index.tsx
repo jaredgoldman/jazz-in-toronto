@@ -35,6 +35,7 @@ export default function Calendar(): JSX.Element {
     // Map calendar events to 5 x 7 grid
     const mapEventsToCalendarRows = () => {
         if (!monthlyEvents) return
+        console.log('monthly events::', monthlyEvents)
         const monthlyEventsCopy = [...monthlyEvents]
         const rows = []
         // map events to calendar rows

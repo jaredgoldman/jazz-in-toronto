@@ -2,9 +2,9 @@
 import { useState, useEffect } from 'react'
 import { addMonths, getDaysInMonth } from 'date-fns'
 // Types
-import { type DailyEventData } from '../types'
-import { type EventWithArtistVenue } from '~/types/data'
-import { type QueryObserverResult } from '@tanstack/react-query'
+import { DailyEventData } from '../types'
+import { EventWithArtistVenue } from '~/types/data'
+import { QueryObserverResult } from '@tanstack/react-query'
 // Utils
 import { getDaysOfTheWeek } from '~/utils/constants'
 
@@ -18,6 +18,7 @@ interface ReturnType {
 /*
  * Hook responsible for managing sorting of calendar events from
  * rows to venue mappings. Also counts events per day
+ * XXX: Move this filtering to the be
  */
 export default function useCalendar(
     events: EventWithArtistVenue[] | undefined,
@@ -36,19 +37,17 @@ export default function useCalendar(
     const daysInMonth = getDaysInMonth(selectedDate)
 
     useEffect(() => {
-        if (events?.length) {
-            const dailyEvents = mapEventsToDaysAndVenue(
-                daysInMonth,
-                events,
-                currentMonth,
-                currentYear
-            )
-            const { before, after } = getWeekDaysOutsideOfMonth(
-                currentMonth,
-                currentYear
-            )
-            setDailyEvents([...before, ...dailyEvents, ...after])
-        }
+        const dailyEvents = mapEventsToDaysAndVenue(
+            daysInMonth,
+            events ?? [],
+            currentMonth,
+            currentYear
+        )
+        const { before, after } = getWeekDaysOutsideOfMonth(
+            currentMonth,
+            currentYear
+        )
+        setDailyEvents([...before, ...dailyEvents, ...after])
     }, [events, daysInMonth, selectedDate, currentMonth, currentYear])
 
     useEffect(() => {
