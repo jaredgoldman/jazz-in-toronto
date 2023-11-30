@@ -7,10 +7,10 @@ import Dialogue from '~/components/Dialogue'
 import VenueForm from '../Venue'
 import ArtistForm from '../Artist'
 // Types
-import { type BaseSyntheticEvent } from 'react'
+import { BaseSyntheticEvent } from 'react'
 import type { Venue, Artist } from '~/types/data'
 import type { Control, FieldErrors } from 'react-hook-form'
-import { type EventFormValues } from './hooks/useEventForm'
+import { EventFormValues } from './hooks/useEventForm'
 // Hooks
 import useArtistForm from '../Artist/hooks/useArtistForm'
 import useVenueForm from '../Venue/hooks/useVenueForm'
@@ -52,7 +52,7 @@ export default function EventForm({
     return (
         <FormLayout maxWidth="max-w-md" isLoading={isLoading} hasCard={true}>
             <Form.Root onSubmit={submit}>
-                <Flex direction="column" gap="3">
+                <Flex direction="column" gap="4">
                     <Input
                         name="name"
                         label="Enter the name of your event"
@@ -61,27 +61,21 @@ export default function EventForm({
                         control={control}
                         required="You must enter a name for your event"
                     />
-                    <DatePicker<EventFormValues>
+                    <Input
                         label="Event start date"
                         name="startDate"
                         error={errors.startDate}
                         control={control}
                         required="Please select a valid start time for your event"
-                        datePickerProps={{
-                            showTimeSelect: true,
-                            dateFormat: 'MMMM d, yyyy h:mm aa'
-                        }}
+                        type="datetime-local"
                     />
-                    <DatePicker<EventFormValues>
+                    <Input
                         label="Event end date"
                         name="endDate"
                         error={errors.endDate}
                         control={control}
                         required="Please select a valid end time for your event"
-                        datePickerProps={{
-                            showTimeSelect: true,
-                            dateFormat: 'MMMM d, yyyy h:mm aa'
-                        }}
+                        type="datetime-local"
                     />
                     {venueData && (
                         <>
@@ -95,6 +89,7 @@ export default function EventForm({
                             <Dialogue
                                 triggerLabel="Add your venue"
                                 onSubmit={venueFormProps.submit}
+                                triggerButtonVariant="outline"
                                 component={
                                     <VenueForm
                                         {...venueFormProps}
@@ -117,6 +112,7 @@ export default function EventForm({
                             <Dialogue
                                 triggerLabel="Add your band"
                                 onSubmit={artistFormProps.submit}
+                                triggerButtonVariant="outline"
                                 component={
                                     <ArtistForm
                                         {...artistFormProps}
@@ -169,7 +165,7 @@ export default function EventForm({
                 {showSubmitButton && (
                     <Flex width="100%" justify="center" mt="3">
                         <Form.Submit asChild>
-                            <Button>Submit</Button>
+                            <Button variant="surface">Submit</Button>
                         </Form.Submit>
                     </Flex>
                 )}

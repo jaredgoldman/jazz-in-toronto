@@ -10,10 +10,9 @@ export default function Book(): JSX.Element {
 
     return (
         <RootLayout pageTitle="Jazz In Toronto | Book Your Event">
-            <Heading align="center" size="9" mb="9">
-                Book your gig here!
+            <Heading align="center" size="8" mb="6">
+                Book Your Gig
             </Heading>
-
             <EventForm {...eventFormProps} />
         </RootLayout>
     )

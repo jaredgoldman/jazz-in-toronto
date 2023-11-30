@@ -5,7 +5,7 @@ import Footer from '~/components/Footer'
 import { Container, Flex } from '@radix-ui/themes'
 // Types
 import { HeaderType } from '~/components/Header/'
-import { type ReactNode } from 'react'
+import { ReactNode } from 'react'
 // Context
 
 interface Props {

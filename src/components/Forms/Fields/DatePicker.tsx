@@ -1,13 +1,13 @@
 // Libraries
 import {
-    type FieldError,
-    type FieldValues,
-    type Path,
-    type Control,
+    FieldError,
+    FieldValues,
+    Path,
+    Control,
     Controller
 } from 'react-hook-form'
 // Commponents
-import ReactDatePicker, { type ReactDatePickerProps } from 'react-datepicker'
+import ReactDatePicker, { ReactDatePickerProps } from 'react-datepicker'
 import * as Form from '@radix-ui/react-form'
 import { Flex, Text } from '@radix-ui/themes'
 // Utils
