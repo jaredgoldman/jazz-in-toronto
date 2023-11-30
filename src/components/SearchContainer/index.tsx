@@ -1,9 +1,9 @@
 // Components
 import SearchBar from './components/SearchBar'
 import SearchTable from './components/SearchTable'
-import { Container, Heading, Card, Box } from '@radix-ui/themes'
+import { Heading, Card, Box } from '@radix-ui/themes'
 // Types
-import { type TableData } from './types'
+import { TableData } from './types'
 // Hooks
 import useSearch from './hooks/useSearch'
 

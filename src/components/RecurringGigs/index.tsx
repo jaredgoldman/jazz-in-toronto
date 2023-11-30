@@ -9,44 +9,35 @@ import {
     AspectRatio
 } from '@radix-ui/themes'
 import Image from 'next/image'
-// Types
-import {
-    type ComponentGigRecurringGig,
-    Enum_Componentgigrecurringgig_Day as Day,
-    type ListingPageQuery
-} from '~/gql/graphql'
 // Utils
-import { convertAndFormatTime } from '~/utils/date'
+import { getFormattedTime } from '~/utils/date'
 
-interface Props {
-    cmsData: ListingPageQuery
-}
-
-export default function RecurringGigs({ cmsData }: Props) {
-    const data = cmsData.listing?.data?.attributes
-
-    const days: { [key in Day]: ComponentGigRecurringGig[] } = {
-        [Day.Monday]: [],
-        [Day.Tuesday]: [],
-        [Day.Wednesday]: [],
-        [Day.Thursday]: [],
-        [Day.Friday]: [],
-        [Day.Saturday]: [],
-        [Day.Sunday]: []
-    }
-
-    if (data?.recurringGig) {
-        data.recurringGig.forEach((gig) => {
-            if (gig?.day && days[gig.day]) {
-                days[gig.day].push(gig as ComponentGigRecurringGig)
+const gigDays = [
+    {
+        day: 'Monday',
+        gigs: [
+            {
+                image: '/team.jpg',
+                artist: 'test',
+                venue: 'test',
+                description: 'test',
+                time: new Date()
             }
-        })
-    }
+        ]
+    },
+    { day: 'Tuesday', gigs: [] },
+    { day: 'Wednesday', gigs: [] },
+    { day: 'Thursday', gigs: [] },
+    { day: 'Friday', gigs: [] },
+    { day: 'Saturday', gigs: [] },
+    { day: 'Sunday', gigs: [] }
+]
 
+export default function RecurringGigs() {
     return (
         <Container>
             <Box>
-                {Object.entries(days).map(([day, gigs]) => {
+                {gigDays.map(({ day, gigs }) => {
                     if (gigs.length) {
                         return (
                             <Container key={day}>
@@ -55,13 +46,13 @@ export default function RecurringGigs({ cmsData }: Props) {
                                 </Heading>
                                 <Card mb="5">
                                     {gigs.map((gig) => {
-                                        const gigImage =
-                                            gig.image?.data?.attributes?.url
-                                        const gigString = `${convertAndFormatTime(
-                                            gig.time as string
+                                        const gigString = `${getFormattedTime(
+                                            gig.time
                                         )} - ${gig.artist} @ ${gig.venue}`
                                         return (
-                                            <Flex key={gig.id}>
+                                            <Flex
+                                                key={`${gig.artist}_${gig.venue}`}
+                                            >
                                                 <Box className="max-w-xl" p="2">
                                                     <Heading mb="4" mt="1">
                                                         {gigString}
@@ -72,7 +63,7 @@ export default function RecurringGigs({ cmsData }: Props) {
                                                         </Text>
                                                     </Box>
                                                 </Box>
-                                                {gigImage && (
+                                                {gig.image && (
                                                     <Box
                                                         width="100%"
                                                         height="auto"
@@ -82,7 +73,7 @@ export default function RecurringGigs({ cmsData }: Props) {
                                                             ratio={1 / 1}
                                                         >
                                                             <Image
-                                                                src={gigImage}
+                                                                src={gig.image}
                                                                 alt={`image for ${gigString}`}
                                                                 className="h-full w-full object-cover"
                                                                 fill={true}

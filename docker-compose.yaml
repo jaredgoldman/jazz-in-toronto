@@ -1,46 +1,5 @@
 version: '3'
 services:
-    strapi:
-        container_name: strapi
-        build: .
-        image: jit-local-dev:latest
-        restart: unless-stopped
-        environment:
-            JWT_SECRET: ${JWT_SECRET}
-            ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
-            APP_KEYS: ${APP_KEYS}
-            API_TOKEN_SALT: ${API_TOKEN_SALT}
-            CLOUDINARY_NAME: ${CLOUDINARY_NAME}
-            CLOUDINARY_KEY: ${CLOUDINARY_KEY}
-            CLOUDINARY_SECRET: ${CLOUDINARY_SECRET}
-            DATABASE_URL: ${DATABASE_URL}
-        volumes:
-            - ./src:/app/src
-            - ./public:/app/public
-        ports:
-            - '1337:1337'
-        networks:
-            - strapi
-        depends_on:
-            - strapidb
-
-    strapidb:
-        container_name: strapidb
-        platform: linux/amd64
-        restart: unless-stopped
-        image: postgres:12.0-alpine
-        command: postgres -p 5433
-        environment:
-            POSTGRES_USER: jazzintoronto
-            POSTGRES_PASSWORD: password
-            POSTGRES_DB: jazzintoronto
-        volumes:
-            - strapi-data:/var/lib/postgresql/data/
-        networks:
-            - strapi
-        ports:
-            - 5433:5433
-
     jitdb:
         container_name: jitdb
         platform: linux/amd64
@@ -56,11 +15,4 @@ services:
             - 5432:5432
 
 volumes:
-    strapidb:
-    strapi-data:
     jitdb-data:
-
-networks:
-    strapi:
-        name: strapi
-        driver: bridge
