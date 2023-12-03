@@ -29,7 +29,7 @@ export default function RootLayout({
                 {fullWidth ? (
                     children
                 ) : (
-                    <Container size="4" className="flex-grow" py="7">
+                    <Container size="4" className="flex-grow">
                         {children}
                     </Container>
                 )}

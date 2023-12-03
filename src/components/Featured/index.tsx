@@ -1,8 +1,6 @@
-// Components
 import Loading from '../Loading'
 import FeaturedCard from './FeaturedCard'
-import { Flex, Grid } from '@radix-ui/themes'
-// Utisl
+import { Flex, Grid, Heading } from '@radix-ui/themes'
 import { api } from '~/utils/api'
 
 export default function Featured() {
@@ -16,6 +14,9 @@ export default function Featured() {
             justify="center"
             className="max-w-5xl"
         >
+            <Heading size="9" align="center" mb="7">
+                Featured
+            </Heading>
             {featuredItems && !isLoading ? (
                 <Grid columns="3" rows="1" m="3" className="justify-center">
                     {featuredItems?.venue && (

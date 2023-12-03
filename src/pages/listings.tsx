@@ -1,22 +1,45 @@
-// Components
+import { useState } from 'react'
 import RootLayout from '~/layouts/RootLayout'
-import Calendar from '~/components/Calendar'
 import RecurringGigs from '~/components/RecurringGigs'
-import { Heading } from '@radix-ui/themes'
+import DailyListings from '~/components/DailyListings/DailyListings'
+import Calendar from '~/components/Calendar'
+import { Callout } from '@radix-ui/themes'
+import { InfoCircledIcon } from '@radix-ui/react-icons'
+
+enum ListingType {
+    CALENDAR = 'CALENDAR',
+    DAILY_LISTINGS = 'DAILY_LISTINGS'
+}
 
 export default function Listings() {
+    const [listingType, setListingType] = useState(ListingType.DAILY_LISTINGS)
+    const onChangeListingType = () =>
+        setListingType((prevListing) =>
+            prevListing === ListingType.DAILY_LISTINGS
+                ? ListingType.CALENDAR
+                : ListingType.DAILY_LISTINGS
+        )
+
     return (
         <RootLayout
-            pageTitle="Jazz In Toronto | Event Listings"
             fullWidth={true}
+            pageTitle="Jazz In Toronto | Event Listings"
         >
-            <Heading size="8" align="center" mb="9">
-                Listings
-            </Heading>
-            <Calendar />
-            <Heading size="8" align="center" mb="9">
-                Recurring Gigs
-            </Heading>
+            <Callout.Root mb="5">
+                <Callout.Icon>
+                    <InfoCircledIcon />
+                </Callout.Icon>
+                <Callout.Text>
+                    Don’t see your gig listed in our below agenda and would like
+                    to be added? Submit a request to join our listings!
+                </Callout.Text>
+            </Callout.Root>
+
+            {listingType === ListingType.DAILY_LISTINGS ? (
+                <DailyListings onChangeListingType={onChangeListingType} />
+            ) : (
+                <Calendar onChangeListingType={onChangeListingType} />
+            )}
             <RecurringGigs />
         </RootLayout>
     )

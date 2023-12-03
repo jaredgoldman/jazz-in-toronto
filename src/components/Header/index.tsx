@@ -98,7 +98,6 @@ export default function Header({
                     {headerType === HeaderType.Admin && session && (
                         <Button onClick={() => void signOut()}>Sign Out</Button>
                     )}
-                    <DarkModeToggle />
                 </Flex>
             </Flex>
             <Separator size="4" />

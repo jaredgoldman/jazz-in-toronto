@@ -26,7 +26,6 @@ export default function CalendarDay({ dailyEvents }: Props) {
         setDayText(dailyEvents.date.getDate())
     }
 
-    // TODO: Lazy load this component
     const modalDay = <ModalDay dailyEvents={dailyEvents} />
 
     return (

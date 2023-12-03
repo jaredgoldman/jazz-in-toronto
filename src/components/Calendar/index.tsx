@@ -1,7 +1,7 @@
 import { useState } from 'react'
 // Components
 import CalendarDay from './components/CalendarDay'
-import { Flex, Button, Table, Heading, Card } from '@radix-ui/themes'
+import { Flex, Button, Table, Heading } from '@radix-ui/themes'
 import Loading from '../Loading'
 // Hooks
 import useCalendar from './hooks/useCalendar'
@@ -9,7 +9,10 @@ import useCalendar from './hooks/useCalendar'
 import { api } from '~/utils/api'
 import { getDaysOfTheWeek } from '~/utils/constants'
 
-export default function Calendar(): JSX.Element {
+interface Props {
+    onChangeListingType: () => void
+}
+export default function Calendar({ onChangeListingType }: Props): JSX.Element {
     const [selectedDate, setSelectedDate] = useState(new Date())
     const currentYear = selectedDate.getFullYear()
     const currentMonth = selectedDate.getMonth()
@@ -35,7 +38,6 @@ export default function Calendar(): JSX.Element {
     // Map calendar events to 5 x 7 grid
     const mapEventsToCalendarRows = () => {
         if (!monthlyEvents) return
-        console.log('monthly events::', monthlyEvents)
         const monthlyEventsCopy = [...monthlyEvents]
         const rows = []
         // map events to calendar rows
@@ -62,16 +64,15 @@ export default function Calendar(): JSX.Element {
 
     return (
         <Flex direction="column" justify="center" m="9">
-            <Heading
-                align="center"
-                mb="5"
-            >{`Events on ${currentMonthName}, ${currentYear}`}</Heading>
-            <Flex mb="5" justify="center">
-                <Button mr="2" onClick={() => changeMonth(-1)}>
-                    Previous
-                </Button>
-                <Button ml="2" onClick={() => changeMonth(1)}>
-                    Next
+            <Heading size="9" mb="6">
+                Calendar
+            </Heading>
+            <Heading mb="5">{`Events on ${currentMonthName}, ${currentYear}`}</Heading>
+            <Flex mb="5" className="gap-3">
+                <Button onClick={() => changeMonth(-1)}>Previous</Button>
+                <Button onClick={() => changeMonth(1)}>Next</Button>
+                <Button variant="soft" onClick={onChangeListingType}>
+                    View daily listings
                 </Button>
             </Flex>
             {isLoading ? (
