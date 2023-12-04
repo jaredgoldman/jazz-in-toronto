@@ -6,7 +6,7 @@ import { api } from '~/utils/api'
 // Hooks
 import { useUploadThing } from '~/hooks/useUploadThing'
 // Types
-import { type FileData, type Artist } from '~/types/data'
+import { FileData, Artist } from '~/types/data'
 // Assets
 import { env } from '~/env.mjs'
 

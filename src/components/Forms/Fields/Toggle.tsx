@@ -1,12 +1,10 @@
-// Libraries
 import {
     Controller,
-    type Path,
-    type FieldValues,
-    type Control,
-    type FieldError
+    Path,
+    FieldValues,
+    Control,
+    FieldError
 } from 'react-hook-form'
-// Components
 import { Switch, Text, Flex } from '@radix-ui/themes'
 import * as Form from '@radix-ui/react-form'
 

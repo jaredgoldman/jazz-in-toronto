@@ -1,6 +1,6 @@
 import Loading from '../Loading'
 import FeaturedCard from './FeaturedCard'
-import { Flex, Grid, Heading } from '@radix-ui/themes'
+import { Flex, Heading } from '@radix-ui/themes'
 import { api } from '~/utils/api'
 
 export default function Featured() {
@@ -12,13 +12,12 @@ export default function Featured() {
             display="flex"
             direction="column"
             justify="center"
-            className="max-w-5xl"
         >
-            <Heading size="9" align="center" mb="7">
+            <Heading size="9"mb="7">
                 Featured
             </Heading>
             {featuredItems && !isLoading ? (
-                <Grid columns="3" rows="1" m="3" className="justify-center">
+                <Flex gap="5" >
                     {featuredItems?.venue && (
                         <FeaturedCard
                             image={featuredItems.venue?.photoPath}
@@ -28,7 +27,7 @@ export default function Featured() {
                     )}
                     {featuredItems?.event && (
                         <FeaturedCard
-                            image={featuredItems.event.artist.photoPath}
+                            /* image={featuredItems.event.artist.photoPath} */
                             title={featuredItems.event.name}
                             link={featuredItems.event?.website}
                         />
@@ -40,7 +39,7 @@ export default function Featured() {
                             link={featuredItems.artist?.website}
                         />
                     )}
-                </Grid>
+                </Flex>
             ) : (
                 <Loading />
             )}

@@ -1,21 +1,20 @@
-// Components
-import {
-    Container,
-    Heading,
-    Text,
-    Flex,
-    AspectRatio,
-    Box
-} from '@radix-ui/themes'
+import { Heading, Text, Flex, Box, Callout } from '@radix-ui/themes'
+import { InfoCircledIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
 import Image from 'next/image'
-// Utils
-import { getFormattedTime } from '~/utils/date'
 
 const gigDays = [
     {
         day: 'Monday',
         gigs: [
+            {
+                image: '/images/team.jpg',
+                artist: 'Artist Name',
+                venue: 'Venue Name',
+                description:
+                    'Test description about how awesome the gig is and any other relevant details',
+                time: new Date()
+            },
             {
                 image: '/images/team.jpg',
                 artist: 'Artist Name',
@@ -29,6 +28,14 @@ const gigDays = [
     {
         day: 'Tuesday',
         gigs: [
+            {
+                image: '/images/team.jpg',
+                artist: 'Artist Name',
+                venue: 'Venue Name',
+                description:
+                    'Test description about how awesome the gig is and any other relevant details',
+                time: new Date()
+            },
             {
                 image: '/images/team.jpg',
                 artist: 'Artist Name',
@@ -108,14 +115,32 @@ const gigDays = [
 
 export default function RecurringGigs() {
     return (
-        <Box my="5" px="5">
-            <Heading size="9" mb="6">
+        <Box mb="9">
+            <Heading size="9" mb="8" align="right">
                 Recurring Gigs
             </Heading>
+            <Callout.Root mb="8">
+                <Callout.Icon>
+                    <InfoCircledIcon />
+                </Callout.Icon>
+                <Callout.Text>
+                    Have a regular gig you'd like us to feature here? Email us
+                    at{' '}
+                    <a href="mailto:support@jazzintoronto.com">
+                        support@jazzintoronto.com
+                    </a>
+                </Callout.Text>
+            </Callout.Root>
             <Box>
-                {gigDays.map(({ day, gigs }) => {
+                {gigDays.map(({ day, gigs }, i) => {
+                    const indexIsEven = Boolean(i % 2)
                     return (
-                        <Flex direction="column" key={day} mb="5">
+                        <Flex
+                            direction="column"
+                            align={indexIsEven ? 'end' : 'start'}
+                            key={day}
+                            gap="6"
+                        >
                             <Heading size="8" mb="4">
                                 {day}
                             </Heading>
@@ -123,26 +148,41 @@ export default function RecurringGigs() {
                                 const time = format(gig.time, 'h:mm b')
                                 const gigString = `${time} - ${gig.artist} @ ${gig.venue}`
                                 return (
-                                    <Flex key={`${gig.artist}_${gig.venue}`}>
-                                        <Box className="max-w-xl">
-                                            <Heading mb="4" mt="1">
+                                    <Flex
+                                        key={`${gig.artist}_${gig.venue}`}
+                                        direction={
+                                            indexIsEven ? 'row' : 'row-reverse'
+                                        }
+                                    >
+                                        <Flex className="max-w-xl" direction="column" px="4">
+                                            <Heading
+                                                mb="4"
+                                                align={
+                                                    indexIsEven
+                                                        ? 'right'
+                                                        : 'left'
+                                                }
+                                            >
                                                 {gigString}
                                             </Heading>
-                                            <Box className="max-w-[90%]">
-                                                <Text size="4">
-                                                    {gig.description}
-                                                </Text>
-                                            </Box>
-                                        </Box>
+                                            <Text
+                                                size="4"
+                                                align={
+                                                    indexIsEven
+                                                        ? 'right'
+                                                        : 'left'
+                                                }
+                                            >
+                                                {gig.description}
+                                            </Text>
+                                        </Flex >
                                         {gig.image && (
-                                            <Box className="relative h-[10rem] w-[10rem] object-contain">
-                                                <Image
-                                                    src={gig.image}
-                                                    alt={`image for ${gigString}`}
-                                                    className="h-full w-full object-cover"
-                                                    fill={true}
-                                                />
-                                            </Box>
+                                            <Image
+                                                src={gig.image}
+                                                alt={`image for ${gigString}`}
+                                                width={200}
+                                                height={600}
+                                            />
                                         )}
                                     </Flex>
                                 )

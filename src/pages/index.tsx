@@ -1,6 +1,6 @@
 import RootLayout from '~/layouts/RootLayout'
 import Featured from '~/components/Featured'
-import { Flex, Heading, Link, Text} from '@radix-ui/themes'
+import { Flex, Heading, Link, Text, Box } from '@radix-ui/themes'
 import Image from 'next/image'
 
 export default function Home() {
@@ -10,10 +10,10 @@ export default function Home() {
                 direction="column"
                 align="center"
                 justify="start"
-                className="bg-hero-pattern bg-cover bg-center bg-no-repeat py-96"
+                className="bg-hero-pattern bg-cover bg-center bg-no-repeat pt-24 pb-80"
             >
                 <Heading size="9" mb="6" align="center">
-                    We are JAZZINTORONTO
+                    We are JazzInToronto
                 </Heading>
                 <Text size="7" align="center" className="max-w-5xl">
                     JazzInToronto is a not-for-profit organization dedicated to
@@ -22,13 +22,12 @@ export default function Home() {
                 </Text>
             </Flex>
             <Flex
-                className="gap-12 bg-gray-900 py-36"
+                className="gap-12 bg-gray-900"
                 justify="center"
                 align="center"
+                py="9"
             >
-                <Heading size="8">
-                    Follow us on our socials!
-                </Heading>
+                <Heading size="8">Follow us on our socials!</Heading>
                 <Link mx="3" href="https://www.instagram.com/jazzintoronto/ ">
                     <Image
                         src="/images/facebook.png"
@@ -46,10 +45,13 @@ export default function Home() {
                     />
                 </Link>
             </Flex>
-            <Flex p="7">
-                <Flex className="flex-grow" py="8">
+            <Flex
+                justify="center"
+                className="bg-hero-pattern-2 bg-cover bg-center bg-no-repeat p-36"
+            >
+                <Box className="max-w-5xl">
                     <Featured />
-                </Flex>
+                </Box>
             </Flex>
         </RootLayout>
     )

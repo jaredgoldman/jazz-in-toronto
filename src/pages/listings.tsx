@@ -3,7 +3,7 @@ import RootLayout from '~/layouts/RootLayout'
 import RecurringGigs from '~/components/RecurringGigs'
 import DailyListings from '~/components/DailyListings/DailyListings'
 import Calendar from '~/components/Calendar'
-import { Callout } from '@radix-ui/themes'
+import { Callout, Separator } from '@radix-ui/themes'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
 
 enum ListingType {
@@ -22,10 +22,9 @@ export default function Listings() {
 
     return (
         <RootLayout
-            fullWidth={true}
             pageTitle="Jazz In Toronto | Event Listings"
         >
-            <Callout.Root mb="5">
+            <Callout.Root >
                 <Callout.Icon>
                     <InfoCircledIcon />
                 </Callout.Icon>
@@ -34,12 +33,12 @@ export default function Listings() {
                     to be added? Submit a request to join our listings!
                 </Callout.Text>
             </Callout.Root>
-
             {listingType === ListingType.DAILY_LISTINGS ? (
                 <DailyListings onChangeListingType={onChangeListingType} />
             ) : (
                 <Calendar onChangeListingType={onChangeListingType} />
             )}
+            <Separator size="4" className="my-10"/>
             <RecurringGigs />
         </RootLayout>
     )

@@ -21,7 +21,6 @@ const FeaturedCard = ({
                     image ? image : 'none'
                 })`
             }}
-            m="2"
             variant="classic"
             className="min-h-[20rem] bg-cover bg-center bg-no-repeat"
         >

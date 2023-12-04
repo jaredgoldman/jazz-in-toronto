@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { Button, Heading, Flex, Text, Box } from '@radix-ui/themes'
+import { Button, Heading, Flex, Text, Box, Separator } from '@radix-ui/themes'
 import Loading from '../Loading'
 import { api } from '~/utils/api'
 import { addDays, format } from 'date-fns'
@@ -30,10 +30,6 @@ export default function DailyListings({ onChangeListingType }: Props) {
             <Heading size="9" mb="6">
                 Daily Listings
             </Heading>
-            <Heading mb="5">{`Events on ${format(
-                selectedDate,
-                'EEEE, MMMM do, yyyy'
-            )} in Toronto, Ontario`}</Heading>
             <Flex mb="5" className="gap-3">
                 <Button
                     onClick={() => {
@@ -51,11 +47,14 @@ export default function DailyListings({ onChangeListingType }: Props) {
                     View in Calendar
                 </Button>
             </Flex>
+            <Heading mb="5">{`Events on ${format(
+                selectedDate,
+                'EEEE, MMMM do, yyyy'
+            )} in Toronto, Ontario`}</Heading>
             <Flex>
                 {data?.length ? (
                     <Flex direction="column" className="gap-1">
                         {sorted.map((event) => {
-                            console.log('YO')
                             const time = format(event.startDate, 'h:mm b')
                             const eventString = `${time} - ${event.artist.name} @ ${event.venue.name}`
                             return (
