@@ -30,7 +30,7 @@ const FeaturedCard = ({
                 </Heading>
                 <Text className="text-gray-200">{content}</Text>
                 {link && (
-                    <Link href={link} color="tomato">
+                    <Link href={link} color="bronze">
                         Learn more
                     </Link>
                 )}

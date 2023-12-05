@@ -1,5 +1,4 @@
-import { Heading, Text, Flex, Box, Callout } from '@radix-ui/themes'
-import { InfoCircledIcon } from '@radix-ui/react-icons'
+import { Heading, Text, Flex, Box } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import Image from 'next/image'
 
@@ -115,22 +114,10 @@ const gigDays = [
 
 export default function RecurringGigs() {
     return (
-        <Box mb="9">
+        <Box p="5">
             <Heading size="9" mb="8" align="right">
                 Recurring Gigs
             </Heading>
-            <Callout.Root mb="8">
-                <Callout.Icon>
-                    <InfoCircledIcon />
-                </Callout.Icon>
-                <Callout.Text>
-                    Have a regular gig you'd like us to feature here? Email us
-                    at{' '}
-                    <a href="mailto:support@jazzintoronto.com">
-                        support@jazzintoronto.com
-                    </a>
-                </Callout.Text>
-            </Callout.Root>
             <Box>
                 {gigDays.map(({ day, gigs }, i) => {
                     const indexIsEven = Boolean(i % 2)
@@ -154,7 +141,11 @@ export default function RecurringGigs() {
                                             indexIsEven ? 'row' : 'row-reverse'
                                         }
                                     >
-                                        <Flex className="max-w-xl" direction="column" px="4">
+                                        <Flex
+                                            className="max-w-xl"
+                                            direction="column"
+                                            px="4"
+                                        >
                                             <Heading
                                                 mb="4"
                                                 align={
@@ -175,7 +166,7 @@ export default function RecurringGigs() {
                                             >
                                                 {gig.description}
                                             </Text>
-                                        </Flex >
+                                        </Flex>
                                         {gig.image && (
                                             <Image
                                                 src={gig.image}

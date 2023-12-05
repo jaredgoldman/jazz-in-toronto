@@ -5,7 +5,6 @@ import Link from '../Link'
 import { default as NextLink } from 'next/link'
 import { Button, Heading, Flex, Separator } from '@radix-ui/themes'
 // Utils
-import DarkModeToggle from '../DarkModeToggle'
 
 interface Props {
     headerType: HeaderType
@@ -42,7 +41,7 @@ export default function Header({
                                 {headerType === HeaderType.Public && (
                                     <>
                                         <li className="px-2">
-                                            <Link href="/book" size="5">
+                                            <Link href="/event" size="5">
                                                 Add Your Gig
                                             </Link>
                                         </li>

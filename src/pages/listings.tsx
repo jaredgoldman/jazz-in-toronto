@@ -21,10 +21,8 @@ export default function Listings() {
         )
 
     return (
-        <RootLayout
-            pageTitle="Jazz In Toronto | Event Listings"
-        >
-            <Callout.Root >
+        <RootLayout pageTitle="Jazz In Toronto | Event Listings">
+            <Callout.Root>
                 <Callout.Icon>
                     <InfoCircledIcon />
                 </Callout.Icon>
@@ -34,11 +32,13 @@ export default function Listings() {
                 </Callout.Text>
             </Callout.Root>
             {listingType === ListingType.DAILY_LISTINGS ? (
-                <DailyListings onChangeListingType={onChangeListingType} />
+                <>
+                    <DailyListings onChangeListingType={onChangeListingType} />
+                    <Separator size="4" className="my-10" />
+                </>
             ) : (
                 <Calendar onChangeListingType={onChangeListingType} />
             )}
-            <Separator size="4" className="my-10"/>
             <RecurringGigs />
         </RootLayout>
     )

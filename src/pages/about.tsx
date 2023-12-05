@@ -31,7 +31,7 @@ export default function About() {
                 align="center"
                 width="100%"
                 mx="auto"
-                mt="5"
+                p="9"
             >
                 <Heading mb="9" align="center" size="9">
                     About Us

@@ -1,4 +1,3 @@
-// Components
 import * as Form from '@radix-ui/react-form'
 import {
     Flex,
@@ -10,19 +9,18 @@ import {
     Text,
     SelectLabel
 } from '@radix-ui/themes'
-// Types
 import type { Venue, Artist } from '~/types/data'
-// Context
 import {
-    type FieldValues,
-    type FieldError,
-    type Control,
-    type Path,
+    FieldValues,
+    FieldError,
+    Control,
+    Path,
     Controller
 } from 'react-hook-form'
+import { ReactNode } from 'react'
 
 interface Props<T extends FieldValues> {
-    label: string
+    label: string | ReactNode
     name: Path<T>
     optionData: Venue[] | Artist[]
     control: Control<T>

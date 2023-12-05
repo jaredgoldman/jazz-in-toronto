@@ -10,11 +10,19 @@ export default function Home() {
                 direction="column"
                 align="center"
                 justify="start"
-                className="bg-hero-pattern bg-cover bg-center bg-no-repeat pt-24 pb-80"
+                className="bg-hero-pattern bg-cover bg-center bg-no-repeat pb-60 pt-36"
             >
-                <Heading size="9" mb="6" align="center">
+                <Heading size="9" align="center">
                     We are JazzInToronto
                 </Heading>
+                <Image
+                    src="/images/logo.svg"
+                    alt="facebook"
+                    width={250}
+                    height={250}
+                    className="my-7"
+                />
+
                 <Text size="7" align="center" className="max-w-5xl">
                     JazzInToronto is a not-for-profit organization dedicated to
                     promoting, connecting, and nourishing Toronto’s live music
@@ -25,10 +33,11 @@ export default function Home() {
                 className="gap-12 bg-gray-900"
                 justify="center"
                 align="center"
-                py="9"
             >
-                <Heading size="8">Follow us on our socials!</Heading>
-                <Link mx="3" href="https://www.instagram.com/jazzintoronto/ ">
+                <Heading color="bronze" size="8">
+                    Follow us on our socials!
+                </Heading>
+                <Link href="https://www.instagram.com/jazzintoronto/ ">
                     <Image
                         src="/images/facebook.png"
                         alt="facebook"
@@ -36,7 +45,7 @@ export default function Home() {
                         height={100}
                     />
                 </Link>
-                <Link mx="3" href="https://www.facebook.com/jazzintoronto/ ">
+                <Link href="https://www.facebook.com/jazzintoronto/ ">
                     <Image
                         src="/images/instagram.svg"
                         alt="facebook"
@@ -47,7 +56,7 @@ export default function Home() {
             </Flex>
             <Flex
                 justify="center"
-                className="bg-hero-pattern-2 bg-cover bg-center bg-no-repeat p-36"
+                className="bg-hero-pattern-2 bg-cover bg-center bg-no-repeat pb-36 pt-60"
             >
                 <Box className="max-w-5xl">
                     <Featured />

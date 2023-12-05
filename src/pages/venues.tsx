@@ -14,16 +14,16 @@ export default function Venues(): JSX.Element {
                       return <VenueCard key={venue.id} venue={venue} />
                   })
                 : [],
-        []
+        [data]
     )
 
     return (
         <RootLayout pageTitle="Jazz In Toronto | Venues">
-            <Box p="5">
-                <Heading mb="5" size="9">
+            <Box p="9">
+                <Heading mb="8" size="9">
                     Venues
                 </Heading>
-                <Flex direction="column" my="9">
+                <Flex direction="column" gap="5">
                     {venueCards}
                 </Flex>
             </Box>

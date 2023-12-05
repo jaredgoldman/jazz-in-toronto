@@ -1,16 +1,12 @@
 import * as Form from '@radix-ui/react-form'
 import { Input, Select, Toggle } from '../Fields'
 import { Flex, Text, Button, Heading, Box, Callout } from '@radix-ui/themes'
-import Dialogue from '~/components/Dialogue'
-import VenueForm from '../Venue'
-import ArtistForm from '../Artist'
 import { BaseSyntheticEvent } from 'react'
 import type { Venue, Artist } from '~/types/data'
 import type { Control, FieldErrors } from 'react-hook-form'
 import { EventFormValues } from './hooks/useEventForm'
-import useArtistForm from '../Artist/hooks/useArtistForm'
-import useVenueForm from '../Venue/hooks/useVenueForm'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
+import Link from '~/components/Link'
 
 interface Props {
     eventMutationIsSuccess: boolean
@@ -24,8 +20,6 @@ interface Props {
     error?: string
     showSubmitButton?: boolean
     submit: (e: BaseSyntheticEvent) => Promise<void>
-    onAddArtist: (data: Artist) => Promise<void>
-    onAddVenue: (data: Venue) => Promise<void>
 }
 
 export default function EventForm({
@@ -38,20 +32,15 @@ export default function EventForm({
     isEditing,
     error,
     submit,
-    showSubmitButton = true,
-    onAddArtist,
-    onAddVenue
+    showSubmitButton = true
 }: Props): JSX.Element {
-    const artistFormProps = useArtistForm(undefined, onAddArtist)
-    const venueFormProps = useVenueForm(undefined, onAddVenue)
-
     return (
-        <Flex direction="column" align="center" p="5">
+        <Flex direction="column" align="center" py="9">
             <Box className="w-full max-w-2xl">
                 <Heading size="9" mb="6">
                     Book Your Gig
                 </Heading>
-                <Callout.Root mb="5">
+                <Callout.Root my="6">
                     <Callout.Icon>
                         <InfoCircledIcon />
                     </Callout.Icon>
@@ -63,7 +52,7 @@ export default function EventForm({
                     </Callout.Text>
                 </Callout.Root>
                 <Form.Root onSubmit={submit}>
-                    <Flex direction="column" gap="4">
+                    <Flex direction="column" gap="5">
                         <Input
                             name="name"
                             label="Enter the name of your event"
@@ -89,7 +78,7 @@ export default function EventForm({
                             type="datetime-local"
                         />
                         {venueData && (
-                            <>
+                            <Box>
                                 <Select
                                     name="venueId"
                                     label="Select a venue"
@@ -97,21 +86,13 @@ export default function EventForm({
                                     control={control}
                                     error={errors.venueId}
                                 />
-                                <Dialogue
-                                    triggerLabel="Add your venue"
-                                    onSubmit={venueFormProps.submit}
-                                    triggerButtonVariant="outline"
-                                    component={
-                                        <VenueForm
-                                            {...venueFormProps}
-                                            showSubmitButton={false}
-                                        />
-                                    }
-                                />
-                            </>
+                                <Link size="2" href="/venue">
+                                    or submit your venue
+                                </Link>
+                            </Box>
                         )}
                         {artistData && (
-                            <>
+                            <Box>
                                 <Select
                                     name="artistId"
                                     label="Select a band"
@@ -120,18 +101,10 @@ export default function EventForm({
                                     error={errors.artistId}
                                     required="Please select a band for your event"
                                 />
-                                <Dialogue
-                                    triggerLabel="Add your band"
-                                    onSubmit={artistFormProps.submit}
-                                    triggerButtonVariant="outline"
-                                    component={
-                                        <ArtistForm
-                                            {...artistFormProps}
-                                            showSubmitButton={false}
-                                        />
-                                    }
-                                />
-                            </>
+                                <Link size="2" href="/artist">
+                                    or submit your band
+                                </Link>
+                            </Box>
                         )}
                         <Input
                             name="instagramHandle"
@@ -174,7 +147,7 @@ export default function EventForm({
                         )}
                     </Flex>
                     {showSubmitButton && (
-                        <Flex width="100%" justify="center" mt="3">
+                        <Flex width="100%" justify="center" mt="5">
                             <Form.Submit asChild>
                                 <Button className="w-full" variant="solid">
                                     Submit

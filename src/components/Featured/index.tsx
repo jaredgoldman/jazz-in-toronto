@@ -7,17 +7,12 @@ export default function Featured() {
     const { data: featuredItems, isLoading } = api.data.getFeatured.useQuery()
 
     return (
-        <Flex
-            mb="2"
-            display="flex"
-            direction="column"
-            justify="center"
-        >
-            <Heading size="9"mb="7">
+        <Flex mb="2" display="flex" direction="column" justify="center">
+            <Heading size="9" mb="9">
                 Featured
             </Heading>
             {featuredItems && !isLoading ? (
-                <Flex gap="5" >
+                <Flex gap="5" direction={{ xs: 'column', md: 'row' }}>
                     {featuredItems?.venue && (
                         <FeaturedCard
                             image={featuredItems.venue?.photoPath}
@@ -27,7 +22,7 @@ export default function Featured() {
                     )}
                     {featuredItems?.event && (
                         <FeaturedCard
-                            /* image={featuredItems.event.artist.photoPath} */
+                            image={featuredItems.event.artist.photoPath}
                             title={featuredItems.event.name}
                             link={featuredItems.event?.website}
                         />

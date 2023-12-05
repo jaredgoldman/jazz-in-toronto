@@ -1,7 +1,6 @@
-// Components
+import { ReactNode } from 'react'
 import * as Form from '@radix-ui/react-form'
-import { TextField, Text, Box } from '@radix-ui/themes'
-// Types
+import { TextField, Text } from '@radix-ui/themes'
 import {
     FieldError,
     FieldValues,
@@ -11,7 +10,7 @@ import {
 } from 'react-hook-form'
 
 interface Props<T extends FieldValues> {
-    label: string
+    label: string | ReactNode
     name: Path<T>
     type?: string
     control: Control<T>
