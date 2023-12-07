@@ -25,7 +25,7 @@ const FileUploadButton = ({ onUpload, label }: Props) => {
 
     useEffect(() => {
         if (selectedFile) {
-            onUpload(selectedFile)
+            void onUpload(selectedFile)
         }
     }, [selectedFile, onUpload])
 

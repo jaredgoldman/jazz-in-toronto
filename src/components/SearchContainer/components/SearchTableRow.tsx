@@ -53,9 +53,7 @@ const getEditFormCellandProps = (
                 data.item
             )
             return {
-                editComp: (
-                    <VenueForm {...venueFormProps} showSubmitButton={false} />
-                ),
+                editComp: <VenueForm />,
                 editFormProps: venueFormProps
             }
         case DataType.ARTIST:
@@ -63,9 +61,7 @@ const getEditFormCellandProps = (
                 data.item
             )
             return {
-                editComp: (
-                    <ArtistForm {...artistFormProps} showSubmitButton={false} />
-                ),
+                editComp: <ArtistForm />,
                 editFormProps: artistFormProps
             }
     }

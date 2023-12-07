@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Card, Flex, Box, Link as RLink } from '@radix-ui/themes'
+import { Flex, Box, Link as RLink } from '@radix-ui/themes'
 import { Venue } from '~/types/data'
 import { processIGHandle, stripFbUrl, simplifyURL } from './utils'
 

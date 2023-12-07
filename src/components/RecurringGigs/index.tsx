@@ -119,7 +119,7 @@ export default function RecurringGigs() {
                 Recurring Gigs
             </Heading>
             <Flex direction="column" gap="7">
-                {gigDays.map(({ day, gigs }, i) => {
+                {gigDays.map(({ day, gigs }) => {
                     return (
                         <Flex
                             direction="column"

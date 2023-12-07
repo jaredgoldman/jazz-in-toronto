@@ -1,8 +1,5 @@
-// Libraries
-import { ReactNode, useState } from 'react'
-// Components
+import { useState } from 'react'
 import { Dialog, Button, Box } from '@radix-ui/themes'
-// Types
 
 interface Props {
     triggerLabel: string | number

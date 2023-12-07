@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { Button, Heading, Flex, Text, Box, Separator } from '@radix-ui/themes'
+import { Button, Heading, Flex, Text, Box } from '@radix-ui/themes'
 import Loading from '../Loading'
 import { api } from '~/utils/api'
 import { addDays, format } from 'date-fns'
