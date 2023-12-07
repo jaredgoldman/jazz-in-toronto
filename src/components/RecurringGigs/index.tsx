@@ -115,18 +115,17 @@ const gigDays = [
 export default function RecurringGigs() {
     return (
         <Box p="5">
-            <Heading size="9" mb="8" align="right">
+            <Heading size="9" mb="8" align="left">
                 Recurring Gigs
             </Heading>
-            <Box>
+            <Flex direction="column" gap="7">
                 {gigDays.map(({ day, gigs }, i) => {
-                    const indexIsEven = Boolean(i % 2)
                     return (
                         <Flex
                             direction="column"
-                            align={indexIsEven ? 'end' : 'start'}
+                            align="start"
                             key={day}
-                            gap="6"
+                            gap="3"
                         >
                             <Heading size="8" mb="4">
                                 {day}
@@ -137,33 +136,17 @@ export default function RecurringGigs() {
                                 return (
                                     <Flex
                                         key={`${gig.artist}_${gig.venue}`}
-                                        direction={
-                                            indexIsEven ? 'row' : 'row-reverse'
-                                        }
+                                        p="4"
+                                        className="bg-zinc-800"
                                     >
                                         <Flex
                                             className="max-w-xl"
                                             direction="column"
-                                            px="4"
                                         >
-                                            <Heading
-                                                mb="4"
-                                                align={
-                                                    indexIsEven
-                                                        ? 'right'
-                                                        : 'left'
-                                                }
-                                            >
+                                            <Heading mb="4" align="left">
                                                 {gigString}
                                             </Heading>
-                                            <Text
-                                                size="4"
-                                                align={
-                                                    indexIsEven
-                                                        ? 'right'
-                                                        : 'left'
-                                                }
-                                            >
+                                            <Text size="4" align="left">
                                                 {gig.description}
                                             </Text>
                                         </Flex>
@@ -181,7 +164,7 @@ export default function RecurringGigs() {
                         </Flex>
                     )
                 })}
-            </Box>
+            </Flex>
         </Box>
     )
 }

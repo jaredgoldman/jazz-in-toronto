@@ -1,5 +1,5 @@
 import { default as NextLink } from 'next/link'
-import { Link as RadixLink, type Responsive } from '@radix-ui/themes'
+import { Link as RadixLink, Responsive } from '@radix-ui/themes'
 
 interface Props {
     href: string
@@ -8,7 +8,7 @@ interface Props {
     children: React.ReactNode
 }
 
-export default function Link({ href, size = '5', children, className }: Props) {
+export default function Link({ href, size = '2', children, className }: Props) {
     return (
         <RadixLink size={size} asChild>
             <NextLink href={href} className={className}>

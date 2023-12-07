@@ -11,7 +11,6 @@ import {
     Controller
 } from 'react-hook-form'
 import { TrashIcon } from '@radix-ui/react-icons'
-import Link from '~/components/Link'
 
 interface Props<T extends FieldValues> {
     name: Path<T>

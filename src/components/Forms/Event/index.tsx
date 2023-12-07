@@ -36,7 +36,7 @@ export default function EventForm({
 }: Props): JSX.Element {
     return (
         <Flex direction="column" align="center" py="9">
-            <Box className="w-full max-w-2xl">
+            <Box className="w-full max-w-xl">
                 <Heading size="9" mb="6">
                     Book Your Gig
                 </Heading>
@@ -47,8 +47,8 @@ export default function EventForm({
                     <Callout.Text>
                         Submit your gig here and at least 24hrs in advance so
                         our admins have time to review and approve your listing.
-                        Once your gig is approved, it will appear in the
-                        listings section
+                        Once your gig is approved, it will appear in the{" "}
+                        <Link href="/listings">listings</Link> section
                     </Callout.Text>
                 </Callout.Root>
                 <Form.Root onSubmit={submit}>
@@ -101,7 +101,7 @@ export default function EventForm({
                                     error={errors.artistId}
                                     required="Please select a band for your event"
                                 />
-                                <Link size="2" href="/artist">
+                                <Link size="2" href="/">
                                     or submit your band
                                 </Link>
                             </Box>

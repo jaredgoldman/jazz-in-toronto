@@ -5,6 +5,7 @@ import DailyListings from '~/components/DailyListings/DailyListings'
 import Calendar from '~/components/Calendar'
 import { Callout, Separator } from '@radix-ui/themes'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
+import Link from '~/components/Link'
 
 enum ListingType {
     CALENDAR = 'CALENDAR',
@@ -28,13 +29,14 @@ export default function Listings() {
                 </Callout.Icon>
                 <Callout.Text>
                     Don’t see your gig listed in our below agenda and would like
-                    to be added? Submit a request to join our listings!
+                    to be added? Submit a{' '}
+                    <Link href="/event">request to join our listings!</Link>
                 </Callout.Text>
             </Callout.Root>
             {listingType === ListingType.DAILY_LISTINGS ? (
                 <>
                     <DailyListings onChangeListingType={onChangeListingType} />
-                    <Separator size="4" className="my-10" />
+                    <Separator size="4" className="my-4" />
                 </>
             ) : (
                 <Calendar onChangeListingType={onChangeListingType} />
