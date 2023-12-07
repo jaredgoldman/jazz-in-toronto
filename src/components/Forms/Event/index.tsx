@@ -47,7 +47,7 @@ export default function EventForm({
                     <Callout.Text>
                         Submit your gig here and at least 24hrs in advance so
                         our admins have time to review and approve your listing.
-                        Once your gig is approved, it will appear in the{" "}
+                        Once your gig is approved, it will appear in the{' '}
                         <Link href="/listings">listings</Link> section
                     </Callout.Text>
                 </Callout.Root>
@@ -95,13 +95,13 @@ export default function EventForm({
                             <Box>
                                 <Select
                                     name="artistId"
-                                    label="Select a band"
+                                    label="Select an artist"
                                     optionData={artistData}
                                     control={control}
                                     error={errors.artistId}
-                                    required="Please select a band for your event"
+                                    required="Please select an artist for your event"
                                 />
-                                <Link size="2" href="/">
+                                <Link size="2" href="/artist">
                                     or submit your band
                                 </Link>
                             </Box>
