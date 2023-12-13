@@ -6,6 +6,7 @@ import Loading from '~/components/Loading'
 // Utils
 import { api } from '~/utils/api'
 import { DataType } from '~/types/enums'
+import { ArtistsTable } from '~/components/Tables'
 
 export default function AdminArtists() {
     const {
@@ -25,12 +26,7 @@ export default function AdminArtists() {
                     Artists
                 </Heading>
                 {artists && !artistsLoading && (
-                    <SearchContainer
-                        data={{ type: DataType.ARTIST, items: artists }}
-                        heading="Find artists"
-                        isLoading={artistsLoading}
-                        onEdit={onEdit}
-                    />
+                <ArtistsTable/>
                 )}
                 {artistsLoading && <Loading />}
             </>

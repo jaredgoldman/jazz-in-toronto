@@ -29,7 +29,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <ThemeProvider attribute="class">
             <Theme accentColor="bronze" radius="medium" appearance="dark">
                 <SessionProvider session={session}>
-                    <main className={`w-full ${poppins.variable}`}>
+                    <main className={`w-full ${poppins.variable}`} suppressHydrationWarning>
                         <Component {...pageProps} />
                     </main>
                 </SessionProvider>
