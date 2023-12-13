@@ -11,8 +11,14 @@ import { Table, flexPropDefs } from '@radix-ui/themes';
 import { format } from 'date-fns'
 
 export function EventsTable() {
+  //fetch data and set loading state
   const { data, isLoading } = api.event.getAll.useQuery();
 
+  //columndef setup using columnHelper. May need to change to other method using/
+  //useMemo in order to add extended functionality 
+  //as in: https://codesandbox.io/p/devbox/tanstack-table-example-row-selection-2llvty?file=%2Fsrc%2Fmain.tsx%3A38%2C29
+  //
+  //using EventWithArtistVenue for all tables because TS yells at me otherwise  
   const columnHelper = createColumnHelper<EventWithArtistVenue>()
 
   const columns = [
@@ -30,7 +36,7 @@ export function EventsTable() {
     }),
     columnHelper.accessor('endDate', {
       cell: info => format(info.getValue(), "mm-dd-yyyy"),
-      header: () => <span>End Date</span>, 
+      header: () => <span>End Date</span>,
     }),
     columnHelper.accessor('artist.name', {
       cell: info => info.getValue(),
@@ -85,9 +91,9 @@ export function EventsTable() {
           {table.getRowModel().rows.map(row => (
             <Table.Row key={row.id}>
               {row.getVisibleCells().map(cell => (
-              <Table.Cell key={cell.id}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </Table.Cell>
+                <Table.Cell key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </Table.Cell>
               ))}
             </Table.Row>
           ))}

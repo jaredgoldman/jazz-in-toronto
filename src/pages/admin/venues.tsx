@@ -5,7 +5,7 @@ import { Heading } from '@radix-ui/themes'
 import { VenuesTable } from '~/components/Tables'
 
 export default function AdminVenues() {
-
+//moved data-fetching logic to Table components
     return (
         <AdminLayout pageTitle="Jazz In Toronto | Admin - Venues">
             <>
