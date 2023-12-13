@@ -5,10 +5,9 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { Artist, EventWithArtistVenue } from '~/types/data'
+import { EventWithArtistVenue } from '~/types/data'
 import { Table, flexPropDefs } from '@radix-ui/themes';
 import { format } from 'date-fns'
-import { map } from '@trpc/server/observable';
 
 export function ArtistsTable() {
   const { data, isLoading } = api.event.getAll.useQuery();
@@ -33,11 +32,11 @@ export function ArtistsTable() {
       header: () => <span>Instagram Handle</span>, 
     }),
     columnHelper.accessor('artist.active', {
-      cell: info => info.getValue(),
+      cell: info => info.getValue()?.toString(),
       header: () => <span>Active</span>, 
     }),
     columnHelper.accessor('artist.featured', {
-      cell: info => info.getValue(),
+      cell: info => info.renderValue()?.toString(),
       header: () => <span>Featured</span>, 
     }),
   ]

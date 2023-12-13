@@ -45,11 +45,11 @@ export function EventsTable() {
       header: () => <span>Instagram Handle</span>,
     }),
     columnHelper.accessor('cancelled', {
-      cell: info => info.getValue(),
+      cell: info => info.getValue()?.toString(),
       header: () => <span>Cancelled</span>,
     }),
     columnHelper.accessor('featured', {
-      cell: info => info.getValue(),
+      cell: info => info.getValue()?.toString(),
       header: () => <span>Featured</span>,
     }),
   ]

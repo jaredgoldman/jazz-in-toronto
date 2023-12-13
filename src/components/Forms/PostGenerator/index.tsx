@@ -14,6 +14,7 @@ import usePostGenerator from './hooks/usePostGenerator'
 import { DataType } from '~/types/enums'
 import FileUploadButton from '~/components/FileUploadButton'
 import { type FileData } from '~/types/data'
+import { EventsTable } from '~/components/Tables'
 
 export default function PostGenerator(): JSX.Element {
     const [srcs, setSrcs] = useState<Set<string>>(new Set())
@@ -157,12 +158,7 @@ export default function PostGenerator(): JSX.Element {
                 </Text>
             </Box>
             {events && (
-                <SearchTable
-                    data={{ type: DataType.EVENT, items: events }}
-                    isLoading={isLoading}
-                    onEdit={onEdit}
-                    showFeatured={false}
-                />
+              <EventsTable/>
             )}
         </>
     )

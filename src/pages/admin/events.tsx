@@ -4,7 +4,6 @@ import PostGenerator from '~/components/Forms/PostGenerator'
 import EventScraper from '~/components/Forms/EventScraper'
 import { Container, Tabs } from '@radix-ui/themes'
 import SearchApproveEvents from '~/components/SearchApproveEvents'
-import SearchEvents from '~/components/SearchEvents'
 import { Heading } from '@radix-ui/themes'
 import { EventsTable } from '~/components/Tables/Events'
 

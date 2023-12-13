@@ -1,5 +1,4 @@
 import { api } from '~/utils/api'
-import { useEffect } from 'react'
 import {
   createColumnHelper,
   flexRender,
@@ -19,6 +18,30 @@ export function VenuesTable() {
     columnHelper.accessor('venue.name', {
       cell: info => info.getValue(),
       header: () => <span>Venue Name</span>,
+    }), 
+    columnHelper.accessor('venue.address', {
+      cell: info => info.getValue(),
+      header: () => <span>Address</span>,
+    }), 
+    columnHelper.accessor('venue.city', {
+      cell: info => info.getValue(),
+      header: () => <span>City</span>,
+    }), 
+    columnHelper.accessor('venue.website', {
+      cell: info => info.getValue(),
+      header: () => <span>Website</span>,
+    }), 
+    columnHelper.accessor('venue.active', {
+      cell: info => info.getValue()?.toString(),
+      header: () => <span>Active</span>,
+    }), 
+    columnHelper.accessor('venue.instagramHandle', {
+      cell: info => info.getValue(),
+      header: () => <span>Instagram</span>,
+    }), 
+    columnHelper.accessor('venue.featured', {
+      cell: info => info.getValue()?.toString(),
+      header: () => <span>Featured</span>,
     }), 
   ]
 
