@@ -1,7 +1,7 @@
 import { Table, Heading, Box, Text, Flex } from '@radix-ui/themes'
 // Types
-import { type DailyEventData } from '../types'
-import { type EventWithArtistVenue } from '~/types/data'
+import { DailyEventData } from '../types'
+import { EventWithArtistVenue } from '~/types/data'
 // Utils
 import { getFormattedTime } from '~/utils/date'
 

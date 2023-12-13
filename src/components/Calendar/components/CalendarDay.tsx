@@ -5,7 +5,7 @@ import ModalDay from './ModalDay'
 import { Table } from '@radix-ui/themes'
 import Dialogue from '~/components/Dialogue'
 // Types
-import { type DailyEventData } from '../types'
+import { DailyEventData } from '../types'
 
 interface Props {
     dailyEvents: DailyEventData
@@ -26,7 +26,6 @@ export default function CalendarDay({ dailyEvents }: Props) {
         setDayText(dailyEvents.date.getDate())
     }
 
-    // TODO: Lazy load this component
     const modalDay = <ModalDay dailyEvents={dailyEvents} />
 
     return (
@@ -43,8 +42,8 @@ export default function CalendarDay({ dailyEvents }: Props) {
                 triggerLabel={dayText}
                 component={modalDay}
                 showSave={false}
-                triggerButtonClassName="w-full"
-                triggerButtonVariant="ghost"
+                rawButton={true}
+                triggerButtonClassName="w-full p-10 hover:bg-stone-600"
             />
         </Table.Cell>
     )

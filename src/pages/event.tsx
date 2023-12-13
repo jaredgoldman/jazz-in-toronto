@@ -3,17 +3,12 @@ import RootLayout from '~/layouts/RootLayout'
 import EventForm from '~/components/Forms/Event'
 // Hooks
 import useEventForm from '~/components/Forms/Event/hooks/useEventForm'
-import { Heading } from '@radix-ui/themes'
 
 export default function Book(): JSX.Element {
     const eventFormProps = useEventForm()
 
     return (
         <RootLayout pageTitle="Jazz In Toronto | Book Your Event">
-            <Heading align="center" size="9" mb="9">
-                Book your gig here!
-            </Heading>
-
             <EventForm {...eventFormProps} />
         </RootLayout>
     )

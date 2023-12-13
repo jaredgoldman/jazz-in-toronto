@@ -26,7 +26,13 @@ const staffMembers = [
 export default function About() {
     return (
         <RootLayout pageTitle="Jazz In Toronto | About Us">
-            <Flex direction="column" align="center" width="100%" mx="auto">
+            <Flex
+                direction="column"
+                align="center"
+                width="100%"
+                mx="auto"
+                p="9"
+            >
                 <Heading mb="9" align="center" size="9">
                     About Us
                 </Heading>

@@ -7,11 +7,11 @@ import ArtistForm from '~/components/Forms/Artist'
 import VenueForm from '~/components/Forms/Venue'
 // Types
 import { DataType } from '~/types/enums'
-import { type RowData } from '../types'
-import type { EventWithArtistVenue, Artist, Venue, Items } from '~/types/data'
-import type useEventForm from '~/components/Forms/Event/hooks/useEventForm'
-import type useArtistForm from '~/components/Forms/Artist/hooks/useArtistForm'
-import type useVenueForm from '~/components/Forms/Venue/hooks/useVenueForm'
+import { RowData } from '../types'
+import { EventWithArtistVenue, Artist, Venue, Items } from '~/types/data'
+import useEventForm from '~/components/Forms/Event/hooks/useEventForm'
+import useArtistForm from '~/components/Forms/Artist/hooks/useArtistForm'
+import useVenueForm from '~/components/Forms/Venue/hooks/useVenueForm'
 // Utils
 import { getFormattedTime } from '~/utils/date'
 import { isEventWithArtistVenue, isUseEventFormProps } from '~/utils/typeguards'
@@ -53,9 +53,7 @@ const getEditFormCellandProps = (
                 data.item
             )
             return {
-                editComp: (
-                    <VenueForm {...venueFormProps} showSubmitButton={false} />
-                ),
+                editComp: <VenueForm />,
                 editFormProps: venueFormProps
             }
         case DataType.ARTIST:
@@ -63,9 +61,7 @@ const getEditFormCellandProps = (
                 data.item
             )
             return {
-                editComp: (
-                    <ArtistForm {...artistFormProps} showSubmitButton={false} />
-                ),
+                editComp: <ArtistForm />,
                 editFormProps: artistFormProps
             }
     }

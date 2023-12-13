@@ -5,7 +5,7 @@ import Footer from '~/components/Footer'
 import { Container, Flex } from '@radix-ui/themes'
 // Types
 import { HeaderType } from '~/components/Header/'
-import { type ReactNode } from 'react'
+import { ReactNode } from 'react'
 // Context
 
 interface Props {
@@ -29,7 +29,7 @@ export default function RootLayout({
                 {fullWidth ? (
                     children
                 ) : (
-                    <Container size="3" className="flex-grow" py="7">
+                    <Container size="4" className="flex-grow">
                         {children}
                     </Container>
                 )}

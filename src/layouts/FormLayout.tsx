@@ -1,36 +1,28 @@
 // Components
 import Loading from '~/components/Loading'
-import { Container, Card, Box } from '@radix-ui/themes'
+import { Container, Box } from '@radix-ui/themes'
 // Type
-import { type ReactNode } from 'react'
+import { ReactNode } from 'react'
 
 interface Props {
     children: ReactNode
     isLoading?: boolean
     maxWidth?: 'max-w-md' | 'max-w-lg' | 'max-w-xl' | 'max-w-2xl'
     overflow?: 'overflow-x-auto' | 'overflow-y-auto' | ''
-    hasCard?: boolean
 }
 
 export default function FormLayout({
     children,
     isLoading,
     maxWidth = 'max-w-xl',
-    overflow = '',
-    hasCard = false
+    overflow = ''
 }: Props) {
     return (
         <Container
             mx={{ initial: '3', sm: 'auto' }}
             className={`${maxWidth} ${overflow}`}
         >
-            {hasCard ? (
-                <Card>
-                    <Box p="4">{isLoading ? <Loading /> : children}</Box>
-                </Card>
-            ) : (
-                <Box p="4">{isLoading ? <Loading /> : children}</Box>
-            )}
+            <Box p="4">{isLoading ? <Loading /> : children}</Box>
         </Container>
     )
 }

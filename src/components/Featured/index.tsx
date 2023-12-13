@@ -1,23 +1,18 @@
-// Components
 import Loading from '../Loading'
 import FeaturedCard from './FeaturedCard'
-import { Flex, Grid } from '@radix-ui/themes'
-// Utisl
+import { Flex, Heading } from '@radix-ui/themes'
 import { api } from '~/utils/api'
 
 export default function Featured() {
     const { data: featuredItems, isLoading } = api.data.getFeatured.useQuery()
 
     return (
-        <Flex
-            mb="2"
-            display="flex"
-            direction="column"
-            justify="center"
-            className="max-w-5xl"
-        >
+        <Flex mb="2" display="flex" direction="column" justify="center">
+            <Heading size="9" mb="9">
+                Featured
+            </Heading>
             {featuredItems && !isLoading ? (
-                <Grid columns="3" rows="1" m="3" className="justify-center">
+                <Flex gap="5" direction={{ xs: 'column', md: 'row' }}>
                     {featuredItems?.venue && (
                         <FeaturedCard
                             image={featuredItems.venue?.photoPath}
@@ -39,7 +34,7 @@ export default function Featured() {
                             link={featuredItems.artist?.website}
                         />
                     )}
-                </Grid>
+                </Flex>
             ) : (
                 <Loading />
             )}

@@ -2,8 +2,8 @@ import { ThemeProvider } from 'next-themes'
 // Components
 import { SessionProvider } from 'next-auth/react'
 // Types
-import { type Session } from 'next-auth'
-import { type AppType } from 'next/app'
+import { Session } from 'next-auth'
+import { AppType } from 'next/app'
 // Utils
 import { api } from '~/utils/api'
 // Assets
@@ -27,7 +27,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
 
     return (
         <ThemeProvider attribute="class">
-            <Theme accentColor="orange" radius="medium" appearance="dark">
+            <Theme accentColor="bronze" radius="medium" appearance="dark">
                 <SessionProvider session={session}>
                     <main className={`w-full ${poppins.variable}`}>
                         <Component {...pageProps} />

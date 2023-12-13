@@ -1,19 +1,16 @@
-// Libraries
 import { useState } from 'react'
-// Componenets
 import FileUploadButton from '~/components/FileUploadButton'
-import Image from 'next/image'
 import { Flex, Button, Text } from '@radix-ui/themes'
 import * as Form from '@radix-ui/react-form'
-// Types
-import { type FileData } from '~/types/data'
+import { FileData } from '~/types/data'
 import {
-    type FieldValues,
-    type Path,
-    type FieldError,
-    type Control,
+    FieldValues,
+    Path,
+    FieldError,
+    Control,
     Controller
 } from 'react-hook-form'
+import { TrashIcon } from '@radix-ui/react-icons'
 
 interface Props<T extends FieldValues> {
     name: Path<T>
@@ -36,11 +33,11 @@ export default function Upload<T extends FieldValues>({
     onUpload,
     label
 }: Props<T>) {
-    const [src, setSrc] = useState<string>('')
+    const [fileData, setFileData] = useState<FileData | null>()
 
     const removeFile = async () => {
         // If a photoPath and updatemutation func were provided
-        setSrc('')
+        setFileData(null)
         // we're editing and we can call the mutation to remove the photo
         if (onDeletePhoto) {
             await onDeletePhoto()
@@ -54,39 +51,39 @@ export default function Upload<T extends FieldValues>({
             name={name}
             render={({ field }) => {
                 if (field.value) {
-                    setSrc(field.value.dataURL as string)
+                    setFileData(field.value as FileData)
                 }
                 return (
                     <Form.Field name={name}>
                         <Form.Label>{label}</Form.Label>
-                        <Flex width="100%" justify="center" my="2">
-                            {!src ? (
+                        <Flex
+                            width="100%"
+                            justify="center"
+                            my="2"
+                            py="6"
+                            className="cursor-pointer rounded-md border-2 border-gray-600"
+                        >
+                            {!fileData ? (
                                 <FileUploadButton
                                     onUpload={(data: FileData) => {
-                                        setSrc(data.dataURL)
+                                        setFileData(data)
                                         onUpload(data)
                                     }}
                                     label={buttonLabel}
-                                    name={name}
                                 />
                             ) : (
-                                <Flex>
-                                    <div className="relative">
+                                <Flex direction="column">
+                                    <Text>File uploaded</Text>
+                                    <Flex align="center" justify="between">
+                                        <Text>{fileData.file.name}</Text>
                                         <Button
-                                            className="absolute left-0 top-0"
+                                            variant="ghost"
                                             size="1"
                                             onClick={removeFile}
                                         >
-                                            X
+                                            <TrashIcon />
                                         </Button>
-                                        <Image
-                                            className="m-3"
-                                            src={src}
-                                            height={50}
-                                            width={50}
-                                            alt="Uploaded image"
-                                        />
-                                    </div>
+                                    </Flex>
                                 </Flex>
                             )}
                         </Flex>

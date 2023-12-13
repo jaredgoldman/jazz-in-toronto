@@ -1,15 +1,10 @@
-// Libraries
-import { type ChangeEvent, useState, useRef, useEffect } from 'react'
-import { type FileData } from '~/types/data'
-// Components
-import { Button, Flex } from '@radix-ui/themes'
+import { ChangeEvent, useState, useRef, useEffect } from 'react'
+import { FileData } from '~/types/data'
+import { Flex } from '@radix-ui/themes'
 
 interface Props {
     onUpload: (data: FileData) => Promise<void> | void
     label: string
-    name?: string
-    buttonComponent?: JSX.Element
-    isPostUpload?: boolean
 }
 
 const trimFileName = (originalFile: File) => {
@@ -20,6 +15,9 @@ const trimFileName = (originalFile: File) => {
     })
 }
 
+/*
+ * Re-usable file upload component
+ */
 const FileUploadButton = ({ onUpload, label }: Props) => {
     const [selectedFile, setSelectedFile] = useState<FileData | null>(null)
 
@@ -29,8 +27,7 @@ const FileUploadButton = ({ onUpload, label }: Props) => {
         if (selectedFile) {
             void onUpload(selectedFile)
         }
-        //eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedFile])
+    }, [selectedFile, onUpload])
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0]
@@ -55,11 +52,7 @@ const FileUploadButton = ({ onUpload, label }: Props) => {
                 ref={fileInputRef}
                 name="file"
             ></input>
-            <Flex width="100%" justify="center">
-                <Button type="button" onClick={handleButtonClick}>
-                    {label}
-                </Button>
-            </Flex>
+            <Flex onClick={handleButtonClick}>{label}</Flex>
         </>
     )
 }

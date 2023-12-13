@@ -21,7 +21,6 @@ const FeaturedCard = ({
                     image ? image : 'none'
                 })`
             }}
-            m="2"
             variant="classic"
             className="min-h-[20rem] bg-cover bg-center bg-no-repeat"
         >
@@ -31,7 +30,7 @@ const FeaturedCard = ({
                 </Heading>
                 <Text className="text-gray-200">{content}</Text>
                 {link && (
-                    <Link href={link} color="tomato">
+                    <Link href={link} color="bronze">
                         Learn more
                     </Link>
                 )}

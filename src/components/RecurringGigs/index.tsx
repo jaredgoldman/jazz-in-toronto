@@ -1,95 +1,175 @@
-// Components
-import {
-    Box,
-    Container,
-    Heading,
-    Card,
-    Text,
-    Flex,
-    AspectRatio
-} from '@radix-ui/themes'
+import { Heading, Text, Flex, Box } from '@radix-ui/themes'
+import { format } from 'date-fns'
 import Image from 'next/image'
-// Utils
-import { getFormattedTime } from '~/utils/date'
 
 const gigDays = [
     {
         day: 'Monday',
         gigs: [
             {
-                image: '/team.jpg',
-                artist: 'test',
-                venue: 'test',
-                description: 'test',
+                image: '/images/team.jpg',
+                artist: 'Artist Name',
+                venue: 'Venue Name',
+                description:
+                    'Test description about how awesome the gig is and any other relevant details',
+                time: new Date()
+            },
+            {
+                image: '/images/team.jpg',
+                artist: 'Artist Name',
+                venue: 'Venue Name',
+                description:
+                    'Test description about how awesome the gig is and any other relevant details',
                 time: new Date()
             }
         ]
     },
-    { day: 'Tuesday', gigs: [] },
-    { day: 'Wednesday', gigs: [] },
-    { day: 'Thursday', gigs: [] },
-    { day: 'Friday', gigs: [] },
-    { day: 'Saturday', gigs: [] },
-    { day: 'Sunday', gigs: [] }
+    {
+        day: 'Tuesday',
+        gigs: [
+            {
+                image: '/images/team.jpg',
+                artist: 'Artist Name',
+                venue: 'Venue Name',
+                description:
+                    'Test description about how awesome the gig is and any other relevant details',
+                time: new Date()
+            },
+            {
+                image: '/images/team.jpg',
+                artist: 'Artist Name',
+                venue: 'Venue Name',
+                description:
+                    'Test description about how awesome the gig is and any other relevant details',
+                time: new Date()
+            }
+        ]
+    },
+    {
+        day: 'Wednesday',
+        gigs: [
+            {
+                image: '/images/team.jpg',
+                artist: 'Artist Name',
+                venue: 'Venue Name',
+                description:
+                    'Test description about how awesome the gig is and any other relevant details',
+                time: new Date()
+            }
+        ]
+    },
+    {
+        day: 'Thursday',
+        gigs: [
+            {
+                image: '/images/team.jpg',
+                artist: 'Artist Name',
+                venue: 'Venue Name',
+                description:
+                    'Test description about how awesome the gig is and any other relevant details',
+                time: new Date()
+            }
+        ]
+    },
+    {
+        day: 'Friday',
+        gigs: [
+            {
+                image: '/images/team.jpg',
+                artist: 'Artist Name',
+                venue: 'Venue Name',
+                description:
+                    'Test description about how awesome the gig is and any other relevant details',
+                time: new Date()
+            }
+        ]
+    },
+    {
+        day: 'Saturday',
+        gigs: [
+            {
+                image: '/images/team.jpg',
+                artist: 'Artist Name',
+                venue: 'Venue Name',
+                description:
+                    'Test description about how awesome the gig is and any other relevant details',
+                time: new Date()
+            }
+        ]
+    },
+    {
+        day: 'Sunday',
+        gigs: [
+            {
+                image: '/images/team.jpg',
+                artist: 'Artist Name',
+                venue: 'Venue Name',
+                description:
+                    'Test description about how awesome the gig is and any other relevant details',
+                time: new Date()
+            }
+        ]
+    }
 ]
 
 export default function RecurringGigs() {
     return (
-        <Container>
-            <Box>
+        <Box p="5" mb="5">
+            <Heading size="9" mb="6" align="left">
+                Recurring Gigs
+            </Heading>
+            <Flex direction="column" gap="7">
                 {gigDays.map(({ day, gigs }) => {
-                    if (gigs.length) {
-                        return (
-                            <Container key={day}>
-                                <Heading size="8" mb="4">
-                                    {day}
-                                </Heading>
-                                <Card mb="5">
-                                    {gigs.map((gig) => {
-                                        const gigString = `${getFormattedTime(
-                                            gig.time
-                                        )} - ${gig.artist} @ ${gig.venue}`
-                                        return (
-                                            <Flex
-                                                key={`${gig.artist}_${gig.venue}`}
+                    return (
+                        <Flex
+                            direction="column"
+                            align="start"
+                            key={day}
+                            gap="3"
+                        >
+                            <Heading size="8" mb="4">
+                                {day}
+                            </Heading>
+                            {gigs.map((gig) => {
+                                const time = format(gig.time, 'h:mm b')
+                                const gigString = `${time} - ${gig.artist} @ ${gig.venue}`
+                                return (
+                                    <Flex
+                                        key={`${gig.artist}_${gig.venue}`}
+                                        p="4"
+                                        className="bg-zinc-800"
+                                    >
+                                        <Flex
+                                            className="max-w-xl"
+                                            direction="column"
+                                        >
+                                            <Heading mb="4" align="left">
+                                                {gigString}
+                                            </Heading>
+                                            <Text
+                                                size="4"
+                                                align="left"
+                                                className="max-w-md"
+                                                mr="2"
                                             >
-                                                <Box className="max-w-xl" p="2">
-                                                    <Heading mb="4" mt="1">
-                                                        {gigString}
-                                                    </Heading>
-                                                    <Box className="max-w-[90%]">
-                                                        <Text size="4">
-                                                            {gig.description}
-                                                        </Text>
-                                                    </Box>
-                                                </Box>
-                                                {gig.image && (
-                                                    <Box
-                                                        width="100%"
-                                                        height="auto"
-                                                        p="6"
-                                                    >
-                                                        <AspectRatio
-                                                            ratio={1 / 1}
-                                                        >
-                                                            <Image
-                                                                src={gig.image}
-                                                                alt={`image for ${gigString}`}
-                                                                className="h-full w-full object-cover"
-                                                                fill={true}
-                                                            />
-                                                        </AspectRatio>
-                                                    </Box>
-                                                )}
-                                            </Flex>
-                                        )
-                                    })}
-                                </Card>
-                            </Container>
-                        )
-                    }
+                                                {gig.description}
+                                            </Text>
+                                        </Flex>
+                                        {gig.image && (
+                                            <Image
+                                                src={gig.image}
+                                                alt={`image for ${gigString}`}
+                                                width={200}
+                                                height={600}
+                                            />
+                                        )}
+                                    </Flex>
+                                )
+                            })}
+                        </Flex>
+                    )
                 })}
-            </Box>
-        </Container>
+            </Flex>
+        </Box>
     )
 }
