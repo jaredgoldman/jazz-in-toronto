@@ -26,7 +26,7 @@ export default function DailyListings({ onChangeListingType }: Props) {
     )
 
     return (
-        <Box p="5">
+        <Box p="5" mb="5">
             <Heading size="9" mb="6">
                 Daily Listings
             </Heading>

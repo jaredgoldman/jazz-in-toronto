@@ -114,7 +114,7 @@ const gigDays = [
 
 export default function RecurringGigs() {
     return (
-        <Box p="5">
+        <Box p="5" mb="5">
             <Heading size="9" mb="6" align="left">
                 Recurring Gigs
             </Heading>
@@ -146,7 +146,12 @@ export default function RecurringGigs() {
                                             <Heading mb="4" align="left">
                                                 {gigString}
                                             </Heading>
-                                            <Text size="4" align="left">
+                                            <Text
+                                                size="4"
+                                                align="left"
+                                                className="max-w-md"
+                                                mr="2"
+                                            >
                                                 {gig.description}
                                             </Text>
                                         </Flex>

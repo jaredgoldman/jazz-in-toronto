@@ -28,11 +28,11 @@ export default function Venues(): JSX.Element {
                 <Callout.Text>
                     Don’t see your venue listed below?{' '}
                     <Link href="/venue">
-                        Submit a request to join our listings!
+                        Submit a request to add your venue
                     </Link>
                 </Callout.Text>
             </Callout.Root>
-            <Box p="5">
+            <Box p="5" mb="5">
                 <Heading mb="8" size="9">
                     Venues
                 </Heading>
