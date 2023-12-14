@@ -34,10 +34,7 @@ export default function Listings() {
                 </Callout.Text>
             </Callout.Root>
             {listingType === ListingType.DAILY_LISTINGS ? (
-                <>
-                    <DailyListings onChangeListingType={onChangeListingType} />
-                    <Separator size="4" className="my-4" />
-                </>
+                <DailyListings onChangeListingType={onChangeListingType} />
             ) : (
                 <Calendar onChangeListingType={onChangeListingType} />
             )}
