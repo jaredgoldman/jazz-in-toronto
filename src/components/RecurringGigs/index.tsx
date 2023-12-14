@@ -136,7 +136,7 @@ export default function RecurringGigs() {
                                     const time = format(gig.time, 'h:mm b')
                                     const gigString = `${time} - ${gig.artist} @ ${gig.venue}`
                                     return (
-                                        <Flex justify="between">
+                                        <Flex justify="between" key={gigString}>
                                             <Flex
                                                 className="max-w-xl"
                                                 direction="column"
