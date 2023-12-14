@@ -1,12 +1,4 @@
-import {
-    Heading,
-    Text,
-    Flex,
-    Box,
-    Card,
-    Inset,
-    Separator
-} from '@radix-ui/themes'
+import { Heading, Text, Flex, Box, Separator } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import Image from 'next/image'
 
