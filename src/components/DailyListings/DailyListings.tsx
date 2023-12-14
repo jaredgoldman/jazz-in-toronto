@@ -1,5 +1,5 @@
-import { useMemo, useState, useEffect } from 'react'
-import { Button, Heading, Flex, Text, Box, Table } from '@radix-ui/themes'
+import { useMemo, useState } from 'react'
+import { Button, Heading, Flex, Box, Table } from '@radix-ui/themes'
 import { api } from '~/utils/api'
 import { addDays, format } from 'date-fns'
 import {
@@ -51,7 +51,7 @@ export default function DailyListings({ onChangeListingType }: Props) {
                 }
             )
         ],
-        [data]
+        [data, columnHelper]
     )
 
     const [sorting, setSorting] = useState<SortingState>([
@@ -97,9 +97,9 @@ export default function DailyListings({ onChangeListingType }: Props) {
             <Table.Root variant="surface">
                 <Table.Header>
                     {table.getHeaderGroups().map((headerGroup) => (
-                        <Table.Row>
+                        <Table.Row key={headerGroup.id}>
                             {headerGroup.headers.map((header) => (
-                                <Table.ColumnHeaderCell>
+                                <Table.ColumnHeaderCell key={header.id}>
                                     {flexRender(
                                         header.column.columnDef.header,
                                         header.getContext()
@@ -111,9 +111,9 @@ export default function DailyListings({ onChangeListingType }: Props) {
                 </Table.Header>
                 <Table.Body>
                     {table.getRowModel().rows.map((row) => (
-                        <Table.Row>
+                        <Table.Row key={row.id}>
                             {row.getVisibleCells().map((cell) => (
-                                <Table.Cell>
+                                <Table.Cell key={cell.id}>
                                     {flexRender(
                                         cell.column.columnDef.cell,
                                         cell.getContext()
