@@ -29,7 +29,7 @@ export function HeaderDrawer({ headerType }: Props) {
                         Home
                     </Link>
                     {navLinks[headerType].map((link) => (
-                        <Link size="4" href={link.href}>
+                        <Link size="4" href={link.href} key={link.href}>
                             {link.title}
                         </Link>
                     ))}
