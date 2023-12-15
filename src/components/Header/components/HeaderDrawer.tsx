@@ -1,4 +1,4 @@
-import { Dialog, Flex, Theme } from '@radix-ui/themes'
+import { Dialog, Flex } from '@radix-ui/themes'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import Link from '~/components/Link'
 import { HeaderType, navLinks } from '../utils'
