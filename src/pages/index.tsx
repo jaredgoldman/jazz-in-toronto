@@ -18,9 +18,9 @@ export default function Home() {
                 <Image
                     src="/images/logo.svg"
                     alt="facebook"
-                    width={250}
-                    height={250}
-                    className="my-7"
+                    width={350}
+                    height={350}
+                    className="my-16"
                 />
 
                 <Text size="7" align="center" className="max-w-5xl">
@@ -30,7 +30,7 @@ export default function Home() {
                 </Text>
             </Flex>
             <Flex
-                className="gap-12 bg-gray-900"
+                className="gap-12 bg-gray-900 py-32"
                 justify="center"
                 align="center"
             >
@@ -56,7 +56,7 @@ export default function Home() {
             </Flex>
             <Flex
                 justify="center"
-                className="bg-hero-pattern-2 bg-cover bg-center bg-no-repeat pb-36 pt-60"
+                className="min-h-[70rem] bg-hero-pattern-2 bg-cover bg-center bg-no-repeat pb-36 pt-60"
             >
                 <Box className="max-w-5xl">
                     <Featured />

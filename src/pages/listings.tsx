@@ -3,7 +3,7 @@ import RootLayout from '~/layouts/RootLayout'
 import RecurringGigs from '~/components/RecurringGigs'
 import DailyListings from '~/components/DailyListings/DailyListings'
 import Calendar from '~/components/Calendar'
-import { Callout, Separator } from '@radix-ui/themes'
+import { Callout } from '@radix-ui/themes'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
 import Link from '~/components/Link'
 
@@ -34,10 +34,7 @@ export default function Listings() {
                 </Callout.Text>
             </Callout.Root>
             {listingType === ListingType.DAILY_LISTINGS ? (
-                <>
-                    <DailyListings onChangeListingType={onChangeListingType} />
-                    <Separator size="4" className="my-4" />
-                </>
+                <DailyListings onChangeListingType={onChangeListingType} />
             ) : (
                 <Calendar onChangeListingType={onChangeListingType} />
             )}
