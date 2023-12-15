@@ -17,8 +17,7 @@ export function EventsTable() {
   //columndef setup using columnHelper. May need to change to other method using/
   //useMemo in order to add extended functionality 
   //as in: https://codesandbox.io/p/devbox/tanstack-table-example-row-selection-2llvty?file=%2Fsrc%2Fmain.tsx%3A38%2C29
-  //
-  //using EventWithArtistVenue for all tables because TS yells at me otherwise  
+
   const columnHelper = createColumnHelper<EventWithArtistVenue>()
 
   const columns = [

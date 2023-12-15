@@ -1,6 +1,6 @@
 //local components
 import { api } from '~/utils/api'
-import { EventWithArtistVenue } from '~/types/data'
+import { Artist } from '~/types/data'
 //modules
 import {
   createColumnHelper,
@@ -13,43 +13,42 @@ import { format } from 'date-fns'
 
 export function ArtistsTable() {
   //fetch data and set loading state
-  const { data, isLoading } = api.event.getAll.useQuery();
+  const { data, isLoading } = api.artist.getAll.useQuery();
 
   //columndef setup using columnHelper. May need to change to other method using/
   //useMemo in order to add extended functionality 
   //as in: https://codesandbox.io/p/devbox/tanstack-table-example-row-selection-2llvty?file=%2Fsrc%2Fmain.tsx%3A38%2C29
   //
-  //using EventWithArtistVenue for all tables because TS yells at me otherwise  
-  const columnHelper = createColumnHelper<EventWithArtistVenue>();
+  const columnHelper = createColumnHelper<Artist>();
 
   const columns = [
-    columnHelper.accessor('artist.name', {
+    columnHelper.accessor('name', {
       cell: info => info.getValue(),
-      header: () => <span>Artist Name</span>,
+      header: () => <span>Name</span>,
     }),
-    columnHelper.accessor('artist.genre', {
+    columnHelper.accessor('genre', {
       cell: info => info.getValue(),
       header: () => <span>Genre</span>,
     }),
-    columnHelper.accessor('artist.website', {
+    columnHelper.accessor('website', {
       cell: info => info.getValue(),
       header: () => <span>Website</span>,
     }),
-    columnHelper.accessor('artist.instagramHandle', {
+    columnHelper.accessor('instagramHandle', {
       cell: info => info.getValue(),
       header: () => <span>Instagram Handle</span>,
     }),
-    columnHelper.accessor('artist.active', {
-      cell: info => info.getValue()?.toString(),
+    columnHelper.accessor('active', {
+      cell: info => info.renderValue()?.toString(),
       header: () => <span>Active</span>,
     }),
-    columnHelper.accessor('artist.featured', {
+    columnHelper.accessor('featured', {
       cell: info => info.renderValue()?.toString(),
       header: () => <span>Featured</span>,
     }),
   ]
 
-  const table = useReactTable<EventWithArtistVenue>({
+  const table = useReactTable<Artist>({
     data: data ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
