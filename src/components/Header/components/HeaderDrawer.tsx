@@ -1,8 +1,13 @@
-import { Dialog, Flex } from '@radix-ui/themes'
+import { Dialog, Flex, Theme } from '@radix-ui/themes'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import Link from '~/components/Link'
+import { HeaderType, navLinks } from '../utils'
 
-export function HeaderDrawer() {
+interface Props {
+    headerType: HeaderType
+}
+
+export function HeaderDrawer({ headerType }: Props) {
     return (
         <Dialog.Root>
             <Dialog.Trigger>
@@ -19,20 +24,17 @@ export function HeaderDrawer() {
                     minHeight: '100%'
                 }}
             >
-                {' '}
                 <Flex direction="column" gap="2">
-                    <Link href="/event" size="5">
-                        Add Your Gig
+                    <Link size="4" href="/">
+                        Home
                     </Link>
-                    <Link href="/listings" size="5">
-                        Listings
-                    </Link>
-                    <Link href="/venues" size="5">
-                        Venues
-                    </Link>
-                    <Link href="/about" size="5">
-                        About Us
-                    </Link>
+                    {navLinks[headerType].map((link) => (
+                        <Theme accentColor="bronze">
+                            <Link size="4" href={link.href}>
+                                {link.title}
+                            </Link>
+                        </Theme>
+                    ))}
                 </Flex>
             </Dialog.Content>
         </Dialog.Root>

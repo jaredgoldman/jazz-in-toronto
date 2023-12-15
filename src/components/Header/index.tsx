@@ -26,7 +26,7 @@ export default function Header({ headerType }: Props): JSX.Element {
                     ))}
                 </Flex>
                 <Box display={{ initial: 'block', xs: 'none' }}>
-                    <HeaderDrawer />
+                    <HeaderDrawer headerType={headerType} />
                 </Box>
                 {headerType === HeaderType.Admin && session && (
                     <Button onClick={() => void signOut()}>Sign Out</Button>

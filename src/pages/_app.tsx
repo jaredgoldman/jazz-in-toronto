@@ -27,7 +27,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
 
     return (
         <ThemeProvider attribute="class">
-            <Theme accentColor="bronze" radius="medium" appearance="dark">
+            <Theme accentColor="indigo" radius="medium" appearance="dark">
                 <SessionProvider session={session}>
                     <main className={`w-full ${poppins.variable}`}>
                         <Component {...pageProps} />
