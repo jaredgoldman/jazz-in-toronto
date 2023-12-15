@@ -1,25 +1,20 @@
-// Libraries
+import { ReactNode } from 'react'
 import { signIn, useSession } from 'next-auth/react'
-// Components
 import Header from '~/components/Header'
 import Footer from '~/components/Footer'
 import { Container, Flex, Text } from '@radix-ui/themes'
 import Head from 'next/head'
-// Types
-import { HeaderType } from '~/components/Header'
 import { Button } from '@radix-ui/themes'
-import { type ReactNode } from 'react'
+import { HeaderType } from '~/components/Header/utils'
 
 interface Props {
     pageTitle: string
     children: ReactNode | undefined
-    showHeaderLinks?: boolean
 }
 
 export default function AdminLayout({
     pageTitle,
-    children,
-    showHeaderLinks = true
+    children
 }: Props): JSX.Element {
     const { data: session } = useSession()
     return (
@@ -28,10 +23,7 @@ export default function AdminLayout({
                 <title>{pageTitle}</title>
             </Head>
             <Flex direction="column" className="h-screen">
-                <Header
-                    headerType={HeaderType.Admin}
-                    showLinks={showHeaderLinks}
-                />
+                <Header headerType={HeaderType.Admin} />
                 <Container
                     size="3"
                     className="flex-grow overflow-x-hidden"
