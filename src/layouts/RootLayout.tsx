@@ -1,12 +1,9 @@
-// Components
 import Header from '~/components/Header'
 import Head from 'next/head'
 import Footer from '~/components/Footer'
 import { Container, Flex } from '@radix-ui/themes'
-// Types
-import { HeaderType } from '~/components/Header/'
+import { HeaderType } from '~/components/Header/utils'
 import { ReactNode } from 'react'
-// Context
 
 interface Props {
     pageTitle: string
