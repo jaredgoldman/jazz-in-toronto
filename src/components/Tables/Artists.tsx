@@ -135,23 +135,27 @@ export function ArtistsTable() {
 		getFilteredRowModel: getFilteredRowModel(),
 	});
 
-	return (
-		<Box>
-			{data?.length && (
-				<Table.Root variant="surface">
-					<Table.Header>
-						{table.getHeaderGroups().map((headerGroup) => (
-							<Table.Row key={headerGroup.id}>
-								{headerGroup.headers.map((header) => (
-									<HeaderCell header={header} key={header.id} />
-								))}
-							</Table.Row>
-						))}
-					</Table.Header>
-					<Table.Body>
-						{table.getRowModel().rows.map((row) => (
-							<Table.Row key={row.id}>
-								{row.getVisibleCells().map((cell) => (
+  return (
+    <div>
+      <Table.Root variant="surface">
+        <Table.Header>
+          {table.getHeaderGroups().map(headerGroup => (
+            <Table.Row key={headerGroup.id}>
+              {headerGroup.headers.map(header => (
+                <Table.RowHeaderCell key={header.id}>
+                  {header.isPlaceholder ? null : flexRender(
+                    header.column.columnDef.header,
+                    header.getContext()
+                  )}
+                </Table.RowHeaderCell>
+              ))}
+            </Table.Row>
+          ))}
+        </Table.Header>
+        <Table.Body>
+          {table.getRowModel().rows.map(row => (
+            <Table.Row key={row.id}>
+              {row.getVisibleCells().map(cell => (
                 <Table.Cell key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   {isModalOpen && (
