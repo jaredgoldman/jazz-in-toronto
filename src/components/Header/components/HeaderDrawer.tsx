@@ -33,6 +33,7 @@ export function HeaderDrawer({ headerType }: Props) {
                         if ('nested' in link && link.nested) {
                             return (
                                 <HeaderAccordion
+                                    key={link.href}
                                     links={link.nested}
                                     title={link.title}
                                 />

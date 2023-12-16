@@ -25,9 +25,14 @@ export default function Header({ headerType }: Props): JSX.Element {
                         display={{ initial: 'none', xs: 'flex' }}
                         align="center"
                     >
-                        {navLinks[headerType].map((link) => {
+                        {navLinks[headerType].map((link, i) => {
                             if ('nested' in link && link.nested) {
-                                return <HeaderDropDown links={link.nested} />
+                                return (
+                                    <HeaderDropDown
+                                        links={link.nested}
+                                        key={i}
+                                    />
+                                )
                             }
                             return (
                                 <Link
