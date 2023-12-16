@@ -8,11 +8,15 @@ export default function Featured() {
 
     return (
         <Flex mb="2" display="flex" direction="column" justify="center">
-            <Heading size="9" mb="9">
+            <Heading size="9" m="5">
                 Featured
             </Heading>
             {featuredItems && !isLoading ? (
-                <Flex gap="5" direction={{ xs: 'column', md: 'row' }}>
+                <Flex
+                    gap="7"
+                    direction={{ initial: 'column', md: 'row' }}
+                    p="5"
+                >
                     {featuredItems?.venue && (
                         <FeaturedCard
                             image={featuredItems.venue?.photoPath}

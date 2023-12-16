@@ -63,7 +63,7 @@ export default function Calendar({ onChangeListingType }: Props): JSX.Element {
     const eventRows = mapEventsToCalendarRows()
 
     return (
-        <Flex direction="column" justify="center" m="9">
+        <Flex direction="column" justify="center" p={{ initial: '5', xs: '9' }}>
             <Heading size="9" mb="6">
                 Calendar
             </Heading>

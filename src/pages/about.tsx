@@ -31,14 +31,14 @@ export default function About() {
                 align="center"
                 width="100%"
                 mx="auto"
-                p="9"
+                p={{ initial: '5', xs: '9' }}
             >
                 <Heading mb="9" align="center" size="9">
                     About Us
                 </Heading>
                 <Text
                     mb="5"
-                    align="left"
+                    align={{ initial: 'center', xs: 'left' }}
                     mx={{ initial: '4', md: '0' }}
                     className="max-w-2xl"
                 >
@@ -69,10 +69,24 @@ export default function About() {
                         {staffMembers.map((member) => {
                             return (
                                 <Box key={member.name}>
-                                    <Heading className="font-bold">
+                                    <Heading
+                                        align={{
+                                            initial: 'center',
+                                            xs: 'left'
+                                        }}
+                                        className="font-bold"
+                                    >
                                         {member.title}
                                     </Heading>
-                                    <Text>{member.name}</Text>
+                                    <Heading
+                                        align={{
+                                            initial: 'center',
+                                            xs: 'left'
+                                        }}
+                                        size="3"
+                                    >
+                                        {member.name}
+                                    </Heading>
                                 </Box>
                             )
                         })}

@@ -1,4 +1,11 @@
-import { Heading, Text, Flex, Box, Separator } from '@radix-ui/themes'
+import {
+    Heading,
+    Text,
+    Flex,
+    Box,
+    Separator,
+    AspectRatio
+} from '@radix-ui/themes'
 import { format } from 'date-fns'
 import Image from 'next/image'
 
@@ -154,12 +161,22 @@ export default function RecurringGigs() {
                                                 </Text>
                                             </Flex>
                                             {gig.image && (
-                                                <Image
-                                                    src={gig.image}
-                                                    alt={`image for ${gigString}`}
-                                                    width={500}
-                                                    height={600}
-                                                />
+                                                <Box
+                                                    display={{
+                                                        initial: 'none',
+                                                        xs: 'block'
+                                                    }}
+                                                >
+                                                    <AspectRatio
+                                                        ratio={1.5 / 1}
+                                                    >
+                                                        <Image
+                                                            src={gig.image}
+                                                            alt={`image for ${gigString}`}
+                                                            fill={true}
+                                                        />
+                                                    </AspectRatio>
+                                                </Box>
                                             )}
                                         </Flex>
                                     )
