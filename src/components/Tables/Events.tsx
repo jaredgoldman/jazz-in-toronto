@@ -1,63 +1,66 @@
 import { api } from '~/utils/api'
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import {
-  createColumnHelper,
+  ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
 import { EventWithArtistVenue } from '~/types/data'
-import { Table, flexPropDefs } from '@radix-ui/themes';
+import { Table } from '@radix-ui/themes';
 import { format } from 'date-fns'
 
 export function EventsTable() {
   //fetch data and set loading state
   const { data, isLoading } = api.event.getAll.useQuery();
 
-  //columndef setup using columnHelper. May need to change to other method using/
-  //useMemo in order to add extended functionality 
-  //as in: https://codesandbox.io/p/devbox/tanstack-table-example-row-selection-2llvty?file=%2Fsrc%2Fmain.tsx%3A38%2C29
-
-  const columnHelper = createColumnHelper<EventWithArtistVenue>()
-
-  const columns = [
-    columnHelper.accessor('name', {
+  const columns = React.useMemo<ColumnDef<EventWithArtistVenue>[]>(() => [
+    {
+      accessorKey: 'name',
       cell: info => info.getValue(),
       header: () => <span>Event Name</span>,
-    }),
-    columnHelper.accessor('venue.name', {
+    },
+    {
+      accessorKey: 'venue.name',
       cell: info => info.getValue(),
       header: () => <span>Venue</span>,
-    }),
-    columnHelper.accessor('startDate', {
+    },
+    {
+      accessorKey: 'startDate',
       cell: info => format(info.getValue(), "mm-dd-yyyy"),
       header: () => <span>Start Date</span>,
-    }),
-    columnHelper.accessor('endDate', {
+    },
+    {
+      accessorKey: 'endDate',
       cell: info => format(info.getValue(), "mm-dd-yyyy"),
       header: () => <span>End Date</span>,
-    }),
-    columnHelper.accessor('artist.name', {
+    },
+    {
+      accessorKey: 'artist.name',
       cell: info => info.getValue(),
       header: () => <span>Artist</span>,
-    }),
-    columnHelper.accessor('venue.website', {
+    },
+    {
+      accessorKey: 'venue.website',
       cell: info => info.getValue(),
       header: () => <span>Website</span>,
-    }),
-    columnHelper.accessor('venue.instagramHandle', {
+    },
+    {
+      accessorKey: 'venue.instagramHandle',
       cell: info => info.getValue(),
       header: () => <span>Instagram Handle</span>,
-    }),
-    columnHelper.accessor('cancelled', {
+    },
+    {
+      accessorKey: 'cancelled',
       cell: info => info.getValue()?.toString(),
       header: () => <span>Cancelled</span>,
-    }),
-    columnHelper.accessor('featured', {
+    },
+    {
+      accessorKey: 'featured',
       cell: info => info.getValue()?.toString(),
       header: () => <span>Featured</span>,
-    }),
-  ]
+    },
+  ], [])
 
   useEffect(() => {
     console.log("", data);

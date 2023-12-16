@@ -1,54 +1,55 @@
 import { api } from '~/utils/api'
 import {
-  createColumnHelper,
+  ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
 import { Venue } from '~/types/data'
-import { Table, flexPropDefs } from '@radix-ui/themes';
-import { format } from 'date-fns'
+import { Table } from '@radix-ui/themes';
+import React from "react";
 
 export function VenuesTable() {
   //fetch data and set loading state
   const { data, isLoading } = api.venue.getAll.useQuery();
 
-  //columndef setup using columnHelper. May need to change to other method using/
-  //useMemo in order to add extended functionality 
-  //as in: https://codesandbox.io/p/devbox/tanstack-table-example-row-selection-2llvty?file=%2Fsrc%2Fmain.tsx%3A38%2C29
-  //
-  const columnHelper = createColumnHelper<Venue>();
-
-  const columns = [
-    columnHelper.accessor('name', {
+  const columns = React.useMemo<ColumnDef<Venue>[]>(() => [
+    {
+      accessorKey: 'name',
       cell: info => info.getValue(),
       header: () => <span>Name</span>,
-    }),
-    columnHelper.accessor('address', {
+    },
+    {
+      accessorKey: 'address',
       cell: info => info.getValue(),
       header: () => <span>Address</span>,
-    }),
-    columnHelper.accessor('city', {
+    },
+    {
+      accessorKey: 'city',
       cell: info => info.getValue(),
       header: () => <span>City</span>,
-    }),
-    columnHelper.accessor('website', {
+    },
+    {
+      accessorKey: 'website',
       cell: info => info.getValue(),
       header: () => <span>Website</span>,
-    }),
-    columnHelper.accessor('active', {
+    },
+    {
+      accessorKey: 'active',
       cell: info => info.getValue()?.toString(),
       header: () => <span>Active</span>,
-    }),
-    columnHelper.accessor('instagramHandle', {
+    },
+    {
+      accessorKey: 'instagramHandle',
       cell: info => info.getValue(),
       header: () => <span>Instagram</span>,
-    }),
-    columnHelper.accessor('featured', {
+    },
+    {
+      accessorKey: 'featured',
       cell: info => info.getValue()?.toString(),
       header: () => <span>Featured</span>,
-    }),
-  ]
+    },
+  ], [])
 
   const table = useReactTable<Venue>({
     data: data ?? [],
