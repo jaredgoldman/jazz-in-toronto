@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-table'
 import { Venue } from '~/types/data'
 import { Table } from '@radix-ui/themes';
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
 export function VenuesTable() {
   //fetch data and set loading state

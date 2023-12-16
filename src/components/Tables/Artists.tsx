@@ -9,13 +9,13 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { Table } from '@radix-ui/themes';
-import React from "react";
+import { useMemo } from 'react';
 
 export function ArtistsTable() {
   //fetch data and set loading state
   const { data } = api.artist.getAll.useQuery();
 
-  const columns = React.useMemo<ColumnDef<Artist>[]>(() => [
+  const columns = useMemo<ColumnDef<Artist>[]>(() => [
     {
       accessorKey: 'name',
       cell: info => info.getValue(),

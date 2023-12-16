@@ -8,12 +8,13 @@ import {
 import { EventWithArtistVenue } from '~/types/data'
 import { Table } from '@radix-ui/themes';
 import { format } from 'date-fns'
+import { useMemo } from 'react'
 
 export function EventsTable() {
   //fetch data and set loading state
   const { data } = api.event.getAll.useQuery();
 
-  const columns = React.useMemo<ColumnDef<EventWithArtistVenue>[]>(() => [
+  const columns = useMemo<ColumnDef<EventWithArtistVenue>[]>(() => [
     {
       accessorKey: 'name',
       cell: info => info.getValue(),
