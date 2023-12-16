@@ -51,7 +51,7 @@ export default function DailyListings({ onChangeListingType }: Props) {
                 }
             )
         ],
-        [data, columnHelper]
+        [columnHelper]
     )
 
     const [sorting, setSorting] = useState<SortingState>([
