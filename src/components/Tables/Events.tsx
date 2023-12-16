@@ -27,12 +27,12 @@ export function EventsTable() {
     },
     {
       accessorKey: 'startDate',
-      cell: info => format(new Date(info.getValue() as string), "mm-dd-yyyy"),
+      cell: info => format(new Date(info.getValue() as string), "MM-dd-yyyy"),
       header: () => <span>Start Date</span>,
     },
     {
       accessorKey: 'endDate',
-      cell: info => format(new Date(info.getValue() as string), "mm-dd-yyyy"),
+      cell: info => format(new Date(info.getValue() as string), "MM-dd-yyyy"),
       header: () => <span>End Date</span>,
     },
     {
