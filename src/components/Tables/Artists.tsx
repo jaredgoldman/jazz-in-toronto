@@ -57,7 +57,7 @@ export function ArtistsTable() {
 
   return (
     <div>
-      <Table.Root>
+      <Table.Root variant="surface">
         <Table.Header>
           {table.getHeaderGroups().map(headerGroup => (
             <Table.Row key={headerGroup.id}>
