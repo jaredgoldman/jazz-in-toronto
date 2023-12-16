@@ -59,7 +59,7 @@ export function VenuesTable() {
 
   return (
     <div>
-      <Table.Root>
+      <Table.Root variant="surface">
         <Table.Header>
           {table.getHeaderGroups().map(headerGroup => (
             /*iterate through headers*/
