@@ -5,7 +5,6 @@ import AdminLayout from '~/layouts/AdminLayout'
 import { ArtistsTable } from '~/components/Tables'
 
 export default function AdminArtists() {
-//moved data-fetching logic to Table components
     return (
         <AdminLayout pageTitle="Jazz In Toronto | Admin - artists">
             <>

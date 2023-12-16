@@ -7,13 +7,13 @@ import {
 } from '@tanstack/react-table'
 import { Venue } from '~/types/data'
 import { Table } from '@radix-ui/themes';
-import React from "react";
+import { useMemo } from "react";
 
 export function VenuesTable() {
   //fetch data and set loading state
-  const { data, isLoading } = api.venue.getAll.useQuery();
+  const { data } = api.venue.getAll.useQuery();
 
-  const columns = React.useMemo<ColumnDef<Venue>[]>(() => [
+  const columns = useMemo<ColumnDef<Venue>[]>(() => [
     {
       accessorKey: 'name',
       cell: info => info.getValue(),

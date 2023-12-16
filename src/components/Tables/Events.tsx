@@ -1,5 +1,4 @@
 import { api } from '~/utils/api'
-import React, { useEffect } from 'react'
 import {
   ColumnDef,
   flexRender,
@@ -12,7 +11,7 @@ import { format } from 'date-fns'
 
 export function EventsTable() {
   //fetch data and set loading state
-  const { data, isLoading } = api.event.getAll.useQuery();
+  const { data } = api.event.getAll.useQuery();
 
   const columns = React.useMemo<ColumnDef<EventWithArtistVenue>[]>(() => [
     {
@@ -61,10 +60,6 @@ export function EventsTable() {
       header: () => <span>Featured</span>,
     },
   ], [])
-
-  useEffect(() => {
-    console.log("", data);
-  }, [data])
 
   const table = useReactTable<EventWithArtistVenue>({
     data: data ?? [],

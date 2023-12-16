@@ -13,7 +13,7 @@ import React from "react";
 
 export function ArtistsTable() {
   //fetch data and set loading state
-  const { data, isLoading } = api.artist.getAll.useQuery();
+  const { data } = api.artist.getAll.useQuery();
 
   const columns = React.useMemo<ColumnDef<Artist>[]>(() => [
     {
