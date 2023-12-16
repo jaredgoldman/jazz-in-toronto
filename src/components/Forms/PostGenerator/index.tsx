@@ -7,13 +7,12 @@ import { Heading, Flex, Button, Text, Box } from '@radix-ui/themes'
 import PostImage from './components/PostImage'
 import Loading from '~/components/Loading'
 import * as Form from '@radix-ui/react-form'
-import SearchTable from '~/components/SearchContainer/components/SearchTable'
 import { Card } from '@radix-ui/themes'
 // Hooks
 import usePostGenerator from './hooks/usePostGenerator'
-import { DataType } from '~/types/enums'
 import FileUploadButton from '~/components/FileUploadButton'
 import { type FileData } from '~/types/data'
+import { EventsTable } from '~/components/Tables'
 
 export default function PostGenerator(): JSX.Element {
     const [srcs, setSrcs] = useState<Set<string>>(new Set())
@@ -27,12 +26,7 @@ export default function PostGenerator(): JSX.Element {
         isSuccess,
         error,
         events,
-        refetch
     } = usePostGenerator()
-
-    const onEdit = async () => {
-        await refetch()
-    }
 
     const removeImage = (index: number) => {
         setSrcs((prev) => {
@@ -157,12 +151,7 @@ export default function PostGenerator(): JSX.Element {
                 </Text>
             </Box>
             {events && (
-                <SearchTable
-                    data={{ type: DataType.EVENT, items: events }}
-                    isLoading={isLoading}
-                    onEdit={onEdit}
-                    showFeatured={false}
-                />
+              <EventsTable/>
             )}
         </>
     )

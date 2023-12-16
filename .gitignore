@@ -46,6 +46,7 @@ yarn-error.log*
 
 # idea
 .idea
+/quodana
 
 # gql codegen
 # /src/gql/*

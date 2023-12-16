@@ -4,8 +4,8 @@ import PostGenerator from '~/components/Forms/PostGenerator'
 import EventScraper from '~/components/Forms/EventScraper'
 import { Container, Tabs } from '@radix-ui/themes'
 import SearchApproveEvents from '~/components/SearchApproveEvents'
-import SearchEvents from '~/components/SearchEvents'
 import { Heading } from '@radix-ui/themes'
+import { EventsTable } from '~/components/Tables/Events'
 
 enum View {
     Search = 'Search',
@@ -29,7 +29,7 @@ export default function AdminEvents(): JSX.Element {
                 </Tabs.List>
                 <Container size="3">
                     <Tabs.Content value={View.Search}>
-                        <SearchEvents />
+                      <EventsTable/>
                     </Tabs.Content>
                     <Tabs.Content value={View.Approval}>
                         <SearchApproveEvents />
