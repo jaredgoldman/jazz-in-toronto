@@ -1,11 +1,11 @@
 import RootLayout from '~/layouts/RootLayout'
 import Featured from '~/components/Featured'
-import { Flex, Heading, Link, Text, Box } from '@radix-ui/themes'
+import { Flex, Heading, Link, Text } from '@radix-ui/themes'
 import Image from 'next/image'
 
 export default function Home() {
     return (
-        <RootLayout pageTitle="Jazz In Toronto | Home" fullWidth={true}>
+        <RootLayout pageTitle="Jazz In Toronto | Home">
             <Flex
                 direction="column"
                 align="center"
@@ -26,7 +26,7 @@ export default function Home() {
                 <Text
                     size={{ initial: '6', xs: '7' }}
                     align="center"
-                    className="max-w-5xl"
+                    className="max-w-2xl"
                 >
                     JazzInToronto is a not-for-profit organization dedicated to
                     promoting, connecting, and nourishing Toronto’s live music
@@ -34,13 +34,14 @@ export default function Home() {
                 </Text>
             </Flex>
             <Flex
-                className=" gap-12 bg-gray-900 py-32"
+                className=" gap-12 bg-gray-900 py-20"
                 justify="center"
                 align="center"
                 direction={{ initial: 'column', sm: 'row' }}
+                px="2"
             >
                 <Heading
-                    size="8"
+                    size="9"
                     align={{ initial: 'center', xs: 'left' }}
                     mb={{ initial: '6', xs: '0' }}
                 >
@@ -69,9 +70,9 @@ export default function Home() {
                 justify="center"
                 className="min-h-[70rem] bg-hero-pattern-2 bg-cover bg-center bg-no-repeat pb-36 pt-60"
             >
-                <Box className="max-w-5xl">
+                <Flex className="max-w-6xl" grow="1">
                     <Featured />
-                </Box>
+                </Flex>
             </Flex>
         </RootLayout>
     )

@@ -35,7 +35,7 @@ const gigDays = [
         day: 'Tuesday',
         gigs: [
             {
-                image: '/images/team.jpg',
+                image: '/images/jit-gig.jpg',
                 artist: 'Artist Name',
                 venue: 'Venue Name',
                 description:
@@ -121,10 +121,8 @@ const gigDays = [
 
 export default function RecurringGigs() {
     return (
-        <Box p="5" mb="5">
-            <Heading size="9" mb="6" align="left">
-                Recurring Gigs
-            </Heading>
+        <Box>
+            <Heading size={{ initial: '8', xs: '9' }}>Recurring Gigs</Heading>
             <Separator size="4" mb="6" />
             <Flex direction="column" gap="7">
                 {gigDays.map(({ day, gigs }) => {
@@ -167,15 +165,13 @@ export default function RecurringGigs() {
                                                         xs: 'block'
                                                     }}
                                                 >
-                                                    <AspectRatio
-                                                        ratio={1.5 / 1}
-                                                    >
-                                                        <Image
-                                                            src={gig.image}
-                                                            alt={`image for ${gigString}`}
-                                                            fill={true}
-                                                        />
-                                                    </AspectRatio>
+                                                    <Image
+                                                        src={gig.image}
+                                                        alt={`image for ${gigString}`}
+                                                        width={500}
+                                                        height={600}
+                                                        className="w-max max-w-[20rem] object-contain"
+                                                    />
                                                 </Box>
                                             )}
                                         </Flex>

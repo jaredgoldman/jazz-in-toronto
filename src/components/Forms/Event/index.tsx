@@ -35,12 +35,7 @@ export default function EventForm({
     showSubmitButton = true
 }: Props): JSX.Element {
     return (
-        <Flex
-            direction="column"
-            align="center"
-            py="9"
-            px={{ initial: '5', xs: '0' }}
-        >
+        <Flex direction="column" align="center">
             <Box className="w-full max-w-xl">
                 <Heading
                     size={{ initial: '8', xs: '9' }}

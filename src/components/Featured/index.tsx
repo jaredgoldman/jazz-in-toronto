@@ -7,7 +7,7 @@ export default function Featured() {
     const { data: featuredItems, isLoading } = api.data.getFeatured.useQuery()
 
     return (
-        <Flex mb="2" display="flex" direction="column" justify="center">
+        <Flex display="flex" direction="column" justify="center" grow="1">
             <Heading size="9" m="5">
                 Featured
             </Heading>

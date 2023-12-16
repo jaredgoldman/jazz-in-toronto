@@ -69,11 +69,15 @@ export default function DailyListings({ onChangeListingType }: Props) {
     })
 
     return (
-        <Box p="5" mb="5">
-            <Heading size="9" mb="6">
+        <Box>
+            <Heading
+                size={{ initial: '8', xs: '9' }}
+                align={{ initial: 'center', xs: 'left' }}
+                mb="6"
+            >
                 Daily Listings
             </Heading>
-            <Flex mb="5" className="gap-3">
+            <Flex mb="5" gap="3">
                 <Button
                     onClick={() => {
                         setSelectedDate(addDays(selectedDate, -1))
@@ -90,7 +94,11 @@ export default function DailyListings({ onChangeListingType }: Props) {
                     View in Calendar
                 </Button>
             </Flex>
-            <Heading mb="5">{`Events on ${format(
+            <Heading
+                size={{ initial: '3', xs: '5' }}
+                align={{ initial: 'center', xs: 'left' }}
+                mb="5"
+            >{`Events on ${format(
                 selectedDate,
                 'EEEE, MMMM do, yyyy'
             )} in Toronto, Ontario`}</Heading>
