@@ -84,6 +84,7 @@ export default function About() {
                                             xs: 'left'
                                         }}
                                         size="3"
+                                        weight="medium"
                                     >
                                         {member.name}
                                     </Text>

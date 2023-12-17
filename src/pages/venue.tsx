@@ -16,7 +16,7 @@ export default function Venue() {
                 </Text>
             }
         >
-            <Flex justify="center" px={{ initial: '5', xs: '0' }} py="6" mb="6">
+            <Flex justify="center" px={{ initial: '5', xs: '0' }} py="9">
                 <VenueForm />
             </Flex>
         </RootLayout>

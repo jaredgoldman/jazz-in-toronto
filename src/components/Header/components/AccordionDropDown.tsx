@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import * as Accordion from '@radix-ui/react-accordion'
 import Link from '~/components/Link'
-import { Flex } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
 import { ChevronDownIcon, ChevronRightIcon } from '@radix-ui/react-icons'
 
 export type Props = {
@@ -25,10 +25,10 @@ export function HeaderAccordion({ links, title }: Props) {
                     </Flex>
                 </Accordion.Trigger>
                 <Accordion.Content>
-                    <Flex direction="column" gap="1">
+                    <Flex direction="column" gap="1" pt="1">
                         {links.map((link, i) => (
-                            <Link size="1" href={link.href} key={i}>
-                                {link.title}
+                            <Link size="3" href={link.href} key={i}>
+                                <Text color="bronze">{link.title}</Text>
                             </Link>
                         ))}
                     </Flex>

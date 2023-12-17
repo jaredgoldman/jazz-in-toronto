@@ -27,6 +27,10 @@ export const navLinks = {
             title: 'Add',
             nested: [
                 {
+                    href: '/event',
+                    title: 'Event'
+                },
+                {
                     href: '/artist',
                     title: 'Artist'
                 },
@@ -34,10 +38,6 @@ export const navLinks = {
                     href: '/venue',
                     title: 'Venue'
                 },
-                {
-                    href: '/event',
-                    title: 'Event'
-                }
             ],
             href: '/'
         },

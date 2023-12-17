@@ -20,11 +20,11 @@ export function HeaderDropDown({ links }: Props) {
                 <Flex
                     direction="column"
                     align="center"
-                    gap="2"
+                    gap="4"
                     className="m-0 min-w-[6.5rem] max-w-[6.5rem] p-0"
                 >
                     {links.map((link) => (
-                        <Link href={link.href} key={link.title}>
+                        <Link href={link.href} size="3" key={link.title}>
                             {link.title}
                         </Link>
                     ))}

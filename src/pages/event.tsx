@@ -8,7 +8,7 @@ export default function Book(): JSX.Element {
 
     return (
         <RootLayout pageTitle="Jazz In Toronto | Book Your Event">
-            <Flex justify="center" py="6" px={{ initial: '5', xs: '0' }} mb="6">
+            <Flex justify="center" py="9" px={{ initial: '5', xs: '0' }}>
                 <EventForm {...eventFormProps} />
             </Flex>
         </RootLayout>

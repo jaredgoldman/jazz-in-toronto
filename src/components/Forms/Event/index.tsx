@@ -106,7 +106,7 @@ export default function EventForm({
                                     required="Please select an artist for your event"
                                 />
                                 <Link size="2" href="/artist">
-                                    or submit your band
+                                    or add an artist
                                 </Link>
                             </Box>
                         )}

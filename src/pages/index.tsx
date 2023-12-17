@@ -12,7 +12,11 @@ export default function Home() {
                 justify="start"
                 className="bg-hero-pattern bg-cover bg-center bg-no-repeat pb-60 pt-36"
             >
-                <Heading size={{ initial: '8', sm: '9' }} align="center">
+                <Heading
+                    size={{ initial: '8', sm: '9' }}
+                    align="center"
+                    weight="bold"
+                >
                     We are JazzInToronto
                 </Heading>
                 <Image

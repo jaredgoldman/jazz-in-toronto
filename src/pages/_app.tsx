@@ -8,9 +8,11 @@ import { AppType } from 'next/app'
 import { api } from '~/utils/api'
 // Assets
 import { Poppins } from 'next/font/google'
-import { Theme, ThemePanel } from '@radix-ui/themes'
 import '~/styles/globals.css'
 import '@radix-ui/themes/styles.css'
+import '../styles/theme-config.css'
+
+import { Theme, ThemePanel } from '@radix-ui/themes'
 
 const poppins = Poppins({
     weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],

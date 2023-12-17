@@ -12,10 +12,10 @@ export type Props = {
 export default function Header({ headerType }: Props): JSX.Element {
     const { data: session } = useSession()
     return (
-        <header>
+        <>
             <Flex gap="4" p="4" align="center" justify="center">
                 <Flex align="center" gap="4" justify="between" width="100%">
-                    <Heading>
+                    <Heading weight="bold">
                         <Link size="6" href="/">
                             JAZZINTORONTO
                         </Link>
@@ -54,6 +54,6 @@ export default function Header({ headerType }: Props): JSX.Element {
                 </Flex>
             </Flex>
             <Separator size="4" />
-        </header>
+        </>
     )
 }
