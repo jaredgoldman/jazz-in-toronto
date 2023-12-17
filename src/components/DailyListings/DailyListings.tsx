@@ -7,10 +7,12 @@ import {
     createColumnHelper,
     getCoreRowModel,
     flexRender,
-    SortingState
+    SortingState,
+    getSortedRowModel
 } from '@tanstack/react-table'
 import { EventWithArtistVenue } from '~/types/data'
 import Loading from '../Loading'
+import { HeaderCell } from '../Tables/components'
 
 interface Props {
     onChangeListingType: () => void
@@ -24,7 +26,7 @@ const columnHelper = createColumnHelper<EventWithArtistVenue>()
 export default function DailyListings({ onChangeListingType }: Props) {
     const [selectedDate, setSelectedDate] = useState(new Date())
 
-    const { data } = api.event.getAllByDay.useQuery({
+    const { data, isLoading, isFetched } = api.event.getAllByDay.useQuery({
         date: selectedDate
     })
 
@@ -64,6 +66,10 @@ export default function DailyListings({ onChangeListingType }: Props) {
         initialState: {
             sorting
         },
+        state: {
+            sorting
+        },
+        getSortedRowModel: getSortedRowModel(),
         onSortingChange: setSorting
     })
 
@@ -101,18 +107,13 @@ export default function DailyListings({ onChangeListingType }: Props) {
                 selectedDate,
                 'EEEE, MMMM do, yyyy'
             )} in Toronto, Ontario`}</Heading>
-            {data ? (
+            {data?.length && (
                 <Table.Root variant="surface">
                     <Table.Header>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <Table.Row key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => (
-                                    <Table.ColumnHeaderCell key={header.id}>
-                                        {flexRender(
-                                            header.column.columnDef.header,
-                                            header.getContext()
-                                        )}
-                                    </Table.ColumnHeaderCell>
+                                    <HeaderCell header={header} key={header.id}/>
                                 ))}
                             </Table.Row>
                         ))}
@@ -132,9 +133,9 @@ export default function DailyListings({ onChangeListingType }: Props) {
                         ))}
                     </Table.Body>
                 </Table.Root>
-            ) : (
-                <Loading />
             )}
+            {isFetched && !data?.length && <div>Empty state placeholder</div>}
+            {isLoading && <Loading />}
         </Box>
     )
 }
