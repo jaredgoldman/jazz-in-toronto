@@ -31,19 +31,23 @@ export default function Listings() {
                 </Text>
             }
         >
-            <Flex
-                direction="column"
-                p="6"
-                gap="6"
-                mb="6"
-                className="max-w-[75rem]"
-            >
-                {listingType === ListingType.DAILY_LISTINGS ? (
-                    <DailyListings onChangeListingType={onChangeListingType} />
-                ) : (
-                    <Calendar onChangeListingType={onChangeListingType} />
-                )}
-                <RecurringGigs />
+            <Flex width="100%" justify="center">
+                <Flex
+                    direction="column"
+                    p="6"
+                    gap="6"
+                    mb="6"
+                    className="max-w-[75rem]"
+                >
+                    {listingType === ListingType.DAILY_LISTINGS ? (
+                        <DailyListings
+                            onChangeListingType={onChangeListingType}
+                        />
+                    ) : (
+                        <Calendar onChangeListingType={onChangeListingType} />
+                    )}
+                    <RecurringGigs />
+                </Flex>
             </Flex>
         </RootLayout>
     )

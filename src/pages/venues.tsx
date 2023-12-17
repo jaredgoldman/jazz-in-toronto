@@ -30,12 +30,20 @@ export default function Venues(): JSX.Element {
                 </Text>
             }
         >
-            <Flex direction="column" mb="6" p="6">
-                <Heading mb="8" size="9">
-                    Venues
-                </Heading>
-                <Flex direction="column" gap="5">
-                    {venueCards}
+            <Flex width="100%" justify="center">
+                <Flex
+                    direction="column"
+                    mb="6"
+                    p={{initial: "4", xs: "6"}}
+                    align="start"
+                    className='xs:min-w-none lg:min-w-[70rem]'
+                >
+                    <Heading mb="8" size="9">
+                        Venues
+                    </Heading>
+                    <Flex direction="column" gap="5">
+                        {venueCards}
+                    </Flex>
                 </Flex>
             </Flex>
         </RootLayout>
