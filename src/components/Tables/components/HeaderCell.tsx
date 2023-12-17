@@ -1,6 +1,10 @@
 import { Table, Flex, Box } from '@radix-ui/themes'
 import { Header } from '@tanstack/react-table'
-import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
+import {
+    ChevronDownIcon,
+    ChevronUpIcon,
+    ChevronRightIcon
+} from '@radix-ui/react-icons'
 import { flexRender } from '@tanstack/react-table'
 
 export type Props<TData> = {
@@ -16,7 +20,9 @@ export function HeaderCell<TData>({ header }: Props<TData>) {
     return (
         <Table.ColumnHeaderCell
             onClick={() => header.column.toggleSorting()}
-            className={header.column.getCanSort() ? 'cursor-pointer select-none' : ''}
+            className={
+                header.column.getCanSort() ? 'cursor-pointer select-none' : ''
+            }
         >
             <Flex align="center" gap="2">
                 {header.isPlaceholder
@@ -28,7 +34,7 @@ export function HeaderCell<TData>({ header }: Props<TData>) {
                 <Box>
                     {sortingIcons[
                         header.column.getIsSorted() as 'desc' | 'asc'
-                    ] ?? null}
+                    ] ?? <ChevronRightIcon />}
                 </Box>
             </Flex>
         </Table.ColumnHeaderCell>
