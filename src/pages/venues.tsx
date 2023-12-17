@@ -1,9 +1,8 @@
+import { useMemo } from 'react'
 import RootLayout from '~/layouts/RootLayout'
 import VenueCard from '~/components/VenueCard/VenueCard'
 import { api } from '~/utils/api'
-import { Flex, Heading, Box, Callout, Text } from '@radix-ui/themes'
-import { InfoCircledIcon } from '@radix-ui/react-icons'
-import { useMemo } from 'react'
+import { Flex, Heading, Text } from '@radix-ui/themes'
 import Link from '~/components/Link'
 
 export default function Venues(): JSX.Element {

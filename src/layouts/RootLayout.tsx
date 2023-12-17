@@ -1,7 +1,7 @@
 import Header from '~/components/Header'
 import Head from 'next/head'
 import Footer from '~/components/Footer'
-import { Container, Flex, Text, Callout } from '@radix-ui/themes'
+import { Flex, Callout } from '@radix-ui/themes'
 import { HeaderType } from '~/components/Header/utils'
 import { ReactNode } from 'react'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
