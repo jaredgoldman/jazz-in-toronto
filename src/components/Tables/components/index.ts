@@ -1,1 +1,1 @@
-export {HeaderCell} from "./HeaderCell"
+export { HeaderCell } from './HeaderCell'
