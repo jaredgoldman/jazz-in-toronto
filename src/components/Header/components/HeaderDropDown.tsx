@@ -11,7 +11,7 @@ export function HeaderDropDown({ links }: Props) {
             <DropdownMenu.Trigger>
                 <Button
                     variant="surface"
-                    className="min-w-[7.5rem] max-w-[7.5rem]"
+                    className="m-0 min-w-[7.5rem] max-w-[7.5rem] p-0"
                 >
                     Add
                 </Button>
@@ -19,8 +19,9 @@ export function HeaderDropDown({ links }: Props) {
             <DropdownMenu.Content size="2" align="center">
                 <Flex
                     direction="column"
+                    align="center"
                     gap="2"
-                    className="min-w-[7.5rem] max-w-[7.5rem]"
+                    className="m-0 min-w-[6.5rem] max-w-[6.5rem] p-0"
                 >
                     {links.map((link) => (
                         <Link href={link.href} key={link.title}>

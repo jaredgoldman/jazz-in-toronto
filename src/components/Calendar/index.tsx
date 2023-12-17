@@ -1,18 +1,16 @@
 import { useState } from 'react'
-// Components
 import CalendarDay from './components/CalendarDay'
 import { Flex, Button, Table, Heading } from '@radix-ui/themes'
 import Loading from '../Loading'
-// Hooks
 import useCalendar from './hooks/useCalendar'
-// Utils
 import { api } from '~/utils/api'
 import { getDaysOfTheWeek } from '~/utils/constants'
 
-interface Props {
+export type Props = {
     onChangeListingType: () => void
 }
-export default function Calendar({ onChangeListingType }: Props): JSX.Element {
+
+export default function Calendar({ onChangeListingType }: Props) {
     const [selectedDate, setSelectedDate] = useState(new Date())
     const currentYear = selectedDate.getFullYear()
     const currentMonth = selectedDate.getMonth()
@@ -63,7 +61,7 @@ export default function Calendar({ onChangeListingType }: Props): JSX.Element {
     const eventRows = mapEventsToCalendarRows()
 
     return (
-        <Flex direction="column" justify="center" p={{ initial: '5', xs: '0' }}>
+        <Flex direction="column" justify="center" width="100%" className="max-w-[75rem]">
             <Heading size="9" mb="6">
                 Calendar
             </Heading>

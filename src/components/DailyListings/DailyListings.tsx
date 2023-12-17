@@ -74,7 +74,7 @@ export default function DailyListings({ onChangeListingType }: Props) {
     })
 
     return (
-        <Box>
+        <Flex direction="column" grow="1">
             <Heading
                 size={{ initial: '8', xs: '9' }}
                 align={{ initial: 'center', xs: 'left' }}
@@ -136,6 +136,6 @@ export default function DailyListings({ onChangeListingType }: Props) {
             )}
             {isFetched && !data?.length && <div>Empty state placeholder</div>}
             {isLoading && <Loading />}
-        </Box>
+        </Flex>
     )
 }

@@ -114,8 +114,8 @@ const gigDays = [
 
 export default function RecurringGigs() {
     return (
-        <Box>
-            <Heading size={{ initial: '8', xs: '9' }}>Recurring Gigs</Heading>
+        <Flex grow="1" direction="column">
+            <Heading size={{ initial: '8', md: '9' }}>Recurring Gigs</Heading>
             <Separator size="4" mb="6" />
             <Flex direction="column" gap="7">
                 {gigDays.map(({ day, gigs }) => {
@@ -155,7 +155,7 @@ export default function RecurringGigs() {
                                                 <Box
                                                     display={{
                                                         initial: 'none',
-                                                        xs: 'block'
+                                                        sm: 'block'
                                                     }}
                                                 >
                                                     <Image
@@ -175,6 +175,6 @@ export default function RecurringGigs() {
                     )
                 })}
             </Flex>
-        </Box>
+        </Flex>
     )
 }

@@ -7,11 +7,6 @@ export default function Venue() {
     return (
         <RootLayout
             pageTitle="Jazz In Toronto | Submit your venue"
-            breadcrumbs={{
-                href: '/event',
-                title: 'bookings',
-                currentPageTitle: 'add venue'
-            }}
             calloutContent={
                 <Text>
                     Submit your venue gig here and at least 24hrs in advance so
