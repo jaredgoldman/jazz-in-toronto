@@ -2,10 +2,8 @@ import PlacesAutocomplete from '../Fields/PlacesAutoComplete'
 import { Input, Toggle } from '../Fields'
 import * as Form from '@radix-ui/react-form'
 import Upload from '../Fields/Upload'
-import { Heading, Text, Flex, Box, Button, Callout } from '@radix-ui/themes'
+import { Heading, Text, Flex, Box, Button } from '@radix-ui/themes'
 import useVenueForm from './hooks/useVenueForm'
-import { InfoCircledIcon } from '@radix-ui/react-icons'
-import Link from '~/components/Link'
 
 export default function VenueForm() {
     const {
@@ -21,23 +19,20 @@ export default function VenueForm() {
         error
     } = useVenueForm()
     return (
-        <Flex direction="column" align="center" py="9">
-            <Box className="w-full max-w-xl">
-                <Heading size="9" mb="6">
+        <Flex
+            direction="column"
+            align="center"
+            width="100%"
+            className="max-w-xl"
+        >
+            <Box className="w-full">
+                <Heading
+                    size={{ initial: '8', xs: '9' }}
+                    mb="6"
+                    align={{ initial: 'center', xs: 'left' }}
+                >
                     {isEditing ? 'Edit venue' : 'Add your venue'}
                 </Heading>
-                <Callout.Root my="6">
-                    <Callout.Icon>
-                        <InfoCircledIcon />
-                    </Callout.Icon>
-                    <Callout.Text>
-                        Submit your venue gig here and at least 24hrs in advance
-                        so our admins have time to review and approve your
-                        listing. Once your venue is approved, it will appear in
-                        the <Link href="/venues">venues section</Link>
-                    </Callout.Text>
-                </Callout.Root>
-
                 <Form.Root onSubmit={submit}>
                     <Flex direction="column" gap="5">
                         <Input

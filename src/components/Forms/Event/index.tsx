@@ -35,9 +35,13 @@ export default function EventForm({
     showSubmitButton = true
 }: Props): JSX.Element {
     return (
-        <Flex direction="column" align="center" py="9">
+        <Flex direction="column" align="center">
             <Box className="w-full max-w-xl">
-                <Heading size="9" mb="6">
+                <Heading
+                    size={{ initial: '8', xs: '9' }}
+                    align={{ initial: 'center', xs: 'left' }}
+                    mb="6"
+                >
                     Book Your Gig
                 </Heading>
                 <Callout.Root my="6">

@@ -2,6 +2,7 @@ import { Dialog, Flex } from '@radix-ui/themes'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import Link from '~/components/Link'
 import { HeaderType, navLinks } from '../utils'
+import { HeaderAccordion } from './AccordionDropDown'
 
 interface Props {
     headerType: HeaderType
@@ -28,11 +29,22 @@ export function HeaderDrawer({ headerType }: Props) {
                     <Link size="4" href="/">
                         Home
                     </Link>
-                    {navLinks[headerType].map((link) => (
-                        <Link size="4" href={link.href} key={link.href}>
-                            {link.title}
-                        </Link>
-                    ))}
+                    {navLinks[headerType].map((link) => {
+                        if ('nested' in link && link.nested) {
+                            return (
+                                <HeaderAccordion
+                                    key={link.href}
+                                    links={link.nested}
+                                    title={link.title}
+                                />
+                            )
+                        }
+                        return (
+                            <Link size="4" href={link.href} key={link.href}>
+                                {link.title}
+                            </Link>
+                        )
+                    })}
                 </Flex>
             </Dialog.Content>
         </Dialog.Root>

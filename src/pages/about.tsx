@@ -2,7 +2,7 @@
 import RootLayout from '~/layouts/RootLayout'
 import Image from 'next/image'
 import { Badge, Link } from '@radix-ui/themes'
-import { Flex, Heading, Text, Grid, Box } from '@radix-ui/themes'
+import { Flex, Heading, Text, Grid } from '@radix-ui/themes'
 
 const staffMembers = [
     {
@@ -31,14 +31,14 @@ export default function About() {
                 align="center"
                 width="100%"
                 mx="auto"
-                p="9"
+                p={{ initial: '5', xs: '9' }}
             >
-                <Heading mb="9" align="center" size="9">
+                <Heading mb="8" align="center" size={{ initial: '8', xs: '9' }}>
                     About Us
                 </Heading>
                 <Text
                     mb="5"
-                    align="left"
+                    align={{ initial: 'center', xs: 'left' }}
                     mx={{ initial: '4', md: '0' }}
                     className="max-w-2xl"
                 >
@@ -68,12 +68,26 @@ export default function About() {
                     >
                         {staffMembers.map((member) => {
                             return (
-                                <Box key={member.name}>
-                                    <Heading className="font-bold">
+                                <Flex direction="column" key={member.name}>
+                                    <Heading
+                                        align={{
+                                            initial: 'center',
+                                            xs: 'left'
+                                        }}
+                                        className="font-bold"
+                                    >
                                         {member.title}
                                     </Heading>
-                                    <Text>{member.name}</Text>
-                                </Box>
+                                    <Text
+                                        align={{
+                                            initial: 'center',
+                                            xs: 'left'
+                                        }}
+                                        size="3"
+                                    >
+                                        {member.name}
+                                    </Text>
+                                </Flex>
                             )
                         })}
                     </Grid>
@@ -95,7 +109,7 @@ export default function About() {
                 </Flex>
                 <Text
                     mb="5"
-                    align="left"
+                    align={{ initial: 'center', xs: 'left' }}
                     className="max-w-2xl"
                     mx={{ initial: '4', md: '0' }}
                 >
@@ -112,7 +126,12 @@ export default function About() {
                         my="6"
                     >
                         <Flex direction="column" mb={{ initial: '5', md: '0' }}>
-                            <Heading size="3">Paypal</Heading>
+                            <Heading
+                                size="3"
+                                align={{ initial: 'center', xs: 'left' }}
+                            >
+                                Paypal
+                            </Heading>
                             <Link
                                 className="text-blue-500"
                                 href="https://paypal.me/JazzInToronto"
@@ -121,7 +140,12 @@ export default function About() {
                             </Link>
                         </Flex>
                         <Flex direction="column">
-                            <Heading size="3">ETransfer</Heading>
+                            <Heading
+                                size="3"
+                                align={{ initial: 'center', xs: 'left' }}
+                            >
+                                ETransfer
+                            </Heading>
                             <Link
                                 className="text-blue-500"
                                 href="mailto:jazzintoronto@outlook.com"

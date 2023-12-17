@@ -18,10 +18,19 @@ export default function ArtistForm() {
     } = useArtistForm()
 
     return (
-        <Flex direction="column" align="center" py="9">
-            <Box className="w-full max-w-2xl">
+        <Flex
+            direction="column"
+            align="center"
+            width="100%"
+            className="max-w-xl"
+        >
+            <Box className="w-full">
                 <Form.Root onSubmit={submit}>
-                    <Heading size="9" mb="6">
+                    <Heading
+                        size={{ initial: '8', xs: '9' }}
+                        align={{ initial: 'center', xs: 'left' }}
+                        mb="6"
+                    >
                         {isEditing ? `Edit artist` : 'Submit artist'}
                     </Heading>
                     <Flex direction="column" gap="5">

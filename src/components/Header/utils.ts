@@ -24,8 +24,22 @@ export const navLinks = {
     ],
     [HeaderType.Public]: [
         {
-            href: '/event',
-            title: 'Add Your Gig'
+            title: 'Add',
+            nested: [
+                {
+                    href: '/artist',
+                    title: 'Artist'
+                },
+                {
+                    href: '/venue',
+                    title: 'Venue'
+                },
+                {
+                    href: '/event',
+                    title: 'Event'
+                }
+            ],
+            href: '/'
         },
         {
             href: '/listings',
