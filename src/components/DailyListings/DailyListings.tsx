@@ -10,10 +10,14 @@ import {
     SortingState
 } from '@tanstack/react-table'
 import { EventWithArtistVenue } from '~/types/data'
+import Loading from '../Loading'
 
 interface Props {
     onChangeListingType: () => void
 }
+
+const columnHelper = createColumnHelper<EventWithArtistVenue>()
+
 /**
  * Component to show daily listings in chronologcal order per day
  */
@@ -24,24 +28,19 @@ export default function DailyListings({ onChangeListingType }: Props) {
         date: selectedDate
     })
 
-    const columnHelper = createColumnHelper<EventWithArtistVenue>()
-
     const columns = useMemo(
         () => [
             columnHelper.accessor((row) => row.venue.name, {
-                id: 'venueName',
                 header: 'Venue Name',
                 cell: (info) => info.getValue()
             }),
             columnHelper.accessor((row) => row.artist.name, {
-                id: 'artist',
                 header: 'Artist',
                 cell: (info) => info.getValue()
             }),
             columnHelper.accessor(
                 (row) => ({ startDate: row.startDate, endDate: row.endDate }),
                 {
-                    id: 'time',
                     header: 'Time',
                     cell: (info) =>
                         `${format(
@@ -51,7 +50,7 @@ export default function DailyListings({ onChangeListingType }: Props) {
                 }
             )
         ],
-        [columnHelper]
+        []
     )
 
     const [sorting, setSorting] = useState<SortingState>([
@@ -102,36 +101,40 @@ export default function DailyListings({ onChangeListingType }: Props) {
                 selectedDate,
                 'EEEE, MMMM do, yyyy'
             )} in Toronto, Ontario`}</Heading>
-            <Table.Root variant="surface">
-                <Table.Header>
-                    {table.getHeaderGroups().map((headerGroup) => (
-                        <Table.Row key={headerGroup.id}>
-                            {headerGroup.headers.map((header) => (
-                                <Table.ColumnHeaderCell key={header.id}>
-                                    {flexRender(
-                                        header.column.columnDef.header,
-                                        header.getContext()
-                                    )}
-                                </Table.ColumnHeaderCell>
-                            ))}
-                        </Table.Row>
-                    ))}
-                </Table.Header>
-                <Table.Body>
-                    {table.getRowModel().rows.map((row) => (
-                        <Table.Row key={row.id}>
-                            {row.getVisibleCells().map((cell) => (
-                                <Table.Cell key={cell.id}>
-                                    {flexRender(
-                                        cell.column.columnDef.cell,
-                                        cell.getContext()
-                                    )}
-                                </Table.Cell>
-                            ))}
-                        </Table.Row>
-                    ))}
-                </Table.Body>
-            </Table.Root>
+            {data ? (
+                <Table.Root variant="surface">
+                    <Table.Header>
+                        {table.getHeaderGroups().map((headerGroup) => (
+                            <Table.Row key={headerGroup.id}>
+                                {headerGroup.headers.map((header) => (
+                                    <Table.ColumnHeaderCell key={header.id}>
+                                        {flexRender(
+                                            header.column.columnDef.header,
+                                            header.getContext()
+                                        )}
+                                    </Table.ColumnHeaderCell>
+                                ))}
+                            </Table.Row>
+                        ))}
+                    </Table.Header>
+                    <Table.Body>
+                        {table.getRowModel().rows.map((row) => (
+                            <Table.Row key={row.id}>
+                                {row.getVisibleCells().map((cell) => (
+                                    <Table.Cell key={cell.id}>
+                                        {flexRender(
+                                            cell.column.columnDef.cell,
+                                            cell.getContext()
+                                        )}
+                                    </Table.Cell>
+                                ))}
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table.Root>
+            ) : (
+                <Loading />
+            )}
         </Box>
     )
 }
