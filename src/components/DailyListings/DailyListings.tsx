@@ -113,7 +113,7 @@ export default function DailyListings({ onChangeListingType }: Props) {
                         {table.getHeaderGroups().map((headerGroup) => (
                             <Table.Row key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => (
-                                    <HeaderCell header={header} />
+                                    <HeaderCell header={header} key={header.id}/>
                                 ))}
                             </Table.Row>
                         ))}

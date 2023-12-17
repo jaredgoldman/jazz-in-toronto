@@ -73,7 +73,7 @@ export function ArtistsTable() {
                         {table.getHeaderGroups().map((headerGroup) => (
                             <Table.Row key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => (
-                                    <HeaderCell header={header} />
+                                    <HeaderCell header={header} key={header.id}/>
                                 ))}
                             </Table.Row>
                         ))}
