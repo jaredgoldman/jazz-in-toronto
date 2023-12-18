@@ -1,6 +1,7 @@
 //local components
 import { api } from '~/utils/api'
 import { Artist } from '~/types/data'
+import ArtistFrom from '../Forms/Artist'
 //modules
 import {
   ColumnDef,
@@ -9,11 +10,25 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { Table } from '@radix-ui/themes';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import ArtistForm from '../Forms/Artist';
+import { Button } from '@radix-ui/themes';
 
 export function ArtistsTable() {
   //fetch data and set loading state
   const { data } = api.artist.getAll.useQuery();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedArtist, setSelectedArtist] = useState<Artist | null>(null);
+
+  const handleOpenModal = (artist: Artist | null) => {
+    setSelectedArtist(artist);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedArtist(null);
+    setIsModalOpen(false);
+  };
 
   const columns = useMemo<ColumnDef<Artist>[]>(() => [
     {
@@ -46,6 +61,15 @@ export function ArtistsTable() {
       cell: info => info.renderValue()?.toString(),
       header: () => <span>Featured</span>,
     },
+    {
+      id: 'edit',
+      cell: ({ row }) => {
+        <Button onClick={() => void handleOpenModal(row.original) }>
+          Edit
+        </Button>
+      },
+      header: () => <span>Edit</span>
+    }
   ], [])
 
 
@@ -78,6 +102,12 @@ export function ArtistsTable() {
               {row.getVisibleCells().map(cell => (
                 <Table.Cell key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  {isModalOpen && (
+                    <ArtistForm
+                      artist={ selectedArtist }
+                      onClose={ handleCloseModal }
+                    />
+                  )}
                 </Table.Cell>
               ))}
             </Table.Row>
