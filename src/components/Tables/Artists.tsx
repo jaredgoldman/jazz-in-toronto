@@ -64,7 +64,7 @@ export function ArtistsTable() {
     {
       id: 'edit',
       cell: ({ row }) => {
-        <Button onClick={() => void handleOpenModal(row.original) }>
+        <Button onClick={() => handleOpenModal(row.original) }>
           Edit
         </Button>
       },
