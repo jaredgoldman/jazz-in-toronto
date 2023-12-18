@@ -52,7 +52,16 @@ export function ArtistsTable() {
                 cell: (info) => info.renderValue()?.toString(),
                 header: () => <span>Featured</span>,
                 enableColumnFilter: false
-            }
+            },
+          {
+            id: 'edit',
+            cell: ({ row }) => {
+              <Button onClick={() => void handleOpenModal(row.original) }>
+                Edit
+              </Button>
+            },
+            header: () => <span>Edit</span>
+          }
         ],
         []
     )
