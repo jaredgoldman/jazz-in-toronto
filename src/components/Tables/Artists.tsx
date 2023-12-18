@@ -26,6 +26,18 @@ export function ArtistsTable() {
 	const router = useRouter();
 	const setFeaturedMutation = api.artist.setFeatured.useMutation();
 	const deleteMutation = api.artist.delete.useMutation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedArtist, setSelectedArtist] = useState<Artist | null>(null);
+
+  const handleOpenModal = (artist: Artist | null) => {
+    setSelectedArtist(artist);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedArtist(null);
+    setIsModalOpen(false);
+  };
 
 	const handleEditClick = useCallback(
 		async (artist: Artist) => {
@@ -140,15 +152,21 @@ export function ArtistsTable() {
 						{table.getRowModel().rows.map((row) => (
 							<Table.Row key={row.id}>
 								{row.getVisibleCells().map((cell) => (
-									<Table.Cell key={cell.id}>
-										{flexRender(cell.column.columnDef.cell, cell.getContext())}
-									</Table.Cell>
-								))}
-							</Table.Row>
-						))}
-					</Table.Body>
-				</Table.Root>
-			)}
+                <Table.Cell key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  {isModalOpen && (
+                    <ArtistForm
+                      artist={ selectedArtist }
+                      onClose={ handleCloseModal }
+                    />
+                  )}
+                </Table.Cell>
+              ))}
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table.Root>
+   )}
 			{isFetched && !data?.length && <div>Empty state placeholder</div>}
 			{isLoading && <Loading />}
 		</Box>
