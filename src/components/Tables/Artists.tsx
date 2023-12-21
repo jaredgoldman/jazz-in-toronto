@@ -98,22 +98,28 @@ export function ArtistsTable() {
                                         header={header}
                                         key={header.id}
                                     />
-                                ))}
-                            </Table.Row>
-                        ))}
-                    </Table.Header>
-                    <Table.Body>
-                        {table.getRowModel().rows.map((row) => (
-                            <Table.Row key={row.id}>
-                                {row.getVisibleCells().map((cell) => (
-                                    <Table.Cell key={cell.id}>
-                                        {flexRender(
-                                            cell.column.columnDef.cell,
-                                            cell.getContext()
-                                        )}
-                                    </Table.Cell>
-                                ))}
-                            </Table.Row>
+                ))}
+              </Table.Row>
+            ))}
+          </Table.Header>
+          <Table.Body>
+            {table.getRowModel().rows.map((row) => (
+              <Table.Row key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <Table.Cell key={cell.id}>
+                    {flexRender(
+                      cell.column.columnDef.cell,
+                      cell.getContext()
+                    )}
+                  </Table.Cell>
+                ))}
+                <Table.Cell key="edit">
+                  <ArtistFormContainer
+                    isOpen={isEditing}
+                    onClose={() => setIsEditing(false)}
+                  />
+                </Table.Cell>
+              </Table.Row>
                         ))}
                     </Table.Body>
                 </Table.Root>
