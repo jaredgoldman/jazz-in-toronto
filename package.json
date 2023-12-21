@@ -59,6 +59,8 @@
         "react-dropzone": "^14.2.3",
         "react-hook-form": "^7.45.4",
         "react-icons": "link:@types/@radix-ui/react-icons",
+        "react-router": "^6.21.0",
+        "react-router-dom": "^6.21.0",
         "server": "link:@trpc/react-query/server",
         "superjson": "1.12.2",
         "uploadthing": "^5.2.1",
