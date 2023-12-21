@@ -51,4 +51,4 @@ yarn-error.log*
 # gql codegen
 # /src/gql/*
 data
-
+/.flyboy/

@@ -4,18 +4,18 @@ import Upload from '../Fields/Upload'
 import { Heading, Flex, Text, Box, Button } from '@radix-ui/themes'
 import useArtistForm from './hooks/useArtistForm'
 
-export default function ArtistForm() {
-    const {
-        submit,
-        isEditing,
-        errors,
-        control,
-        onUpload,
-        handleDeletePhoto,
-        artistMutationIsSuccess,
-        editArtistMutationIsSuccess,
-        error
-    } = useArtistForm()
+export default function ArtistForm({ selectedArtist }) {
+  const {
+    submit,
+    isEditing,
+    errors,
+    control,
+    onUpload,
+    handleDeletePhoto,
+    artistMutationIsSuccess,
+    editArtistMutationIsSuccess,
+    error
+  } = useArtistForm(selectedArtist)
 
     return (
         <Flex
