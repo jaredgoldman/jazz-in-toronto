@@ -29,7 +29,6 @@ export function ArtistsTable() {
       params.set('instagramHandle', artist.instagramHandle || '')
       params.set('website', artist.website || '')
       params.set('featured', artist.featured.toString())
-      params.set('modalIsOpen', 'true')
 
       await router.push(
         {
