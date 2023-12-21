@@ -10,7 +10,7 @@ import {
   useReactTable
 } from '@tanstack/react-table'
 import { Table } from '@radix-ui/themes'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 
 export function ArtistsTable() {
@@ -18,6 +18,7 @@ export function ArtistsTable() {
   const { data } = api.artist.getAll.useQuery()
 
   const router = useRouter()
+  const [isEditing, setIsEditing] = useState(false)
 
   const handleEditClick = useCallback(
     async (artist: Artist) => {
@@ -41,6 +42,7 @@ export function ArtistsTable() {
     },
     [router]
   )
+
   const columns = useMemo<ColumnDef<Artist>[]>(
     () => [
       {
@@ -79,7 +81,7 @@ export function ArtistsTable() {
           return (
             <>
               <div onClick={() => handleEditClick(row.original)}>
-                <ArtistFormContainer />
+                EDIT
               </div>
             </>
           )
@@ -128,6 +130,12 @@ export function ArtistsTable() {
                     )}
                   </Table.Cell>
                 ))}
+                <Table.Cell key="edit">
+                  <ArtistFormContainer
+                    isOpen={isEditing}
+                    onClose={() => setIsEditing(false)}
+                  />
+                </Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>
