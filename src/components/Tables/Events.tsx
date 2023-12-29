@@ -16,6 +16,7 @@ import { format } from 'date-fns'
 import { useMemo } from 'react'
 import Loading from '../Loading'
 import { HeaderCell } from './components'
+import { fuzzyFilter } from './utils/filters'
 
 export function EventsTable() {
     const [filteredDate, setFilteredDate] = useState<Date>(new Date())
@@ -89,6 +90,9 @@ export function EventsTable() {
         state: {
             sorting,
             columnFilters
+        },
+        filterFns: {
+            fuzzy: fuzzyFilter
         },
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
