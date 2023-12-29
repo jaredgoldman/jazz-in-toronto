@@ -1,9 +1,9 @@
 import ArtistForm from "~/components/Forms/Artist";
 import RootLayout from "~/layouts/RootLayout";
 
-export default function Artist() {
+export default function EditArtist() {
 	return (
-		<RootLayout pageTitle="Jazz In Toronto | Submit your artist">
+		<RootLayout pageTitle="Jazz in Toronto | Edit Artist">
 			<ArtistForm />
 		</RootLayout>
 	);
