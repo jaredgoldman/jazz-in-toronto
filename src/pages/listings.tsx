@@ -31,7 +31,14 @@ export default function Listings() {
                 </Text>
             }
         >
-            <Flex width="100%" align="center" direction="column" p="6" gap="9">
+            <Flex
+                width="100%"
+                align="center"
+                direction="column"
+                px="6"
+                py="9"
+                gap="9"
+            >
                 {listingType === ListingType.DAILY_LISTINGS ? (
                     <Flex width="100%" className="max-w-[65rem]">
                         <DailyListings
