@@ -8,10 +8,13 @@ import {
     flexRender,
     getCoreRowModel,
     useReactTable,
-    getSortedRowModel
+    getSortedRowModel,
+    getFilteredRowModel,
+    ColumnFiltersState
 } from '@tanstack/react-table'
 import { Table, Box } from '@radix-ui/themes'
 import Loading from '../Loading'
+import { fuzzyFilter } from './utils/filters'
 
 export function ArtistsTable() {
     const { data, isFetched, isLoading } = api.artist.getAll.useQuery()
@@ -36,33 +39,42 @@ export function ArtistsTable() {
             {
                 accessorKey: 'instagramHandle',
                 cell: (info) => info.getValue(),
-                header: () => <span>Instagram Handle</span>
+                header: () => <span>Instagram</span>
             },
             {
                 accessorKey: 'active',
                 cell: (info) => info.renderValue()?.toString(),
-                header: () => <span>Active</span>
+                header: () => <span>Active</span>,
+                enableColumnFilter: false
             },
             {
                 accessorKey: 'featured',
                 cell: (info) => info.renderValue()?.toString(),
-                header: () => <span>Featured</span>
+                header: () => <span>Featured</span>,
+                enableColumnFilter: false
             }
         ],
         []
     )
 
     const [sorting, setSorting] = useState<SortingState>([])
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
     const table = useReactTable<Artist>({
         data: data ?? [],
         columns,
         state: {
-            sorting
+            sorting,
+            columnFilters
+        },
+        filterFns: {
+            fuzzy: fuzzyFilter
         },
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
-        onSortingChange: setSorting
+        onSortingChange: setSorting,
+        onColumnFiltersChange: setColumnFilters,
+        getFilteredRowModel: getFilteredRowModel()
     })
 
     return (
@@ -73,7 +85,10 @@ export function ArtistsTable() {
                         {table.getHeaderGroups().map((headerGroup) => (
                             <Table.Row key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => (
-                                    <HeaderCell header={header} key={header.id}/>
+                                    <HeaderCell
+                                        header={header}
+                                        key={header.id}
+                                    />
                                 ))}
                             </Table.Row>
                         ))}

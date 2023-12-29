@@ -20,28 +20,7 @@ export default function AdminEvents(): JSX.Element {
             <Heading align="center" size="9" mb="9">
                 Events
             </Heading>
-            <Tabs.Root defaultValue={View.Search}>
-                <Tabs.List>
-                    <Tabs.Trigger value={View.Search}>Search</Tabs.Trigger>
-                    <Tabs.Trigger value={View.Approval}>Approval</Tabs.Trigger>
-                    <Tabs.Trigger value={View.Scrape}>Scrape</Tabs.Trigger>
-                    <Tabs.Trigger value={View.Post}>Post</Tabs.Trigger>
-                </Tabs.List>
-                <Container size="3">
-                    <Tabs.Content value={View.Search}>
-                      <EventsTable/>
-                    </Tabs.Content>
-                    <Tabs.Content value={View.Approval}>
-                        <SearchApproveEvents />
-                    </Tabs.Content>
-                    <Tabs.Content value={View.Scrape}>
-                        <EventScraper />
-                    </Tabs.Content>
-                    <Tabs.Content value={View.Post}>
-                        <PostGenerator />
-                    </Tabs.Content>
-                </Container>
-            </Tabs.Root>
+            <EventsTable />
         </AdminLayout>
     )
 }

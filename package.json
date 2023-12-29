@@ -33,6 +33,7 @@
         "@radix-ui/themes": "^1.0.0",
         "@sparticuz/chromium-min": "^115.0.0",
         "@t3-oss/env-nextjs": "^0.3.1",
+        "@tanstack/match-sorter-utils": "^8.8.4",
         "@tanstack/react-query": "^4.29.7",
         "@tanstack/react-table": "^8.10.7",
         "@trpc/client": "^10.26.0",
