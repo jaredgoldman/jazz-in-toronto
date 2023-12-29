@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Button, Heading, Flex, Box, Table } from '@radix-ui/themes'
+import { Button, Heading, Flex, Table } from '@radix-ui/themes'
 import { api } from '~/utils/api'
 import { addDays, format } from 'date-fns'
 import {
@@ -13,6 +13,7 @@ import {
 import { EventWithArtistVenue } from '~/types/data'
 import Loading from '../Loading'
 import { HeaderCell } from '../Tables/components'
+import { fuzzyFilter } from '../Tables/utils/filters'
 
 interface Props {
     onChangeListingType: () => void
@@ -34,11 +35,13 @@ export default function DailyListings({ onChangeListingType }: Props) {
         () => [
             columnHelper.accessor((row) => row.venue.name, {
                 header: 'Venue Name',
-                cell: (info) => info.getValue()
+                cell: (info) => info.getValue(),
+                enableColumnFilter: false
             }),
             columnHelper.accessor((row) => row.artist.name, {
                 header: 'Artist',
-                cell: (info) => info.getValue()
+                cell: (info) => info.getValue(),
+                enableColumnFilter: false
             }),
             columnHelper.accessor(
                 (row) => ({ startDate: row.startDate, endDate: row.endDate }),
@@ -48,7 +51,8 @@ export default function DailyListings({ onChangeListingType }: Props) {
                         `${format(
                             info.getValue().startDate,
                             'h:mm a'
-                        )} - ${format(info.getValue().endDate, `h:mm a`)}`
+                        )} - ${format(info.getValue().endDate, `h:mm a`)}`,
+                    enableColumnFilter: false
                 }
             )
         ],
@@ -68,6 +72,9 @@ export default function DailyListings({ onChangeListingType }: Props) {
         },
         state: {
             sorting
+        },
+        filterFns: {
+            fuzzy: fuzzyFilter
         },
         getSortedRowModel: getSortedRowModel(),
         onSortingChange: setSorting
@@ -113,7 +120,10 @@ export default function DailyListings({ onChangeListingType }: Props) {
                         {table.getHeaderGroups().map((headerGroup) => (
                             <Table.Row key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => (
-                                    <HeaderCell header={header} key={header.id}/>
+                                    <HeaderCell
+                                        header={header}
+                                        key={header.id}
+                                    />
                                 ))}
                             </Table.Row>
                         ))}

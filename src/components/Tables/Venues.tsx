@@ -6,12 +6,15 @@ import {
     getCoreRowModel,
     useReactTable,
     SortingState,
-    getSortedRowModel
+    getSortedRowModel,
+    getFilteredRowModel,
+    ColumnFiltersState
 } from '@tanstack/react-table'
 import { Venue } from '~/types/data'
 import { Table, Box } from '@radix-ui/themes'
 import { HeaderCell } from './components'
 import Loading from '../Loading'
+import { fuzzyFilter } from './utils/filters'
 
 export function VenuesTable() {
     const { data, isFetched, isLoading } = api.venue.getAll.useQuery()
@@ -39,45 +42,56 @@ export function VenuesTable() {
                 header: () => <span>Website</span>
             },
             {
-                accessorKey: 'active',
-                cell: (info) => info.getValue()?.toString(),
-                header: () => <span>Active</span>
-            },
-            {
                 accessorKey: 'instagramHandle',
                 cell: (info) => info.getValue(),
                 header: () => <span>Instagram</span>
             },
             {
+                accessorKey: 'active',
+                cell: (info) => info.getValue()?.toString(),
+                header: () => <span>Active</span>,
+                enableColumnFilter: false
+            },
+            {
                 accessorKey: 'featured',
                 cell: (info) => info.getValue()?.toString(),
-                header: () => <span>Featured</span>
+                header: () => <span>Featured</span>,
+                enableColumnFilter: false
             }
         ],
         []
     )
 
     const [sorting, setSorting] = useState<SortingState>([])
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
     const table = useReactTable<Venue>({
         data: data ?? [],
         columns,
-        state: { sorting },
+        state: { sorting, columnFilters },
+        filterFns: {
+            fuzzy: fuzzyFilter
+        },
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
-        onSortingChange: setSorting
+        onSortingChange: setSorting,
+        onColumnFiltersChange: setColumnFilters,
+        getFilteredRowModel: getFilteredRowModel()
     })
 
     return (
         <Box>
             {data?.length && (
-                <Table.Root>
+                <Table.Root variant="surface">
                     <Table.Header>
                         {table.getHeaderGroups().map((headerGroup) => (
                             /*iterate through headers*/
                             <Table.Row key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => (
-                                    <HeaderCell header={header} key={header.id}/>
+                                    <HeaderCell
+                                        header={header}
+                                        key={header.id}
+                                    />
                                 ))}
                             </Table.Row>
                         ))}
@@ -86,25 +100,21 @@ export function VenuesTable() {
                         {table.getRowModel().rows.map((row) => (
                             /*iterate through cells*/
                             <Table.Row key={row.id}>
-                                {row
-                                    .getVisibleCells()
-                                    .map((cell) =>
-                                        (
-                                            <Table.Cell key={cell.id}>
-                                                {flexRender(
-                                                    cell.column.columnDef.cell,
-                                                    cell.getContext()
-                                                )}
-                                            </Table.Cell>
-                                        )
-                                    )}
+                                {row.getVisibleCells().map((cell) => (
+                                    <Table.Cell key={cell.id}>
+                                        {flexRender(
+                                            cell.column.columnDef.cell,
+                                            cell.getContext()
+                                        )}
+                                    </Table.Cell>
+                                ))}
                             </Table.Row>
                         ))}
                     </Table.Body>
                 </Table.Root>
             )}
-            {isFetched && !data?.length && <div>Empty state placeholder</div> }
-            {isLoading && <Loading/>}
+            {isFetched && !data?.length && <div>Empty state placeholder</div>}
+            {isLoading && <Loading />}
         </Box>
     )
 }
