@@ -18,6 +18,25 @@ import { fuzzyFilter } from './utils/filters'
 
 export function ArtistsTable() {
     const { data, isFetched, isLoading } = api.artist.getAll.useQuery()
+	//fetch data and set loading state
+	const { data } = api.artist.getAll.useQuery();
+	const router = useRouter();
+
+	const handleEditClick = useCallback(
+		async (artist: Artist) => {
+			const params = new URLSearchParams();
+			params.set("id", artist.id);
+			await router.push(
+				{
+					pathname: "/admin/edit-artist",
+					query: params.toString(),
+				},
+				undefined,
+				{ shallow: true },
+			);
+		},
+		[router],
+	);
 
     const columns = useMemo<ColumnDef<Artist>[]>(
         () => [
@@ -56,7 +75,7 @@ export function ArtistsTable() {
           {
             id: 'edit',
             cell: ({ row }) => {
-              <Button onClick={() => void handleOpenModal(row.original) }>
+              <Button onClick={() => void handleEditClick(row.original) }>
                 Edit
               </Button>
             },
@@ -69,10 +88,10 @@ export function ArtistsTable() {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
-    const table = useReactTable<Artist>({
-        data: data ?? [],
-        columns,
-        state: {
+	const table = useReactTable<Artist>({
+		data: data ?? [],
+		columns,
+		state: {
             sorting,
             columnFilters
         },
@@ -80,11 +99,11 @@ export function ArtistsTable() {
             fuzzy: fuzzyFilter
         },
         getCoreRowModel: getCoreRowModel(),
-        getSortedRowModel: getSortedRowModel(),
+	getSortedRowModel: getSortedRowModel(),
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getFilteredRowModel: getFilteredRowModel()
-    })
+    });
 
     return (
         <Box>

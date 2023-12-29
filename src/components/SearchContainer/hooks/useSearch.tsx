@@ -45,6 +45,7 @@ export default function useSearch(
         setSearchData(initialSearchData)
     }
 
+<<<<<<< Updated upstream
     // Filter functions
     const filterName = useEvent(
         (item: Artist | Venue | EventWithArtistVenue) => {
@@ -57,6 +58,21 @@ export default function useSearch(
             )
         }
     )
+=======
+  function compareString(ascending: boolean, a: string | null | undefined, b: string | null | undefined) {
+    if (a === null || a === undefined) {
+      a = ""
+    }
+    if (b === null || b === undefined) {
+      b = ""
+    }
+    if (ascending) {
+      return a.localeCompare(b)
+    } else {
+      return b.localeCompare(a)
+    }
+  }
+>>>>>>> Stashed changes
 
     const filterWebsite = useEvent(
         (item: Artist | Venue | EventWithArtistVenue) => {
@@ -192,4 +208,30 @@ export default function useSearch(
         filteredItems,
         clearSearchData
     }
+<<<<<<< Updated upstream
+=======
+  }
+
+  const handleSort = (k: string) => {
+    const a = !sorting.ascending
+    setSorting({
+      ascending: a,
+      key: k
+    })
+    console.log('button clicked ', sorting.key, sorting.ascending)
+  }
+  
+  useEffect (() => {
+    console.log('ascending', sorting)
+  }, [sorting])
+
+  return {
+    searchData,
+    setSearchData,
+    handleSearch,
+    filteredItems,
+    clearSearchData,
+    handleSort
+  }
+>>>>>>> Stashed changes
 }
