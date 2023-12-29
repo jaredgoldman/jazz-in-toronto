@@ -40,7 +40,7 @@ export default function RootLayout({
                     </Callout.Root>
                 )}
                 {breadcrumbs && <Breadcrumbs {...breadcrumbs} />}
-                <Flex direction="column" width="100%" mb="9">
+                <Flex direction="column" width="100%">
                     {children}
                 </Flex>
                 <Footer />

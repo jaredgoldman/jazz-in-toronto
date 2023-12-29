@@ -72,7 +72,7 @@ export default function Home() {
             </Flex>
             <Flex
                 justify="center"
-                className="min-h-[70rem] bg-hero-pattern-2 bg-cover bg-center bg-no-repeat pb-36 pt-60"
+                className="min-h-[70rem] bg-hero-pattern-2 bg-cover bg-center bg-no-repeat pb-36 pt-60 mb-0"
             >
                 <Flex className="max-w-6xl" grow="1">
                     <Featured />
