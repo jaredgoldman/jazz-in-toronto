@@ -8,7 +8,7 @@ export const fuzzyFilter: FilterFn<unknown> = (
     addMeta
 ) => {
     // Rank the item
-    const itemRank = rankItem(row.getValue(columnId) as string, value)
+    const itemRank = rankItem(row.getValue(columnId), value as string)
 
     // Store the itemRank info
     addMeta({
