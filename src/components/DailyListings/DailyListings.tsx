@@ -13,6 +13,7 @@ import {
 import { EventWithArtistVenue } from '~/types/data'
 import Loading from '../Loading'
 import { HeaderCell } from '../Tables/components'
+import { fuzzyFilter } from '../Tables/utils/filters'
 
 interface Props {
     onChangeListingType: () => void
@@ -71,6 +72,9 @@ export default function DailyListings({ onChangeListingType }: Props) {
         },
         state: {
             sorting
+        },
+        filterFns: {
+            fuzzy: fuzzyFilter
         },
         getSortedRowModel: getSortedRowModel(),
         onSortingChange: setSorting

@@ -14,6 +14,7 @@ import { Venue } from '~/types/data'
 import { Table, Box } from '@radix-ui/themes'
 import { HeaderCell } from './components'
 import Loading from '../Loading'
+import { fuzzyFilter } from './utils/filters'
 
 export function VenuesTable() {
     const { data, isFetched, isLoading } = api.venue.getAll.useQuery()
@@ -68,6 +69,9 @@ export function VenuesTable() {
         data: data ?? [],
         columns,
         state: { sorting, columnFilters },
+        filterFns: {
+            fuzzy: fuzzyFilter
+        },
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         onSortingChange: setSorting,
