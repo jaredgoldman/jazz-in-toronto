@@ -73,14 +73,6 @@ export default function Home() {
                     </Link>
                 </Flex>
             </Flex>
-<<<<<<< Updated upstream
-            <Flex
-                justify="center"
-                className="min-h-[70rem] bg-hero-pattern-2 bg-cover bg-center bg-no-repeat pb-36 pt-60 mb-0"
-            >
-                <Flex className="max-w-6xl" grow="1">
-                    <Featured />
-=======
             {featuredItems &&
             Object.values(featuredItems).filter(Boolean).length >= 3 ? (
                 <Flex
@@ -90,7 +82,6 @@ export default function Home() {
                     <Flex className="max-w-6xl" grow="1">
                         <Featured />
                     </Flex>
->>>>>>> Stashed changes
                 </Flex>
             ) : (
                 <Box className="bg-gray-900 py-20"></Box>
