@@ -1,97 +1,101 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { api } from '~/utils/api'
 import { Artist } from '~/types/data'
 import { HeaderCell } from './components'
 import {
-    ColumnDef,
     SortingState,
     flexRender,
     getCoreRowModel,
     useReactTable,
     getSortedRowModel,
     getFilteredRowModel,
-    ColumnFiltersState
+    ColumnFiltersState,
+    createColumnHelper
 } from '@tanstack/react-table'
-import { Table, Box } from '@radix-ui/themes'
+import { Table, Box, Button } from '@radix-ui/themes'
 import Loading from '../Loading'
 import { fuzzyFilter } from './utils/filters'
+import { useRouter } from 'next/router'
+
+const columnHelper = createColumnHelper<Artist>()
 
 export function ArtistsTable() {
     const { data, isFetched, isLoading } = api.artist.getAll.useQuery()
-	//fetch data and set loading state
-	const { data } = api.artist.getAll.useQuery();
-	const router = useRouter();
+    //fetch data and set loading state
+    const router = useRouter()
 
-	const handleEditClick = useCallback(
-		async (artist: Artist) => {
-			const params = new URLSearchParams();
-			params.set("id", artist.id);
-			await router.push(
-				{
-					pathname: "/admin/edit-artist",
-					query: params.toString(),
-				},
-				undefined,
-				{ shallow: true },
-			);
-		},
-		[router],
-	);
+    const handleEditClick = useCallback(
+        async (artist: Artist) => {
+            const params = new URLSearchParams()
+            params.set('id', artist.id)
+            await router.push(
+                {
+                    pathname: '/admin/edit-artist',
+                    query: params.toString()
+                },
+                undefined,
+                { shallow: true }
+            )
+        },
+        [router]
+    )
 
-    const columns = useMemo<ColumnDef<Artist>[]>(
+    const columns = useMemo(
         () => [
-            {
-                accessorKey: 'name',
+            columnHelper.accessor((row) => row.name, {
                 cell: (info) => info.getValue(),
-                header: () => <span>Name</span>
-            },
-            {
-                accessorKey: 'genre',
+                header: 'Name'
+            }),
+            columnHelper.accessor((row) => row.name, {
                 cell: (info) => info.getValue(),
-                header: () => <span>Genre</span>
-            },
-            {
-                accessorKey: 'website',
+                header: 'Genre'
+            }),
+            columnHelper.accessor((row) => row.name, {
                 cell: (info) => info.getValue(),
-                header: () => <span>Website</span>
-            },
-            {
-                accessorKey: 'instagramHandle',
+                header: 'Website'
+            }),
+            columnHelper.accessor((row) => row.name, {
                 cell: (info) => info.getValue(),
-                header: () => <span>Instagram</span>
-            },
-            {
-                accessorKey: 'active',
+                header: 'Instagram'
+            }),
+            columnHelper.accessor((row) => row.name, {
                 cell: (info) => info.renderValue()?.toString(),
-                header: () => <span>Active</span>,
+                header: 'Active',
                 enableColumnFilter: false
-            },
-            {
-                accessorKey: 'featured',
+            }),
+            columnHelper.accessor((row) => row.name, {
                 cell: (info) => info.renderValue()?.toString(),
-                header: () => <span>Featured</span>,
+                header: 'Featured',
                 enableColumnFilter: false
-            },
-          {
-            id: 'edit',
-            cell: ({ row }) => {
-              <Button onClick={() => void handleEditClick(row.original) }>
-                Edit
-              </Button>
-            },
-            header: () => <span>Edit</span>
-          }
+            }),
+            columnHelper.display({
+                id: 'edit',
+                cell: ({ row }) => {
+                    return (
+                        <>
+                            <Button
+                                onClick={() =>
+                                    void handleEditClick(row.original)
+                                }
+                            >
+                                Edit
+                            </Button>
+                        </>
+                    )
+                },
+                header: 'Edit'
+            })
         ],
-        []
+        [handleEditClick]
     )
 
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
-	const table = useReactTable<Artist>({
-		data: data ?? [],
-		columns,
-		state: {
+    const table = useReactTable<Artist>({
+        data: data ?? [],
+        columns,
+        state: {
             sorting,
             columnFilters
         },
@@ -99,11 +103,11 @@ export function ArtistsTable() {
             fuzzy: fuzzyFilter
         },
         getCoreRowModel: getCoreRowModel(),
-	getSortedRowModel: getSortedRowModel(),
+        getSortedRowModel: getSortedRowModel(),
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getFilteredRowModel: getFilteredRowModel()
-    });
+    })
 
     return (
         <Box>
@@ -117,28 +121,22 @@ export function ArtistsTable() {
                                         header={header}
                                         key={header.id}
                                     />
-                ))}
-              </Table.Row>
-            ))}
-          </Table.Header>
-          <Table.Body>
-            {table.getRowModel().rows.map((row) => (
-              <Table.Row key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <Table.Cell key={cell.id}>
-                    {flexRender(
-                      cell.column.columnDef.cell,
-                      cell.getContext()
-                    )}
-                  </Table.Cell>
-                ))}
-                <Table.Cell key="edit">
-                  <ArtistFormContainer
-                    isOpen={isEditing}
-                    onClose={() => setIsEditing(false)}
-                  />
-                </Table.Cell>
-              </Table.Row>
+                                ))}
+                            </Table.Row>
+                        ))}
+                    </Table.Header>
+                    <Table.Body>
+                        {table.getRowModel().rows.map((row) => (
+                            <Table.Row key={row.id}>
+                                {row.getVisibleCells().map((cell) => (
+                                    <Table.Cell key={cell.id}>
+                                        {flexRender(
+                                            cell.column.columnDef.cell,
+                                            cell.getContext()
+                                        )}
+                                    </Table.Cell>
+                                ))}
+                            </Table.Row>
                         ))}
                     </Table.Body>
                 </Table.Root>
