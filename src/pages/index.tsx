@@ -1,9 +1,12 @@
 import RootLayout from '~/layouts/RootLayout'
 import Featured from '~/components/Featured'
-import { Flex, Heading, Link, Text } from '@radix-ui/themes'
+import { Flex, Heading, Link, Text, Box } from '@radix-ui/themes'
 import Image from 'next/image'
+import { api } from '~/utils/api'
 
 export default function Home() {
+    const { data: featuredItems } = api.data.getFeatured.useQuery()
+    console.log(featuredItems)
     return (
         <RootLayout pageTitle="Jazz In Toronto | Home">
             <Flex
@@ -70,14 +73,28 @@ export default function Home() {
                     </Link>
                 </Flex>
             </Flex>
+<<<<<<< Updated upstream
             <Flex
                 justify="center"
                 className="min-h-[70rem] bg-hero-pattern-2 bg-cover bg-center bg-no-repeat pb-36 pt-60 mb-0"
             >
                 <Flex className="max-w-6xl" grow="1">
                     <Featured />
+=======
+            {featuredItems &&
+            Object.values(featuredItems).filter(Boolean).length >= 3 ? (
+                <Flex
+                    justify="center"
+                    className="mb-0 min-h-[70rem] bg-hero-pattern-2 bg-cover bg-center bg-no-repeat pb-36 pt-60"
+                >
+                    <Flex className="max-w-6xl" grow="1">
+                        <Featured />
+                    </Flex>
+>>>>>>> Stashed changes
                 </Flex>
-            </Flex>
+            ) : (
+                <Box className="bg-gray-900 py-20"></Box>
+            )}
         </RootLayout>
     )
 }
