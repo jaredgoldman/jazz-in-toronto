@@ -4,19 +4,13 @@ import Upload from "../Fields/Upload";
 import { Heading, Flex, Text, Box, Button } from "@radix-ui/themes";
 import useArtistForm from "./hooks/useArtistForm";
 import { useRouter } from "next/router";
-import { Artist } from "~/types/data";
 import { api } from "~/utils/api";
-
-type ParamArtistId = {
-	id: string;
-};
+import { useEffect } from "react";
 
 export default function ArtistForm() {
 	const router = useRouter();
-	const param = router.query as ParamArtistId;
-	const getArtistFromParam = (param: ParamArtistId) => {
-		return api.artist.get.useQuery(param).data as Artist;
-	};
+	const param = router.query.id as string;
+	const { data } = api.artist.get.useQuery({ id: param });
 	const {
 		submit,
 		isEditing,
@@ -27,15 +21,24 @@ export default function ArtistForm() {
 		artistMutationIsSuccess,
 		editArtistMutationIsSuccess,
 		error,
-	} = useArtistForm(getArtistFromParam(param) || null);
+		reset,
+	} = useArtistForm(data ?? undefined);
+
+	useEffect(() => {
+		if (data) {
+			reset(data);
+		}
+	}, [data, reset]);
 
 	return (
-		<Flex direction="column" align="center" width="100%"
-            className="max-w-xl">
+		<Flex direction="column" align="center" width="100%" className="max-w-xl">
 			<Box className="w-full ">
 				<Form.Root onSubmit={submit}>
-					<Heading size={{ initial: '8', xs: '9' }}
-                        align={{ initial: 'center', xs: 'left' }} mb="6">
+					<Heading
+						size={{ initial: "8", xs: "9" }}
+						align={{ initial: "center", xs: "left" }}
+						mb="6"
+					>
 						{isEditing ? `Edit artist` : "Submit artist"}
 					</Heading>
 					<Flex direction="column" gap="5">
