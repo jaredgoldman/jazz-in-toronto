@@ -4,8 +4,14 @@ import * as Form from '@radix-ui/react-form'
 import Upload from '../Fields/Upload'
 import { Heading, Text, Flex, Box, Button } from '@radix-ui/themes'
 import useVenueForm from './hooks/useVenueForm'
+import { useRouter } from 'next/router'
+import { api } from '~/utils/api'
+import { useEffect } from 'react'
 
 export default function VenueForm() {
+    const router = useRouter()
+    const param = router.query.id as string
+    const { data } = api.venue.get.useQuery({ id: param })
     const {
         isEditing,
         submit,
@@ -16,8 +22,16 @@ export default function VenueForm() {
         handleDeletePhoto,
         venueMutationIsSuccess,
         editVenueMutationIsSuccess,
-        error
-    } = useVenueForm()
+        error,
+        reset
+    } = useVenueForm(data ?? undefined)
+
+    useEffect(() => {
+        if (data) {
+            reset(data)
+        }
+    }, [data, reset])
+
     return (
         <Flex
             direction="column"
