@@ -15,7 +15,7 @@ export function TableActionMenu({
     onEdit,
     onDelete
 }: Props) {
-    const [open, setOpen] = useState(false)
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
 
     return (
         <>
@@ -37,12 +37,12 @@ export function TableActionMenu({
                     <DropdownMenu.Separator />
                     <DropdownMenu.Item>Approve</DropdownMenu.Item>
                     <DropdownMenu.Separator />
-                    <AlertDialog.Root open={open} onOpenChange={setOpen}>
+                    <AlertDialog.Root open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
                         <AlertDialog.Trigger>
                             <DropdownMenu.Item
                                 color="red"
                                 onClick={() => {
-                                    setOpen(true)
+                                    setDeleteDialogOpen(true)
                                 }}
                             >
                                 Delete
@@ -68,7 +68,7 @@ export function TableActionMenu({
                                         color="red"
                                         onClick={() => {
                                             onDelete()
-                                            setOpen(false)
+                                            setDeleteDialogOpen(false)
                                         }}
                                     >
                                         Delete
