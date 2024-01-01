@@ -35,6 +35,9 @@ dependencies:
   '@radix-ui/themes':
     specifier: ^1.0.0
     version: 1.0.0(@types/react-dom@18.2.4)(@types/react@18.2.6)(react-dom@18.2.0)(react@18.2.0)
+  '@react-buddy/ide-toolbox-next':
+    specifier: ^2.4.1
+    version: 2.4.1(next@13.4.13)(react@18.2.0)
   '@sparticuz/chromium-min':
     specifier: ^115.0.0
     version: 115.0.0
@@ -3106,6 +3109,25 @@ packages:
       classnames: 2.3.2
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /@react-buddy/ide-toolbox-next@2.4.1(next@13.4.13)(react@18.2.0):
+    resolution: {integrity: sha512-WiCO0Zzl9CflBtTF0uht1rbdI83NrUl0qKN5HKAy5oXVr9+qB495E6Y1+qng5ZrQONM9VcF5DF5mf12SQcSG8A==}
+    peerDependencies:
+      next: ^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0
+      react: ^17.0.0 || ^18.0.0
+    dependencies:
+      '@react-buddy/ide-toolbox': 2.4.0(react@18.2.0)
+      next: 13.4.13(@babel/core@7.22.9)(react-dom@18.2.0)(react@18.2.0)
+      react: 18.2.0
+    dev: false
+
+  /@react-buddy/ide-toolbox@2.4.0(react@18.2.0):
+    resolution: {integrity: sha512-TWHX6gwa0Gop7215uHhjFMbYLLdjM/b9rr0wYE3E0m7GNJ56gbPpbZiq86w9uI8zksl827acqGeT437MkuO64w==}
+    peerDependencies:
+      react: ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /@remix-run/router@1.14.0:
