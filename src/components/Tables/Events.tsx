@@ -1,84 +1,133 @@
-import { useState } from 'react'
+import { useState, useCallback, useMemo } from 'react'
+import { TableActionMenu } from './components/TableActionMenu'
 import { api } from '~/utils/api'
 import {
-    ColumnDef,
     flexRender,
     getCoreRowModel,
     useReactTable,
     SortingState,
     getSortedRowModel,
     getFilteredRowModel,
-    ColumnFiltersState
+    ColumnFiltersState,
+    createColumnHelper
 } from '@tanstack/react-table'
 import { EventWithArtistVenue } from '~/types/data'
 import { Table, Flex, TextField, Heading } from '@radix-ui/themes'
 import { format } from 'date-fns'
-import { useMemo } from 'react'
 import Loading from '../Loading'
 import { HeaderCell } from './components'
 import { fuzzyFilter } from './utils/filters'
+import { useRouter } from 'next/router'
+
+const columnHelper = createColumnHelper<EventWithArtistVenue>()
 
 export function EventsTable() {
     const [filteredDate, setFilteredDate] = useState<Date>(new Date())
     const { data, isLoading, isFetched } = api.event.getAllByDay.useQuery({
         date: filteredDate
     })
+    const router = useRouter()
+    const setFeaturedMutation = api.event.setFeatured.useMutation()
+    const deleteMutation = api.event.delete.useMutation()
 
-    const columns = useMemo<ColumnDef<EventWithArtistVenue>[]>(
+    const handleEditClick = useCallback(
+        async (event: EventWithArtistVenue) => {
+            const params = new URLSearchParams()
+            params.set('id', event.id)
+            await router.push(
+                {
+                    pathname: '/admin/edit-event',
+                    query: params.toString()
+                },
+                undefined,
+                {
+                    shallow: true
+                }
+            )
+        },
+        [router]
+    )
+
+    const handleToggleFeatured = useCallback(
+        (event: EventWithArtistVenue) => {
+            setFeaturedMutation.mutate({ id: event.id })
+        },
+        [setFeaturedMutation]
+    )
+
+    const handleDelete = useCallback(
+        (event: EventWithArtistVenue) => {
+            deleteMutation.mutate({ id: event.id })
+        },
+        [deleteMutation]
+    )
+
+    const columns = useMemo(
         () => [
-            {
-                accessorKey: 'name',
+            columnHelper.accessor((row) => row.name, {
                 cell: (info) => info.getValue(),
-                header: () => <span>Event</span>
-            },
-            {
-                accessorKey: 'venue.name',
+                header: 'Event'
+            }),
+            columnHelper.accessor((row) => row.venue.name, {
                 cell: (info) => info.getValue(),
-                header: () => <span>Venue</span>
-            },
-            {
-                accessorKey: 'startDate',
+                header: 'Venue'
+            }),
+            columnHelper.accessor((row) => row.startDate, {
                 cell: (info) =>
-                    format(new Date(info.getValue() as string), 'h:mm a'),
-                header: () => <span>Start</span>,
+                    format(
+                        new Date(info.getValue() as unknown as string),
+                        'h:mm a'
+                    ),
+                header: 'Start',
                 enableColumnFilter: false
-            },
-            {
-                accessorKey: 'endDate',
+            }),
+            columnHelper.accessor((row) => row.endDate, {
                 cell: (info) =>
-                    format(new Date(info.getValue() as string), 'h:mm a'),
-                header: () => <span>End</span>,
+                    format(
+                        new Date(info.getValue() as unknown as string),
+                        'h:mm a'
+                    ),
+                header: 'End',
                 enableColumnFilter: false
-            },
-            {
-                accessorKey: 'artist.name',
+            }),
+            columnHelper.accessor((row) => row.artist.name, {
                 cell: (info) => info.getValue(),
-                header: () => <span>Artist</span>
-            },
-            {
-                accessorKey: 'venue.website',
+                header: 'Artist'
+            }),
+            columnHelper.accessor((row) => row.venue.website, {
                 cell: (info) => info.getValue(),
-                header: () => <span>Website</span>
-            },
-            {
-                accessorKey: 'venue.instagramHandle',
+                header: 'Website'
+            }),
+            columnHelper.accessor((row) => row.venue.instagramHandle, {
                 cell: (info) => info.getValue(),
-                header: () => <span>Instagram</span>
-            },
-            {
-                accessorKey: 'cancelled',
+                header: 'Instagram'
+            }),
+            columnHelper.accessor((row) => row.cancelled, {
                 cell: (info) => info.getValue()?.toString(),
-                header: () => <span>Cancelled</span>,
+                header: 'Cancelled',
                 enableColumnFilter: false
-            },
-            {
-                accessorKey: 'featured',
+            }),
+            columnHelper.accessor((row) => row.featured, {
                 cell: (info) => info.getValue()?.toString(),
-                header: () => <span>Featured</span>,
+                header: 'Featured',
                 enableColumnFilter: false
-            }
+            }),
+            columnHelper.display({
+                id: 'edit',
+                cell: ({ row }) => (
+                    <TableActionMenu
+                        isFeatured={row.original.featured}
+                        onToggleFeatured={() => {
+                            handleToggleFeatured(row.original)
+                        }}
+                        onEdit={() => handleEditClick(row.original)}
+                        onDelete={() => handleDelete(row.original)}
+                    />
+                ),
+                header: 'Edit'
+            })
         ],
-        []
+        [handleDelete, handleEditClick, handleToggleFeatured]
     )
 
     const [sorting, setSorting] = useState<SortingState>([])
