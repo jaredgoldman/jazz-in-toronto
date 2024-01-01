@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useState } from 'react' import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
 import { useUploadThing } from '~/hooks/useUploadThing'
 import { FileData, Artist } from '~/types/data'

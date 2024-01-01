@@ -1,13 +1,8 @@
-// Libraries
 import { useState } from 'react'
-// Hooks
 import { useUploadThing } from '~/hooks/useUploadThing'
 import { useForm } from 'react-hook-form'
-// utils
 import { api } from '~/utils/api'
-// Assets
 import { env } from '~/env.mjs'
-// Types
 import { Area } from '@prisma/client'
 import { type Venue } from '~/types/data'
 import { type FileData } from '~/types/data'
@@ -70,6 +65,7 @@ export default function useVenueForm(
         setValue,
         control,
         getValues,
+        reset,
         formState: { errors }
     } = useForm<VenueFormValues>({
         defaultValues
@@ -172,6 +168,7 @@ export default function useVenueForm(
         submit,
         onUpload,
         onSelectLocation,
-        getValues
+        getValues,
+        reset
     }
 }

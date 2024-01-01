@@ -1,65 +1,109 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { api } from '~/utils/api'
 import {
-    ColumnDef,
     flexRender,
     getCoreRowModel,
     useReactTable,
     SortingState,
     getSortedRowModel,
     getFilteredRowModel,
-    ColumnFiltersState
+    ColumnFiltersState,
+    createColumnHelper
 } from '@tanstack/react-table'
 import { Venue } from '~/types/data'
 import { Table, Box } from '@radix-ui/themes'
 import { HeaderCell } from './components'
 import Loading from '../Loading'
 import { fuzzyFilter } from './utils/filters'
+import { useRouter } from 'next/router'
+import { TableActionMenu } from './components/TableActionMenu'
+
+const columnHelper = createColumnHelper<Venue>()
 
 export function VenuesTable() {
     const { data, isFetched, isLoading } = api.venue.getAll.useQuery()
+    const router = useRouter()
+    const setFeaturedMutation = api.venue.setFeatured.useMutation()
+    const deleteMutation = api.venue.delete.useMutation()
 
-    const columns = useMemo<ColumnDef<Venue>[]>(
+    const handleEditClick = useCallback(
+        async (venue: Venue) => {
+            const params = new URLSearchParams()
+            params.set('id', venue.id)
+            await router.push(
+                {
+                    pathname: '/admin/edit-venue',
+                    query: params.toString()
+                },
+                undefined,
+                { shallow: true }
+            )
+        },
+        [router]
+    )
+
+    const handleToggleFeatured = useCallback(
+        (venue: Venue) => {
+            setFeaturedMutation.mutate({ id: venue.id })
+        },
+        [setFeaturedMutation]
+    )
+
+    const handleDelete = useCallback(
+        (venue: Venue) => {
+            deleteMutation.mutate({ id: venue.id })
+        },
+        [deleteMutation]
+    )
+
+    const columns = useMemo(
         () => [
-            {
-                accessorKey: 'name',
+            columnHelper.accessor((row) => row.name, {
                 cell: (info) => info.getValue(),
-                header: () => <span>Name</span>
-            },
-            {
-                accessorKey: 'address',
+                header: 'Name'
+            }),
+            columnHelper.accessor((row) => row.address, {
                 cell: (info) => info.getValue(),
-                header: () => <span>Address</span>
-            },
-            {
-                accessorKey: 'city',
+                header: 'Address'
+            }),
+            columnHelper.accessor((row) => row.city, {
                 cell: (info) => info.getValue(),
-                header: () => <span>City</span>
-            },
-            {
-                accessorKey: 'website',
+                header: 'City'
+            }),
+            columnHelper.accessor((row) => row.website, {
                 cell: (info) => info.getValue(),
-                header: () => <span>Website</span>
-            },
-            {
-                accessorKey: 'instagramHandle',
+                header: 'Website'
+            }),
+            columnHelper.accessor((row) => row.instagramHandle, {
                 cell: (info) => info.getValue(),
-                header: () => <span>Instagram</span>
-            },
-            {
-                accessorKey: 'active',
+                header: 'Instagram'
+            }),
+            columnHelper.accessor((row) => row.active, {
                 cell: (info) => info.getValue()?.toString(),
-                header: () => <span>Active</span>,
+                header: 'Active',
                 enableColumnFilter: false
-            },
-            {
-                accessorKey: 'featured',
+            }),
+            columnHelper.accessor((row) => row.featured, {
                 cell: (info) => info.getValue()?.toString(),
-                header: () => <span>Featured</span>,
+                header: 'Featured',
                 enableColumnFilter: false
-            }
+            }),
+            columnHelper.display({
+                id: 'edit',
+                cell: ({ row }) => (
+                    <TableActionMenu
+                        isFeatured={row.original.featured}
+                        onToggleFeatured={() => {
+                            handleToggleFeatured(row.original)
+                        }}
+                        onEdit={() => handleEditClick(row.original)}
+                        onDelete={() => handleDelete(row.original)}
+                    />
+                ),
+                header: 'Edit'
+            })
         ],
-        []
+        [handleDelete, handleEditClick, handleToggleFeatured]
     )
 
     const [sorting, setSorting] = useState<SortingState>([])
