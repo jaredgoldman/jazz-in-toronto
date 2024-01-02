@@ -1,6 +1,7 @@
-import { DropdownMenu, AlertDialog, Button, Flex } from '@radix-ui/themes'
+import { DropdownMenu } from '@radix-ui/themes'
 import { DotsVerticalIcon } from '@radix-ui/react-icons'
 import { useState } from 'react'
+import { ConfirmDelete } from './confirmDelete'
 
 type Props = {
     isFeatured: boolean
@@ -37,48 +38,21 @@ export function TableActionMenu({
                     <DropdownMenu.Separator />
                     <DropdownMenu.Item>Approve</DropdownMenu.Item>
                     <DropdownMenu.Separator />
-                    <AlertDialog.Root open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-                        <AlertDialog.Trigger>
-                            <DropdownMenu.Item
-                                color="red"
-                                onClick={() => {
-                                    setDeleteDialogOpen(true)
-                                }}
-                            >
-                                Delete
-                            </DropdownMenu.Item>
-                        </AlertDialog.Trigger>
-                        <AlertDialog.Content style={{ maxWidth: 450 }}>
-                            <AlertDialog.Title>
-                                Confirm Delete
-                            </AlertDialog.Title>
-                            <AlertDialog.Description size="2">
-                                You are about to delete a record. This action
-                                cannot be undone.
-                            </AlertDialog.Description>
-                            <Flex gap="3" mt="4" justify="end">
-                                <AlertDialog.Cancel>
-                                    <Button variant="soft" color="gray">
-                                        Cancel
-                                    </Button>
-                                </AlertDialog.Cancel>
-                                <AlertDialog.Action>
-                                    <Button
-                                        variant="solid"
-                                        color="red"
-                                        onClick={() => {
-                                            onDelete()
-                                            setDeleteDialogOpen(false)
-                                        }}
-                                    >
-                                        Delete
-                                    </Button>
-                                </AlertDialog.Action>
-                            </Flex>
-                        </AlertDialog.Content>
-                    </AlertDialog.Root>
+                    <DropdownMenu.Item
+                        color="red"
+                        onClick={() => {
+                            setDeleteDialogOpen(true)
+                        }}
+                    >
+                        Delete
+                    </DropdownMenu.Item>
                 </DropdownMenu.Content>
             </DropdownMenu.Root>
+            <ConfirmDelete
+                onDelete={onDelete}
+                open={deleteDialogOpen}
+                setOpen={setDeleteDialogOpen}
+            />
         </>
     )
 }
