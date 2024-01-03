@@ -1,7 +1,7 @@
 import { DropdownMenu } from '@radix-ui/themes'
 import { DotsVerticalIcon } from '@radix-ui/react-icons'
 import { useState } from 'react'
-import { ConfirmDelete } from './confirmDelete'
+import { ConfirmDelete } from './ConfirmDelete'
 
 type Props = {
     isFeatured: boolean

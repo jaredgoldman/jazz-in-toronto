@@ -1,5 +1,5 @@
 import * as Form from '@radix-ui/react-form'
-import { Input, Select, Toggle } from '../Fields'
+import { Input, Select } from '../Fields'
 import { Flex, Text, Button, Heading, Box, Callout } from '@radix-ui/themes'
 import { BaseSyntheticEvent } from 'react'
 import type { Venue, Artist } from '~/types/data'
@@ -29,7 +29,6 @@ export default function EventForm({
     venueData,
     control,
     errors,
-    isEditing,
     error,
     submit,
     showSubmitButton = true
@@ -124,14 +123,6 @@ export default function EventForm({
                             error={errors.website}
                             control={control}
                         />
-                        {isEditing && (
-                            <Toggle
-                                label="Featured"
-                                name="featured"
-                                control={control}
-                                error={errors.featured}
-                            />
-                        )}
                     </Flex>
                     <Flex width="100%" justify="center" mt="3">
                         {eventMutationIsSuccess && (

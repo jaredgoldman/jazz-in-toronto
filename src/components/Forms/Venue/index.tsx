@@ -1,5 +1,5 @@
 import PlacesAutocomplete from '../Fields/PlacesAutoComplete'
-import { Input, Toggle } from '../Fields'
+import { Input } from '../Fields'
 import * as Form from '@radix-ui/react-form'
 import Upload from '../Fields/Upload'
 import { Heading, Text, Flex, Box, Button } from '@radix-ui/themes'
@@ -88,14 +88,6 @@ export default function VenueForm() {
                             error={errors.website}
                             control={control}
                         />
-                        {isEditing && (
-                            <Toggle
-                                label="Featured"
-                                name="featured"
-                                control={control}
-                                error={errors.featured}
-                            />
-                        )}
                     </Flex>
                     <Flex width="100%" align="center" mt="3">
                         {venueMutationIsSuccess && (
