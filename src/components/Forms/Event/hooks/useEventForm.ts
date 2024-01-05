@@ -1,3 +1,4 @@
+import { parseISO } from 'date-fns'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
@@ -10,13 +11,32 @@ import { isArtist, isVenue } from '~/utils/typeguards'
 
 export interface EventFormValues {
     name: string
-    startDate: Date
-    endDate: Date
+    startDate: string
+    endDate: string
     artistId: string
     instagramHandle?: string
     website?: string
     venueId: string
     featured: boolean
+}
+
+function toDateTimeLocal(date: Date): string {
+    // Pad function to ensure single digits are preceded by a 0
+    function pad(number: number): string {
+        if (number < 10) {
+            return '0' + number;
+        }
+        return number.toString();
+    }
+    // Format the date to YYYY-MM-DD
+    const formattedDate = date.getFullYear() +
+        '-' + pad(date.getMonth() + 1) + // Months are 0-based in JS
+        '-' + pad(date.getDate());
+    // Format the time to HH:MM
+    const formattedTime = pad(date.getHours()) +
+        ':' + pad(date.getMinutes());
+    // Combine both date and time
+    return formattedDate + 'T' + formattedTime;
 }
 
 export default function useEventForm(currentValues?: EventWithArtistVenue) {
@@ -54,16 +74,16 @@ export default function useEventForm(currentValues?: EventWithArtistVenue) {
           }
         : {
               name: '',
-              startDate: new Date(),
-              endDate: new Date(),
+              startDate: new Date().toISOString(),
+              endDate: new Date().toISOString(),
               artistId: '',
               venueId: '',
               instagramHandle: '',
               website: '',
               featured: false
           }
-    const log = new Date(defaultValues.startDate).toISOString()
-    console.log(log)
+    const log = defaultValues.startDate
+    console.log(log) 
 
     const {
         register,
@@ -79,11 +99,17 @@ export default function useEventForm(currentValues?: EventWithArtistVenue) {
         try {
             if (isEditing && currentValues && editEventMutation) {
                 await editEventMutation({
+                    ...values,
                     id: currentValues?.id,
-                    ...values
+                    startDate: parseISO(values.startDate),
+                    endDate: parseISO(values.endDate)
                 })
             } else if (eventMutation) {
-                await eventMutation(values)
+                await eventMutation({
+                    ...values,
+                    startDate: parseISO(values.startDate),
+                    endDate: parseISO(values.endDate)
+                })
             }
         } catch (e) {
             setError('There was an error submitting. Please try again')
