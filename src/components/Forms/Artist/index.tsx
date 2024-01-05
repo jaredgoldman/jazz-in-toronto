@@ -21,14 +21,15 @@ export default function ArtistForm() {
         artistMutationIsSuccess,
         editArtistMutationIsSuccess,
         error,
-        reset
+        reset,
+        getValues
     } = useArtistForm(data ?? undefined)
 
     useEffect(() => {
-        if (data) {
+        if (data && JSON.stringify(data) !== JSON.stringify(getValues)) {
             reset(data)
         }
-    }, [data, reset])
+    }, [data, reset, getValues])
 
     return (
         <Flex

@@ -46,6 +46,8 @@ export default function useEventForm(currentValues?: EventWithArtistVenue) {
     const defaultValues: EventFormValues = currentValues
         ? {
               ...currentValues,
+              startDate: currentValues?.startDate.toISOString(),
+              endDate: new Date(currentValues?.endDate).toISOString(),
               instagramHandle: currentValues.instagramHandle || undefined,
               website: currentValues.website || undefined,
               featured: currentValues.featured || false
@@ -60,6 +62,8 @@ export default function useEventForm(currentValues?: EventWithArtistVenue) {
               website: '',
               featured: false
           }
+    const log = new Date(defaultValues.startDate).toISOString()
+    console.log(log)
 
     const {
         register,

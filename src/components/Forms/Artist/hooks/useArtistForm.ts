@@ -51,6 +51,8 @@ export default function useArtistForm(
               featured: false
           }
 
+    console.log(currentValues)
+
     const {
         handleSubmit,
         control,

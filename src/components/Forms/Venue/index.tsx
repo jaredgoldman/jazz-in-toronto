@@ -23,14 +23,15 @@ export default function VenueForm() {
         venueMutationIsSuccess,
         editVenueMutationIsSuccess,
         error,
-        reset
+        reset,
+        getValues
     } = useVenueForm(data ?? undefined)
 
     useEffect(() => {
-        if (data) {
+        if (data && JSON.stringify(data) !== JSON.stringify(getValues)) {
             reset(data)
         }
-    }, [data, reset])
+    }, [data, reset, getValues])
 
     return (
         <Flex

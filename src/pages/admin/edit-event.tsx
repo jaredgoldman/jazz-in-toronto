@@ -12,7 +12,10 @@ export default function EditEvent() {
     const eventFormProps = useEventForm(data)
 
     useEffect(() => {
-        if (data) {
+        if (
+            data &&
+            JSON.stringify(data) !== JSON.stringify(eventFormProps.getValues())
+        ) {
             eventFormProps.reset(data)
         }
     }, [data, eventFormProps])
