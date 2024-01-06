@@ -22,21 +22,16 @@ export interface EventFormValues {
 
 function toDateTimeLocal(date: Date): string {
     // Pad function to ensure single digits are preceded by a 0
-    function pad(number: number): string {
-        if (number < 10) {
-            return '0' + number;
-        }
-        return number.toString();
-    }
+    const pad = (number: number): string =>
+        number < 10 ? `0${number}` : number.toString()
     // Format the date to YYYY-MM-DD
-    const formattedDate = date.getFullYear() +
-        '-' + pad(date.getMonth() + 1) + // Months are 0-based in JS
-        '-' + pad(date.getDate());
+    const formattedDate = `${date.getFullYear()}-${pad(
+        date.getMonth() + 1
+    )}-${pad(date.getDate())}`
     // Format the time to HH:MM
-    const formattedTime = pad(date.getHours()) +
-        ':' + pad(date.getMinutes());
+    const formattedTime = `${pad(date.getHours())}:${pad(date.getMinutes())}`
     // Combine both date and time
-    return formattedDate + 'T' + formattedTime;
+    return `${formattedDate}T${formattedTime}`
 }
 
 export default function useEventForm(currentValues?: EventWithArtistVenue) {
@@ -66,16 +61,16 @@ export default function useEventForm(currentValues?: EventWithArtistVenue) {
     const defaultValues: EventFormValues = currentValues
         ? {
               ...currentValues,
-              startDate: new Date(currentValues?.startDate).toISOString(),
-              endDate: new Date(currentValues?.endDate).toISOString(),
+              startDate: toDateTimeLocal(new Date(currentValues?.startDate)),
+              endDate: toDateTimeLocal(new Date(currentValues?.endDate)),
               instagramHandle: currentValues.instagramHandle || undefined,
               website: currentValues.website || undefined,
               featured: currentValues.featured || false
           }
         : {
               name: '',
-              startDate: new Date().toISOString(),
-              endDate: new Date().toISOString(),
+              startDate: toDateTimeLocal(new Date()),
+              endDate: toDateTimeLocal(new Date()),
               artistId: '',
               venueId: '',
               instagramHandle: '',
@@ -83,7 +78,7 @@ export default function useEventForm(currentValues?: EventWithArtistVenue) {
               featured: false
           }
     const log = defaultValues.startDate
-    console.log(log) 
+    console.log(log)
 
     const {
         register,

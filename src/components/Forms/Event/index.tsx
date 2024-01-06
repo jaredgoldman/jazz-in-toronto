@@ -33,6 +33,7 @@ export default function EventForm({
     submit,
     showSubmitButton = true
 }: Props): JSX.Element {
+    if (!control) {return <></>}
     return (
         <Flex direction="column" align="center">
             <Box className="w-full max-w-xl">
