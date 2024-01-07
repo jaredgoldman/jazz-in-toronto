@@ -10,8 +10,6 @@ export const env = createEnv({
         DATABASE_URL: z.string().url(),
         NODE_ENV: z.enum(['development', 'test', 'production']),
         GOOGLE_API_KEY: z.string(),
-        FACEBOOK_CLIENT_ID: z.string(),
-        FACEBOOK_CLIENT_SECRET: z.string(),
         EMAIL_SERVER_USER: z.string(),
         EMAIL_SERVER_PASSWORD: z.string(),
         EMAIL_SERVER_HOST: z.string(),
@@ -21,8 +19,6 @@ export const env = createEnv({
         UPLOADTHING_SECRET: z.string(),
         UPLOADTHING_APP_ID: z.string(),
         CHROME_EXECUTABLE_PATH: z.string(),
-        MAX_FILE_SIZE: z.number(),
-        MAX_FILE_SIZE_READABLE: z.enum(['2KB', '2MB', '2GB']),
         BASE_URL: z.string().url()
     },
 
@@ -43,8 +39,6 @@ export const env = createEnv({
         DATABASE_URL: process.env.DATABASE_URL,
         NODE_ENV: process.env.NODE_ENV,
         GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
-        FACEBOOK_CLIENT_ID: process.env.FACEBOOK_CLIENT_ID,
-        FACEBOOK_CLIENT_SECRET: process.env.FACEBOOK_CLIENT_SECRET,
         EMAIL_SERVER_USER: process.env.EMAIL_SERVER_USER,
         EMAIL_SERVER_PASSWORD: process.env.EMAIL_SERVER_PASSWORD,
         EMAIL_SERVER_HOST: process.env.EMAIL_SERVER_HOST,
@@ -54,8 +48,6 @@ export const env = createEnv({
         UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
         UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
         CHROME_EXECUTABLE_PATH: process.env.CHROME_EXECUTABLE_PATH,
-        MAX_FILE_SIZE: Number(process.env.MAX_FILE_SIZE),
-        MAX_FILE_SIZE_READABLE: process.env.MAX_FILE_SIZE_READABLE,
         NEXT_PUBLIC_MAX_FILE_SIZE: Number(
             process.env.NEXT_PUBLIC_MAX_FILE_SIZE
         ),
