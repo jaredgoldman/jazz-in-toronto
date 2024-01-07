@@ -10,7 +10,7 @@ export default async function handler() {
     })
     for (const admin of admins) {
         await emailService.sendEmail(
-            env.EMAIL_FROM,
+            env.EMAIL_SERVER_USER,
             admin.email,
             'ACTION: Unapproved Events',
             `There are ${unapproved} unapproved events. Please visit ${env.BASE_URL}/admin/events to approve them.`

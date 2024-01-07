@@ -10,19 +10,14 @@ export const env = createEnv({
         DATABASE_URL: z.string().url(),
         NODE_ENV: z.enum(['development', 'test', 'production']),
         GOOGLE_API_KEY: z.string(),
-        FACEBOOK_CLIENT_ID: z.string(),
-        FACEBOOK_CLIENT_SECRET: z.string(),
         EMAIL_SERVER_USER: z.string(),
         EMAIL_SERVER_PASSWORD: z.string(),
         EMAIL_SERVER_HOST: z.string(),
         EMAIL_SERVER_PORT: z.string(),
-        EMAIL_FROM: z.string().email(),
         NEXTAUTH_SECRET: z.string(),
         UPLOADTHING_SECRET: z.string(),
         UPLOADTHING_APP_ID: z.string(),
         CHROME_EXECUTABLE_PATH: z.string(),
-        MAX_FILE_SIZE: z.number(),
-        MAX_FILE_SIZE_READABLE: z.enum(['2KB', '2MB', '2GB']),
         BASE_URL: z.string().url()
     },
 
@@ -31,9 +26,7 @@ export const env = createEnv({
      * isn't built with invalid env vars. To expose them to the client, prefix them with
      * `NEXT_PUBLIC_`.
      */
-    client: {
-        NEXT_PUBLIC_MAX_FILE_SIZE: z.number()
-    },
+    client: {},
 
     /**
      * You can't destruct `process.env` as a regular object in the Next.js edge runtimes (e.g.
@@ -43,22 +36,14 @@ export const env = createEnv({
         DATABASE_URL: process.env.DATABASE_URL,
         NODE_ENV: process.env.NODE_ENV,
         GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
-        FACEBOOK_CLIENT_ID: process.env.FACEBOOK_CLIENT_ID,
-        FACEBOOK_CLIENT_SECRET: process.env.FACEBOOK_CLIENT_SECRET,
         EMAIL_SERVER_USER: process.env.EMAIL_SERVER_USER,
         EMAIL_SERVER_PASSWORD: process.env.EMAIL_SERVER_PASSWORD,
         EMAIL_SERVER_HOST: process.env.EMAIL_SERVER_HOST,
         EMAIL_SERVER_PORT: process.env.EMAIL_SERVER_PORT,
-        EMAIL_FROM: process.env.EMAIL_FROM,
         NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
         UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
         UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
         CHROME_EXECUTABLE_PATH: process.env.CHROME_EXECUTABLE_PATH,
-        MAX_FILE_SIZE: Number(process.env.MAX_FILE_SIZE),
-        MAX_FILE_SIZE_READABLE: process.env.MAX_FILE_SIZE_READABLE,
-        NEXT_PUBLIC_MAX_FILE_SIZE: Number(
-            process.env.NEXT_PUBLIC_MAX_FILE_SIZE
-        ),
         BASE_URL: process.env.BASE_URL
     },
     /**
