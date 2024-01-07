@@ -60,7 +60,7 @@ export const authOptions: NextAuthOptions = {
                     pass: env.EMAIL_SERVER_PASSWORD
                 }
             },
-            from: env.EMAIL_FROM
+            from: env.EMAIL_SERVER_USER
         })
     ]
 }
