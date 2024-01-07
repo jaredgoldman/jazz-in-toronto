@@ -27,9 +27,7 @@ export const env = createEnv({
      * isn't built with invalid env vars. To expose them to the client, prefix them with
      * `NEXT_PUBLIC_`.
      */
-    client: {
-        NEXT_PUBLIC_MAX_FILE_SIZE: z.number()
-    },
+    client: {},
 
     /**
      * You can't destruct `process.env` as a regular object in the Next.js edge runtimes (e.g.
@@ -48,9 +46,6 @@ export const env = createEnv({
         UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
         UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
         CHROME_EXECUTABLE_PATH: process.env.CHROME_EXECUTABLE_PATH,
-        NEXT_PUBLIC_MAX_FILE_SIZE: Number(
-            process.env.NEXT_PUBLIC_MAX_FILE_SIZE
-        ),
         BASE_URL: process.env.BASE_URL
     },
     /**
