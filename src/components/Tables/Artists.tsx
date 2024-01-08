@@ -10,11 +10,13 @@ import {
     useReactTable,
     getSortedRowModel,
     getFilteredRowModel,
-    ColumnFiltersState
+    ColumnFiltersState,
+    getPaginationRowModel
 } from '@tanstack/react-table'
 import { Table, Box } from '@radix-ui/themes'
 import Loading from '../Loading'
 import { fuzzyFilter } from './utils/filters'
+import { PaginationButtonGroup } from './components/PaginationButtonGroup'
 
 export function ArtistsTable() {
     const { data, isFetched, isLoading } = api.artist.getAll.useQuery()
@@ -60,7 +62,13 @@ export function ArtistsTable() {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
-    const table = useReactTable<Artist>({
+    const table = useReactTable({
+        initialState: {
+            pagination: {
+                pageSize: 10,
+                pageIndex: 0
+            }
+        },
         data: data ?? [],
         columns,
         state: {
@@ -74,40 +82,44 @@ export function ArtistsTable() {
         getSortedRowModel: getSortedRowModel(),
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
-        getFilteredRowModel: getFilteredRowModel()
+        getFilteredRowModel: getFilteredRowModel(),
+        getPaginationRowModel: getPaginationRowModel()
     })
 
     return (
         <Box>
             {data?.length && (
-                <Table.Root variant="surface">
-                    <Table.Header>
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <Table.Row key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => (
-                                    <HeaderCell
-                                        header={header}
-                                        key={header.id}
-                                    />
-                                ))}
-                            </Table.Row>
-                        ))}
-                    </Table.Header>
-                    <Table.Body>
-                        {table.getRowModel().rows.map((row) => (
-                            <Table.Row key={row.id}>
-                                {row.getVisibleCells().map((cell) => (
-                                    <Table.Cell key={cell.id}>
-                                        {flexRender(
-                                            cell.column.columnDef.cell,
-                                            cell.getContext()
-                                        )}
-                                    </Table.Cell>
-                                ))}
-                            </Table.Row>
-                        ))}
-                    </Table.Body>
-                </Table.Root>
+                <>
+                    <Table.Root variant="surface">
+                        <Table.Header>
+                            {table.getHeaderGroups().map((headerGroup) => (
+                                <Table.Row key={headerGroup.id}>
+                                    {headerGroup.headers.map((header) => (
+                                        <HeaderCell
+                                            header={header}
+                                            key={header.id}
+                                        />
+                                    ))}
+                                </Table.Row>
+                            ))}
+                        </Table.Header>
+                        <Table.Body>
+                            {table.getRowModel().rows.map((row) => (
+                                <Table.Row key={row.id}>
+                                    {row.getVisibleCells().map((cell) => (
+                                        <Table.Cell key={cell.id}>
+                                            {flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext()
+                                            )}
+                                        </Table.Cell>
+                                    ))}
+                                </Table.Row>
+                            ))}
+                        </Table.Body>
+                    </Table.Root>
+                    <PaginationButtonGroup table={table} />
+                </>
             )}
             {isFetched && !data?.length && <div>Empty state placeholder</div>}
             {isLoading && <Loading />}
