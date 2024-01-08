@@ -11,10 +11,11 @@ import {
     ColumnFiltersState
 } from '@tanstack/react-table'
 import { Venue } from '~/types/data'
-import { Table, Box } from '@radix-ui/themes'
+import { Table, Box, Flex } from '@radix-ui/themes'
 import { HeaderCell } from './components'
 import Loading from '../Loading'
 import { fuzzyFilter } from './utils/filters'
+import { PaginationButtonGroup } from './components/PaginationButtonGroup'
 
 export function VenuesTable() {
     const { data, isFetched, isLoading } = api.venue.getAll.useQuery()
@@ -82,36 +83,43 @@ export function VenuesTable() {
     return (
         <Box>
             {data?.length && (
-                <Table.Root variant="surface">
-                    <Table.Header>
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            /*iterate through headers*/
-                            <Table.Row key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => (
-                                    <HeaderCell
-                                        header={header}
-                                        key={header.id}
-                                    />
-                                ))}
-                            </Table.Row>
-                        ))}
-                    </Table.Header>
-                    <Table.Body>
-                        {table.getRowModel().rows.map((row) => (
-                            /*iterate through cells*/
-                            <Table.Row key={row.id}>
-                                {row.getVisibleCells().map((cell) => (
-                                    <Table.Cell key={cell.id}>
-                                        {flexRender(
-                                            cell.column.columnDef.cell,
-                                            cell.getContext()
-                                        )}
-                                    </Table.Cell>
-                                ))}
-                            </Table.Row>
-                        ))}
-                    </Table.Body>
-                </Table.Root>
+                <>
+                    <Table.Root variant="surface">
+                        <Table.Header>
+                            {table.getHeaderGroups().map((headerGroup) => (
+                                /*iterate through headers*/
+                                <Table.Row key={headerGroup.id}>
+                                    {headerGroup.headers.map((header) => (
+                                        <HeaderCell
+                                            header={header}
+                                            key={header.id}
+                                        />
+                                    ))}
+                                </Table.Row>
+                            ))}
+                        </Table.Header>
+                        <Table.Body>
+                            {table.getRowModel().rows.map((row) => (
+                                /*iterate through cells*/
+                                <Table.Row key={row.id}>
+                                    {row.getVisibleCells().map((cell) => (
+                                        <Table.Cell key={cell.id}>
+                                            {flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext()
+                                            )}
+                                        </Table.Cell>
+                                    ))}
+                                </Table.Row>
+                            ))}
+                        </Table.Body>
+                    </Table.Root>
+                    {table.getPageCount() > 1 && (
+                        <Flex justify="center" mt="4">
+                            <PaginationButtonGroup table={table} />
+                        </Flex>
+                    )}
+                </>
             )}
             {isFetched && !data?.length && <div>Empty state placeholder</div>}
             {isLoading && <Loading />}

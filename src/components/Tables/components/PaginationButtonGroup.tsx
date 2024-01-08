@@ -81,6 +81,7 @@ export function PaginationButtonGroup<T extends unknown>({
             if (renderElipsis) {
                 return <Button key={num}>...</Button>
             }
+            const isSelected = pageIndex === indexNum
 
             // Number is in visible range
             if (renderRangePageNumber || shouldShowLastPage) {
@@ -90,6 +91,7 @@ export function PaginationButtonGroup<T extends unknown>({
                         onClick={() => {
                             table.setPageIndex(indexNum)
                         }}
+                        disabled={isSelected}
                     >
                         {num}
                     </Button>

@@ -13,7 +13,7 @@ import {
     ColumnFiltersState,
     getPaginationRowModel
 } from '@tanstack/react-table'
-import { Table, Box } from '@radix-ui/themes'
+import { Table, Box, Flex } from '@radix-ui/themes'
 import Loading from '../Loading'
 import { fuzzyFilter } from './utils/filters'
 import { PaginationButtonGroup } from './components/PaginationButtonGroup'
@@ -118,7 +118,11 @@ export function ArtistsTable() {
                             ))}
                         </Table.Body>
                     </Table.Root>
-                    <PaginationButtonGroup table={table} />
+                    {table.getPageCount() > 1 && (
+                        <Flex justify="center" mt="4">
+                            <PaginationButtonGroup table={table} />
+                        </Flex>
+                    )}
                 </>
             )}
             {isFetched && !data?.length && <div>Empty state placeholder</div>}
