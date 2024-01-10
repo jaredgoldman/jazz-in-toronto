@@ -7,6 +7,7 @@ import type { Control, FieldErrors } from 'react-hook-form'
 import { EventFormValues } from './hooks/useEventForm'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
 import Link from '~/components/Link'
+import { ar } from 'date-fns/locale'
 
 interface Props {
     eventMutationIsSuccess: boolean
@@ -33,7 +34,9 @@ export default function EventForm({
     submit,
     showSubmitButton = true
 }: Props): JSX.Element {
-    if (!control) {return <></>}
+    if (!control) {
+        return <></>
+    }
     return (
         <Flex direction="column" align="center">
             <Box className="w-full max-w-xl">

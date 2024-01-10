@@ -9,16 +9,17 @@ export default function EditEvent() {
     const router = useRouter()
     const param = router.query.id as string
     const { data } = api.event.get.useQuery({ id: param })
-    const eventFormProps = useEventForm(data)
+    const eventFormProps = useEventForm()
 
     useEffect(() => {
+        console.log({ data, param })
         if (
             data &&
             JSON.stringify(data) !== JSON.stringify(eventFormProps.getValues())
         ) {
             eventFormProps.reset(data)
         }
-    }, [data, eventFormProps])
+    }, [data, eventFormProps, param])
 
     return (
         <RootLayout pageTitle="Jazz in Toronto | Edit Artist">
