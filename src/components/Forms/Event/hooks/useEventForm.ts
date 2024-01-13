@@ -11,12 +11,12 @@ import { isArtist, isVenue } from '~/utils/typeguards'
 
 export interface EventFormValues {
     name: string
-    startDate: string | null
-    endDate: string | null
-    artistId: string | null
-    instagramHandle?: string | null
-    website?: string | null
-    venueId: string | null
+    startDate: string
+    endDate: string
+    artistId: string
+    instagramHandle?: string
+    website?: string
+    venueId: string
     featured: boolean
 }
 

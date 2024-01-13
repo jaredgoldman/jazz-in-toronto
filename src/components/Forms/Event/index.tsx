@@ -1,42 +1,86 @@
 import * as Form from '@radix-ui/react-form'
 import { Input, Select } from '../Fields'
 import { Flex, Text, Button, Heading, Box, Callout } from '@radix-ui/themes'
-import { BaseSyntheticEvent } from 'react'
-import type { Venue, Artist } from '~/types/data'
-import type { Control, FieldErrors } from 'react-hook-form'
-import { EventFormValues } from './hooks/useEventForm'
+import useEventForm from './hooks/useEventForm'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
 import Link from '~/components/Link'
-import { ar } from 'date-fns/locale'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
+import { api } from '~/utils/api'
+import { EventWithArtistVenue } from '~/types/data'
 
-interface Props {
-    eventMutationIsSuccess: boolean
-    editEventMutationIsSuccess: boolean
-    artistData: Artist[] | undefined
-    venueData: Venue[] | undefined
-    isLoading: boolean
-    control: Control<EventFormValues>
-    errors: FieldErrors<EventFormValues>
-    isEditing: boolean
-    error?: string
-    showSubmitButton?: boolean
-    submit: (e: BaseSyntheticEvent) => Promise<void>
-}
+export default function EventForm(): JSX.Element {
+    const router = useRouter()
+    const param = router.query.id as string
+    const { data } = api.event.get.useQuery({ id: param }, { enabled: !!param })
+    const intermediateEventObj: EventWithArtistVenue | undefined = data ? {
+        id: data.id,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
+        name: data.name,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        featured: data.featured,
+        instagramHandle: data.instagramHandle,
+        website: data.website,
+        description: data.description,
+        cancelled: data.cancelled,
+        approved: data.approved,
+        artist: {
+            id: data.artistId,
+            createdAt: data.updatedAt,
+            updatedAt: data.updatedAt,
+            name: data.name,
+            instagramHandle: data.instagramHandle,
+            featured: data.featured,
+            website: data.website,
+            description: data.description
+        },
+        venue: {
+            id: data.venueId,
+            createdAt: data.createdAt,
+            updatedAt: data.updatedAt,
+            name: data.name,
+            instagramHandle: data.instagramHandle,
+            featured: data.featured,
+            website: data.website,
+            description: data.description
+        }
+    } as EventWithArtistVenue : undefined;
+    const {
+        submit,
+        errors,
+        control,
+        eventMutationIsSuccess,
+        editEventMutationIsSuccess,
+        error,
+        venueData,
+        artistData,
+        getValues,
+        reset
+    } = useEventForm(intermediateEventObj)
 
-export default function EventForm({
-    eventMutationIsSuccess,
-    editEventMutationIsSuccess,
-    artistData,
-    venueData,
-    control,
-    errors,
-    error,
-    submit,
-    showSubmitButton = true
-}: Props): JSX.Element {
-    if (!control) {
-        return <></>
-    }
+    useEffect(() => {
+        console.log({ intermediateEventObj, param })
+        if (
+            intermediateEventObj &&
+            JSON.stringify(intermediateEventObj) !== JSON.stringify(getValues)
+        ) {
+        const formValuesMassage: Partial<EventWithArtistVenue> = {
+            id: intermediateEventObj.id,
+            name: intermediateEventObj.name,
+            startDate: intermediateEventObj.startDate,
+            endDate: intermediateEventObj.endDate,
+            artistId: intermediateEventObj.artistId,
+            instagramHandle: intermediateEventObj.instagramHandle,
+            website: intermediateEventObj.website,
+            venueId: intermediateEventObj.venueId,
+            featured: intermediateEventObj.featured,
+        };
+            reset(formValuesMassage as EventWithArtistVenue)
+        }
+    }, [intermediateEventObj, getValues, param, reset])
+
     return (
         <Flex direction="column" align="center">
             <Box className="w-full max-w-xl">
@@ -145,15 +189,13 @@ export default function EventForm({
                             </Text>
                         )}
                     </Flex>
-                    {showSubmitButton && (
-                        <Flex width="100%" justify="center" mt="5">
-                            <Form.Submit asChild>
-                                <Button className="w-full" variant="solid">
-                                    Submit
-                                </Button>
-                            </Form.Submit>
-                        </Flex>
-                    )}
+                    <Flex width="100%" justify="center" mt="5">
+                        <Form.Submit asChild>
+                            <Button className="w-full" variant="solid">
+                                Submit
+                            </Button>
+                        </Form.Submit>
+                    </Flex>
                 </Form.Root>
             </Box>
         </Flex>
