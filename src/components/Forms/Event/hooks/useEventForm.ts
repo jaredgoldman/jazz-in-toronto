@@ -2,11 +2,7 @@ import { parseISO } from 'date-fns'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
-import {
-    type EventWithArtistVenue,
-    type Artist,
-    type Venue
-} from '~/types/data'
+import { EventWithArtistVenue, Artist, Venue } from '~/types/data'
 import { isArtist, isVenue } from '~/utils/typeguards'
 
 export interface EventFormValues {
@@ -14,13 +10,13 @@ export interface EventFormValues {
     startDate: string
     endDate: string
     artistId: string
-    instagramHandle?: string
-    website?: string
+    instagramHandle: string
+    website: string
     venueId: string
     featured: boolean
 }
 
-function toDateTimeLocal(date: Date): string {
+export const toDateTimeLocal = (date: Date): string => {
     // Pad function to ensure single digits are preceded by a 0
     const pad = (number: number): string =>
         number < 10 ? `0${number}` : number.toString()
@@ -77,8 +73,6 @@ export default function useEventForm(currentValues?: EventWithArtistVenue) {
               website: '',
               featured: false
           }
-    const log = defaultValues.startDate
-    console.log(log)
 
     const {
         register,

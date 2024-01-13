@@ -22,7 +22,6 @@ const columnHelper = createColumnHelper<Artist>()
 
 export function ArtistsTable() {
     const { data, isFetched, isLoading } = api.artist.getAll.useQuery()
-    //fetch data and set loading state
     const router = useRouter()
     const setFeaturedMutation = api.artist.setFeatured.useMutation()
     const deleteMutation = api.artist.delete.useMutation()

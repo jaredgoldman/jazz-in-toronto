@@ -1,10 +1,6 @@
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
-import { type GetServerSidePropsContext } from 'next'
-import {
-    getServerSession,
-    type NextAuthOptions,
-    type DefaultSession
-} from 'next-auth'
+import { GetServerSidePropsContext } from 'next'
+import { getServerSession, NextAuthOptions, DefaultSession } from 'next-auth'
 import EmailProvider from 'next-auth/providers/email'
 import { env } from '~/env.mjs'
 import { prisma } from '~/server/db'
@@ -60,7 +56,7 @@ export const authOptions: NextAuthOptions = {
                     pass: env.EMAIL_SERVER_PASSWORD
                 }
             },
-            from: env.EMAIL_FROM
+            from: env.EMAIL_SERVER_USER
         })
     ]
 }

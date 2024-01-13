@@ -1,52 +1,22 @@
 import * as Form from '@radix-ui/react-form'
 import { Input, Select } from '../Fields'
 import { Flex, Text, Button, Heading, Box, Callout } from '@radix-ui/themes'
-import useEventForm from './hooks/useEventForm'
+import useEventForm, { toDateTimeLocal } from './hooks/useEventForm'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
 import Link from '~/components/Link'
-import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { api } from '~/utils/api'
+import { useEffect } from 'react'
 import { EventWithArtistVenue } from '~/types/data'
 
 export default function EventForm(): JSX.Element {
     const router = useRouter()
     const param = router.query.id as string
-    const { data } = api.event.get.useQuery({ id: param }, { enabled: !!param })
-    const intermediateEventObj: EventWithArtistVenue | undefined = data ? {
-        id: data.id,
-        createdAt: data.createdAt,
-        updatedAt: data.updatedAt,
-        name: data.name,
-        startDate: data.startDate,
-        endDate: data.endDate,
-        featured: data.featured,
-        instagramHandle: data.instagramHandle,
-        website: data.website,
-        description: data.description,
-        cancelled: data.cancelled,
-        approved: data.approved,
-        artist: {
-            id: data.artistId,
-            createdAt: data.updatedAt,
-            updatedAt: data.updatedAt,
-            name: data.name,
-            instagramHandle: data.instagramHandle,
-            featured: data.featured,
-            website: data.website,
-            description: data.description
-        },
-        venue: {
-            id: data.venueId,
-            createdAt: data.createdAt,
-            updatedAt: data.updatedAt,
-            name: data.name,
-            instagramHandle: data.instagramHandle,
-            featured: data.featured,
-            website: data.website,
-            description: data.description
-        }
-    } as EventWithArtistVenue : undefined;
+    const { data } = api.event.get.useQuery(
+        { id: param },
+        { enabled: Boolean(param) }
+    )
+
     const {
         submit,
         errors,
@@ -56,30 +26,21 @@ export default function EventForm(): JSX.Element {
         error,
         venueData,
         artistData,
-        getValues,
         reset
-    } = useEventForm(intermediateEventObj)
+    } = useEventForm()
 
     useEffect(() => {
-        console.log({ intermediateEventObj, param })
-        if (
-            intermediateEventObj &&
-            JSON.stringify(intermediateEventObj) !== JSON.stringify(getValues)
-        ) {
-        const formValuesMassage: Partial<EventWithArtistVenue> = {
-            id: intermediateEventObj.id,
-            name: intermediateEventObj.name,
-            startDate: intermediateEventObj.startDate,
-            endDate: intermediateEventObj.endDate,
-            artistId: intermediateEventObj.artistId,
-            instagramHandle: intermediateEventObj.instagramHandle,
-            website: intermediateEventObj.website,
-            venueId: intermediateEventObj.venueId,
-            featured: intermediateEventObj.featured,
-        };
-            reset(formValuesMassage as EventWithArtistVenue)
+        if (data) {
+            delete (data as Partial<EventWithArtistVenue>).id
+            reset({
+                ...data,
+                instagramHandle: data.instagramHandle ?? '',
+                website: data.website ?? '',
+                startDate: toDateTimeLocal(data.startDate),
+                endDate: toDateTimeLocal(data.endDate)
+            })
         }
-    }, [intermediateEventObj, getValues, param, reset])
+    }, [])
 
     return (
         <Flex direction="column" align="center">

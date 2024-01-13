@@ -258,7 +258,7 @@ export const eventRouter = createTRPCRouter({
             })
             for (const admin of admins) {
                 await ctx.emailService.sendEmail(
-                    env.EMAIL_FROM,
+                    env.EMAIL_SERVER_USER,
                     admin.email,
                     'ACTION: Unapproved Events',
                     `There are ${unapproved} unapproved events. Please visit ${env.BASE_URL}/admin/events to approve them.`
