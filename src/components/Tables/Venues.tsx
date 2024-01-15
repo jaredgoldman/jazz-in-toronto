@@ -17,6 +17,7 @@ import Loading from '../Loading'
 import { fuzzyFilter } from './utils/filters'
 import { useRouter } from 'next/router'
 import { TableActionMenu } from './components/TableActionMenu'
+import FadeOutText from '../FadeOutText'
 
 const columnHelper = createColumnHelper<Venue>()
 
@@ -47,41 +48,42 @@ export function VenuesTable() {
 
     const handleToggleFeatured = useCallback(
         (venue: Venue) => {
-            try {
-                setFeaturedMutation(
-                    { id: venue.id },
-                    {
-                        onSuccess: () => {
-                            void refetch()
-                        }
+            setFeaturedMutation(
+                { id: venue.id },
+                {
+                    onSuccess: () => {
+                        setError(null)
+                        void refetch()
+                    },
+                    onError: (e) => {
+                        setError(
+                            'Toggle featured failed. There was an error altering the database.'
+                        )
+                        console.error(e)
                     }
-                )
-            } catch (e) {
-                setError(
-                    'Toggle featured failed. There was an error altering the database.'
-                )
-            }
+                }
+            )
         },
         [setFeaturedMutation, refetch]
     )
 
     const handleDelete = useCallback(
         (venue: Venue) => {
-            try {
-                deleteMutation(
-                    { id: venue.id },
-                    {
-                        onSuccess: () => {
-                            void refetch()
-                        }
+            deleteMutation(
+                { id: venue.id },
+                {
+                    onSuccess: () => {
+                        setError(null)
+                        void refetch()
+                    },
+                    onError: (e) => {
+                        setError(
+                            'Delete failed. There was an error altering the database.'
+                        )
+                        console.error(e)
                     }
-                )
-            } catch (e) {
-                setError(
-                    'Delete failed. There was an error altering the database.'
-                )
-                console.error(e)
-            }
+                }
+            )
         },
         [deleteMutation, refetch]
     )
@@ -156,14 +158,25 @@ export function VenuesTable() {
     return (
         <Box>
             {setFeaturedIsSuccess ? (
-                <Text color="green" size="2" align="center">
-                    Venue successfully set as featured
-                </Text>
+                <FadeOutText>
+                    <Text color="green" size="2" align="center">
+                        Venue successfully set as featured
+                    </Text>
+                </FadeOutText>
             ) : null}
             {deleteMutationIsSuccess ? (
-                <Text color="red" size="2" align="center">
-                    Venue has been deleted
-                </Text>
+                <FadeOutText>
+                    <Text color="red" size="2" align="center">
+                        Venue has been deleted
+                    </Text>
+                </FadeOutText>
+            ) : null}
+            {error ? (
+                <FadeOutText>
+                    <Text color="yellow" size="2" align="center">
+                        {error}
+                    </Text>
+                </FadeOutText>
             ) : null}
             {data?.length ? (
                 <Table.Root variant="surface">

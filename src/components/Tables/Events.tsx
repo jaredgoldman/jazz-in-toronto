@@ -18,12 +18,13 @@ import Loading from '../Loading'
 import { HeaderCell } from './components'
 import { fuzzyFilter } from './utils/filters'
 import { useRouter } from 'next/router'
+import FadeOutText from '../FadeOutText'
 
 const columnHelper = createColumnHelper<EventWithArtistVenue>()
 
 export function EventsTable() {
     const [filteredDate, setFilteredDate] = useState<Date>(new Date())
-    const [error, setError] = useState<string>('')
+    const [error, setError] = useState<string | null>(null)
     const { data, isLoading, isFetched, refetch } =
         api.event.getAllByDay.useQuery({
             date: filteredDate
@@ -54,40 +55,40 @@ export function EventsTable() {
 
     const handleToggleFeatured = useCallback(
         (event: EventWithArtistVenue) => {
-            try {
-                setFeaturedMutation(
-                    { id: event.id },
-                    {
-                        onSuccess: () => {
-                            void refetch()
-                        }
+            setFeaturedMutation(
+                { id: event.id },
+                {
+                    onSuccess: () => {
+                        void refetch()
+                    },
+                    onError: (e) => {
+                        setError(
+                            'Toggle featured failed. An error occurred when attempting to alter the database.'
+                        )
+                        console.error(e)
                     }
-                )
-            } catch (e) {
-                setError(
-                    'Toggle featured failed. An error occurred when attempting to alter the database.'
-                )
-            }
+                }
+            )
         },
         [setFeaturedMutation, refetch]
     )
 
     const handleDelete = useCallback(
         (event: EventWithArtistVenue) => {
-            try {
-                deleteMutation(
-                    { id: event.id },
-                    {
-                        onSuccess: () => {
-                            void refetch()
-                        }
+            deleteMutation(
+                { id: event.id },
+                {
+                    onSuccess: () => {
+                        void refetch()
+                    },
+                    onError: (e) => {
+                        setError(
+                            'Delete failed. An error occurred when attempting to alter the database.'
+                        )
+                        console.error(e)
                     }
-                )
-            } catch (e) {
-                setError(
-                    'Delete failed. An error occurred when attempting to alter the database.'
-                )
-            }
+                }
+            )
         },
         [deleteMutation, refetch]
     )
@@ -183,21 +184,26 @@ export function EventsTable() {
     return (
         <Flex direction="column">
             {setFeaturedIsSuccess && (
-                <Text color="green" size="2" align="center">
-                    Event successfully set as featured
-                </Text>
+                <FadeOutText>
+                    <Text color="green" size="2" align="center">
+                        Event successfully set as featured
+                    </Text>
+                </FadeOutText>
             )}
             {deleteMutationIsSuccess && (
-                <Text color="red" size="2" align="center">
-                    Event has been deleted
-                </Text>
+                <FadeOutText>
+                    <Text color="red" size="2" align="center">
+                        Event has been deleted
+                    </Text>
+                </FadeOutText>
             )}
-            {/*TODO: This doesn't work*/}
-            {error && (
-                <Text color="yellow" size="2" align="center">
-                    {error}
-                </Text>
-            )}
+            {error ? (
+                <FadeOutText>
+                    <Text color="yellow" size="2" align="center">
+                        {error}
+                    </Text>
+                </FadeOutText>
+            ) : null}
             <Flex mb="4" direction="column" className="max-w-xs" gap="3">
                 <Heading>Filter by date:</Heading>
                 <TextField.Root className="px-2 pt-1">
