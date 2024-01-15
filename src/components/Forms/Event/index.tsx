@@ -40,7 +40,7 @@ export default function EventForm(): JSX.Element {
                 endDate: toDateTimeLocal(data.endDate)
             })
         }
-    }, [])
+    }, [data, reset])
 
     return (
         <Flex direction="column" align="center">

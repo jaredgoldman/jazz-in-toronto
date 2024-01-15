@@ -11,7 +11,7 @@ import {
     createColumnHelper
 } from '@tanstack/react-table'
 import { Venue } from '~/types/data'
-import { Table, Box } from '@radix-ui/themes'
+import { Table, Box, Text } from '@radix-ui/themes'
 import { HeaderCell } from './components'
 import Loading from '../Loading'
 import { fuzzyFilter } from './utils/filters'
@@ -21,10 +21,13 @@ import { TableActionMenu } from './components/TableActionMenu'
 const columnHelper = createColumnHelper<Venue>()
 
 export function VenuesTable() {
-    const { data, isFetched, isLoading } = api.venue.getAll.useQuery()
+    const { data, isFetched, isLoading, refetch } = api.venue.getAll.useQuery()
     const router = useRouter()
-    const setFeaturedMutation = api.venue.setFeatured.useMutation()
-    const deleteMutation = api.venue.delete.useMutation()
+    const { mutate: setFeaturedMutation, isSuccess: setFeaturedIsSuccess } =
+        api.venue.setFeatured.useMutation()
+    const { mutate: deleteMutation, isSuccess: deleteMutationIsSuccess } =
+        api.venue.delete.useMutation()
+    const [error, setError] = useState<string | null>(null)
 
     const handleEditClick = useCallback(
         async (venue: Venue) => {
@@ -44,16 +47,43 @@ export function VenuesTable() {
 
     const handleToggleFeatured = useCallback(
         (venue: Venue) => {
-            setFeaturedMutation.mutate({ id: venue.id })
+            try {
+                setFeaturedMutation(
+                    { id: venue.id },
+                    {
+                        onSuccess: () => {
+                            void refetch()
+                        }
+                    }
+                )
+            } catch (e) {
+                setError(
+                    'Toggle featured failed. There was an error altering the database.'
+                )
+            }
         },
-        [setFeaturedMutation]
+        [setFeaturedMutation, refetch]
     )
 
     const handleDelete = useCallback(
         (venue: Venue) => {
-            deleteMutation.mutate({ id: venue.id })
+            try {
+                deleteMutation(
+                    { id: venue.id },
+                    {
+                        onSuccess: () => {
+                            void refetch()
+                        }
+                    }
+                )
+            } catch (e) {
+                setError(
+                    'Delete failed. There was an error altering the database.'
+                )
+                console.error(e)
+            }
         },
-        [deleteMutation]
+        [deleteMutation, refetch]
     )
 
     const columns = useMemo(
@@ -125,7 +155,17 @@ export function VenuesTable() {
 
     return (
         <Box>
-            {data?.length && (
+            {setFeaturedIsSuccess ? (
+                <Text color="green" size="2" align="center">
+                    Venue successfully set as featured
+                </Text>
+            ) : null}
+            {deleteMutationIsSuccess ? (
+                <Text color="red" size="2" align="center">
+                    Venue has been deleted
+                </Text>
+            ) : null}
+            {data?.length ? (
                 <Table.Root variant="surface">
                     <Table.Header>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -156,7 +196,7 @@ export function VenuesTable() {
                         ))}
                     </Table.Body>
                 </Table.Root>
-            )}
+            ) : null}
             {isFetched && !data?.length && <div>Empty state placeholder</div>}
             {isLoading && <Loading />}
         </Box>

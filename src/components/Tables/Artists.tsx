@@ -1,30 +1,33 @@
-import { useCallback, useMemo, useState } from 'react'
-import { TableActionMenu } from './components/TableActionMenu'
-import { api } from '~/utils/api'
-import { Artist } from '~/types/data'
-import { HeaderCell } from './components'
+import { Box, Table, Text } from '@radix-ui/themes'
 import {
+    ColumnFiltersState,
     SortingState,
+    createColumnHelper,
     flexRender,
     getCoreRowModel,
-    useReactTable,
-    getSortedRowModel,
     getFilteredRowModel,
-    ColumnFiltersState,
-    createColumnHelper
+    getSortedRowModel,
+    useReactTable
 } from '@tanstack/react-table'
-import { Table, Box } from '@radix-ui/themes'
-import Loading from '../Loading'
-import { fuzzyFilter } from './utils/filters'
 import { useRouter } from 'next/router'
+import { useCallback, useMemo, useState } from 'react'
+import { Artist } from '~/types/data'
+import { api } from '~/utils/api'
+import Loading from '../Loading'
+import { HeaderCell } from './components'
+import { TableActionMenu } from './components/TableActionMenu'
+import { fuzzyFilter } from './utils/filters'
 
 const columnHelper = createColumnHelper<Artist>()
 
 export function ArtistsTable() {
-    const { data, isFetched, isLoading } = api.artist.getAll.useQuery()
+    const { data, isFetched, isLoading, refetch } = api.artist.getAll.useQuery()
     const router = useRouter()
-    const setFeaturedMutation = api.artist.setFeatured.useMutation()
-    const deleteMutation = api.artist.delete.useMutation()
+    const { mutate: setFeaturedMutation, isSuccess: setFeaturedIsSuccess } =
+        api.artist.setFeatured.useMutation()
+    const { mutate: deleteMutation, isSuccess: deleteMutationIsSuccess } =
+        api.artist.delete.useMutation()
+    const [error, setError] = useState<string | null>(null)
 
     const handleEditClick = useCallback(
         async (artist: Artist) => {
@@ -44,16 +47,43 @@ export function ArtistsTable() {
 
     const handleToggleFeatured = useCallback(
         (artist: Artist) => {
-            setFeaturedMutation.mutate({ id: artist.id })
+            try {
+                setFeaturedMutation(
+                    { id: artist.id },
+                    {
+                        onSuccess: () => {
+                            void refetch()
+                        }
+                    }
+                )
+            } catch (e) {
+                setError(
+                    'Toggle featured failed. There was an error altering the database.'
+                )
+            }
         },
-        [setFeaturedMutation]
+        [setFeaturedMutation, refetch]
     )
 
     const handleDelete = useCallback(
         (artist: Artist) => {
-            deleteMutation.mutate({ id: artist.id })
+            try {
+                deleteMutation(
+                    { id: artist.id },
+                    {
+                        onSuccess: () => {
+                            void refetch()
+                        }
+                    }
+                )
+            } catch (e) {
+                setError(
+                    'Delete failed. There was an error altering the database.'
+                )
+                console.error(e)
+            }
         },
-        [deleteMutation]
+        [deleteMutation, refetch]
     )
 
     const columns = useMemo(
@@ -124,7 +154,23 @@ export function ArtistsTable() {
 
     return (
         <Box>
-            {data?.length && (
+            {setFeaturedIsSuccess ? (
+                <Text color="green" size="2" align="center">
+                    Artist successfully set as featured
+                </Text>
+            ) : null}
+            {deleteMutationIsSuccess ? (
+                <Text color="red" size="2" align="center">
+                    Artist has been deleted
+                </Text>
+            ) : null}
+            {/*TODO: This doesn't work*/}
+            {error ? (
+                <Text color="yellow" size="2" align="center">
+                    {error}
+                </Text>
+            ) : null}
+            {data?.length ? (
                 <Table.Root variant="surface">
                     <Table.Header>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -153,7 +199,7 @@ export function ArtistsTable() {
                         ))}
                     </Table.Body>
                 </Table.Root>
-            )}
+            ) : null}
             {isFetched && !data?.length && <div>Empty state placeholder</div>}
             {isLoading && <Loading />}
         </Box>

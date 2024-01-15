@@ -12,7 +12,7 @@ import {
     createColumnHelper
 } from '@tanstack/react-table'
 import { EventWithArtistVenue } from '~/types/data'
-import { Table, Flex, TextField, Heading } from '@radix-ui/themes'
+import { Table, Flex, TextField, Heading, Text } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import Loading from '../Loading'
 import { HeaderCell } from './components'
@@ -23,12 +23,16 @@ const columnHelper = createColumnHelper<EventWithArtistVenue>()
 
 export function EventsTable() {
     const [filteredDate, setFilteredDate] = useState<Date>(new Date())
-    const { data, isLoading, isFetched } = api.event.getAllByDay.useQuery({
-        date: filteredDate
-    })
+    const [error, setError] = useState<string>('')
+    const { data, isLoading, isFetched, refetch } =
+        api.event.getAllByDay.useQuery({
+            date: filteredDate
+        })
     const router = useRouter()
-    const setFeaturedMutation = api.event.setFeatured.useMutation()
-    const deleteMutation = api.event.delete.useMutation()
+    const { mutate: setFeaturedMutation, isSuccess: setFeaturedIsSuccess } =
+        api.event.setFeatured.useMutation()
+    const { mutate: deleteMutation, isSuccess: deleteMutationIsSuccess } =
+        api.event.delete.useMutation()
 
     const handleEditClick = useCallback(
         async (event: EventWithArtistVenue) => {
@@ -50,16 +54,42 @@ export function EventsTable() {
 
     const handleToggleFeatured = useCallback(
         (event: EventWithArtistVenue) => {
-            setFeaturedMutation.mutate({ id: event.id })
+            try {
+                setFeaturedMutation(
+                    { id: event.id },
+                    {
+                        onSuccess: () => {
+                            void refetch()
+                        }
+                    }
+                )
+            } catch (e) {
+                setError(
+                    'Toggle featured failed. An error occurred when attempting to alter the database.'
+                )
+            }
         },
-        [setFeaturedMutation]
+        [setFeaturedMutation, refetch]
     )
 
     const handleDelete = useCallback(
         (event: EventWithArtistVenue) => {
-            deleteMutation.mutate({ id: event.id })
+            try {
+                deleteMutation(
+                    { id: event.id },
+                    {
+                        onSuccess: () => {
+                            void refetch()
+                        }
+                    }
+                )
+            } catch (e) {
+                setError(
+                    'Delete failed. An error occurred when attempting to alter the database.'
+                )
+            }
         },
-        [deleteMutation]
+        [deleteMutation, refetch]
     )
 
     const columns = useMemo(
@@ -152,6 +182,22 @@ export function EventsTable() {
 
     return (
         <Flex direction="column">
+            {setFeaturedIsSuccess && (
+                <Text color="green" size="2" align="center">
+                    Event successfully set as featured
+                </Text>
+            )}
+            {deleteMutationIsSuccess && (
+                <Text color="red" size="2" align="center">
+                    Event has been deleted
+                </Text>
+            )}
+            {/*TODO: This doesn't work*/}
+            {error && (
+                <Text color="yellow" size="2" align="center">
+                    {error}
+                </Text>
+            )}
             <Flex mb="4" direction="column" className="max-w-xs" gap="3">
                 <Heading>Filter by date:</Heading>
                 <TextField.Root className="px-2 pt-1">
