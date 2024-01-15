@@ -1,14 +1,16 @@
+// Libraries
 import { getServerSession } from 'next-auth'
 import { createUploadthing } from 'uploadthing/next-legacy'
 import type { FileRouter } from 'uploadthing/next-legacy'
 import { authOptions } from './auth'
-import { MAX_FILE_SIZE_READABLE } from '~/utils/constants'
+// Assets
+import { env } from '~/env.mjs'
 
 const f = createUploadthing()
 
 export const uploadRouter = {
     uploadPosts: f({
-        image: { maxFileSize: MAX_FILE_SIZE_READABLE, maxFileCount: 8 }
+        image: { maxFileSize: env.MAX_FILE_SIZE_READABLE, maxFileCount: 8 }
     })
         .middleware(async ({ req, res }) => {
             const auth = await getServerSession(req, res, authOptions)
@@ -30,7 +32,7 @@ export const uploadRouter = {
             return
         }),
     uploadImage: f({
-        image: { maxFileSize: MAX_FILE_SIZE_READABLE }
+        image: { maxFileSize: env.MAX_FILE_SIZE_READABLE }
     }).onUploadComplete(({ metadata, file }) => {
         console.log({
             metadata,
