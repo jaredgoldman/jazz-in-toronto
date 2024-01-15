@@ -1,141 +1,74 @@
-import { Box, Table, Text } from '@radix-ui/themes'
+import { useMemo, useState } from 'react'
+import { api } from '~/utils/api'
+import { Artist } from '~/types/data'
+import { HeaderCell } from './components'
 import {
-    ColumnFiltersState,
+    ColumnDef,
     SortingState,
-    createColumnHelper,
     flexRender,
     getCoreRowModel,
-    getFilteredRowModel,
+    useReactTable,
     getSortedRowModel,
-    useReactTable
+    getFilteredRowModel,
+    ColumnFiltersState,
+    getPaginationRowModel
 } from '@tanstack/react-table'
-import { useRouter } from 'next/router'
-import { useCallback, useMemo, useState } from 'react'
-import { Artist } from '~/types/data'
-import { api } from '~/utils/api'
+import { Table, Box, Flex } from '@radix-ui/themes'
 import Loading from '../Loading'
-import { HeaderCell } from './components'
-import { TableActionMenu } from './components/TableActionMenu'
 import { fuzzyFilter } from './utils/filters'
-
-const columnHelper = createColumnHelper<Artist>()
+import { PaginationButtonGroup } from './components/PaginationButtonGroup'
 
 export function ArtistsTable() {
-    const { data, isFetched, isLoading, refetch } = api.artist.getAll.useQuery()
-    const router = useRouter()
-    const { mutate: setFeaturedMutation, isSuccess: setFeaturedIsSuccess } =
-        api.artist.setFeatured.useMutation()
-    const { mutate: deleteMutation, isSuccess: deleteMutationIsSuccess } =
-        api.artist.delete.useMutation()
-    const [error, setError] = useState<string | null>(null)
+    const { data, isFetched, isLoading } = api.artist.getAll.useQuery()
 
-    const handleEditClick = useCallback(
-        async (artist: Artist) => {
-            const params = new URLSearchParams()
-            params.set('id', artist.id)
-            await router.push(
-                {
-                    pathname: '/admin/edit-artist',
-                    query: params.toString()
-                },
-                undefined,
-                { shallow: true }
-            )
-        },
-        [router]
-    )
-
-    const handleToggleFeatured = useCallback(
-        (artist: Artist) => {
-            try {
-                setFeaturedMutation(
-                    { id: artist.id },
-                    {
-                        onSuccess: () => {
-                            void refetch()
-                        }
-                    }
-                )
-            } catch (e) {
-                setError(
-                    'Toggle featured failed. There was an error altering the database.'
-                )
-            }
-        },
-        [setFeaturedMutation, refetch]
-    )
-
-    const handleDelete = useCallback(
-        (artist: Artist) => {
-            try {
-                deleteMutation(
-                    { id: artist.id },
-                    {
-                        onSuccess: () => {
-                            void refetch()
-                        }
-                    }
-                )
-            } catch (e) {
-                setError(
-                    'Delete failed. There was an error altering the database.'
-                )
-                console.error(e)
-            }
-        },
-        [deleteMutation, refetch]
-    )
-
-    const columns = useMemo(
+    const columns = useMemo<ColumnDef<Artist>[]>(
         () => [
-            columnHelper.accessor((row) => row.name, {
+            {
+                accessorKey: 'name',
                 cell: (info) => info.getValue(),
-                header: 'Name'
-            }),
-            columnHelper.accessor((row) => row.genre, {
+                header: () => <span>Name</span>
+            },
+            {
+                accessorKey: 'genre',
                 cell: (info) => info.getValue(),
-                header: 'Genre'
-            }),
-            columnHelper.accessor((row) => row.website, {
+                header: () => <span>Genre</span>
+            },
+            {
+                accessorKey: 'website',
                 cell: (info) => info.getValue(),
-                header: 'Website'
-            }),
-            columnHelper.accessor((row) => row.instagramHandle, {
+                header: () => <span>Website</span>
+            },
+            {
+                accessorKey: 'instagramHandle',
                 cell: (info) => info.getValue(),
-                header: 'Instagram'
-            }),
-            columnHelper.accessor((row) => row.active, {
+                header: () => <span>Instagram</span>
+            },
+            {
+                accessorKey: 'active',
                 cell: (info) => info.renderValue()?.toString(),
-                header: 'Active',
+                header: () => <span>Active</span>,
                 enableColumnFilter: false
-            }),
-            columnHelper.accessor((row) => row.featured, {
+            },
+            {
+                accessorKey: 'featured',
                 cell: (info) => info.renderValue()?.toString(),
-                header: 'Featured',
+                header: () => <span>Featured</span>,
                 enableColumnFilter: false
-            }),
-            columnHelper.display({
-                id: 'edit',
-                cell: ({ row }) => (
-                    <TableActionMenu
-                        isFeatured={row.original.featured}
-                        onToggleFeatured={() => {
-                            handleToggleFeatured(row.original)
-                        }}
-                        onEdit={() => handleEditClick(row.original)}
-                        onDelete={() => handleDelete(row.original)}
-                    />
-                ),
-                header: 'Edit'
-            })
+            }
         ],
-        [handleDelete, handleEditClick, handleToggleFeatured]
+        []
     )
 
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
-    const table = useReactTable<Artist>({
+    const table = useReactTable({
+        initialState: {
+            pagination: {
+                pageSize: 10,
+                pageIndex: 0
+            }
+        },
         data: data ?? [],
         columns,
         state: {
@@ -149,57 +82,49 @@ export function ArtistsTable() {
         getSortedRowModel: getSortedRowModel(),
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
-        getFilteredRowModel: getFilteredRowModel()
+        getFilteredRowModel: getFilteredRowModel(),
+        getPaginationRowModel: getPaginationRowModel()
     })
 
     return (
         <Box>
-            {setFeaturedIsSuccess ? (
-                <Text color="green" size="2" align="center">
-                    Artist successfully set as featured
-                </Text>
-            ) : null}
-            {deleteMutationIsSuccess ? (
-                <Text color="red" size="2" align="center">
-                    Artist has been deleted
-                </Text>
-            ) : null}
-            {/*TODO: This doesn't work*/}
-            {error ? (
-                <Text color="yellow" size="2" align="center">
-                    {error}
-                </Text>
-            ) : null}
-            {data?.length ? (
-                <Table.Root variant="surface">
-                    <Table.Header>
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <Table.Row key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => (
-                                    <HeaderCell
-                                        header={header}
-                                        key={header.id}
-                                    />
-                                ))}
-                            </Table.Row>
-                        ))}
-                    </Table.Header>
-                    <Table.Body>
-                        {table.getRowModel().rows.map((row) => (
-                            <Table.Row key={row.id}>
-                                {row.getVisibleCells().map((cell) => (
-                                    <Table.Cell key={cell.id}>
-                                        {flexRender(
-                                            cell.column.columnDef.cell,
-                                            cell.getContext()
-                                        )}
-                                    </Table.Cell>
-                                ))}
-                            </Table.Row>
-                        ))}
-                    </Table.Body>
-                </Table.Root>
-            ) : null}
+            {data?.length && (
+                <>
+                    <Table.Root variant="surface">
+                        <Table.Header>
+                            {table.getHeaderGroups().map((headerGroup) => (
+                                <Table.Row key={headerGroup.id}>
+                                    {headerGroup.headers.map((header) => (
+                                        <HeaderCell
+                                            header={header}
+                                            key={header.id}
+                                        />
+                                    ))}
+                                </Table.Row>
+                            ))}
+                        </Table.Header>
+                        <Table.Body>
+                            {table.getRowModel().rows.map((row) => (
+                                <Table.Row key={row.id}>
+                                    {row.getVisibleCells().map((cell) => (
+                                        <Table.Cell key={cell.id}>
+                                            {flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext()
+                                            )}
+                                        </Table.Cell>
+                                    ))}
+                                </Table.Row>
+                            ))}
+                        </Table.Body>
+                    </Table.Root>
+                    {table.getPageCount() > 1 && (
+                        <Flex justify="center" mt="4">
+                            <PaginationButtonGroup table={table} />
+                        </Flex>
+                    )}
+                </>
+            )}
             {isFetched && !data?.length && <div>Empty state placeholder</div>}
             {isLoading && <Loading />}
         </Box>

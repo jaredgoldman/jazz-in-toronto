@@ -3,14 +3,14 @@ import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
 import { useUploadThing } from '~/hooks/useUploadThing'
 import { FileData, Artist } from '~/types/data'
-import { env } from '~/env.mjs'
+import { MAX_FILE_SIZE } from '~/utils/constants'
 
 export interface ArtistFormValues {
     name: string
-    genre?: string | null
-    photoPath?: string | null
-    instagramHandle: string | null
-    website?: string | null
+    genre?: string
+    photoPath?: string
+    instagramHandle: string | undefined
+    website?: string
     fileData?: {
         file: File
         dataURL: string
@@ -51,15 +51,12 @@ export default function useArtistForm(
               featured: false
           }
 
-    console.log(currentValues)
-
     const {
         handleSubmit,
         control,
         watch,
         setValue,
         getValues,
-        reset,
         formState: { errors }
     } = useForm<ArtistFormValues>({
         defaultValues
@@ -96,7 +93,7 @@ export default function useArtistForm(
             // upload it first
             if (values?.fileData?.file) {
                 // First ensure file is not too large
-                if (values.fileData.file.size > env.NEXT_PUBLIC_MAX_FILE_SIZE) {
+                if (values.fileData.file.size > MAX_FILE_SIZE) {
                     setError(
                         'File size is too large. Please upload a file smaller than 5MB.'
                     )
@@ -149,7 +146,6 @@ export default function useArtistForm(
         control,
         watch,
         onUpload,
-        getValues,
-        reset
+        getValues
     }
 }

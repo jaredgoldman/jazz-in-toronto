@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { useUploadThing } from '~/hooks/useUploadThing'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
-import { env } from '~/env.mjs'
 import { Area } from '@prisma/client'
-import { type Venue } from '~/types/data'
-import { type FileData } from '~/types/data'
+import { Venue } from '~/types/data'
+import { FileData } from '~/types/data'
+import { MAX_FILE_SIZE } from '~/utils/constants'
 
 export interface VenueFormValues {
     name: string
@@ -65,7 +65,6 @@ export default function useVenueForm(
         setValue,
         control,
         getValues,
-        reset,
         formState: { errors }
     } = useForm<VenueFormValues>({
         defaultValues
@@ -124,7 +123,7 @@ export default function useVenueForm(
             //
             if (values?.fileData?.file) {
                 // First ensure file is not too large
-                if (values.fileData.file.size > env.NEXT_PUBLIC_MAX_FILE_SIZE) {
+                if (values.fileData.file.size > MAX_FILE_SIZE) {
                     setError(
                         'File size is too large. Please upload a file smaller than 5MB.'
                     )
@@ -168,7 +167,6 @@ export default function useVenueForm(
         submit,
         onUpload,
         onSelectLocation,
-        getValues,
-        reset
+        getValues
     }
 }
