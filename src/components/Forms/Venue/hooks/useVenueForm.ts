@@ -14,9 +14,9 @@ export interface VenueFormValues {
     longitude: number
     city: string
     website: string
-    instagramHandle?: string
+    instagramHandle?: string | null
     fileData?: FileData
-    photoPath?: string
+    photoPath?: string | null
     phoneNumber: string
     area: Area
     featured: boolean
@@ -40,9 +40,16 @@ export default function useVenueForm(
     const isEditing = !!currentValues
     const defaultValues: VenueFormValues = currentValues
         ? {
-              ...currentValues,
-              photoPath: currentValues.photoPath || undefined,
-              instagramHandle: currentValues.instagramHandle || undefined,
+              name: currentValues.name,
+              photoPath: currentValues.photoPath || '',
+              latitude: currentValues.latitude || 0,
+              longitude: currentValues.longitude || 0,
+              city: currentValues.city || '',
+              address: currentValues.address || '',
+              website: currentValues.website || '',
+              instagramHandle: currentValues.instagramHandle || '',
+              phoneNumber: currentValues.phoneNumber || '',
+              area: currentValues.area || Area.DOWNTOWN,
               featured: currentValues.featured || false
           }
         : {
@@ -116,9 +123,9 @@ export default function useVenueForm(
             // Make coapy of values and conver phoneNumber to string
             let newValues = {
                 ...values,
-                phoneNumber: values.phoneNumber.toString()
+                phoneNumber: values.phoneNumber?.toString()
             }
-            let addedVenue
+            let addedVenue: Venue
             // if we have fileData in form Input
             // upload it first
             //

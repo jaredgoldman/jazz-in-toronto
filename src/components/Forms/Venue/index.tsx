@@ -23,15 +23,14 @@ export default function VenueForm() {
         venueMutationIsSuccess,
         editVenueMutationIsSuccess,
         error,
-        reset,
-        getValues
+        reset
     } = useVenueForm(data ?? undefined)
 
     useEffect(() => {
-        if (data && JSON.stringify(data) !== JSON.stringify(getValues)) {
+        if (data) {
             reset(data)
         }
-    }, [data, reset, getValues])
+    }, [data, reset])
 
     return (
         <Flex
@@ -59,6 +58,7 @@ export default function VenueForm() {
                         />
                         <PlacesAutocomplete
                             name="address"
+                            initialValue={data?.address}
                             label="Address"
                             control={control}
                             onSelect={onSelectLocation}
@@ -74,7 +74,6 @@ export default function VenueForm() {
                             name="phoneNumber"
                             label="Enter your venues phone number"
                             error={errors.phoneNumber}
-                            type="number"
                             control={control}
                         />
                         <Input

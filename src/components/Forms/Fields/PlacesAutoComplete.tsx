@@ -8,7 +8,14 @@ import useOnclickOutside from 'react-cool-onclickoutside'
 // Components
 import * as Form from '@radix-ui/react-form'
 import { TextField, Strong, Text } from '@radix-ui/themes'
-import { Control, Controller, FieldValues, Path } from 'react-hook-form'
+import {
+    Control,
+    Controller,
+    FieldError,
+    FieldValues,
+    Path
+} from 'react-hook-form'
+import { useEffect, useState } from 'react'
 
 interface Props<T extends FieldValues> {
     label: string
@@ -20,15 +27,19 @@ interface Props<T extends FieldValues> {
         longitude: number,
         city: string
     ) => void
+    error?: FieldError
     placeHolder?: string
     required?: boolean | string
+    initialValue?: string
 }
 
 export default function PlacesAutocomplete<T extends FieldValues>({
     label,
     name,
+    initialValue,
     placeHolder,
     onSelect,
+    error,
     control,
     required = false
 }: Props<T>): JSX.Element {
@@ -48,6 +59,10 @@ export default function PlacesAutocomplete<T extends FieldValues>({
         },
         debounce: 300
     })
+    useEffect(() => {
+        setValue(initialValue ?? '')
+    }, [initialValue, setValue])
+
     const ref = useOnclickOutside(() => {
         // When user clicks outside of the component, we can dismiss
         // the searched suggestions by calling this method
@@ -80,13 +95,12 @@ export default function PlacesAutocomplete<T extends FieldValues>({
                 structured_formatting: { main_text, secondary_text }
             } = suggestion
 
+            const select = async () => {
+                await handleSelect(suggestion)
+            }
+
             return (
-                <li
-                    key={place_id}
-                    onClick={async () => {
-                        await handleSelect(suggestion)
-                    }}
-                >
+                <li key={place_id} onKeyDown={select} onClick={select}>
                     <Strong>{main_text}</Strong> <Text>{secondary_text}</Text>
                 </li>
             )
@@ -113,6 +127,11 @@ export default function PlacesAutocomplete<T extends FieldValues>({
                     </Form.Control>
                     {/* We can use the "status" to decide whether we should display the dropdown or not */}
                     {status === 'OK' && <ul>{renderSuggestions()}</ul>}
+                    {error && (
+                        <Text size="2" color="red">
+                            {error.message}
+                        </Text>
+                    )}
                 </Form.Field>
             )}
         />

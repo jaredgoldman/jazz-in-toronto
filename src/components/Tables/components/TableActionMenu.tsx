@@ -29,11 +29,12 @@ export function TableActionMenu({
                     <DropdownMenu.Separator />
                     <DropdownMenu.Item
                         color={isFeatured ? undefined : 'green'}
+                        disabled={isFeatured}
                         onClick={() => {
                             onToggleFeatured()
                         }}
                     >
-                        {isFeatured ? 'Unfeature' : 'Feature'}
+                        Feature
                     </DropdownMenu.Item>
                     <DropdownMenu.Separator />
                     <DropdownMenu.Item>Approve</DropdownMenu.Item>
