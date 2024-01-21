@@ -13,7 +13,7 @@ type Props<T> = {
     visiblePageButtons?: number
 }
 
-export function PaginationButtonGroup<T extends unknown>({
+export function PaginationButtonGroup<T>({
     table,
     visiblePageButtons = 6
 }: Props<T>) {
@@ -57,7 +57,7 @@ export function PaginationButtonGroup<T extends unknown>({
         end = Math.min(totalPages - 1, end)
 
         return { start, end }
-    }, [totalPages, visible])
+    }, [totalPages, visible, pageIndex])
 
     /*
      * Function responsible for producing correct PaginationButton component
@@ -98,7 +98,7 @@ export function PaginationButtonGroup<T extends unknown>({
                 )
             }
         },
-        [totalPages, pageIndex, isOverflow]
+        [totalPages, pageIndex, isOverflow, table]
     )
 
     // Finally re-render buttons when state changes
