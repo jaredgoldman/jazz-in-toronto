@@ -21,7 +21,7 @@ export function EventsMapModal({ venueName, events }: Props) {
             <Heading mb="3">{`Today @ ${venueName}`}</Heading>
             <Flex direction="column">
                 {events.map((event) => (
-                    <Flex>{`${event.artist.name} @ ${format(
+                    <Flex key={event.id}>{`${event.artist.name} @ ${format(
                         event.startDate,
                         'h:mm a'
                     )}`}</Flex>

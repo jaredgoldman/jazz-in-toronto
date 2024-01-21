@@ -21,11 +21,6 @@ export const EventsMap = () => {
         events: []
     })
 
-    const handleMarkerClick = (event: any) => {
-        // Handle marker click event here
-        console.log(event)
-    }
-
     const handleMarkerHover = (
         events: EventWithArtistVenue[],
         venueName: string
@@ -68,7 +63,6 @@ export const EventsMap = () => {
                                     lng: venue.longitude,
                                     lat: venue.latitude
                                 }}
-                                onClick={handleMarkerClick}
                                 onMouseOver={() =>
                                     handleMarkerHover(events, venue.name)
                                 }
