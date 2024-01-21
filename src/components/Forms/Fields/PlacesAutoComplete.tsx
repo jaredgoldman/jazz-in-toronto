@@ -1,4 +1,3 @@
-/* eslint-disable */
 import usePlacesAutocomplete, {
     getGeocode,
     getLatLng
@@ -72,7 +71,9 @@ export default function PlacesAutocomplete<T extends FieldValues>({
         try {
             // Get latitude and longitude via utility functions
             const results = await getGeocode({ address: description })
-            const { lat, lng } = getLatLng(results[0])
+            const { lat, lng } = getLatLng(
+                results[0] as google.maps.GeocoderResult
+            )
             const city =
                 results[0]?.address_components[3]?.long_name || 'city unknown'
             onSelect(description, lat, lng, city)
