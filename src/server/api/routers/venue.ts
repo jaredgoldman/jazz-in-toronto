@@ -1,10 +1,10 @@
-// Libraries
 import { z } from 'zod'
 import {
     createTRPCRouter,
     publicProcedure,
     protectedProcedure
 } from '~/server/api/trpc'
+import { env } from '~/env.mjs'
 
 export const venueRouter = createTRPCRouter({
     create: publicProcedure
@@ -20,18 +20,7 @@ export const venueRouter = createTRPCRouter({
                 instagramHandle: z.string().optional(),
                 website: z.string(),
                 active: z.boolean().optional(),
-                phoneNumber: z.string(),
-                area: z.enum([
-                    'JUNCTION',
-                    'LITTLE_PORTUGAL',
-                    'ANNEX',
-                    'KENSINGTON',
-                    'DOWNTOWN',
-                    'RIVERDALE',
-                    'BEACHES',
-                    'NORTH_YORK',
-                    'DAVISVILLE'
-                ])
+                phoneNumber: z.string()
             })
         )
         .mutation(({ ctx, input }) => {
@@ -54,18 +43,7 @@ export const venueRouter = createTRPCRouter({
                     instagramHandle: z.string().nullable(),
                     website: z.string(),
                     active: z.boolean().optional(),
-                    phoneNumber: z.string(),
-                    area: z.enum([
-                        'JUNCTION',
-                        'LITTLE_PORTUGAL',
-                        'ANNEX',
-                        'KENSINGTON',
-                        'DOWNTOWN',
-                        'RIVERDALE',
-                        'BEACHES',
-                        'NORTH_YORK',
-                        'DAVISVILLE'
-                    ])
+                    phoneNumber: z.string()
                 })
             )
         )
@@ -78,13 +56,20 @@ export const venueRouter = createTRPCRouter({
     get: publicProcedure
         .input(z.object({ id: z.string().cuid() }))
         .query(({ ctx, input }) => {
-            return ctx.prisma.venue.findUnique({
-                where: { id: input.id }
+            return ctx.prisma.venue.findFirst({
+                where: {
+                    id: input.id,
+                    approved: env.SHOW_UNAPPROVED_ITEMS ? undefined : true
+                }
             })
         }),
 
     getAll: publicProcedure.query(({ ctx }) => {
-        return ctx.prisma.venue.findMany()
+        return ctx.prisma.venue.findMany({
+            where: {
+                approved: env.SHOW_UNAPPROVED_ITEMS ? undefined : true
+            }
+        })
     }),
 
     getAllCrawlable: publicProcedure.query(({ ctx }) => {
