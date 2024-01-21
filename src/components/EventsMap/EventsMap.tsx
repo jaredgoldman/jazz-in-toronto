@@ -3,7 +3,7 @@ import { APIProvider, Map, Marker } from '@vis.gl/react-google-maps'
 import { env } from '~/env.mjs'
 import { api } from '~/utils/api'
 import startOfDay from 'date-fns/startOfDay'
-import { Box, Flex, Text } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
 import { EventWithArtistVenue } from '~/types/data'
 import { EventsMapModal } from './components'
 
