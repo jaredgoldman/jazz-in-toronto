@@ -5,36 +5,13 @@ import { api } from '~/utils/api'
 import startOfDay from 'date-fns/startOfDay'
 import { Flex, Heading } from '@radix-ui/themes'
 import { EventWithArtistVenue } from '~/types/data'
-import { format } from 'date-fns'
-
-type Props = {
-    venueName: string
-    events: EventWithArtistVenue[]
-}
-
-const CustomModal = ({ venueName, events }: Props) => (
-    <Flex
-        position="relative"
-        top="0"
-        left="0"
-        height="100%"
-        p="2"
-        direction="column"
-        className="z-50 w-1/3 border-r border-slate-300 bg-slate-100/70 text-black"
-    >
-        <Heading mb="3">{`Today @ ${venueName}`}</Heading>
-        <Flex direction="column">
-            {events.map((event) => (
-                <Flex>{`${event.artist.name} @ ${format(
-                    event.startDate,
-                    'h:mm a'
-                )}`}</Flex>
-            ))}
-        </Flex>
-    </Flex>
-)
+import { EventsMapModal } from './components'
 
 export const EventsMap = () => {
+    const { data } = api.event.getAllByDayByVenue.useQuery({
+        date: startOfDay(new Date())
+    })
+
     const [showModal, setShowModal] = useState<boolean>(false)
     const [modalContent, setModalContent] = useState<{
         venueName: string
@@ -42,10 +19,6 @@ export const EventsMap = () => {
     }>({
         venueName: '',
         events: []
-    })
-
-    const { data } = api.event.getAllByDayByVenue.useQuery({
-        date: startOfDay(new Date())
     })
 
     const handleMarkerClick = (event: any) => {
@@ -57,7 +30,6 @@ export const EventsMap = () => {
         events: EventWithArtistVenue[],
         venueName: string
     ) => {
-        // Show the modal on hover and set its position and text
         setModalContent({
             venueName,
             events
@@ -103,7 +75,7 @@ export const EventsMap = () => {
                                 onMouseOut={handleMarkerHoverOut}
                             />
                         ))}
-                        {showModal && <CustomModal {...modalContent} />}
+                        {showModal && <EventsMapModal {...modalContent} />}
                     </>
                 </Map>
             </APIProvider>
