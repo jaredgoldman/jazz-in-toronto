@@ -1,7 +1,7 @@
 // Libraries
-import { cheerioJsonMapper, type JsonTemplate } from 'cheerio-json-mapper'
+import { cheerioJsonMapper, JsonTemplate } from 'cheerio-json-mapper'
 import { TRPCError } from '@trpc/server'
-import puppeterr, { type Page } from 'puppeteer-core'
+import puppeterr, { Page } from 'puppeteer-core'
 import { createId } from '@paralleldrive/cuid2'
 // types
 import type { Venue, EventWithArtistVenue } from '~/types/data'
@@ -211,7 +211,8 @@ export default class ScraperService {
                             featured: false,
                             active: true,
                             description: null,
-                            genre: null
+                            genre: null,
+                            approved: false
                         }
                     })
                 })
