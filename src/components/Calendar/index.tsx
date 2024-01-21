@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import CalendarDay from './components/CalendarDay'
 import { Flex, Button, Table, Heading } from '@radix-ui/themes'
 import Loading from '../Loading'
@@ -7,11 +6,11 @@ import { api } from '~/utils/api'
 import { getDaysOfTheWeek } from '~/utils/constants'
 
 export type Props = {
-    onChangeListingType: () => void
+    setSelectedDate: (date: Date) => void
+    selectedDate: Date
 }
 
-export default function Calendar({ onChangeListingType }: Props) {
-    const [selectedDate, setSelectedDate] = useState(new Date())
+export default function Calendar({ selectedDate, setSelectedDate }: Props) {
     const currentYear = selectedDate.getFullYear()
     const currentMonth = selectedDate.getMonth()
 
@@ -24,7 +23,7 @@ export default function Calendar({ onChangeListingType }: Props) {
         month: currentMonth
     })
 
-    const { changeMonth, currentMonthName, monthlyEvents } = useCalendar(
+    const { currentMonthName, monthlyEvents } = useCalendar(
         events,
         currentYear,
         currentMonth,
@@ -61,18 +60,12 @@ export default function Calendar({ onChangeListingType }: Props) {
     const eventRows = mapEventsToCalendarRows()
 
     return (
-        <Flex direction="column" justify="center" width="100%" className="max-w-[75rem]">
-            <Heading size="9" mb="6">
-                Calendar
-            </Heading>
-            <Heading mb="5">{`Events on ${currentMonthName}, ${currentYear}`}</Heading>
-            <Flex mb="5" className="gap-3">
-                <Button onClick={() => changeMonth(-1)}>Previous</Button>
-                <Button onClick={() => changeMonth(1)}>Next</Button>
-                <Button variant="soft" onClick={onChangeListingType}>
-                    View daily listings
-                </Button>
-            </Flex>
+        <Flex
+            direction="column"
+            justify="center"
+            width="100%"
+            className="max-w-[75rem]"
+        >
             {isLoading ? (
                 <Loading />
             ) : (

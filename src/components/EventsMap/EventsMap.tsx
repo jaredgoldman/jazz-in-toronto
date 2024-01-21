@@ -3,13 +3,16 @@ import { APIProvider, Map, Marker } from '@vis.gl/react-google-maps'
 import { env } from '~/env.mjs'
 import { api } from '~/utils/api'
 import startOfDay from 'date-fns/startOfDay'
-import { Flex, Heading, Text } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
 import { EventWithArtistVenue } from '~/types/data'
 import { EventsMapModal } from './components'
 
-export const EventsMap = () => {
+type Props = {
+    selectedDate: Date
+}
+export const EventsMap = ({ selectedDate }: Props) => {
     const { data } = api.event.getAllByDayByVenue.useQuery({
-        date: startOfDay(new Date())
+        date: startOfDay(selectedDate)
     })
 
     const [showModal, setShowModal] = useState<boolean>(false)
@@ -32,17 +35,11 @@ export const EventsMap = () => {
         setShowModal(true)
     }
 
-    const handleMarkerHoverOut = () => {
-        // Hide the modal when mouse leaves the marker
-        setShowModal(false)
-    }
-
     return (
         <Flex direction="column" width="100%">
-            <Heading size="9" mb="3">
-                Daily Events Map
-            </Heading>
-            <Text size="4">Hover over a marker to see the events</Text>
+            <Text size="4" mb="1">
+                Hover over a marker to see the respective venues events
+            </Text>
             <APIProvider apiKey={env.NEXT_PUBLIC_GOOGLE_API_KEY}>
                 <Map
                     zoom={12}
@@ -67,10 +64,14 @@ export const EventsMap = () => {
                                 onMouseOver={() =>
                                     handleMarkerHover(events, venue.name)
                                 }
-                                onMouseOut={handleMarkerHoverOut}
                             />
                         ))}
-                        {showModal && <EventsMapModal {...modalContent} />}
+                        {showModal && (
+                            <EventsMapModal
+                                {...modalContent}
+                                onClose={() => setShowModal(false)}
+                            />
+                        )}
                     </>
                 </Map>
             </APIProvider>

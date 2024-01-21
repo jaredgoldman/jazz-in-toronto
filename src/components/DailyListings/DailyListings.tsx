@@ -16,7 +16,7 @@ import { HeaderCell } from '../Tables/components'
 import { fuzzyFilter } from '../Tables/utils/filters'
 
 interface Props {
-    onChangeListingType: () => void
+    selectedDate: Date
 }
 
 const columnHelper = createColumnHelper<EventWithArtistVenue>()
@@ -24,9 +24,7 @@ const columnHelper = createColumnHelper<EventWithArtistVenue>()
 /**
  * Component to show daily listings in chronologcal order per day
  */
-export default function DailyListings({ onChangeListingType }: Props) {
-    const [selectedDate, setSelectedDate] = useState(new Date())
-
+export default function DailyListings({ selectedDate }: Props) {
     const { data, isLoading, isFetched } = api.event.getAllByDay.useQuery({
         date: selectedDate
     })
@@ -83,38 +81,6 @@ export default function DailyListings({ onChangeListingType }: Props) {
 
     return (
         <Flex direction="column" grow="1">
-            <Heading
-                size={{ initial: '8', xs: '9' }}
-                align={{ initial: 'center', xs: 'left' }}
-                mb="6"
-            >
-                Daily Listings
-            </Heading>
-            <Flex mb="5" gap="3">
-                <Button
-                    onClick={() => {
-                        setSelectedDate(addDays(selectedDate, -1))
-                    }}
-                >
-                    Previous Day
-                </Button>
-                <Button
-                    onClick={() => setSelectedDate(addDays(selectedDate, 1))}
-                >
-                    Next Day
-                </Button>
-                <Button variant="soft" onClick={onChangeListingType}>
-                    View in Calendar
-                </Button>
-            </Flex>
-            <Heading
-                size={{ initial: '3', xs: '5' }}
-                align={{ initial: 'center', xs: 'left' }}
-                mb="5"
-            >{`Events on ${format(
-                selectedDate,
-                'EEEE, MMMM do, yyyy'
-            )} in Toronto, Ontario`}</Heading>
             {data?.length && (
                 <Table.Root variant="surface">
                     <Table.Header>
