@@ -46,6 +46,7 @@ export default function DailyListings({ onChangeListingType }: Props) {
             columnHelper.accessor(
                 (row) => ({ startDate: row.startDate, endDate: row.endDate }),
                 {
+                    id: 'startDate',
                     header: 'Time',
                     cell: (info) =>
                         `${format(

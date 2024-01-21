@@ -5,6 +5,7 @@ import DailyListings from '~/components/DailyListings/DailyListings'
 import Calendar from '~/components/Calendar'
 import { Flex, Text } from '@radix-ui/themes'
 import Link from '~/components/Link'
+import { EventsMap } from '~/components/EventsMap'
 
 enum ListingType {
     CALENDAR = 'CALENDAR',
@@ -50,6 +51,9 @@ export default function Listings() {
                         <Calendar onChangeListingType={onChangeListingType} />
                     </Flex>
                 )}
+                <Flex width="100%" className="h-[500px] max-w-[65rem]">
+                    <EventsMap />
+                </Flex>
                 <Flex width="100%" className="max-w-[65rem]">
                     <RecurringGigs />
                 </Flex>
