@@ -51,7 +51,7 @@ export default function Listings() {
                         <Calendar onChangeListingType={onChangeListingType} />
                     </Flex>
                 )}
-                <Flex width="100%" className="h-[400px] max-w-[65rem]">
+                <Flex width="100%" className="h-[500px] max-w-[65rem]">
                     <EventsMap />
                 </Flex>
                 <Flex width="100%" className="max-w-[65rem]">
