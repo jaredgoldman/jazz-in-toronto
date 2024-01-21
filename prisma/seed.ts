@@ -1,4 +1,4 @@
-import { Venue, Area } from '@prisma/client'
+import { Venue } from '@prisma/client'
 import { prisma } from '../src/server/db'
 import { ArtistNameGenerator } from './artistNameGenerator'
 
@@ -53,8 +53,7 @@ const generateVenues = async () => {
             crawlable: true,
             eventsPath: '/events',
             phoneNumber: '416-598-2475',
-            facebookLink: 'https://www.facebook.com/therextoronto',
-            area: Area.DOWNTOWN
+            facebookLink: 'https://www.facebook.com/therextoronto'
         }
     })
     await prisma.venue.create({
@@ -70,8 +69,7 @@ const generateVenues = async () => {
             crawlable: true,
             eventsPath: '/events-9O8Cm',
             phoneNumber: '416-598-2475',
-            facebookLink: 'https://www.facebook.com/dromtaberna',
-            area: Area.KENSINGTON
+            facebookLink: 'https://www.facebook.com/dromtaberna'
         }
     })
     await prisma.venue.create({
@@ -87,8 +85,7 @@ const generateVenues = async () => {
             crawlable: true,
             eventsPath: '/performance_calendar',
             phoneNumber: '416-363-5299',
-            facebookLink: 'https://www.facebook.com/JazzBistroTO',
-            area: Area.DOWNTOWN
+            facebookLink: 'https://www.facebook.com/JazzBistroTO'
         }
     })
 }

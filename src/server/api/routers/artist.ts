@@ -5,6 +5,7 @@ import {
     publicProcedure,
     protectedProcedure
 } from '~/server/api/trpc'
+import { env } from '~/env.mjs'
 
 export const artistRouter = createTRPCRouter({
     create: publicProcedure
@@ -46,13 +47,20 @@ export const artistRouter = createTRPCRouter({
     get: publicProcedure
         .input(z.object({ id: z.string().cuid() }))
         .query(({ ctx, input }) => {
-            return ctx.prisma.artist.findUnique({
-                where: { id: input.id }
+            return ctx.prisma.artist.findFirst({
+                where: {
+                    id: input.id,
+                    approved: env.SHOW_UNAPPROVED_ITEMS ? undefined : true
+                }
             })
         }),
 
     getAll: publicProcedure.query(({ ctx }) => {
-        return ctx.prisma.artist.findMany()
+        return ctx.prisma.artist.findMany({
+            where: {
+                approved: env.SHOW_UNAPPROVED_ITEMS ? undefined : true
+            }
+        })
     }),
 
     update: protectedProcedure

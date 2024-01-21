@@ -1,15 +1,9 @@
 import { expect, it, describe, beforeAll, afterAll } from 'vitest'
-import { type RouterInputs } from '~/utils/api'
+import { RouterInputs } from '~/utils/api'
 import { appRouter } from '~/server/api/root'
 import { createInnerTRPCContext } from '~/server/api/trpc'
 import { prisma } from '~/server/db'
-import {
-    Area,
-    type Admin,
-    type Artist,
-    type Event,
-    type Venue
-} from '@prisma/client'
+import { Admin, Artist, Event, Venue } from '@prisma/client'
 
 const testVenueData = {
     name: 'test venue',
@@ -18,8 +12,7 @@ const testVenueData = {
     website: 'test.com',
     longitude: 0,
     latitude: 0,
-    phoneNumber: '6474548412',
-    area: Area.ANNEX
+    phoneNumber: '6474548412'
 }
 
 const testArtistData = {
