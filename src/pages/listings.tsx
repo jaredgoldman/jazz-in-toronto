@@ -18,7 +18,7 @@ enum ListingType {
 export default function Listings() {
     const [selectedDate, setSelectedDate] = useState(new Date())
     // Change listing type
-    const [listingType, setListingType] = useState(ListingType.DAILY_LISTINGS)
+    const [listingType, setListingType] = useState(ListingType.EVENT_MAP)
     const onChangeListingType = (type: ListingType) => setListingType(type)
 
     return (

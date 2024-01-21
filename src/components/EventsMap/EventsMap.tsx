@@ -42,7 +42,9 @@ export const EventsMap = ({ selectedDate }: Props) => {
 
     return (
         <Flex direction="column" width="100%">
-            <Text size="4">Hover over a marker to see the events</Text>
+            <Text size="4" mb="1">
+                Hover over a marker to see the events
+            </Text>
             <APIProvider apiKey={env.NEXT_PUBLIC_GOOGLE_API_KEY}>
                 <Map
                     zoom={12}
