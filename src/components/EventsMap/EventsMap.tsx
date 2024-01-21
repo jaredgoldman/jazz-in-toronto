@@ -3,7 +3,7 @@ import { APIProvider, Map, Marker } from '@vis.gl/react-google-maps'
 import { env } from '~/env.mjs'
 import { api } from '~/utils/api'
 import startOfDay from 'date-fns/startOfDay'
-import { Flex, Text } from '@radix-ui/themes'
+import { Box, Flex, Text } from '@radix-ui/themes'
 import { EventWithArtistVenue } from '~/types/data'
 import { EventsMapModal } from './components'
 
@@ -35,11 +35,6 @@ export const EventsMap = ({ selectedDate }: Props) => {
         setShowModal(true)
     }
 
-    const handleMarkerHoverOut = () => {
-        // Hide the modal when mouse leaves the marker
-        setShowModal(false)
-    }
-
     return (
         <Flex direction="column" width="100%">
             <Text size="4" mb="1">
@@ -55,7 +50,6 @@ export const EventsMap = ({ selectedDate }: Props) => {
                     gestureHandling={'greedy'}
                     disableDefaultUI={true}
                     zoomControl={true}
-                    onMouseout={handleMarkerHoverOut}
                 >
                     <>
                         {data?.map(({ venue, events }) => (
@@ -72,7 +66,12 @@ export const EventsMap = ({ selectedDate }: Props) => {
                                 }
                             />
                         ))}
-                        {showModal && <EventsMapModal {...modalContent} />}
+                        {showModal && (
+                            <EventsMapModal
+                                {...modalContent}
+                                onClose={() => setShowModal(false)}
+                            />
+                        )}
                     </>
                 </Map>
             </APIProvider>
