@@ -135,8 +135,8 @@ dependencies:
     specifier: ^5.2.1
     version: 5.2.1(zod@3.21.4)
   use-places-autocomplete:
-    specifier: ^4.0.0
-    version: 4.0.0(react@18.2.0)
+    specifier: ^4.0.1
+    version: 4.0.1(react@18.2.0)
   zod:
     specifier: ^3.21.4
     version: 3.21.4
@@ -8261,8 +8261,8 @@ packages:
       tslib: 2.6.0
     dev: false
 
-  /use-places-autocomplete@4.0.0(react@18.2.0):
-    resolution: {integrity: sha512-w8jdm1iT3WXN0DPXtgyccJoBlAk/UetCMg466B2pBiWNBfvAIxdRoU6Gt4CzW11rWWuzpqnMG5hLxUOKSZBSgw==}
+  /use-places-autocomplete@4.0.1(react@18.2.0):
+    resolution: {integrity: sha512-AybOR/qzXcdaMCGSFveycfL3kztwseAOdagbYoJD8c3amll+gEiPmUkSNhYNUEBqbR+JmJG6/oBTRgihNbE+1A==}
     peerDependencies:
       react: '>= 16.8.0'
     dependencies:

@@ -29,7 +29,7 @@ export default function AdminLayout({
                     className="flex-grow overflow-x-hidden"
                     py="7"
                 >
-                    {true ? (
+                    {session ? (
                         children
                     ) : (
                         <Flex direction="column" align="center">

@@ -1,11 +1,9 @@
 /* eslint-disable */
-// Libraries
 import usePlacesAutocomplete, {
     getGeocode,
     getLatLng
 } from 'use-places-autocomplete'
 import useOnclickOutside from 'react-cool-onclickoutside'
-// Components
 import * as Form from '@radix-ui/react-form'
 import { TextField, Strong, Text } from '@radix-ui/themes'
 import { Control, Controller, FieldValues, Path } from 'react-hook-form'
@@ -40,14 +38,20 @@ export default function PlacesAutocomplete<T extends FieldValues>({
         clearSuggestions
     } = usePlacesAutocomplete({
         requestOptions: {
-            /* Define search scope here */
-            // locationRestriction: {
-            //     latLng: { lat: () => 43.65107, lng: () => -79.347015 },
-            //     radius: 2800 * 1000, // approximately radius to cover the whole Canada
-            // },
+            region: 'CA',
+            componentRestrictions: {
+                country: ['ca']
+            },
+            locationBias: {
+                north: 56.852592,
+                south: 41.675105,
+                west: -95.156227,
+                east: -74.875761
+            }
         },
         debounce: 300
     })
+
     const ref = useOnclickOutside(() => {
         // When user clicks outside of the component, we can dismiss
         // the searched suggestions by calling this method
@@ -65,12 +69,16 @@ export default function PlacesAutocomplete<T extends FieldValues>({
         setValue(description, false)
         clearSuggestions()
 
-        // Get latitude and longitude via utility functions
-        const results = await getGeocode({ address: description })
-        const { lat, lng } = getLatLng(results[0])
-        const city =
-            results[0]?.address_components[3]?.long_name || 'city unknonw'
-        onSelect(description, lat, lng, city)
+        try {
+            // Get latitude and longitude via utility functions
+            const results = await getGeocode({ address: description })
+            const { lat, lng } = getLatLng(results[0])
+            const city =
+                results[0]?.address_components[3]?.long_name || 'city unknown'
+            onSelect(description, lat, lng, city)
+        } catch (e) {
+            console.log('ERROR', e)
+        }
     }
 
     const renderSuggestions = () =>
