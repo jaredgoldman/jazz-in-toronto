@@ -17,6 +17,8 @@ import { fuzzyFilter } from '../Tables/utils/filters'
 
 interface Props {
     onChangeListingType: () => void
+    selectedDate: Date
+    setSelectedDate: () => void
 }
 
 const columnHelper = createColumnHelper<EventWithArtistVenue>()
@@ -24,9 +26,11 @@ const columnHelper = createColumnHelper<EventWithArtistVenue>()
 /**
  * Component to show daily listings in chronologcal order per day
  */
-export default function DailyListings({ onChangeListingType }: Props) {
-    const [selectedDate, setSelectedDate] = useState(new Date())
-
+export default function DailyListings({
+    onChangeListingType,
+    selectedDate,
+    setSelectedDate
+}: Props) {
     const { data, isLoading, isFetched } = api.event.getAllByDay.useQuery({
         date: selectedDate
     })

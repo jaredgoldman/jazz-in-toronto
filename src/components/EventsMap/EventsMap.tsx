@@ -7,9 +7,12 @@ import { Flex, Heading, Text } from '@radix-ui/themes'
 import { EventWithArtistVenue } from '~/types/data'
 import { EventsMapModal } from './components'
 
-export const EventsMap = () => {
+type Props = {
+    selectedDate: Date
+}
+export const EventsMap = ({ selectedDate }: Props) => {
     const { data } = api.event.getAllByDayByVenue.useQuery({
-        date: startOfDay(new Date())
+        date: startOfDay(selectedDate)
     })
 
     const [showModal, setShowModal] = useState<boolean>(false)

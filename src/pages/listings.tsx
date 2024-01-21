@@ -13,6 +13,7 @@ enum ListingType {
 }
 
 export default function Listings() {
+    const [selectedDate, setSelectedDate] = useState(new Date())
     const [listingType, setListingType] = useState(ListingType.DAILY_LISTINGS)
     const onChangeListingType = () =>
         setListingType((prevListing) =>
@@ -44,15 +45,21 @@ export default function Listings() {
                     <Flex width="100%" className="max-w-[65rem]">
                         <DailyListings
                             onChangeListingType={onChangeListingType}
+                            setSelectedDate={setSelectedDate}
+                            selectedDate={selectedDate}
                         />
                     </Flex>
                 ) : (
                     <Flex width="100%" className="max-w-[65rem]">
-                        <Calendar onChangeListingType={onChangeListingType} />
+                        <Calendar
+                            selectedDate={selectedDate}
+                            setSelectedDate={setSelectedDate}
+                            onChangeListingType={onChangeListingType}
+                        />
                     </Flex>
                 )}
                 <Flex width="100%" className="h-[500px] max-w-[65rem]">
-                    <EventsMap />
+                    <EventsMap selectedDate={selectedDate} />
                 </Flex>
                 <Flex width="100%" className="max-w-[65rem]">
                     <RecurringGigs />
