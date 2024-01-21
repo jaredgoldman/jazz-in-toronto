@@ -68,6 +68,7 @@ export default function Listings() {
                             onClick={() =>
                                 onChangeListingType(ListingType.CALENDAR)
                             }
+                            disabled={listingType === ListingType.CALENDAR}
                         >
                             View in Calendar
                         </Button>
@@ -75,6 +76,9 @@ export default function Listings() {
                             variant="soft"
                             onClick={() =>
                                 onChangeListingType(ListingType.DAILY_LISTINGS)
+                            }
+                            disabled={
+                                listingType === ListingType.DAILY_LISTINGS
                             }
                         >
                             View Listings
@@ -84,6 +88,7 @@ export default function Listings() {
                             onClick={() =>
                                 onChangeListingType(ListingType.EVENT_MAP)
                             }
+                            disabled={listingType === ListingType.EVENT_MAP}
                         >
                             View Event Map
                         </Button>
