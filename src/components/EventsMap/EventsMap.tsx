@@ -55,6 +55,7 @@ export const EventsMap = ({ selectedDate }: Props) => {
                     gestureHandling={'greedy'}
                     disableDefaultUI={true}
                     zoomControl={true}
+                    onMouseout={handleMarkerHoverOut}
                 >
                     <>
                         {data?.map(({ venue, events }) => (
@@ -69,7 +70,6 @@ export const EventsMap = ({ selectedDate }: Props) => {
                                 onMouseOver={() =>
                                     handleMarkerHover(events, venue.name)
                                 }
-                                onMouseOut={handleMarkerHoverOut}
                             />
                         ))}
                         {showModal && <EventsMapModal {...modalContent} />}
