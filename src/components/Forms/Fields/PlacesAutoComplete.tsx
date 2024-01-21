@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import usePlacesAutocomplete, {
     getGeocode,
     getLatLng
@@ -64,7 +63,6 @@ export default function PlacesAutocomplete<T extends FieldValues>({
     }
 
     const handleSelect = async ({ description }: { description: string }) => {
-        console.log('DESC', description)
         // When user selects a place, we can replace the keyword without request data from API
         // by setting the second parameter to "false"
         setValue(description, false)
@@ -73,15 +71,9 @@ export default function PlacesAutocomplete<T extends FieldValues>({
         try {
             // Get latitude and longitude via utility functions
             const results = await getGeocode({ address: description })
-            console.log({
-                results
-            })
             const { lat, lng } = getLatLng(results[0])
             const city =
-                results[0]?.address_components[3]?.long_name || 'city unknonw'
-            console.log({
-                city
-            })
+                results[0]?.address_components[3]?.long_name || 'city unknown'
             onSelect(description, lat, lng, city)
         } catch (e) {
             console.log('ERROR', e)
