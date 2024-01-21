@@ -6,16 +6,11 @@ import { api } from '~/utils/api'
 import { getDaysOfTheWeek } from '~/utils/constants'
 
 export type Props = {
-    onChangeListingType: () => void
     setSelectedDate: (date: Date) => void
     selectedDate: Date
 }
 
-export default function Calendar({
-    onChangeListingType,
-    selectedDate,
-    setSelectedDate
-}: Props) {
+export default function Calendar({ selectedDate, setSelectedDate }: Props) {
     const currentYear = selectedDate.getFullYear()
     const currentMonth = selectedDate.getMonth()
 
@@ -28,7 +23,7 @@ export default function Calendar({
         month: currentMonth
     })
 
-    const { changeMonth, currentMonthName, monthlyEvents } = useCalendar(
+    const { currentMonthName, monthlyEvents } = useCalendar(
         events,
         currentYear,
         currentMonth,
@@ -71,17 +66,6 @@ export default function Calendar({
             width="100%"
             className="max-w-[75rem]"
         >
-            <Heading size="9" mb="6">
-                Calendar
-            </Heading>
-            <Heading mb="5">{`Events on ${currentMonthName}, ${currentYear}`}</Heading>
-            <Flex mb="5" className="gap-3">
-                <Button onClick={() => changeMonth(-1)}>Previous</Button>
-                <Button onClick={() => changeMonth(1)}>Next</Button>
-                <Button variant="soft" onClick={onChangeListingType}>
-                    View daily listings
-                </Button>
-            </Flex>
             {isLoading ? (
                 <Loading />
             ) : (

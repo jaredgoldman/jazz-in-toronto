@@ -3,7 +3,7 @@ import { APIProvider, Map, Marker } from '@vis.gl/react-google-maps'
 import { env } from '~/env.mjs'
 import { api } from '~/utils/api'
 import startOfDay from 'date-fns/startOfDay'
-import { Flex, Heading, Text } from '@radix-ui/themes'
+import { Flex, Text } from '@radix-ui/themes'
 import { EventWithArtistVenue } from '~/types/data'
 import { EventsMapModal } from './components'
 
@@ -42,9 +42,6 @@ export const EventsMap = ({ selectedDate }: Props) => {
 
     return (
         <Flex direction="column" width="100%">
-            <Heading size="9" mb="3">
-                Daily Events Map
-            </Heading>
             <Text size="4">Hover over a marker to see the events</Text>
             <APIProvider apiKey={env.NEXT_PUBLIC_GOOGLE_API_KEY}>
                 <Map
