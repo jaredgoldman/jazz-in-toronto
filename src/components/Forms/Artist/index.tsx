@@ -9,7 +9,7 @@ import { useEffect } from 'react'
 
 export default function ArtistForm() {
     const router = useRouter()
-    const param = router.query.id as string
+    const param = router.query as string
     const { data } = api.artist.get.useQuery({ id: param })
     const {
         submit,
@@ -26,14 +26,14 @@ export default function ArtistForm() {
     } = useArtistForm()
 
     useEffect(() => {
-        if (data && JSON.stringify(data) !== JSON.stringify(getValues)) {
+        if (data) {
             reset({
-        ...data,
-        instagramHandle: data.instagramHandle ?? '',
-        genre: data.genre ?? '',
-        photoPath: data.photoPath ?? '',
-        website: data.website?? '',
-      })
+                ...data,
+                instagramHandle: data.instagramHandle ?? '',
+                genre: data.genre ?? '',
+                photoPath: data.photoPath ?? '',
+                website: data.website ?? ''
+            })
         }
     }, [data, reset, getValues])
 
