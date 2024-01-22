@@ -1,6 +1,10 @@
-import { useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 
-export default function FadeOutText({ children }) {
+interface Props {
+  children?: ReactNode
+}
+
+export default function FadeOutText({ children, ...props }: Props) {
     const [isVisible, setIsVisible] = useState(true)
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -9,7 +13,7 @@ export default function FadeOutText({ children }) {
         return () => clearTimeout(timer) // Clean up on component unmount
     }, [])
     return (
-        <div className={`fade-out-text ${isVisible ? 'visible' : 'hidden'}`}>
+        <div {...props} className={`fade-out-text ${isVisible ? 'visible' : 'hidden'}`}>
             {children}
         </div>
     )
