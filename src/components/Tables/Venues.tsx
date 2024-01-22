@@ -1,7 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { api } from '~/utils/api'
 import {
-    ColumnDef,
     flexRender,
     getCoreRowModel,
     useReactTable,
