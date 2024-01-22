@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useUploadThing } from '~/hooks/useUploadThing'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
-import { Area } from '@prisma/client'
 import { Venue } from '~/types/data'
 import { FileData } from '~/types/data'
 import { MAX_FILE_SIZE } from '~/utils/constants'
@@ -18,7 +17,6 @@ export interface VenueFormValues {
     fileData?: FileData
     photoPath?: string | null
     phoneNumber: string
-    area: Area
     featured: boolean
 }
 
@@ -63,7 +61,6 @@ export default function useVenueForm(
               website: '',
               fileData: undefined,
               phoneNumber: '',
-              area: Area.DOWNTOWN,
               featured: false
           }
 

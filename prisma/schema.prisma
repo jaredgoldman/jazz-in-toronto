@@ -34,6 +34,7 @@ model Artist {
   events          Event[]
   active          Boolean  @default(true)
   description     String?
+  approved        Boolean @default(false)
 
   @@index([featured, name])
 }
@@ -58,36 +59,11 @@ model Venue {
   crawlable       Boolean     @default(false)
   eventsPath      String?
   description     String?
-  area            Area
-  eventsHash      String?
-  VenueHash       VenueHash[]
+  approved        Boolean @default(false)
 
   @@index([featured])
 }
 
-model VenueHash {
-  id        String   @id @default(cuid())
-  startDate DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  hash      String
-  Venue     Venue    @relation(fields: [venueId], references: [id])
-  venueId   String
-
-  @@unique([startDate, venueId])
-}
-
-enum Area {
-  JUNCTION
-  LITTLE_PORTUGAL
-  ANNEX
-  KENSINGTON
-  DOWNTOWN
-  RIVERDALE
-  BEACHES
-  NORTH_YORK
-  DAVISVILLE
-}
 
 model Event {
   id              String   @id @default(cuid())

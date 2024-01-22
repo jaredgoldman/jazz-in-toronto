@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import ScraperService from '../scraperService'
 import { prisma } from '~/server/db'
-import { Area, type Venue } from '@prisma/client'
+import { Venue } from '@prisma/client'
 import { addMonths } from 'date-fns'
 let venue: Venue
 
@@ -18,8 +18,7 @@ beforeAll(async () => {
             longitude: -79.3883,
             crawlable: true,
             eventsPath: 'events',
-            phoneNumber: '6474548412',
-            area: Area.ANNEX
+            phoneNumber: '6474548412'
         }
     })
 })

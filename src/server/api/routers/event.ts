@@ -6,6 +6,29 @@ import {
 } from '~/server/api/trpc'
 import addDays from 'date-fns/addDays'
 import { env } from '~/env.mjs'
+import { PrismaClient, Venue } from '@prisma/client'
+import { EventWithArtistVenue } from '~/types/data'
+
+// Shared helpers
+const getAllByDay = (date: Date, prisma: PrismaClient) => {
+    console.log({ SHOW: env.SHOW_UNAPPROVED_ITEMS })
+    return prisma.event.findMany({
+        where: {
+            startDate: {
+                gte: new Date(date.setHours(0, 0, 0, 0)),
+                lt: new Date(addDays(date, 1))
+            },
+            approved: env.SHOW_UNAPPROVED_ITEMS ? undefined : true
+        },
+        include: {
+            artist: true,
+            venue: true
+        },
+        orderBy: {
+            startDate: 'asc'
+        }
+    })
+}
 
 export const eventRouter = createTRPCRouter({
     create: publicProcedure
@@ -102,8 +125,11 @@ export const eventRouter = createTRPCRouter({
     get: publicProcedure
         .input(z.object({ id: z.string().cuid() }))
         .query(({ ctx, input }) => {
-            return ctx.prisma.event.findUnique({
-                where: { id: input.id }
+            return ctx.prisma.event.findFirst({
+                where: {
+                    id: input.id,
+                    approved: env.SHOW_UNAPPROVED_ITEMS ? undefined : true
+                }
             })
         }),
 
@@ -112,6 +138,9 @@ export const eventRouter = createTRPCRouter({
             include: {
                 artist: true,
                 venue: true
+            },
+            where: {
+                approved: env.SHOW_UNAPPROVED_ITEMS ? undefined : true
             }
         })
     }),
@@ -119,21 +148,31 @@ export const eventRouter = createTRPCRouter({
     getAllByDay: publicProcedure
         .input(z.object({ date: z.date() }))
         .query(({ ctx, input }) => {
-            return ctx.prisma.event.findMany({
-                where: {
-                    startDate: {
-                        gte: new Date(input.date.setHours(0, 0, 0, 0)),
-                        lt: new Date(addDays(input.date, 1))
-                    }
-                },
-                include: {
-                    artist: true,
-                    venue: true
-                },
-                orderBy: {
-                    startDate: 'asc'
+            return getAllByDay(input.date, ctx.prisma)
+        }),
+
+    getAllByDayByVenue: publicProcedure
+        .input(z.object({ date: z.date() }))
+        .query(async ({ ctx, input }) => {
+            const dailyEvents = await getAllByDay(input.date, ctx.prisma)
+            const dailyEventsByVenue: {
+                venue: Venue
+                events: EventWithArtistVenue[]
+            }[] = []
+            for (const event of dailyEvents) {
+                const existingVenue = dailyEventsByVenue.find(
+                    (e) => e.venue.id === event.venue.id
+                )
+                if (existingVenue) {
+                    existingVenue.events.push(event)
+                } else {
+                    dailyEventsByVenue.push({
+                        venue: event.venue,
+                        events: [event]
+                    })
                 }
-            })
+            }
+            return dailyEventsByVenue
         }),
 
     getAllByMonth: publicProcedure
@@ -145,7 +184,7 @@ export const eventRouter = createTRPCRouter({
                         gte: new Date(input.year, input.month, 1),
                         lt: new Date(input.year, input.month + 1, 1)
                     },
-                    approved: true
+                    approved: env.SHOW_UNAPPROVED_ITEMS ? undefined : true
                 },
                 include: {
                     artist: true,

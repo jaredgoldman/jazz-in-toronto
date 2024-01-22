@@ -18,7 +18,8 @@ export const env = createEnv({
         UPLOADTHING_SECRET: z.string(),
         UPLOADTHING_APP_ID: z.string(),
         CHROME_EXECUTABLE_PATH: z.string(),
-        BASE_URL: z.string().url()
+        BASE_URL: z.string().url(),
+        SHOW_UNAPPROVED_ITEMS: z.boolean().optional()
     },
 
     /**
@@ -26,7 +27,9 @@ export const env = createEnv({
      * isn't built with invalid env vars. To expose them to the client, prefix them with
      * `NEXT_PUBLIC_`.
      */
-    client: {},
+    client: {
+        NEXT_PUBLIC_GOOGLE_API_KEY: z.string()
+    },
 
     /**
      * You can't destruct `process.env` as a regular object in the Next.js edge runtimes (e.g.
@@ -36,6 +39,7 @@ export const env = createEnv({
         DATABASE_URL: process.env.DATABASE_URL,
         NODE_ENV: process.env.NODE_ENV,
         GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
+        NEXT_PUBLIC_GOOGLE_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
         EMAIL_SERVER_USER: process.env.EMAIL_SERVER_USER,
         EMAIL_SERVER_PASSWORD: process.env.EMAIL_SERVER_PASSWORD,
         EMAIL_SERVER_HOST: process.env.EMAIL_SERVER_HOST,
@@ -44,7 +48,8 @@ export const env = createEnv({
         UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
         UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
         CHROME_EXECUTABLE_PATH: process.env.CHROME_EXECUTABLE_PATH,
-        BASE_URL: process.env.BASE_URL
+        BASE_URL: process.env.BASE_URL,
+        SHOW_UNAPPROVED_ITEMS: !!process.env.SHOW_UNAPPROVED_ITEMS || false
     },
     /**
      * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

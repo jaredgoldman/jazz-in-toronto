@@ -9,7 +9,6 @@ import { QueryObserverResult } from '@tanstack/react-query'
 import { getDaysOfTheWeek } from '~/utils/constants'
 
 interface ReturnType {
-    changeMonth: (numOfMonths: number) => void
     currentMonthName: string
     currentDayName: string
     monthlyEvents: DailyEventData[]
@@ -64,7 +63,6 @@ export default function useCalendar(
     }
 
     return {
-        changeMonth,
         currentMonthName,
         currentDayName,
         monthlyEvents

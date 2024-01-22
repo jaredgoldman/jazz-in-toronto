@@ -1,6 +1,4 @@
-// Components
 import { Html, Head, Main, NextScript } from 'next/document'
-// Config
 import { env } from '../env.mjs'
 
 export default function Document() {
