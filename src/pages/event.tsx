@@ -1,6 +1,5 @@
 import RootLayout from '~/layouts/RootLayout'
 import EventForm from '~/components/Forms/Event'
-import useEventForm from '~/components/Forms/Event/hooks/useEventForm'
 import { Flex } from '@radix-ui/themes'
 
 export default function Book(): JSX.Element {
