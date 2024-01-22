@@ -1,39 +1,47 @@
 import * as Form from '@radix-ui/react-form'
-import { Input, Select, Toggle } from '../Fields'
+import { Input, Select } from '../Fields'
 import { Flex, Text, Button, Heading, Box, Callout } from '@radix-ui/themes'
-import { BaseSyntheticEvent } from 'react'
-import type { Venue, Artist } from '~/types/data'
-import type { Control, FieldErrors } from 'react-hook-form'
-import { EventFormValues } from './hooks/useEventForm'
+import useEventForm, { toDateTimeLocal } from './hooks/useEventForm'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
 import Link from '~/components/Link'
+import { useRouter } from 'next/router'
+import { api } from '~/utils/api'
+import { useEffect } from 'react'
+import { EventWithArtistVenue } from '~/types/data'
 
-interface Props {
-    eventMutationIsSuccess: boolean
-    editEventMutationIsSuccess: boolean
-    artistData: Artist[] | undefined
-    venueData: Venue[] | undefined
-    isLoading: boolean
-    control: Control<EventFormValues>
-    errors: FieldErrors<EventFormValues>
-    isEditing: boolean
-    error?: string
-    showSubmitButton?: boolean
-    submit: (e: BaseSyntheticEvent) => Promise<void>
-}
+export default function EventForm(): JSX.Element {
+    const router = useRouter()
+    const param = router.query.id as string
+    const { data } = api.event.get.useQuery(
+        { id: param },
+        { enabled: Boolean(param) }
+    )
 
-export default function EventForm({
-    eventMutationIsSuccess,
-    editEventMutationIsSuccess,
-    artistData,
-    venueData,
-    control,
-    errors,
-    isEditing,
-    error,
-    submit,
-    showSubmitButton = true
-}: Props): JSX.Element {
+    const {
+        submit,
+        errors,
+        control,
+        eventMutationIsSuccess,
+        editEventMutationIsSuccess,
+        error,
+        venueData,
+        artistData,
+        reset
+    } = useEventForm()
+
+    useEffect(() => {
+        if (data) {
+            delete (data as Partial<EventWithArtistVenue>).id
+            reset({
+                ...data,
+                instagramHandle: data.instagramHandle ?? '',
+                website: data.website ?? '',
+                startDate: toDateTimeLocal(data.startDate),
+                endDate: toDateTimeLocal(data.endDate)
+            })
+        }
+    }, [data, reset])
+
     return (
         <Flex direction="column" align="center">
             <Box className="w-full max-w-xl">
@@ -124,14 +132,6 @@ export default function EventForm({
                             error={errors.website}
                             control={control}
                         />
-                        {isEditing && (
-                            <Toggle
-                                label="Featured"
-                                name="featured"
-                                control={control}
-                                error={errors.featured}
-                            />
-                        )}
                     </Flex>
                     <Flex width="100%" justify="center" mt="3">
                         {eventMutationIsSuccess && (
@@ -150,15 +150,13 @@ export default function EventForm({
                             </Text>
                         )}
                     </Flex>
-                    {showSubmitButton && (
-                        <Flex width="100%" justify="center" mt="5">
-                            <Form.Submit asChild>
-                                <Button className="w-full" variant="solid">
-                                    Submit
-                                </Button>
-                            </Form.Submit>
-                        </Flex>
-                    )}
+                    <Flex width="100%" justify="center" mt="5">
+                        <Form.Submit asChild>
+                            <Button className="w-full" variant="solid">
+                                Submit
+                            </Button>
+                        </Form.Submit>
+                    </Flex>
                 </Form.Root>
             </Box>
         </Flex>

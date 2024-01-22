@@ -1,84 +1,164 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { api } from '~/utils/api'
 import {
-    ColumnDef,
     flexRender,
     getCoreRowModel,
     useReactTable,
     SortingState,
     getSortedRowModel,
     getFilteredRowModel,
-    ColumnFiltersState
+    ColumnFiltersState,
+    createColumnHelper
 } from '@tanstack/react-table'
 import { EventWithArtistVenue } from '~/types/data'
-import { Table, Flex, TextField, Heading } from '@radix-ui/themes'
+import { Table, Flex, TextField, Heading, Text } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import { useMemo } from 'react'
 import Loading from '../Loading'
-import { HeaderCell } from './components'
+import { HeaderCell, TableActionMenu } from './components'
 import { fuzzyFilter } from './utils/filters'
+import { useRouter } from 'next/router'
+import FadeOutText from '../FadeOutText'
+
+const columnHelper = createColumnHelper<EventWithArtistVenue>()
 
 export function EventsTable() {
     const [filteredDate, setFilteredDate] = useState<Date>(new Date())
-    const { data, isLoading, isFetched } = api.event.getAllByDay.useQuery({
-        date: filteredDate
-    })
+    const [error, setError] = useState<string | null>(null)
+    const { data, isLoading, isFetched, refetch } =
+        api.event.getAllByDay.useQuery({
+            date: filteredDate
+        })
+    const router = useRouter()
+    const { mutate: setFeaturedMutation, isSuccess: setFeaturedIsSuccess } =
+        api.event.setFeatured.useMutation()
+    const { mutate: deleteMutation, isSuccess: deleteMutationIsSuccess } =
+        api.event.delete.useMutation()
 
-    const columns = useMemo<ColumnDef<EventWithArtistVenue>[]>(
+    const handleEditClick = useCallback(
+        async (event: EventWithArtistVenue) => {
+            const params = new URLSearchParams()
+            params.set('id', event.id)
+            await router.push(
+                {
+                    pathname: '/admin/edit-event',
+                    query: params.toString()
+                },
+                undefined,
+                {
+                    shallow: true
+                }
+            )
+        },
+        [router]
+    )
+
+    const handleToggleFeatured = useCallback(
+        (event: EventWithArtistVenue) => {
+            setFeaturedMutation(
+                { id: event.id },
+                {
+                    onSuccess: () => {
+                        void refetch()
+                    },
+                    onError: (e) => {
+                        setError(
+                            'Toggle featured failed. An error occurred when attempting to alter the database.'
+                        )
+                        console.error(e)
+                    }
+                }
+            )
+        },
+        [setFeaturedMutation, refetch]
+    )
+
+    const handleDelete = useCallback(
+        (event: EventWithArtistVenue) => {
+            deleteMutation(
+                { id: event.id },
+                {
+                    onSuccess: () => {
+                        void refetch()
+                    },
+                    onError: (e) => {
+                        setError(
+                            'Delete failed. An error occurred when attempting to alter the database.'
+                        )
+                        console.error(e)
+                    }
+                }
+            )
+        },
+        [deleteMutation, refetch]
+    )
+
+    const columns = useMemo(
         () => [
-            {
-                accessorKey: 'name',
+            columnHelper.accessor((row) => row.name, {
                 cell: (info) => info.getValue(),
-                header: () => <span>Event</span>
-            },
-            {
-                accessorKey: 'venue.name',
+                header: 'Event'
+            }),
+            columnHelper.accessor((row) => row.venue.name, {
                 cell: (info) => info.getValue(),
-                header: () => <span>Venue</span>
-            },
-            {
-                accessorKey: 'startDate',
+                header: 'Venue'
+            }),
+            columnHelper.accessor((row) => row.startDate, {
                 cell: (info) =>
-                    format(new Date(info.getValue() as string), 'h:mm a'),
-                header: () => <span>Start</span>,
+                    format(
+                        new Date(info.getValue() as unknown as string),
+                        'h:mm a'
+                    ),
+                header: 'Start',
                 enableColumnFilter: false
-            },
-            {
-                accessorKey: 'endDate',
+            }),
+            columnHelper.accessor((row) => row.endDate, {
                 cell: (info) =>
-                    format(new Date(info.getValue() as string), 'h:mm a'),
-                header: () => <span>End</span>,
+                    format(
+                        new Date(info.getValue() as unknown as string),
+                        'h:mm a'
+                    ),
+                header: 'End',
                 enableColumnFilter: false
-            },
-            {
-                accessorKey: 'artist.name',
+            }),
+            columnHelper.accessor((row) => row.artist.name, {
                 cell: (info) => info.getValue(),
-                header: () => <span>Artist</span>
-            },
-            {
-                accessorKey: 'venue.website',
+                header: 'Artist'
+            }),
+            columnHelper.accessor((row) => row.venue.website, {
                 cell: (info) => info.getValue(),
-                header: () => <span>Website</span>
-            },
-            {
-                accessorKey: 'venue.instagramHandle',
+                header: 'Website'
+            }),
+            columnHelper.accessor((row) => row.venue.instagramHandle, {
                 cell: (info) => info.getValue(),
-                header: () => <span>Instagram</span>
-            },
-            {
-                accessorKey: 'cancelled',
+                header: 'Instagram'
+            }),
+            columnHelper.accessor((row) => row.cancelled, {
                 cell: (info) => info.getValue()?.toString(),
-                header: () => <span>Cancelled</span>,
+                header: 'Cancelled',
                 enableColumnFilter: false
-            },
-            {
-                accessorKey: 'featured',
+            }),
+            columnHelper.accessor((row) => row.featured, {
                 cell: (info) => info.getValue()?.toString(),
-                header: () => <span>Featured</span>,
+                header: 'Featured',
                 enableColumnFilter: false
-            }
+            }),
+            columnHelper.display({
+                id: 'edit',
+                cell: ({ row }) => (
+                    <TableActionMenu
+                        isFeatured={row.original.featured}
+                        onToggleFeatured={() => {
+                            handleToggleFeatured(row.original)
+                        }}
+                        onEdit={() => handleEditClick(row.original)}
+                        onDelete={() => handleDelete(row.original)}
+                    />
+                ),
+                header: 'Edit'
+            })
         ],
-        []
+        [handleDelete, handleEditClick, handleToggleFeatured]
     )
 
     const [sorting, setSorting] = useState<SortingState>([])
@@ -103,6 +183,27 @@ export function EventsTable() {
 
     return (
         <Flex direction="column">
+            {setFeaturedIsSuccess && (
+                <FadeOutText>
+                    <Text color="green" size="2" align="center">
+                        Event successfully set as featured
+                    </Text>
+                </FadeOutText>
+            )}
+            {deleteMutationIsSuccess && (
+                <FadeOutText>
+                    <Text color="red" size="2" align="center">
+                        Event has been deleted
+                    </Text>
+                </FadeOutText>
+            )}
+            {error ? (
+                <FadeOutText>
+                    <Text color="yellow" size="2" align="center">
+                        {error}
+                    </Text>
+                </FadeOutText>
+            ) : null}
             <Flex mb="4" direction="column" className="max-w-xs" gap="3">
                 <Heading>Filter by date:</Heading>
                 <TextField.Root className="px-2 pt-1">
