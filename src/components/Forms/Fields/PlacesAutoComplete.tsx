@@ -64,7 +64,7 @@ export default function PlacesAutocomplete<T extends FieldValues>({
     
     useEffect(() => {
         setValue(initialValue ?? '')
-    }, [initialValue, setValue
+    }, [initialValue, setValue])
             
     const ref = useOnclickOutside(() => {
         // When user clicks outside of the component, we can dismiss
