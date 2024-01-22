@@ -1,11 +1,17 @@
 import PlacesAutocomplete from '../Fields/PlacesAutoComplete'
-import { Input, Toggle } from '../Fields'
+import { Input } from '../Fields'
 import * as Form from '@radix-ui/react-form'
 import Upload from '../Fields/Upload'
 import { Heading, Text, Flex, Box, Button } from '@radix-ui/themes'
 import useVenueForm from './hooks/useVenueForm'
+import { useRouter } from 'next/router'
+import { api } from '~/utils/api'
+import { useEffect } from 'react'
 
 export default function VenueForm() {
+    const router = useRouter()
+    const param = router.query.id as string
+    const { data } = api.venue.get.useQuery({ id: param })
     const {
         isEditing,
         submit,
@@ -16,8 +22,16 @@ export default function VenueForm() {
         handleDeletePhoto,
         venueMutationIsSuccess,
         editVenueMutationIsSuccess,
-        error
+        error,
+        reset
     } = useVenueForm()
+
+    useEffect(() => {
+        if (data) {
+            reset(data)
+        }
+    }, [data, reset])
+
     return (
         <Flex
             direction="column"
@@ -44,6 +58,7 @@ export default function VenueForm() {
                         />
                         <PlacesAutocomplete
                             name="address"
+                            initialValue={data?.address}
                             label="Address"
                             control={control}
                             onSelect={onSelectLocation}
@@ -59,7 +74,6 @@ export default function VenueForm() {
                             name="phoneNumber"
                             label="Enter your venues phone number"
                             error={errors.phoneNumber}
-                            type="number"
                             control={control}
                         />
                         <Input
@@ -74,14 +88,6 @@ export default function VenueForm() {
                             error={errors.website}
                             control={control}
                         />
-                        {isEditing && (
-                            <Toggle
-                                label="Featured"
-                                name="featured"
-                                control={control}
-                                error={errors.featured}
-                            />
-                        )}
                     </Flex>
                     <Flex width="100%" align="center" mt="3">
                         {venueMutationIsSuccess && (

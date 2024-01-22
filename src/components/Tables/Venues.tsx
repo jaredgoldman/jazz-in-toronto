@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { api } from '~/utils/api'
 import {
     ColumnDef,
@@ -8,59 +8,135 @@ import {
     SortingState,
     getSortedRowModel,
     getFilteredRowModel,
-    ColumnFiltersState
+    ColumnFiltersState,
+    createColumnHelper
 } from '@tanstack/react-table'
 import { Venue } from '~/types/data'
-import { Table, Box, Flex } from '@radix-ui/themes'
-import { HeaderCell } from './components'
+import { Table, Box, Flex, Text } from '@radix-ui/themes'
+import { HeaderCell, TableActionMenu } from './components'
 import Loading from '../Loading'
 import { fuzzyFilter } from './utils/filters'
 import { PaginationButtonGroup } from './components/PaginationButtonGroup'
+import FadeOutText from '../FadeOutText'
+import { useRouter } from 'next/router'
+
+const columnHelper = createColumnHelper<Venue>()
 
 export function VenuesTable() {
-    const { data, isFetched, isLoading } = api.venue.getAll.useQuery()
+    const { data, isFetched, isLoading, refetch } = api.venue.getAll.useQuery()
+    const router = useRouter()
+    const { mutate: setFeaturedMutation, isSuccess: setFeaturedIsSuccess } =
+        api.venue.setFeatured.useMutation()
+    const { mutate: deleteMutation, isSuccess: deleteMutationIsSuccess } =
+        api.venue.delete.useMutation()
+    const [error, setError] = useState<string | null>(null)
 
-    const columns = useMemo<ColumnDef<Venue>[]>(
+    const handleEditClick = useCallback(
+        async (venue: Venue) => {
+            const params = new URLSearchParams()
+            params.set('id', venue.id)
+            await router.push(
+                {
+                    pathname: '/admin/edit-venue',
+                    query: params.toString()
+                },
+                undefined,
+                { shallow: true }
+            )
+        },
+        [router]
+    )
+
+    const handleToggleFeatured = useCallback(
+        (venue: Venue) => {
+            setFeaturedMutation(
+                { id: venue.id },
+                {
+                    onSuccess: () => {
+                        setError(null)
+                        void refetch()
+                    },
+                    onError: (e) => {
+                        setError(
+                            'Toggle featured failed. There was an error altering the database.'
+                        )
+                        console.error(e)
+                    }
+                }
+            )
+        },
+        [setFeaturedMutation, refetch]
+    )
+
+    const handleDelete = useCallback(
+        (venue: Venue) => {
+            deleteMutation(
+                { id: venue.id },
+                {
+                    onSuccess: () => {
+                        setError(null)
+                        void refetch()
+                    },
+                    onError: (e) => {
+                        setError(
+                            'Delete failed. There was an error altering the database.'
+                        )
+                        console.error(e)
+                    }
+                }
+            )
+        },
+        [deleteMutation, refetch]
+    )
+
+    const columns = useMemo(
         () => [
-            {
-                accessorKey: 'name',
+            columnHelper.accessor((row) => row.name, {
                 cell: (info) => info.getValue(),
-                header: () => <span>Name</span>
-            },
-            {
-                accessorKey: 'address',
+                header: 'Name'
+            }),
+            columnHelper.accessor((row) => row.address, {
                 cell: (info) => info.getValue(),
-                header: () => <span>Address</span>
-            },
-            {
-                accessorKey: 'city',
+                header: 'Address'
+            }),
+            columnHelper.accessor((row) => row.city, {
                 cell: (info) => info.getValue(),
-                header: () => <span>City</span>
-            },
-            {
-                accessorKey: 'website',
+                header: 'City'
+            }),
+            columnHelper.accessor((row) => row.website, {
                 cell: (info) => info.getValue(),
-                header: () => <span>Website</span>
-            },
-            {
-                accessorKey: 'instagramHandle',
+                header: 'Website'
+            }),
+            columnHelper.accessor((row) => row.instagramHandle, {
                 cell: (info) => info.getValue(),
-                header: () => <span>Instagram</span>
-            },
-            {
-                accessorKey: 'active',
+                header: 'Instagram'
+            }),
+            columnHelper.accessor((row) => row.active, {
                 cell: (info) => info.getValue()?.toString(),
-                header: () => <span>Active</span>,
+                header: 'Active',
                 enableColumnFilter: false
-            },
-            {
-                accessorKey: 'featured',
+            }),
+            columnHelper.accessor((row) => row.featured, {
                 cell: (info) => info.getValue()?.toString(),
-                header: () => <span>Featured</span>,
+                header: 'Featured',
                 enableColumnFilter: false
-            }
+            }),
+            columnHelper.display({
+                id: 'edit',
+                cell: ({ row }) => (
+                    <TableActionMenu
+                        isFeatured={row.original.featured}
+                        onToggleFeatured={() => {
+                            handleToggleFeatured(row.original)
+                        }}
+                        onEdit={() => handleEditClick(row.original)}
+                        onDelete={() => handleDelete(row.original)}
+                    />
+                ),
+                header: 'Edit'
+            })
         ],
-        []
+        [handleDelete, handleEditClick, handleToggleFeatured]
     )
 
     const [sorting, setSorting] = useState<SortingState>([])
@@ -82,6 +158,27 @@ export function VenuesTable() {
 
     return (
         <Box>
+            {setFeaturedIsSuccess ? (
+                <FadeOutText>
+                    <Text color="green" size="2" align="center">
+                        Venue successfully set as featured
+                    </Text>
+                </FadeOutText>
+            ) : null}
+            {deleteMutationIsSuccess ? (
+                <FadeOutText>
+                    <Text color="red" size="2" align="center">
+                        Venue has been deleted
+                    </Text>
+                </FadeOutText>
+            ) : null}
+            {error ? (
+                <FadeOutText>
+                    <Text color="yellow" size="2" align="center">
+                        {error}
+                    </Text>
+                </FadeOutText>
+            ) : null}
             {data?.length && (
                 <>
                     <Table.Root variant="surface">

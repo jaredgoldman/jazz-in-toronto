@@ -23,7 +23,7 @@ export default function ArtistForm() {
         error,
         reset,
         getValues
-    } = useArtistForm(data ?? undefined)
+    } = useArtistForm()
 
     useEffect(() => {
         if (data && JSON.stringify(data) !== JSON.stringify(getValues)) {

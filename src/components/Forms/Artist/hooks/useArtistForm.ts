@@ -7,10 +7,10 @@ import { MAX_FILE_SIZE } from '~/utils/constants'
 
 export interface ArtistFormValues {
     name: string
-    genre?: string
-    photoPath?: string
-    instagramHandle: string | undefined
-    website?: string
+    genre: string | null
+    photoPath?: string | null
+    instagramHandle?: string | null
+    website: string | null
     fileData?: {
         file: File
         dataURL: string
@@ -34,12 +34,12 @@ export default function useArtistForm(
     const isEditing = !!currentValues
     const defaultValues: ArtistFormValues = currentValues
         ? {
+              ...currentValues,
               name: currentValues.name,
-              instagramHandle: currentValues.instagramHandle || undefined,
-              genre: currentValues.genre || undefined,
-              website: currentValues.website || undefined,
-              photoPath: currentValues.photoPath || undefined,
-              featured: currentValues.featured || false
+              instagramHandle: currentValues.instagramHandle || '',
+              genre: currentValues.genre || '',
+              website: currentValues.website || '',
+              photoPath: currentValues.photoPath || ''
           }
         : {
               name: '',
