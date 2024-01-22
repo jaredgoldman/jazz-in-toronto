@@ -59,7 +59,7 @@ export function EventsTable() {
                 { id: event.id },
                 {
                     onSuccess: () => {
-                        refetch()
+                        void refetch()
                     },
                     onError: (e) => {
                         setError(
@@ -79,7 +79,7 @@ export function EventsTable() {
                 { id: event.id },
                 {
                     onSuccess: () => {
-                        refetch()
+                        void refetch()
                     },
                     onError: (e) => {
                         setError(

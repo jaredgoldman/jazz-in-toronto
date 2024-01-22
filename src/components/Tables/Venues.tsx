@@ -53,7 +53,7 @@ export function VenuesTable() {
                 {
                     onSuccess: () => {
                         setError(null)
-                        refetch()
+                        void refetch()
                     },
                     onError: (e) => {
                         setError(
@@ -74,7 +74,7 @@ export function VenuesTable() {
                 {
                     onSuccess: () => {
                         setError(null)
-                        refetch()
+                        void refetch()
                     },
                     onError: (e) => {
                         setError(
