@@ -27,7 +27,13 @@ export default function ArtistForm() {
 
     useEffect(() => {
         if (data && JSON.stringify(data) !== JSON.stringify(getValues)) {
-            reset(data)
+            reset({
+        ...data,
+        instagramHandle: data.instagramHandle ?? '',
+        genre: data.genre ?? '',
+        photoPath: data.photoPath ?? '',
+        website: data.website?? '',
+      })
         }
     }, [data, reset, getValues])
 

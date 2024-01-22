@@ -13,9 +13,9 @@ export interface VenueFormValues {
     longitude: number
     city: string
     website: string
-    instagramHandle?: string | null
+    instagramHandle?: string
     fileData?: FileData
-    photoPath?: string | null
+    photoPath?: string
     phoneNumber: string
     featured: boolean
 }
@@ -47,7 +47,6 @@ export default function useVenueForm(
               website: currentValues.website || '',
               instagramHandle: currentValues.instagramHandle || '',
               phoneNumber: currentValues.phoneNumber || '',
-              area: currentValues.area || Area.DOWNTOWN,
               featured: currentValues.featured || false
           }
         : {
@@ -145,7 +144,14 @@ export default function useVenueForm(
             if (isEditing && currentValues) {
                 addedVenue = await editVenueMutation({
                     id: currentValues?.id,
-                    ...newValues
+                    name: currentValues?.name,
+                    address: currentValues?.address,
+                    city: currentValues?.city,
+                    latitude: currentValues?.latitude,
+                    longitude: currentValues?.longitude,
+                    instagramHandle: currentValues?.instagramHandle ?? undefined,
+                    website: currentValues?.website,
+                    featured: currentValues?.featured
                 })
             } else {
                 addedVenue = await venueMutation(newValues)

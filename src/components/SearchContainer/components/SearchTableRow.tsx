@@ -43,9 +43,6 @@ const getEditFormCellandProps = (
                 data.item
             )
             return {
-                editComp: (
-                    <EventForm {...eventFormProps} showSubmitButton={false} />
-                ),
                 editFormProps: eventFormProps
             }
         case DataType.VENUE:
@@ -215,12 +212,6 @@ export default function SearchTableRow({
                 </Table.Cell>
             )}
             <Table.Cell key="edit" align="center">
-                <Dialogue
-                    title="Edit"
-                    triggerLabel="Edit"
-                    onSubmit={onEditRow}
-                    component={editComp}
-                />
 
                 {isEventWithArtistVenue(item) &&
                     successAttribute === 'approved' && (

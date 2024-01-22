@@ -28,7 +28,11 @@ export default function VenueForm() {
 
     useEffect(() => {
         if (data) {
-            reset(data)
+            reset({
+                ...data,
+                instagramHandle: data.instagramHandle ?? '',
+                photoPath: data.photoPath ?? ''
+            })
         }
     }, [data, reset])
 

@@ -7,10 +7,10 @@ import { MAX_FILE_SIZE } from '~/utils/constants'
 
 export interface ArtistFormValues {
     name: string
-    genre: string | null
-    photoPath?: string | null
-    instagramHandle?: string | null
-    website: string | null
+    genre: string
+    photoPath?: string
+    instagramHandle?: string
+    website: string
     fileData?: {
         file: File
         dataURL: string
@@ -113,7 +113,12 @@ export default function useArtistForm(
             if (isEditing && currentValues) {
                 addedArtist = await editArtistMutation({
                     id: currentValues?.id,
-                    ...newValues
+                    name: currentValues?.name,
+                    genre: currentValues?.genre ?? undefined,
+                    photoPath: currentValues?.photoPath ?? undefined,
+                    featured: currentValues?.featured,
+                    instagramHandle: currentValues?.instagramHandle ?? undefined,
+                    website: currentValues?.website ?? undefined
                 })
             } else {
                 addedArtist = await artistMutation(newValues)
