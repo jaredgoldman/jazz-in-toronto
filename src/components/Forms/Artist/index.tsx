@@ -9,7 +9,7 @@ import { useEffect } from 'react'
 
 export default function ArtistForm() {
     const router = useRouter()
-    const param = router.query as string
+    const param = router.query.id as string
     const { data } = api.artist.get.useQuery({ id: param })
     const {
         submit,

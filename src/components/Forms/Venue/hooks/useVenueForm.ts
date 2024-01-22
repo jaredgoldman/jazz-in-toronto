@@ -144,14 +144,7 @@ export default function useVenueForm(
             if (isEditing && currentValues) {
                 addedVenue = await editVenueMutation({
                     id: currentValues?.id,
-                    name: currentValues?.name,
-                    address: currentValues?.address,
-                    city: currentValues?.city,
-                    latitude: currentValues?.latitude,
-                    longitude: currentValues?.longitude,
-                    instagramHandle: currentValues?.instagramHandle ?? undefined,
-                    website: currentValues?.website,
-                    featured: currentValues?.featured
+                    ...newValues
                 })
             } else {
                 addedVenue = await venueMutation(newValues)

@@ -59,11 +59,11 @@ export function EventsTable() {
                 { id: event.id },
                 {
                     onSuccess: () => {
-                        void refetch()
+                        refetch()
                     },
                     onError: (e) => {
                         setError(
-                            'Toggle featured failed. An error occurred when attempting to alter the database.'
+                            'Setting featured event failed. Please try again later.'
                         )
                         console.error(e)
                     }
@@ -79,11 +79,11 @@ export function EventsTable() {
                 { id: event.id },
                 {
                     onSuccess: () => {
-                        void refetch()
+                        refetch()
                     },
                     onError: (e) => {
                         setError(
-                            'Delete failed. An error occurred when attempting to alter the database.'
+                            'Delete venue failed. Please try again later.'
                         )
                         console.error(e)
                     }

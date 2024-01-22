@@ -55,11 +55,11 @@ export function ArtistsTable() {
                 {
                     onSuccess: () => {
                         setError(null)
-                        void refetch()
+                        refetch()
                     },
                     onError: (e) => {
                         setError(
-                            'Toggle featured failed. There was an error altering the database.'
+                            'Setting featured artist failed. Please try again later.'
                         )
                         console.error(e)
                     }
@@ -76,11 +76,11 @@ export function ArtistsTable() {
                 {
                     onSuccess: () => {
                         setError(null)
-                        void refetch()
+                        refetch()
                     },
                     onError: (e) => {
                         setError(
-                            'Delete failed. There was an error altering the database.'
+                            'Delete artist failed. This artist may be referenced by an event. Please try again later.'
                         )
                         console.error(e)
                     }

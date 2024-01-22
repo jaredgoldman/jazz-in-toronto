@@ -53,11 +53,11 @@ export function VenuesTable() {
                 {
                     onSuccess: () => {
                         setError(null)
-                        void refetch()
+                        refetch()
                     },
                     onError: (e) => {
                         setError(
-                            'Toggle featured failed. There was an error altering the database.'
+                            'Setting featured venue failed. Please try again later.'
                         )
                         console.error(e)
                     }
@@ -74,11 +74,11 @@ export function VenuesTable() {
                 {
                     onSuccess: () => {
                         setError(null)
-                        void refetch()
+                        refetch()
                     },
                     onError: (e) => {
                         setError(
-                            'Delete failed. There was an error altering the database.'
+                            'Delete venue failed. This venue may be referenced by an event. Please try again later.'
                         )
                         console.error(e)
                     }

@@ -1,12 +1,12 @@
 import { AlertDialog, Button, Flex } from '@radix-ui/themes'
 
-type ConfirmDeleteProps = {
+type Props = {
     open: boolean
     setOpen: (open: boolean) => void
     onDelete: () => void
 }
 
-export const ConfirmDelete: React.FC<ConfirmDeleteProps> = ({
+export const ConfirmDelete: React.FC<Props> = ({
     onDelete,
     open,
     setOpen
