@@ -1,10 +1,16 @@
 import * as Form from '@radix-ui/react-form'
-import { Input, Toggle } from '../Fields'
+import { Input } from '../Fields'
 import Upload from '../Fields/Upload'
 import { Heading, Flex, Text, Box, Button } from '@radix-ui/themes'
 import useArtistForm from './hooks/useArtistForm'
+import { useRouter } from 'next/router'
+import { api } from '~/utils/api'
+import { useEffect } from 'react'
 
 export default function ArtistForm() {
+    const router = useRouter()
+    const param = router.query.id as string
+    const { data } = api.artist.get.useQuery({ id: param })
     const {
         submit,
         isEditing,
@@ -14,8 +20,16 @@ export default function ArtistForm() {
         handleDeletePhoto,
         artistMutationIsSuccess,
         editArtistMutationIsSuccess,
-        error
-    } = useArtistForm()
+        error,
+        reset,
+        getValues
+    } = useArtistForm(data ?? undefined)
+
+    useEffect(() => {
+        if (data && JSON.stringify(data) !== JSON.stringify(getValues)) {
+            reset(data)
+        }
+    }, [data, reset, getValues])
 
     return (
         <Flex
@@ -66,15 +80,6 @@ export default function ArtistForm() {
                             error={errors.website}
                             control={control}
                         />
-                        {isEditing && (
-                            <Toggle
-                                label="Featured"
-                                name="featured"
-                                control={control}
-                                error={errors.featured}
-                            />
-                        )}
-
                         <Flex width="100%" align="center">
                             {artistMutationIsSuccess && (
                                 <Text size="2" color="green" align="center">

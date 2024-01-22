@@ -57,6 +57,7 @@ export default function useArtistForm(
         watch,
         setValue,
         getValues,
+        reset,
         formState: { errors }
     } = useForm<ArtistFormValues>({
         defaultValues
@@ -146,6 +147,7 @@ export default function useArtistForm(
         control,
         watch,
         onUpload,
-        getValues
+        getValues,
+        reset
     }
 }
