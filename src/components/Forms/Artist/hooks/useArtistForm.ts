@@ -113,12 +113,13 @@ export default function useArtistForm(
             if (isEditing && currentValues) {
                 addedArtist = await editArtistMutation({
                     id: currentValues?.id,
-                    name: currentValues?.name,
+                    ...newValues
+                    /* name: currentValues?.name,
                     genre: currentValues?.genre ?? undefined,
                     photoPath: currentValues?.photoPath ?? undefined,
                     featured: currentValues?.featured,
                     instagramHandle: currentValues?.instagramHandle ?? undefined,
-                    website: currentValues?.website ?? undefined
+                    website: currentValues?.website ?? undefined, */
                 })
             } else {
                 addedArtist = await artistMutation(newValues)
