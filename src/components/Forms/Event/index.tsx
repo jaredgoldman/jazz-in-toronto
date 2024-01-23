@@ -26,6 +26,7 @@ export default function EventForm(): JSX.Element {
         error,
         venueData,
         artistData,
+        isEditing,
         reset
     } = useEventForm()
 
@@ -43,26 +44,29 @@ export default function EventForm(): JSX.Element {
     }, [data, reset])
 
     return (
-        <Flex direction="column" align="center">
+        <Flex direction="column" align="center" py="6">
             <Box className="w-full max-w-xl">
                 <Heading
                     size={{ initial: '8', xs: '9' }}
                     align={{ initial: 'center', xs: 'left' }}
                     mb="6"
                 >
-                    Book Your Gig
+                    {isEditing ? 'Book Your Gig' : 'Edit Event'}
                 </Heading>
-                <Callout.Root my="6">
-                    <Callout.Icon>
-                        <InfoCircledIcon />
-                    </Callout.Icon>
-                    <Callout.Text>
-                        Submit your gig here and at least 24hrs in advance so
-                        our admins have time to review and approve your listing.
-                        Once your gig is approved, it will appear in the{' '}
-                        <Link href="/listings">listings</Link> section
-                    </Callout.Text>
-                </Callout.Root>
+                {isEditing ?? (
+                    <Callout.Root my="6">
+                        <Callout.Icon>
+                            <InfoCircledIcon />
+                        </Callout.Icon>
+                        <Callout.Text>
+                            Submit your gig here and at least 24hrs in advance
+                            so our admins have time to review and approve your
+                            listing. Once your gig is approved, it will appear
+                            in the <Link href="/listings">listings</Link>{' '}
+                            section
+                        </Callout.Text>
+                    </Callout.Root>
+                )}
                 <Form.Root onSubmit={submit}>
                     <Flex direction="column" gap="5">
                         <Input

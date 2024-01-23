@@ -46,6 +46,7 @@ export default function ArtistForm() {
             align="center"
             width="100%"
             className="max-w-xl"
+            py="6"
         >
             <Box className="w-full">
                 <Form.Root onSubmit={submit}>

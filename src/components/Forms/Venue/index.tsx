@@ -45,6 +45,7 @@ export default function VenueForm() {
             align="center"
             width="100%"
             className="max-w-xl"
+            py="6"
         >
             <Box className="w-full">
                 <Heading
