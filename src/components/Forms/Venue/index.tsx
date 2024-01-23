@@ -53,7 +53,7 @@ export default function VenueForm() {
                     mb="6"
                     align={{ initial: 'center', xs: 'left' }}
                 >
-                    {isEditing ? 'Edit venue' : 'Add your venue'}
+                    {isEditing ?  'Add your venue' : 'Edit venue' }
                 </Heading>
                 <Form.Root onSubmit={submit}>
                     <Flex direction="column" gap="5">

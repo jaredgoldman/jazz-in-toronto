@@ -55,7 +55,7 @@ export default function ArtistForm() {
                         align={{ initial: 'center', xs: 'left' }}
                         mb="6"
                     >
-                        {isEditing ? `Edit artist` : 'Submit artist'}
+                        {isEditing ? 'Submit artist' : 'Edit artist' }
                     </Heading>
                     <Flex direction="column" gap="5">
                         <Input
