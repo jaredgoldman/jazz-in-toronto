@@ -106,7 +106,7 @@ export function EventsTable() {
                     const content = info.getValue()
                     if (content) {
                         format(
-                            new Date(info.getValue() as unknown as string),
+                            new Date(content as unknown as string),
                             'h:mm a'
                         )
                     }
@@ -119,7 +119,7 @@ export function EventsTable() {
                     const content = info.getValue()
                     if (content) {
                         format(
-                            new Date(info.getValue() as unknown as string),
+                            new Date(content as unknown as string),
                             'h:mm a'
                         )
                     }
