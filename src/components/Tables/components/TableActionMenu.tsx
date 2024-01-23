@@ -22,26 +22,35 @@ export function TableActionMenu({
         <>
             <DropdownMenu.Root>
                 <DropdownMenu.Trigger>
-                    <DotsVerticalIcon />
+                    <DotsVerticalIcon style={{ cursor: 'pointer' }} />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Content size="2">
-                    <DropdownMenu.Item onClick={onEdit}>Edit</DropdownMenu.Item>
+                    <DropdownMenu.Item
+                        style={{ cursor: 'pointer' }}
+                        onClick={onEdit}
+                    >
+                        Edit
+                    </DropdownMenu.Item>
                     <DropdownMenu.Separator />
                     <DropdownMenu.Item
                         color={isFeatured ? undefined : 'green'}
                         disabled={isFeatured}
                         onClick={onToggleFeatured}
+                        style={{ cursor: 'pointer' }}
                     >
                         Feature
                     </DropdownMenu.Item>
                     <DropdownMenu.Separator />
-                    <DropdownMenu.Item>Approve</DropdownMenu.Item>
+                    <DropdownMenu.Item style={{ cursor: 'pointer' }}>
+                        Approve
+                    </DropdownMenu.Item>
                     <DropdownMenu.Separator />
                     <DropdownMenu.Item
                         color="red"
                         onClick={() => {
                             setDeleteDialogOpen(true)
                         }}
+                        style={{ cursor: 'pointer' }}
                     >
                         Delete
                     </DropdownMenu.Item>
