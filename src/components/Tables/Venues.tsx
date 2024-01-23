@@ -78,7 +78,7 @@ export function VenuesTable() {
                     },
                     onError: (e) => {
                         setError(
-                            'Delete venue failed. This venue may be referenced by an event. Please try again later.'
+                            'Delete venue failed. Please try again later.'
                         )
                         console.error(e)
                     }

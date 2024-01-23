@@ -80,7 +80,7 @@ export function ArtistsTable() {
                     },
                     onError: (e) => {
                         setError(
-                            'Delete artist failed. This artist may be referenced by an event. Please try again later.'
+                            'Delete artist failed. Please try again later.'
                         )
                         console.error(e)
                     }
