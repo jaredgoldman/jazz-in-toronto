@@ -11,7 +11,10 @@ import { useEffect } from 'react'
 export default function VenueForm() {
     const router = useRouter()
     const param = router.query.id as string
-    const { data } = api.venue.get.useQuery({ id: param })
+    const { data } = api.venue.get.useQuery(
+        { id: param },
+        { enabled: Boolean(param) }
+    )
     const {
         isEditing,
         submit,

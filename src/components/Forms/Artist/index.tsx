@@ -10,7 +10,10 @@ import { useEffect } from 'react'
 export default function ArtistForm() {
     const router = useRouter()
     const param = router.query.id as string
-    const { data } = api.artist.get.useQuery({ id: param })
+    const { data } = api.artist.get.useQuery(
+        { id: param },
+        { enabled: Boolean(param) }
+    )
     const {
         submit,
         isEditing,
