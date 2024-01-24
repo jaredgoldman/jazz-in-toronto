@@ -1,11 +1,7 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
-import {
-    EventWithArtistVenue,
-    Artist,
-    Venue
-} from '~/types/data'
+import { EventWithArtistVenue, Artist, Venue } from '~/types/data'
 import { isArtist, isVenue } from '~/utils/typeguards'
 import { parseISO } from 'date-fns'
 

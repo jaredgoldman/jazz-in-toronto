@@ -26,7 +26,7 @@ export default function ArtistForm() {
         error,
         reset,
         getValues
-    } = useArtistForm()
+    } = useArtistForm(data ?? undefined)
 
     useEffect(() => {
         if (data) {
@@ -55,7 +55,7 @@ export default function ArtistForm() {
                         align={{ initial: 'center', xs: 'left' }}
                         mb="6"
                     >
-                        {isEditing ? 'Submit artist' : 'Edit artist' }
+                        {isEditing ? 'Edit artist' : 'Submit artist' }
                     </Heading>
                     <Flex direction="column" gap="5">
                         <Input

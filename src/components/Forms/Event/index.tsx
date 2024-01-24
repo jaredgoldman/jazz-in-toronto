@@ -9,7 +9,7 @@ import { api } from '~/utils/api'
 import { useEffect } from 'react'
 import { EventWithArtistVenue } from '~/types/data'
 
-export default function EventForm(): JSX.Element {
+export default function EventForm(fromEdit?: boolean): JSX.Element {
     const router = useRouter()
     const param = router.query.id as string
     const { data } = api.event.get.useQuery(
@@ -27,7 +27,7 @@ export default function EventForm(): JSX.Element {
         venueData,
         artistData,
         isEditing,
-        reset
+        reset,
     } = useEventForm()
 
     useEffect(() => {
@@ -42,7 +42,7 @@ export default function EventForm(): JSX.Element {
             })
         }
     }, [data, reset])
-
+    
     return (
         <Flex direction="column" align="center" py="6">
             <Box className="w-full max-w-xl">
@@ -51,7 +51,7 @@ export default function EventForm(): JSX.Element {
                     align={{ initial: 'center', xs: 'left' }}
                     mb="6"
                 >
-                    {isEditing ? 'Book Your Gig' : 'Edit Event'}
+                    {isEditing ? 'Edit Event' : 'Book Your Gig' }
                 </Heading>
                 {isEditing ?? (
                     <Callout.Root my="6">

@@ -27,7 +27,7 @@ export default function VenueForm() {
         editVenueMutationIsSuccess,
         error,
         reset
-    } = useVenueForm()
+    } = useVenueForm(data ?? undefined)
 
     useEffect(() => {
         if (data) {
@@ -53,7 +53,7 @@ export default function VenueForm() {
                     mb="6"
                     align={{ initial: 'center', xs: 'left' }}
                 >
-                    {isEditing ?  'Add your venue' : 'Edit venue' }
+                    {isEditing ?  'Edit venue' : 'Add your venue' }
                 </Heading>
                 <Form.Root onSubmit={submit}>
                     <Flex direction="column" gap="5">
