@@ -25,11 +25,7 @@ export function TableActionMenu({
                     <DotsVerticalIcon className="cursor-pointer" />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Content size="2">
-                    <DropdownMenu.Item
-                        onClick={onEdit}
-                    >
-                        Edit
-                    </DropdownMenu.Item>
+                    <DropdownMenu.Item onClick={onEdit}>Edit</DropdownMenu.Item>
                     <DropdownMenu.Separator />
                     <DropdownMenu.Item
                         color={isFeatured ? undefined : 'green'}
@@ -39,9 +35,7 @@ export function TableActionMenu({
                         Feature
                     </DropdownMenu.Item>
                     <DropdownMenu.Separator />
-                    <DropdownMenu.Item >
-                        Approve
-                    </DropdownMenu.Item>
+                    <DropdownMenu.Item>Approve</DropdownMenu.Item>
                     <DropdownMenu.Separator />
                     <DropdownMenu.Item
                         color="red"

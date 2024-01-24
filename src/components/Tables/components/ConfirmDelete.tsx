@@ -6,11 +6,7 @@ type Props = {
     onDelete: () => void
 }
 
-export const ConfirmDelete = ({
-    onDelete,
-    open,
-    setOpen
-}: Props) => (
+export const ConfirmDelete = ({ onDelete, open, setOpen }: Props) => (
     <AlertDialog.Root open={open} onOpenChange={setOpen}>
         <AlertDialog.Content style={{ maxWidth: 450 }}>
             <AlertDialog.Title>Confirm Delete</AlertDialog.Title>

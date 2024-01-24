@@ -82,9 +82,7 @@ export function EventsTable() {
                         void refetch()
                     },
                     onError: (e) => {
-                        setError(
-                            'Delete event failed. Please try again later.'
-                        )
+                        setError('Delete event failed. Please try again later.')
                         console.error(e)
                     }
                 }
@@ -92,8 +90,7 @@ export function EventsTable() {
         },
         [deleteMutation, refetch]
     )
-    
-    
+
     const columns = useMemo(
         () => [
             columnHelper.accessor((row) => row.name, {
@@ -105,20 +102,12 @@ export function EventsTable() {
                 header: 'Venue'
             }),
             columnHelper.accessor((row) => row.startDate, {
-                cell: (info) =>
-                    format(
-                        new Date(info.getValue()),
-                        'h:mm a'
-                    ),
+                cell: (info) => format(new Date(info.getValue()), 'h:mm a'),
                 header: 'Start',
                 enableColumnFilter: false
             }),
             columnHelper.accessor((row) => row.endDate, {
-                cell: (info) =>
-                    format(
-                        new Date(info.getValue()),
-                        'h:mm a'
-                    ),
+                cell: (info) => format(new Date(info.getValue()), 'h:mm a'),
                 header: 'End',
                 enableColumnFilter: false
             }),
