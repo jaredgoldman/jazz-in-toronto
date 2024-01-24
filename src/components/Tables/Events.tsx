@@ -82,7 +82,9 @@ export function EventsTable() {
                         void refetch()
                     },
                     onError: (e) => {
-                        setError('Delete venue failed. Please try again later.')
+                        setError(
+                            'Delete event failed. Please try again later.'
+                        )
                         console.error(e)
                     }
                 }
@@ -90,7 +92,8 @@ export function EventsTable() {
         },
         [deleteMutation, refetch]
     )
-
+    
+    
     const columns = useMemo(
         () => [
             columnHelper.accessor((row) => row.name, {
@@ -102,28 +105,20 @@ export function EventsTable() {
                 header: 'Venue'
             }),
             columnHelper.accessor((row) => row.startDate, {
-                cell: (info) => {
-                    const content = info.getValue()
-                    if (content) {
-                        format(
-                            new Date(content as unknown as string),
-                            'h:mm a'
-                        )
-                    }
-                },
+                cell: (info) =>
+                    format(
+                        new Date(info.getValue()),
+                        'h:mm a'
+                    ),
                 header: 'Start',
                 enableColumnFilter: false
             }),
             columnHelper.accessor((row) => row.endDate, {
-                cell: (info) => {
-                    const content = info.getValue()
-                    if (content) {
-                        format(
-                            new Date(content as unknown as string),
-                            'h:mm a'
-                        )
-                    }
-                },
+                cell: (info) =>
+                    format(
+                        new Date(info.getValue()),
+                        'h:mm a'
+                    ),
                 header: 'End',
                 enableColumnFilter: false
             }),
