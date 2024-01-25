@@ -30,7 +30,10 @@ export const toDateTimeLocal = (date: Date): string => {
     return `${formattedDate}T${formattedTime}`
 }
 
-export default function useEventForm(currentValues?: EventWithArtistVenue) {
+export default function useEventForm(
+    editing?: boolean,
+    currentValues?: EventWithArtistVenue
+) {
     const [error, setError] = useState<string>('')
 
     const {
@@ -53,7 +56,7 @@ export default function useEventForm(currentValues?: EventWithArtistVenue) {
     } = api.event.update.useMutation()
 
     const isLoading = venuesLoading || artistsLoading
-    const isEditing = !!currentValues
+    const isEditing = editing
     const defaultValues: EventFormValues = currentValues
         ? {
               ...currentValues,

@@ -15,6 +15,7 @@ export default function VenueForm() {
         { id: param },
         { enabled: Boolean(param) }
     )
+    const editing = !!param
     const {
         isEditing,
         submit,
@@ -27,7 +28,7 @@ export default function VenueForm() {
         editVenueMutationIsSuccess,
         error,
         reset
-    } = useVenueForm(data ?? undefined)
+    } = useVenueForm(editing)
 
     useEffect(() => {
         if (data) {

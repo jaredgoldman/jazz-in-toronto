@@ -21,6 +21,7 @@ export interface VenueFormValues {
 }
 
 export default function useVenueForm(
+    editing?: boolean,
     currentValues?: Venue,
     onAdd?: (data: Venue) => Promise<void>
 ) {
@@ -35,7 +36,7 @@ export default function useVenueForm(
     } = api.venue.update.useMutation()
     const deleteVenuePhotoMutation = api.venue.deletePhoto.useMutation()
 
-    const isEditing = !!currentValues
+    const isEditing = editing
     const defaultValues: VenueFormValues = currentValues
         ? {
               name: currentValues.name,

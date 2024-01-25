@@ -6,6 +6,7 @@ import useArtistForm from './hooks/useArtistForm'
 import { useRouter } from 'next/router'
 import { api } from '~/utils/api'
 import { useEffect } from 'react'
+import { boolean } from 'zod'
 
 export default function ArtistForm() {
     const router = useRouter()
@@ -14,6 +15,8 @@ export default function ArtistForm() {
         { id: param },
         { enabled: Boolean(param) }
     )
+    const editing: boolean = !!param
+
     const {
         submit,
         isEditing,
@@ -26,7 +29,7 @@ export default function ArtistForm() {
         error,
         reset,
         getValues
-    } = useArtistForm(data ?? undefined)
+    } = useArtistForm(editing)
 
     useEffect(() => {
         if (data) {

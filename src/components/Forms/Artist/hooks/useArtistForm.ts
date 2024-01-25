@@ -19,6 +19,7 @@ export interface ArtistFormValues {
 }
 
 export default function useArtistForm(
+    editing?: boolean,
     currentValues?: Artist | undefined,
     onAdd?: (values: Artist) => Promise<void>
 ) {
@@ -31,7 +32,7 @@ export default function useArtistForm(
     } = api.artist.update.useMutation()
     const deleteartistPhotoMutation = api.artist.deletePhoto.useMutation()
 
-    const isEditing = !!currentValues
+    const isEditing = editing
     const defaultValues: ArtistFormValues = currentValues
         ? {
               ...currentValues,

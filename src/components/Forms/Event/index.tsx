@@ -16,6 +16,7 @@ export default function EventForm(): JSX.Element {
         { id: param },
         { enabled: Boolean(param) }
     )
+    const editing = !!param
 
     const {
         submit,
@@ -28,7 +29,7 @@ export default function EventForm(): JSX.Element {
         artistData,
         isEditing,
         reset
-    } = useEventForm()
+    } = useEventForm(editing)
 
     useEffect(() => {
         if (data) {
