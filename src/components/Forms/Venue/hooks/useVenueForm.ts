@@ -21,6 +21,7 @@ export interface VenueFormValues {
 }
 
 export default function useVenueForm(
+    isEditing?: boolean,
     currentValues?: Venue,
     onAdd?: (data: Venue) => Promise<void>
 ) {
@@ -35,12 +36,17 @@ export default function useVenueForm(
     } = api.venue.update.useMutation()
     const deleteVenuePhotoMutation = api.venue.deletePhoto.useMutation()
 
-    const isEditing = !!currentValues
     const defaultValues: VenueFormValues = currentValues
         ? {
-              ...currentValues,
-              photoPath: currentValues.photoPath || undefined,
-              instagramHandle: currentValues.instagramHandle || undefined,
+              name: currentValues.name,
+              photoPath: currentValues.photoPath || '',
+              latitude: currentValues.latitude || 0,
+              longitude: currentValues.longitude || 0,
+              city: currentValues.city || '',
+              address: currentValues.address || '',
+              website: currentValues.website || '',
+              instagramHandle: currentValues.instagramHandle || '',
+              phoneNumber: currentValues.phoneNumber || '',
               featured: currentValues.featured || false
           }
         : {
@@ -62,6 +68,7 @@ export default function useVenueForm(
         setValue,
         control,
         getValues,
+        reset,
         formState: { errors }
     } = useForm<VenueFormValues>({
         defaultValues
@@ -109,7 +116,7 @@ export default function useVenueForm(
     const onSubmit = async (values: VenueFormValues) => {
         try {
             setError('')
-            // Make coapy of values and conver phoneNumber to string
+            // Make coapy of values and convert phoneNumber to string
             let newValues = {
                 ...values,
                 phoneNumber: values.phoneNumber.toString()
@@ -164,6 +171,7 @@ export default function useVenueForm(
         submit,
         onUpload,
         onSelectLocation,
+        reset,
         getValues
     }
 }

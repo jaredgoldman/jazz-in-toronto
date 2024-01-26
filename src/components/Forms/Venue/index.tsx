@@ -1,11 +1,20 @@
 import PlacesAutocomplete from '../Fields/PlacesAutoComplete'
-import { Input, Toggle } from '../Fields'
+import { Input } from '../Fields'
 import * as Form from '@radix-ui/react-form'
 import Upload from '../Fields/Upload'
 import { Heading, Text, Flex, Box, Button } from '@radix-ui/themes'
 import useVenueForm from './hooks/useVenueForm'
+import { useRouter } from 'next/router'
+import { api } from '~/utils/api'
+import { useEffect } from 'react'
 
 export default function VenueForm() {
+    const router = useRouter()
+    const param = router.query.id as string
+    const { data } = api.venue.get.useQuery(
+        { id: param },
+        { enabled: Boolean(param) }
+    )
     const {
         isEditing,
         submit,
@@ -16,14 +25,27 @@ export default function VenueForm() {
         handleDeletePhoto,
         venueMutationIsSuccess,
         editVenueMutationIsSuccess,
-        error
-    } = useVenueForm()
+        error,
+        reset
+    } = useVenueForm(!!param)
+
+    useEffect(() => {
+        if (data) {
+            reset({
+                ...data,
+                instagramHandle: data.instagramHandle ?? '',
+                photoPath: data.photoPath ?? ''
+            })
+        }
+    }, [data, reset])
+
     return (
         <Flex
             direction="column"
             align="center"
             width="100%"
             className="max-w-xl"
+            py="6"
         >
             <Box className="w-full">
                 <Heading
@@ -40,10 +62,11 @@ export default function VenueForm() {
                             label="Venue Name"
                             error={errors.name}
                             control={control}
-                            required="Please eneter your venues name"
+                            required="Please enter your venues name"
                         />
                         <PlacesAutocomplete
                             name="address"
+                            initialValue={data?.address}
                             label="Address"
                             control={control}
                             onSelect={onSelectLocation}
@@ -59,7 +82,6 @@ export default function VenueForm() {
                             name="phoneNumber"
                             label="Enter your venues phone number"
                             error={errors.phoneNumber}
-                            type="number"
                             control={control}
                         />
                         <Input
@@ -74,24 +96,16 @@ export default function VenueForm() {
                             error={errors.website}
                             control={control}
                         />
-                        {isEditing && (
-                            <Toggle
-                                label="Featured"
-                                name="featured"
-                                control={control}
-                                error={errors.featured}
-                            />
-                        )}
                     </Flex>
                     <Flex width="100%" align="center" mt="3">
                         {venueMutationIsSuccess && (
                             <Text size="2" color="green" align="center">
-                                Venue submitted succesfully
+                                Venue submitted successfully
                             </Text>
                         )}
                         {editVenueMutationIsSuccess && (
                             <Text size="2" color="green" align="center">
-                                Venue edited succesfully
+                                Venue edited successfully
                             </Text>
                         )}
                         {error && (

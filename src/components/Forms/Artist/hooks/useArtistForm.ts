@@ -7,10 +7,10 @@ import { MAX_FILE_SIZE } from '~/utils/constants'
 
 export interface ArtistFormValues {
     name: string
-    genre?: string
+    genre: string
     photoPath?: string
-    instagramHandle: string | undefined
-    website?: string
+    instagramHandle?: string
+    website: string
     fileData?: {
         file: File
         dataURL: string
@@ -19,6 +19,7 @@ export interface ArtistFormValues {
 }
 
 export default function useArtistForm(
+    isEditing?: boolean,
     currentValues?: Artist | undefined,
     onAdd?: (values: Artist) => Promise<void>
 ) {
@@ -31,15 +32,14 @@ export default function useArtistForm(
     } = api.artist.update.useMutation()
     const deleteartistPhotoMutation = api.artist.deletePhoto.useMutation()
 
-    const isEditing = !!currentValues
     const defaultValues: ArtistFormValues = currentValues
         ? {
+              ...currentValues,
               name: currentValues.name,
-              instagramHandle: currentValues.instagramHandle || undefined,
-              genre: currentValues.genre || undefined,
-              website: currentValues.website || undefined,
-              photoPath: currentValues.photoPath || undefined,
-              featured: currentValues.featured || false
+              instagramHandle: currentValues.instagramHandle || '',
+              genre: currentValues.genre || '',
+              website: currentValues.website || '',
+              photoPath: currentValues.photoPath || ''
           }
         : {
               name: '',
@@ -57,6 +57,7 @@ export default function useArtistForm(
         watch,
         setValue,
         getValues,
+        reset,
         formState: { errors }
     } = useForm<ArtistFormValues>({
         defaultValues
@@ -146,6 +147,7 @@ export default function useArtistForm(
         control,
         watch,
         onUpload,
-        getValues
+        getValues,
+        reset
     }
 }

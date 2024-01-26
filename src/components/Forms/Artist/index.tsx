@@ -1,10 +1,20 @@
 import * as Form from '@radix-ui/react-form'
-import { Input, Toggle } from '../Fields'
+import { Input } from '../Fields'
 import Upload from '../Fields/Upload'
 import { Heading, Flex, Text, Box, Button } from '@radix-ui/themes'
 import useArtistForm from './hooks/useArtistForm'
+import { useRouter } from 'next/router'
+import { api } from '~/utils/api'
+import { useEffect } from 'react'
 
 export default function ArtistForm() {
+    const router = useRouter()
+    const param = router.query.id as string
+    const { data } = api.artist.get.useQuery(
+        { id: param },
+        { enabled: Boolean(param) }
+    )
+
     const {
         submit,
         isEditing,
@@ -14,8 +24,22 @@ export default function ArtistForm() {
         handleDeletePhoto,
         artistMutationIsSuccess,
         editArtistMutationIsSuccess,
-        error
-    } = useArtistForm()
+        error,
+        reset,
+        getValues
+    } = useArtistForm(!!param)
+
+    useEffect(() => {
+        if (data) {
+            reset({
+                ...data,
+                instagramHandle: data.instagramHandle ?? '',
+                genre: data.genre ?? '',
+                photoPath: data.photoPath ?? '',
+                website: data.website ?? ''
+            })
+        }
+    }, [data, reset, getValues])
 
     return (
         <Flex
@@ -23,6 +47,7 @@ export default function ArtistForm() {
             align="center"
             width="100%"
             className="max-w-xl"
+            py="6"
         >
             <Box className="w-full">
                 <Form.Root onSubmit={submit}>
@@ -31,7 +56,7 @@ export default function ArtistForm() {
                         align={{ initial: 'center', xs: 'left' }}
                         mb="6"
                     >
-                        {isEditing ? `Edit artist` : 'Submit artist'}
+                        {isEditing ? 'Edit artist' : 'Submit artist'}
                     </Heading>
                     <Flex direction="column" gap="5">
                         <Input
@@ -66,24 +91,15 @@ export default function ArtistForm() {
                             error={errors.website}
                             control={control}
                         />
-                        {isEditing && (
-                            <Toggle
-                                label="Featured"
-                                name="featured"
-                                control={control}
-                                error={errors.featured}
-                            />
-                        )}
-
                         <Flex width="100%" align="center">
                             {artistMutationIsSuccess && (
                                 <Text size="2" color="green" align="center">
-                                    Artist submitted succesfully
+                                    Artist submitted successfully
                                 </Text>
                             )}
                             {editArtistMutationIsSuccess && (
                                 <Text size="2" color="green" align="center">
-                                    Artist edited succesfully
+                                    Artist edited successfully
                                 </Text>
                             )}
                             {error && (

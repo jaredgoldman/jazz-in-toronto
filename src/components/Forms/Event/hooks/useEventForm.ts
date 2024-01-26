@@ -1,17 +1,14 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
-import {
-    type EventWithArtistVenue,
-    type Artist,
-    type Venue
-} from '~/types/data'
+import { EventWithArtistVenue, Artist, Venue } from '~/types/data'
 import { isArtist, isVenue } from '~/utils/typeguards'
+import { parseISO } from 'date-fns'
 
 export interface EventFormValues {
     name: string
-    startDate: Date
-    endDate: Date
+    startDate: string
+    endDate: string
     artistId: string
     instagramHandle?: string
     website?: string
@@ -19,7 +16,24 @@ export interface EventFormValues {
     featured: boolean
 }
 
-export default function useEventForm(currentValues?: EventWithArtistVenue) {
+export const toDateTimeLocal = (date: Date): string => {
+    // Pad function to ensure single digits are preceded by a 0
+    const pad = (number: number): string =>
+        number < 10 ? `0${number}` : number.toString()
+    // Format the date to YYYY-MM-DD
+    const formattedDate = `${date.getFullYear()}-${pad(
+        date.getMonth() + 1
+    )}-${pad(date.getDate())}`
+    // Format the time to HH:MM
+    const formattedTime = `${pad(date.getHours())}:${pad(date.getMinutes())}`
+    // Combine both date and time
+    return `${formattedDate}T${formattedTime}`
+}
+
+export default function useEventForm(
+    isEditing?: boolean,
+    currentValues?: EventWithArtistVenue
+) {
     const [error, setError] = useState<string>('')
 
     const {
@@ -42,18 +56,19 @@ export default function useEventForm(currentValues?: EventWithArtistVenue) {
     } = api.event.update.useMutation()
 
     const isLoading = venuesLoading || artistsLoading
-    const isEditing = !!currentValues
     const defaultValues: EventFormValues = currentValues
         ? {
               ...currentValues,
+              startDate: toDateTimeLocal(new Date(currentValues?.startDate)),
+              endDate: toDateTimeLocal(new Date(currentValues?.endDate)),
               instagramHandle: currentValues.instagramHandle || undefined,
               website: currentValues.website || undefined,
               featured: currentValues.featured || false
           }
         : {
               name: '',
-              startDate: new Date(),
-              endDate: new Date(),
+              startDate: toDateTimeLocal(new Date()),
+              endDate: toDateTimeLocal(new Date()),
               artistId: '',
               venueId: '',
               instagramHandle: '',
@@ -67,6 +82,7 @@ export default function useEventForm(currentValues?: EventWithArtistVenue) {
         setValue,
         control,
         getValues,
+        reset,
         formState: { errors }
     } = useForm<EventFormValues>({ defaultValues })
 
@@ -74,11 +90,17 @@ export default function useEventForm(currentValues?: EventWithArtistVenue) {
         try {
             if (isEditing && currentValues && editEventMutation) {
                 await editEventMutation({
+                    ...values,
                     id: currentValues?.id,
-                    ...values
+                    startDate: parseISO(values.startDate),
+                    endDate: parseISO(values.endDate)
                 })
             } else if (eventMutation) {
-                await eventMutation(values)
+                await eventMutation({
+                    ...values,
+                    startDate: parseISO(values.startDate),
+                    endDate: parseISO(values.endDate)
+                })
             }
         } catch (e) {
             setError('There was an error submitting. Please try again')
@@ -129,6 +151,7 @@ export default function useEventForm(currentValues?: EventWithArtistVenue) {
         setValue,
         getValues,
         control,
-        getSpecificArtistData
+        getSpecificArtistData,
+        reset
     }
 }
