@@ -21,7 +21,7 @@ export interface VenueFormValues {
 }
 
 export default function useVenueForm(
-    editing?: boolean,
+    isEditing?: boolean,
     currentValues?: Venue,
     onAdd?: (data: Venue) => Promise<void>
 ) {
@@ -36,7 +36,6 @@ export default function useVenueForm(
     } = api.venue.update.useMutation()
     const deleteVenuePhotoMutation = api.venue.deletePhoto.useMutation()
 
-    const isEditing = editing
     const defaultValues: VenueFormValues = currentValues
         ? {
               name: currentValues.name,
@@ -117,7 +116,7 @@ export default function useVenueForm(
     const onSubmit = async (values: VenueFormValues) => {
         try {
             setError('')
-            // Make coapy of values and conver phoneNumber to string
+            // Make coapy of values and convert phoneNumber to string
             let newValues = {
                 ...values,
                 phoneNumber: values.phoneNumber.toString()

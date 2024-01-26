@@ -15,7 +15,6 @@ export default function VenueForm() {
         { id: param },
         { enabled: Boolean(param) }
     )
-    const editing = !!param
     const {
         isEditing,
         submit,
@@ -28,7 +27,7 @@ export default function VenueForm() {
         editVenueMutationIsSuccess,
         error,
         reset
-    } = useVenueForm(editing)
+    } = useVenueForm(!!param)
 
     useEffect(() => {
         if (data) {
@@ -63,7 +62,7 @@ export default function VenueForm() {
                             label="Venue Name"
                             error={errors.name}
                             control={control}
-                            required="Please eneter your venues name"
+                            required="Please enter your venues name"
                         />
                         <PlacesAutocomplete
                             name="address"
@@ -101,12 +100,12 @@ export default function VenueForm() {
                     <Flex width="100%" align="center" mt="3">
                         {venueMutationIsSuccess && (
                             <Text size="2" color="green" align="center">
-                                Venue submitted succesfully
+                                Venue submitted successfully
                             </Text>
                         )}
                         {editVenueMutationIsSuccess && (
                             <Text size="2" color="green" align="center">
-                                Venue edited succesfully
+                                Venue edited successfully
                             </Text>
                         )}
                         {error && (

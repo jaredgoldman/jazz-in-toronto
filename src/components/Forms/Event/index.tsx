@@ -16,7 +16,6 @@ export default function EventForm(): JSX.Element {
         { id: param },
         { enabled: Boolean(param) }
     )
-    const editing = !!param
 
     const {
         submit,
@@ -29,7 +28,7 @@ export default function EventForm(): JSX.Element {
         artistData,
         isEditing,
         reset
-    } = useEventForm(editing)
+    } = useEventForm(!!param)
 
     useEffect(() => {
         if (data) {
@@ -141,12 +140,12 @@ export default function EventForm(): JSX.Element {
                     <Flex width="100%" justify="center" mt="3">
                         {eventMutationIsSuccess && (
                             <Text size="2" color="green" align="center">
-                                Event submitted succesfully
+                                Event submitted successfully
                             </Text>
                         )}
                         {editEventMutationIsSuccess && (
                             <Text size="2" color="green" align="center">
-                                Event edited succesfully
+                                Event edited successfully
                             </Text>
                         )}
                         {error && (

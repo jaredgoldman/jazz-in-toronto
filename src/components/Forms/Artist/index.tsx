@@ -14,7 +14,6 @@ export default function ArtistForm() {
         { id: param },
         { enabled: Boolean(param) }
     )
-    const editing = !!param
 
     const {
         submit,
@@ -28,7 +27,7 @@ export default function ArtistForm() {
         error,
         reset,
         getValues
-    } = useArtistForm(editing)
+    } = useArtistForm(!!param)
 
     useEffect(() => {
         if (data) {
@@ -95,12 +94,12 @@ export default function ArtistForm() {
                         <Flex width="100%" align="center">
                             {artistMutationIsSuccess && (
                                 <Text size="2" color="green" align="center">
-                                    Artist submitted succesfully
+                                    Artist submitted successfully
                                 </Text>
                             )}
                             {editArtistMutationIsSuccess && (
                                 <Text size="2" color="green" align="center">
-                                    Artist edited succesfully
+                                    Artist edited successfully
                                 </Text>
                             )}
                             {error && (
