@@ -11,24 +11,22 @@ import {
     createColumnHelper
 } from '@tanstack/react-table'
 import { Venue } from '~/types/data'
-import { Table, Box, Flex, Text } from '@radix-ui/themes'
+import { Table, Box, Flex } from '@radix-ui/themes'
 import { HeaderCell, TableActionMenu } from './components'
 import Loading from '../Loading'
 import { fuzzyFilter } from './utils/filters'
 import { PaginationButtonGroup } from './components/PaginationButtonGroup'
-import FadeOutText from '../FadeOutText'
 import { useRouter } from 'next/router'
+import { useToast } from '~/hooks/useToast'
 
 const columnHelper = createColumnHelper<Venue>()
 
 export function VenuesTable() {
+    const toast = useToast()
     const { data, isFetched, isLoading, refetch } = api.venue.getAll.useQuery()
     const router = useRouter()
-    const { mutate: setFeaturedMutation, isSuccess: setFeaturedIsSuccess } =
-        api.venue.setFeatured.useMutation()
-    const { mutate: deleteMutation, isSuccess: deleteMutationIsSuccess } =
-        api.venue.delete.useMutation()
-    const [error, setError] = useState<string | null>(null)
+    const { mutate: setFeaturedMutation } = api.venue.setFeatured.useMutation()
+    const { mutate: deleteMutation } = api.venue.delete.useMutation()
 
     const handleEditClick = useCallback(
         async (venue: Venue) => {
@@ -52,19 +50,22 @@ export function VenuesTable() {
                 { id: venue.id },
                 {
                     onSuccess: () => {
-                        setError(null)
                         void refetch()
+                        toast({
+                            title: 'Success',
+                            message: 'Venue successfully set as featured'
+                        })
                     },
-                    onError: (e) => {
-                        setError(
-                            'Setting featured venue failed. Please try again later.'
-                        )
-                        console.error(e)
-                    }
+                    onError: () =>
+                        toast({
+                            title: 'Error',
+                            message: 'Setting featured venue failed',
+                            type: 'error'
+                        })
                 }
             )
         },
-        [setFeaturedMutation, refetch]
+        [setFeaturedMutation, refetch, toast]
     )
 
     const handleDelete = useCallback(
@@ -73,19 +74,22 @@ export function VenuesTable() {
                 { id: venue.id },
                 {
                     onSuccess: () => {
-                        setError(null)
                         void refetch()
+                        toast({
+                            title: 'Success',
+                            message: 'Venue has been deleted'
+                        })
                     },
-                    onError: (e) => {
-                        setError(
-                            'Delete venue failed. Please try again later.'
-                        )
-                        console.error(e)
-                    }
+                    onError: () =>
+                        toast({
+                            title: 'Error',
+                            message: 'Delete venue failed',
+                            type: 'error'
+                        })
                 }
             )
         },
-        [deleteMutation, refetch]
+        [deleteMutation, refetch, toast]
     )
 
     const columns = useMemo(
@@ -157,27 +161,6 @@ export function VenuesTable() {
 
     return (
         <Box>
-            {setFeaturedIsSuccess ? (
-                <FadeOutText>
-                    <Text color="green" size="2" align="center">
-                        Venue successfully set as featured
-                    </Text>
-                </FadeOutText>
-            ) : null}
-            {deleteMutationIsSuccess ? (
-                <FadeOutText>
-                    <Text color="red" size="2" align="center">
-                        Venue has been deleted
-                    </Text>
-                </FadeOutText>
-            ) : null}
-            {error ? (
-                <FadeOutText>
-                    <Text color="yellow" size="2" align="center">
-                        {error}
-                    </Text>
-                </FadeOutText>
-            ) : null}
             {data?.length && (
                 <>
                     <Table.Root variant="surface">

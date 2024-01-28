@@ -13,24 +13,22 @@ import {
     getPaginationRowModel,
     createColumnHelper
 } from '@tanstack/react-table'
-import { Table, Box, Flex, Text } from '@radix-ui/themes'
+import { Table, Box, Flex } from '@radix-ui/themes'
 import Loading from '../Loading'
 import { fuzzyFilter } from './utils/filters'
 import { PaginationButtonGroup } from './components/PaginationButtonGroup'
 import { useRouter } from 'next/router'
 import { TableActionMenu } from './components/TableActionMenu'
-import FadeOutText from '../FadeOutText'
+import { useToast } from '~/hooks/useToast'
 
 const columnHelper = createColumnHelper<Artist>()
 
 export function ArtistsTable() {
+    const toast = useToast()
     const { data, isFetched, isLoading, refetch } = api.artist.getAll.useQuery()
     const router = useRouter()
-    const { mutate: setFeaturedMutation, isSuccess: setFeaturedIsSuccess } =
-        api.artist.setFeatured.useMutation()
-    const { mutate: deleteMutation, isSuccess: deleteMutationIsSuccess } =
-        api.artist.delete.useMutation()
-    const [error, setError] = useState<string | null>(null)
+    const { mutate: setFeaturedMutation } = api.artist.setFeatured.useMutation()
+    const { mutate: deleteMutation } = api.artist.delete.useMutation()
 
     const handleEditClick = useCallback(
         async (artist: Artist) => {
@@ -54,19 +52,22 @@ export function ArtistsTable() {
                 { id: artist.id },
                 {
                     onSuccess: () => {
-                        setError(null)
                         void refetch()
+                        toast({
+                            title: 'Success',
+                            message: 'Artist successfully set as featured'
+                        })
                     },
-                    onError: (e) => {
-                        setError(
-                            'Setting featured artist failed. Please try again later.'
-                        )
-                        console.error(e)
-                    }
+                    onError: () =>
+                        toast({
+                            title: 'Error',
+                            message: 'Setting featured artist failed',
+                            type: 'error'
+                        })
                 }
             )
         },
-        [setFeaturedMutation, refetch]
+        [setFeaturedMutation, refetch, toast]
     )
 
     const handleDelete = useCallback(
@@ -75,19 +76,23 @@ export function ArtistsTable() {
                 { id: artist.id },
                 {
                     onSuccess: () => {
-                        setError(null)
                         void refetch()
+                        toast({
+                            title: 'Success',
+                            message: 'Artist has been deleted'
+                        })
                     },
-                    onError: (e) => {
-                        setError(
-                            'Delete artist failed. Please try again later.'
-                        )
-                        console.error(e)
+                    onError: () => {
+                        toast({
+                            title: 'Error',
+                            message: 'Delete artist failed',
+                            type: 'error'
+                        })
                     }
                 }
             )
         },
-        [deleteMutation, refetch]
+        [deleteMutation, refetch, toast]
     )
 
     const columns = useMemo(
@@ -165,27 +170,6 @@ export function ArtistsTable() {
 
     return (
         <Box>
-            {setFeaturedIsSuccess ? (
-                <FadeOutText>
-                    <Text color="green" size="2" align="center">
-                        Artist successfully set as featured
-                    </Text>
-                </FadeOutText>
-            ) : null}
-            {deleteMutationIsSuccess ? (
-                <FadeOutText>
-                    <Text color="red" size="2" align="center">
-                        Artist has been deleted
-                    </Text>
-                </FadeOutText>
-            ) : null}
-            {error ? (
-                <FadeOutText>
-                    <Text color="yellow" size="2" align="center">
-                        {error}
-                    </Text>
-                </FadeOutText>
-            ) : null}
             {data?.length && (
                 <>
                     <Table.Root variant="surface">

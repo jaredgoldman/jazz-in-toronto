@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useCallback() } from 'react'
 import { useAtom } from 'jotai'
 import { atom } from 'jotai'
 
