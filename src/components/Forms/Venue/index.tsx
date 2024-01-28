@@ -2,7 +2,7 @@ import PlacesAutocomplete from '../Fields/PlacesAutoComplete'
 import { Input } from '../Fields'
 import * as Form from '@radix-ui/react-form'
 import Upload from '../Fields/Upload'
-import { Heading, Text, Flex, Box, Button } from '@radix-ui/themes'
+import { Heading, Flex, Box, Button } from '@radix-ui/themes'
 import useVenueForm from './hooks/useVenueForm'
 import { useRouter } from 'next/router'
 import { api } from '~/utils/api'
@@ -23,9 +23,6 @@ export default function VenueForm() {
         onSelectLocation,
         onUpload,
         handleDeletePhoto,
-        venueMutationIsSuccess,
-        editVenueMutationIsSuccess,
-        error,
         reset
     } = useVenueForm(!!param)
 

@@ -22,9 +22,6 @@ export default function ArtistForm() {
         control,
         onUpload,
         handleDeletePhoto,
-        artistMutationIsSuccess,
-        editArtistMutationIsSuccess,
-        error,
         reset,
         getValues
     } = useArtistForm(!!param)
@@ -91,24 +88,6 @@ export default function ArtistForm() {
                             error={errors.website}
                             control={control}
                         />
-                        <Flex width="100%" align="center">
-                            {artistMutationIsSuccess && (
-                                <Text size="2" color="green" align="center">
-                                    Artist submitted successfully
-                                </Text>
-                            )}
-                            {editArtistMutationIsSuccess && (
-                                <Text size="2" color="green" align="center">
-                                    Artist edited successfully
-                                </Text>
-                            )}
-                            {error && (
-                                <Text size="2" color="red" align="center">
-                                    {error}
-                                </Text>
-                            )}
-                        </Flex>
-                    </Flex>
                     <Flex width="100%" justify="center">
                         <Form.Submit asChild>
                             <Button className="w-full">Submit</Button>
