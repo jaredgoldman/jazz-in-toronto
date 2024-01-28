@@ -12,7 +12,7 @@ const bgColors = {
 
 export function Toast() {
     const [toastData, setToastData] = useAtom(toastAtom)
-    const bgColor = bgColors[toastData.type]
+    const bgColor = bgColors[toastData.type ?? 'info']
     const animationClass = toastData.visible
         ? 'animate-fadeIn'
         : 'animate-swipeOut'
@@ -21,7 +21,7 @@ export function Toast() {
         <Box
             p="3"
             grow="1"
-            className={`fixed right-0 bottom-0 ${bgColor} z-50 m-4 rounded-md shadow-md ${animationClass} min-w-[18rem]`}
+            className={`fixed bottom-0 right-0 ${bgColor} z-50 m-4 rounded-md shadow-md ${animationClass} min-w-[18rem]`}
         >
             <Cross1Icon
                 color="black"

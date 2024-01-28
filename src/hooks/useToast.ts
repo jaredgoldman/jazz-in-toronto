@@ -2,7 +2,7 @@ import { useEffect, useCallback } from 'react'
 import { useAtom } from 'jotai'
 import { atom } from 'jotai'
 
-enum ToastType {
+export enum ToastType {
     Success = 'success',
     Error = 'error'
 }
@@ -10,18 +10,18 @@ enum ToastType {
 type ToastProps = {
     title: string
     message: string
-    type: ToastType
-    visible: boolean
-    animating: boolean
+    type?: 'success' | 'error'
+    visible?: boolean
+    animating?: boolean
 }
 
 const defaultToastSettings = {
     title: '',
     message: '',
-    type: ToastType.Success,
+    type: 'success',
     visible: false,
     animating: false
-}
+} as ToastProps
 
 export const toastAtom = atom<ToastProps>(defaultToastSettings)
 
@@ -46,7 +46,7 @@ export function useToast() {
     }, [toastData, setToastData])
 
     const toast = useCallback(
-        ({ title, message, type = ToastType.Success }: ToastProps) => {
+        ({ title, message, type = 'success' }: ToastProps) => {
             setToastData({
                 ...toastData,
                 title,
