@@ -1,10 +1,10 @@
-import { useState } from 'react'
 import { useUploadThing } from '~/hooks/useUploadThing'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
 import { Venue } from '~/types/data'
 import { FileData } from '~/types/data'
 import { MAX_FILE_SIZE } from '~/utils/constants'
+import { useToast } from '~/hooks/useToast'
 
 export interface VenueFormValues {
     name: string
@@ -25,15 +25,10 @@ export default function useVenueForm(
     currentValues?: Venue,
     onAdd?: (data: Venue) => Promise<void>
 ) {
-    // State
-    const [error, setError] = useState<string>('')
+    const toast = useToast()
     // Mutations
-    const { mutateAsync: venueMutation, isSuccess: venueMutationIsSuccess } =
-        api.venue.create.useMutation()
-    const {
-        mutateAsync: editVenueMutation,
-        isSuccess: editVenueMutationIsSuccess
-    } = api.venue.update.useMutation()
+    const { mutateAsync: venueMutation } = api.venue.create.useMutation()
+    const { mutateAsync: editVenueMutation } = api.venue.update.useMutation()
     const deleteVenuePhotoMutation = api.venue.deletePhoto.useMutation()
 
     const defaultValues: VenueFormValues = currentValues
@@ -96,10 +91,17 @@ export default function useVenueForm(
                 await deleteVenuePhotoMutation.mutateAsync({
                     id: currentValues.id
                 })
+                toast({
+                    title: 'Success',
+                    message: 'Your photo was deleted successfully.'
+                })
             } catch {
-                setError(
-                    'There was an error deleting your photo. Please try again.'
-                )
+                toast({
+                    title: 'Error',
+                    message:
+                        'There was an error deleting your photo. Please try again.',
+                    type: 'error'
+                })
             }
         }
     }
@@ -107,15 +109,17 @@ export default function useVenueForm(
     const { startUpload } = useUploadThing({
         endpoint: 'uploadImage',
         onUploadError: () => {
-            setError(
-                'There was an error uploading your data. Please try again.'
-            )
+            toast({
+                title: 'Error',
+                message:
+                    'There was an error uploading your data. Please try again.',
+                type: 'error'
+            })
         }
     })
 
     const onSubmit = async (values: VenueFormValues) => {
         try {
-            setError('')
             // Make coapy of values and convert phoneNumber to string
             let newValues = {
                 ...values,
@@ -128,10 +132,12 @@ export default function useVenueForm(
             if (values?.fileData?.file) {
                 // First ensure file is not too large
                 if (values.fileData.file.size > MAX_FILE_SIZE) {
-                    setError(
-                        'File size is too large. Please upload a file smaller than 5MB.'
-                    )
-                    return
+                    return toast({
+                        title: 'Error',
+                        message:
+                            'File size is too large. Please upload a file smaller than 5MB.',
+                        type: 'error'
+                    })
                 }
                 const res = await startUpload([values.fileData.file])
                 if (res) {
@@ -151,8 +157,16 @@ export default function useVenueForm(
             }
             // If we're in a modal form, handle accordingly
             onAdd && (await onAdd(addedVenue))
+            toast({
+                title: 'Success',
+                message: 'Venue successfully submitted!'
+            })
         } catch (e) {
-            setError('There was an error adding your artist. Please try again.')
+            toast({
+                title: 'Error',
+                message: 'There was an error submitting. Please try again',
+                type: 'error'
+            })
         }
     }
 
@@ -160,12 +174,8 @@ export default function useVenueForm(
 
     return {
         isEditing,
-        venueMutationIsSuccess,
-        editVenueMutationIsSuccess,
         handleDeletePhoto,
         startUpload,
-        setError,
-        error,
         errors,
         control,
         submit,

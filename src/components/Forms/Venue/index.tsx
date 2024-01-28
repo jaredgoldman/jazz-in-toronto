@@ -97,23 +97,6 @@ export default function VenueForm() {
                             control={control}
                         />
                     </Flex>
-                    <Flex width="100%" align="center" mt="3">
-                        {venueMutationIsSuccess && (
-                            <Text size="2" color="green" align="center">
-                                Venue submitted successfully
-                            </Text>
-                        )}
-                        {editVenueMutationIsSuccess && (
-                            <Text size="2" color="green" align="center">
-                                Venue edited successfully
-                            </Text>
-                        )}
-                        {error && (
-                            <Text size="2" color="red" align="center">
-                                {error}
-                            </Text>
-                        )}
-                    </Flex>
                     <Flex width="100%" justify="center">
                         <Form.Submit asChild>
                             <Button className="w-full" variant="solid">
