@@ -1,4 +1,4 @@
-import { useEffect, useCallback() } from 'react'
+import { useEffect, useCallback } from 'react'
 import { useAtom } from 'jotai'
 import { atom } from 'jotai'
 
@@ -39,15 +39,18 @@ export function useToast() {
         }
     }, [toastData, setToastData])
 
-    const toast = ({ title, message, type = 'success' }: Props) => {
-        setToastData({
-            ...toastData,
-            title,
-            message,
-            type,
-            visible: true
-        })
-    }
+    const toast = useCallback(
+        ({ title, message, type = 'success' }: Props) => {
+            setToastData({
+                ...toastData,
+                title,
+                message,
+                type,
+                visible: true
+            })
+        },
+        [toastData, setToastData]
+    )
 
     return toast
 }

@@ -35,7 +35,12 @@ export default function EventForm(): JSX.Element {
     }, [data, reset])
 
     return (
-        <Flex direction="column" align="center" py="6">
+        <Flex
+            direction="column"
+            align="center"
+            py="6"
+            className="min-h-[30rem]"
+        >
             {artistData && venueData ? (
                 <Box className="w-full max-w-xl">
                     <Heading

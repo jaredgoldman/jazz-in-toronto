@@ -41,7 +41,7 @@ export default function VenueForm() {
             direction="column"
             align="center"
             width="100%"
-            className="max-w-xl"
+            className="min-h-[30rem] max-w-xl"
             py="6"
         >
             <Box className="w-full">
