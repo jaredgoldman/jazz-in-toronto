@@ -6,6 +6,7 @@ import { Container, Flex, Text } from '@radix-ui/themes'
 import Head from 'next/head'
 import { Button } from '@radix-ui/themes'
 import { HeaderType } from '~/components/Header/utils'
+import { Toast } from '~/components/Toast/Toast'
 
 interface Props {
     pageTitle: string
@@ -23,6 +24,7 @@ export default function AdminLayout({
                 <title>{pageTitle}</title>
             </Head>
             <Flex direction="column" className="h-screen">
+                <Toast />
                 <Header headerType={HeaderType.Admin} />
                 <Container
                     size="3"
