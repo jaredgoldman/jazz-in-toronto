@@ -137,23 +137,6 @@ export default function EventForm(): JSX.Element {
                             control={control}
                         />
                     </Flex>
-                    <Flex width="100%" justify="center" mt="3">
-                        {eventMutationIsSuccess && (
-                            <Text size="2" color="green" align="center">
-                                Event submitted successfully
-                            </Text>
-                        )}
-                        {editEventMutationIsSuccess && (
-                            <Text size="2" color="green" align="center">
-                                Event edited successfully
-                            </Text>
-                        )}
-                        {error && (
-                            <Text size="2" color="red" align="center">
-                                {error}
-                            </Text>
-                        )}
-                    </Flex>
                     <Flex width="100%" justify="center" mt="5">
                         <Form.Submit asChild>
                             <Button className="w-full" variant="solid">

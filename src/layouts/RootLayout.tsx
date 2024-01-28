@@ -6,8 +6,10 @@ import { HeaderType } from '~/components/Header/utils'
 import { ReactNode } from 'react'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
 import { Breadcrumbs } from '~/components/Breadcrumbs/Breadcrumbs'
+import { Toast } from '~/components/Toast/Toast'
+import { useAtomValue, atom } from 'jotai'
 
-interface Props {
+type Props = {
     pageTitle: string
     children: ReactNode | string
     breadcrumbs?: {
@@ -17,6 +19,22 @@ interface Props {
     }
     calloutContent?: ReactNode
 }
+
+type ToastProps = {
+    visible: boolean
+    title: string
+    message: string
+    type: 'success' | 'error' | 'warning' | 'info'
+    swipeOut?: boolean
+    fadeIn?: boolean
+}
+
+export const toastAtom = atom<ToastProps>({
+    visible: false,
+    title: '',
+    message: '',
+    type: 'success'
+})
 
 export default function RootLayout({
     children,
@@ -30,6 +48,7 @@ export default function RootLayout({
                 <title>{pageTitle}</title>
             </Head>
             <Flex direction="column" className="h-screen">
+                <Toast />
                 <Header headerType={HeaderType.Public} />
                 {calloutContent && (
                     <Callout.Root>

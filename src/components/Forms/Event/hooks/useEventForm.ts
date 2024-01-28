@@ -1,9 +1,9 @@
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
 import { EventWithArtistVenue, Artist, Venue } from '~/types/data'
 import { isArtist, isVenue } from '~/utils/typeguards'
 import { parseISO } from 'date-fns'
+import { useToast } from '~/hooks/useToast'
 
 export interface EventFormValues {
     name: string
@@ -34,7 +34,7 @@ export default function useEventForm(
     isEditing?: boolean,
     currentValues?: EventWithArtistVenue
 ) {
-    const [error, setError] = useState<string>('')
+    const toast = useToast()
 
     const {
         data: venueData,
@@ -48,12 +48,8 @@ export default function useEventForm(
         isLoading: artistsLoading
     } = api.artist.getAll.useQuery()
 
-    const { mutateAsync: eventMutation, isSuccess: eventMutationIsSuccess } =
-        api.event.create.useMutation()
-    const {
-        mutateAsync: editEventMutation,
-        isSuccess: editEventMutationIsSuccess
-    } = api.event.update.useMutation()
+    const { mutateAsync: eventMutation } = api.event.create.useMutation()
+    const { mutateAsync: editEventMutation } = api.event.update.useMutation()
 
     const isLoading = venuesLoading || artistsLoading
     const defaultValues: EventFormValues = currentValues
@@ -102,8 +98,16 @@ export default function useEventForm(
                     endDate: parseISO(values.endDate)
                 })
             }
+            toast({
+                title: 'Success',
+                message: 'Event successfully submitted!'
+            })
         } catch (e) {
-            setError('There was an error submitting. Please try again')
+            toast({
+                title: 'Error',
+                message: 'There was an error submitting. Please try again',
+                type: 'error'
+            })
         }
     }
 
@@ -139,14 +143,11 @@ export default function useEventForm(
         isEditing,
         venueData,
         artistData,
-        eventMutationIsSuccess,
-        editEventMutationIsSuccess,
         submit,
         onAddArtist,
         onAddVenue,
         isLoading,
         register,
-        error,
         errors,
         setValue,
         getValues,
