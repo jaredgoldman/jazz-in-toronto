@@ -1,7 +1,7 @@
 import * as Form from '@radix-ui/react-form'
 import { Input } from '../Fields'
 import Upload from '../Fields/Upload'
-import { Heading, Flex, Text, Box, Button } from '@radix-ui/themes'
+import { Heading, Flex, Box, Button } from '@radix-ui/themes'
 import useArtistForm from './hooks/useArtistForm'
 import { useRouter } from 'next/router'
 import { api } from '~/utils/api'
@@ -88,6 +88,7 @@ export default function ArtistForm() {
                             error={errors.website}
                             control={control}
                         />
+                    </Flex>
                     <Flex width="100%" justify="center">
                         <Form.Submit asChild>
                             <Button className="w-full">Submit</Button>
