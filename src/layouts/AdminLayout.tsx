@@ -9,7 +9,6 @@ import { HeaderType } from '~/components/Header/utils'
 import { Toast } from '~/components/Toast/Toast'
 import { useAtomValue } from 'jotai'
 import { toastAtom } from '~/hooks/useToast'
-import { useToast } from '~/hooks/useToast'
 
 interface Props {
     pageTitle: string
@@ -21,12 +20,7 @@ export default function AdminLayout({
     children
 }: Props): JSX.Element {
     const { data: session } = useSession()
-    const { resetToast } = useToast()
     const toastState = useAtomValue(toastAtom)
-
-    useEffect(() => {
-        resetToast()
-    }, [resetToast])
 
     return (
         <>

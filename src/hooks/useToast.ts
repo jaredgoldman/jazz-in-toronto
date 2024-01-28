@@ -63,5 +63,9 @@ export function useToast() {
         setToastData(defaultToastSettings)
     }, [setToastData])
 
+    useEffect(() => {
+        resetToast()
+    }, [resetToast])
+
     return { toast, resetToast }
 }

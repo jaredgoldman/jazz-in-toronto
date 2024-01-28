@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from 'react'
+import { ReactNode } from 'react'
 import Header from '~/components/Header'
 import Head from 'next/head'
 import Footer from '~/components/Footer'
@@ -9,7 +9,6 @@ import { Breadcrumbs } from '~/components/Breadcrumbs/Breadcrumbs'
 import { Toast } from '~/components/Toast/Toast'
 import { useAtomValue } from 'jotai'
 import { toastAtom } from '~/hooks/useToast'
-import { useToast } from '~/hooks/useToast'
 
 type Props = {
     pageTitle: string
@@ -28,12 +27,7 @@ export default function RootLayout({
     breadcrumbs,
     calloutContent
 }: Props): JSX.Element {
-    const { resetToast } = useToast()
     const toastState = useAtomValue(toastAtom)
-
-    useEffect(() => {
-        resetToast()
-    }, [resetToast])
 
     return (
         <>
