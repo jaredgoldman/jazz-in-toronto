@@ -21,7 +21,7 @@ export function Toast() {
         <Box
             p="3"
             grow="1"
-            className={`fixed right-0 top-0 ${bgColor} z-50 m-4 rounded-md shadow-md ${animationClass} min-w-[18rem]`}
+            className={`fixed right-0 bottom-0 ${bgColor} z-50 m-4 rounded-md shadow-md ${animationClass} min-w-[18rem]`}
         >
             <Cross1Icon
                 color="black"

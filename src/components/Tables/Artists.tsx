@@ -24,7 +24,7 @@ import { useToast } from '~/hooks/useToast'
 const columnHelper = createColumnHelper<Artist>()
 
 export function ArtistsTable() {
-    const toast = useToast()
+    const { toast } = useToast()
     const { data, isFetched, isLoading, refetch } = api.artist.getAll.useQuery()
     const router = useRouter()
     const { mutate: setFeaturedMutation } = api.artist.setFeatured.useMutation()

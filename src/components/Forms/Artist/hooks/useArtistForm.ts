@@ -23,7 +23,7 @@ export default function useArtistForm(
     currentValues?: Artist | undefined,
     onAdd?: (values: Artist) => Promise<void>
 ) {
-    const toast = useToast()
+    const { toast } = useToast()
     const { mutateAsync: artistMutation } = api.artist.create.useMutation()
     const { mutateAsync: editArtistMutation } = api.artist.update.useMutation()
     const deleteartistPhotoMutation = api.artist.deletePhoto.useMutation()

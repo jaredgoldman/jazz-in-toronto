@@ -39,7 +39,8 @@ export default function EventForm(): JSX.Element {
             direction="column"
             align="center"
             py="6"
-            className="min-h-[30rem]"
+            width="100%"
+            className="min-h-[30rem] max-w-xl"
         >
             {artistData && venueData ? (
                 <Box className="w-full max-w-xl">
@@ -129,8 +130,6 @@ export default function EventForm(): JSX.Element {
                                 error={errors.website}
                                 control={control}
                             />
-                        </Flex>
-                        <Flex width="100%" justify="center" mt="5">
                             <Form.Submit asChild>
                                 <Button className="w-full" variant="solid">
                                     Submit

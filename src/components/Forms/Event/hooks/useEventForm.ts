@@ -34,7 +34,7 @@ export default function useEventForm(
     isEditing?: boolean,
     currentValues?: EventWithArtistVenue
 ) {
-    const toast = useToast()
+    const { toast } = useToast()
 
     const {
         data: venueData,

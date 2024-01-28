@@ -25,8 +25,7 @@ export default function useVenueForm(
     currentValues?: Venue,
     onAdd?: (data: Venue) => Promise<void>
 ) {
-    const toast = useToast()
-    // Mutations
+    const { toast } = useToast()
     const { mutateAsync: venueMutation } = api.venue.create.useMutation()
     const { mutateAsync: editVenueMutation } = api.venue.update.useMutation()
     const deleteVenuePhotoMutation = api.venue.deletePhoto.useMutation()

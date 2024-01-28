@@ -88,8 +88,6 @@ export default function ArtistForm() {
                             error={errors.website}
                             control={control}
                         />
-                    </Flex>
-                    <Flex width="100%" justify="center">
                         <Form.Submit asChild>
                             <Button className="w-full">Submit</Button>
                         </Form.Submit>

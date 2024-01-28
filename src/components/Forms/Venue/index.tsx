@@ -93,8 +93,6 @@ export default function VenueForm() {
                             error={errors.website}
                             control={control}
                         />
-                    </Flex>
-                    <Flex width="100%" justify="center">
                         <Form.Submit asChild>
                             <Button className="w-full" variant="solid">
                                 Submit

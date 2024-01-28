@@ -22,7 +22,7 @@ import { useToast } from '~/hooks/useToast'
 const columnHelper = createColumnHelper<Venue>()
 
 export function VenuesTable() {
-    const toast = useToast()
+    const { toast } = useToast()
     const { data, isFetched, isLoading, refetch } = api.venue.getAll.useQuery()
     const router = useRouter()
     const { mutate: setFeaturedMutation } = api.venue.setFeatured.useMutation()

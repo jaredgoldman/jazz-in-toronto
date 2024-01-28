@@ -23,7 +23,7 @@ import { useToast } from '~/hooks/useToast'
 const columnHelper = createColumnHelper<EventWithArtistVenue>()
 
 export function EventsTable() {
-    const toast = useToast()
+    const { toast } = useToast()
     const [filteredDate, setFilteredDate] = useState<Date>(new Date())
     const { data, isLoading, isFetched, refetch } =
         api.event.getAllByDay.useQuery({

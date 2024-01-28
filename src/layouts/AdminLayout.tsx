@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { ReactNode, useEffect } from 'react'
 import { signIn, useSession } from 'next-auth/react'
 import Header from '~/components/Header'
 import Footer from '~/components/Footer'
@@ -7,6 +7,9 @@ import Head from 'next/head'
 import { Button } from '@radix-ui/themes'
 import { HeaderType } from '~/components/Header/utils'
 import { Toast } from '~/components/Toast/Toast'
+import { useAtomValue } from 'jotai'
+import { toastAtom } from '~/hooks/useToast'
+import { useToast } from '~/hooks/useToast'
 
 interface Props {
     pageTitle: string
@@ -18,13 +21,20 @@ export default function AdminLayout({
     children
 }: Props): JSX.Element {
     const { data: session } = useSession()
+    const { resetToast } = useToast()
+    const toastState = useAtomValue(toastAtom)
+
+    useEffect(() => {
+        resetToast()
+    }, [resetToast])
+
     return (
         <>
             <Head>
                 <title>{pageTitle}</title>
             </Head>
             <Flex direction="column" className="h-screen">
-                <Toast />
+                {(toastState.visible || toastState.animating) && <Toast />}
                 <Header headerType={HeaderType.Admin} />
                 <Container
                     size="3"

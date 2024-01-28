@@ -2,55 +2,66 @@ import { useEffect, useCallback } from 'react'
 import { useAtom } from 'jotai'
 import { atom } from 'jotai'
 
-type ToastProps = {
-    visible: boolean
-    title: string
-    message: string
-    type: 'success' | 'error' | 'warning' | 'info'
-    swipeOut?: boolean
-    fadeIn?: boolean
+enum ToastType {
+    Success = 'success',
+    Error = 'error'
 }
 
-export const toastAtom = atom<ToastProps>({
-    visible: false,
+type ToastProps = {
+    title: string
+    message: string
+    type: ToastType
+    visible: boolean
+    animating: boolean
+}
+
+const defaultToastSettings = {
     title: '',
     message: '',
-    type: 'success'
-})
-
-type Props = {
-    title: string
-    message: string
-    type?: 'success' | 'error' | 'warning' | 'info'
+    type: ToastType.Success,
+    visible: false,
+    animating: false
 }
+
+export const toastAtom = atom<ToastProps>(defaultToastSettings)
 
 export function useToast() {
     const [toastData, setToastData] = useAtom(toastAtom)
 
     useEffect(() => {
-        const timer = setTimeout(() => {
+        const timer1 = setTimeout(() => {
             setToastData({
                 ...toastData,
+                animating: true,
                 visible: false
             })
+        }, 5000)
+        const timer2 = setTimeout(() => {
+            setToastData(defaultToastSettings)
         }, 5500)
         return () => {
-            clearTimeout(timer)
+            clearTimeout(timer1)
+            clearTimeout(timer2)
         }
     }, [toastData, setToastData])
 
     const toast = useCallback(
-        ({ title, message, type = 'success' }: Props) => {
+        ({ title, message, type = ToastType.Success }: ToastProps) => {
             setToastData({
                 ...toastData,
                 title,
                 message,
                 type,
-                visible: true
+                visible: true,
+                animating: true
             })
         },
         [toastData, setToastData]
     )
 
-    return toast
+    const resetToast = useCallback(() => {
+        setToastData(defaultToastSettings)
+    }, [setToastData])
+
+    return { toast, resetToast }
 }
