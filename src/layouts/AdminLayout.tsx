@@ -30,15 +30,15 @@ export default function AdminLayout({
             <Flex direction="column" className="h-screen">
                 {(toastState.visible || toastState.animating) && <Toast />}
                 <Header headerType={HeaderType.Admin} />
-                <Container
-                    size="3"
-                    className="flex-grow overflow-x-hidden"
-                    py="7"
-                >
+                <Container className="flex-grow overflow-x-hidden" py="7">
                     {session ? (
                         children
                     ) : (
-                        <Flex direction="column" align="center">
+                        <Flex
+                            direction="column"
+                            align="center"
+                            justify="center"
+                        >
                             <Text align="center" size="5" mb="5">
                                 Please sign in to access the admin panel.
                             </Text>

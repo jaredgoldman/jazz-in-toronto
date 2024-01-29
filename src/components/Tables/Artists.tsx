@@ -171,7 +171,7 @@ export function ArtistsTable() {
     return (
         <Box>
             {data?.length && (
-                <>
+                <Flex gap="3" direction="column">
                     <Table.Root variant="surface">
                         <Table.Header>
                             {table.getHeaderGroups().map((headerGroup) => (
@@ -205,7 +205,7 @@ export function ArtistsTable() {
                             <PaginationButtonGroup table={table} />
                         </Flex>
                     )}
-                </>
+                </Flex>
             )}
             {isFetched && !data?.length && <div>Empty state placeholder</div>}
             {isLoading && <Loading />}

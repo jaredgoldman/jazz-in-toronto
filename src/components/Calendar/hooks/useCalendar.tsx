@@ -1,11 +1,8 @@
-// Libraries
 import { useState, useEffect } from 'react'
-import { addMonths, getDaysInMonth } from 'date-fns'
-// Types
+import { getDaysInMonth } from 'date-fns'
 import { DailyEventData } from '../types'
 import { EventWithArtistVenue } from '~/types/data'
 import { QueryObserverResult } from '@tanstack/react-query'
-// Utils
 import { getDaysOfTheWeek } from '~/utils/constants'
 
 interface ReturnType {
@@ -24,7 +21,6 @@ export default function useCalendar(
     currentYear: number,
     currentMonth: number,
     selectedDate: Date,
-    setSelectedDate: (date: Date) => void,
     refetch?: () => Promise<QueryObserverResult<EventWithArtistVenue[]>>
 ): ReturnType {
     const [monthlyEvents, setDailyEvents] = useState<DailyEventData[]>([])
@@ -57,10 +53,6 @@ export default function useCalendar(
         }
         void handleRetch()
     }, [refetch, selectedDate])
-
-    const changeMonth = (numOfMonths: number) => {
-        setSelectedDate(addMonths(selectedDate, numOfMonths))
-    }
 
     return {
         currentMonthName,
