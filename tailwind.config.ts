@@ -12,6 +12,14 @@ export default {
                 spin: {
                     '0%': { transform: 'rotate(0deg)' },
                     '100%': { transform: 'rotate(360deg)' }
+                },
+                swipeOut: {
+                    from: { transform: 'translateX(0)' },
+                    to: { transform: 'translateX(200%)' }
+                },
+                fadeIn: {
+                    from: { opacity: '0' },
+                    to: { opacity: '1' }
                 }
             },
             width: {
@@ -25,8 +33,10 @@ export default {
             }
         },
         animation: {
-            spin: 'spin 1s linear infinite'
+            spin: 'spin 1s linear infinite',
+            swipeOut: 'swipeOut 0.5s ease-in-out forwards',
+            fadeIn: 'fadeIn 0.4s ease-in-out forwards'
         }
     },
     plugins: []
-} satisfies Config;
+} satisfies Config

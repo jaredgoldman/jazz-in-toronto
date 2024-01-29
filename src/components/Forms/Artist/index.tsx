@@ -1,7 +1,7 @@
 import * as Form from '@radix-ui/react-form'
 import { Input } from '../Fields'
 import Upload from '../Fields/Upload'
-import { Heading, Flex, Text, Box, Button } from '@radix-ui/themes'
+import { Heading, Flex, Box, Button } from '@radix-ui/themes'
 import useArtistForm from './hooks/useArtistForm'
 import { useRouter } from 'next/router'
 import { api } from '~/utils/api'
@@ -22,9 +22,6 @@ export default function ArtistForm() {
         control,
         onUpload,
         handleDeletePhoto,
-        artistMutationIsSuccess,
-        editArtistMutationIsSuccess,
-        error,
         reset,
         getValues
     } = useArtistForm(!!param)
@@ -46,7 +43,7 @@ export default function ArtistForm() {
             direction="column"
             align="center"
             width="100%"
-            className="max-w-xl"
+            className="min-h-[30rem] max-w-xl"
             py="6"
         >
             <Box className="w-full">
@@ -91,25 +88,6 @@ export default function ArtistForm() {
                             error={errors.website}
                             control={control}
                         />
-                        <Flex width="100%" align="center">
-                            {artistMutationIsSuccess && (
-                                <Text size="2" color="green" align="center">
-                                    Artist submitted successfully
-                                </Text>
-                            )}
-                            {editArtistMutationIsSuccess && (
-                                <Text size="2" color="green" align="center">
-                                    Artist edited successfully
-                                </Text>
-                            )}
-                            {error && (
-                                <Text size="2" color="red" align="center">
-                                    {error}
-                                </Text>
-                            )}
-                        </Flex>
-                    </Flex>
-                    <Flex width="100%" justify="center">
                         <Form.Submit asChild>
                             <Button className="w-full">Submit</Button>
                         </Form.Submit>

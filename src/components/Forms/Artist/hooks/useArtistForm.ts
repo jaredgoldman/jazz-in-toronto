@@ -1,9 +1,9 @@
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
 import { useUploadThing } from '~/hooks/useUploadThing'
 import { FileData, Artist } from '~/types/data'
 import { MAX_FILE_SIZE } from '~/utils/constants'
+import { useToast } from '~/hooks/useToast'
 
 export interface ArtistFormValues {
     name: string
@@ -23,13 +23,9 @@ export default function useArtistForm(
     currentValues?: Artist | undefined,
     onAdd?: (values: Artist) => Promise<void>
 ) {
-    const [error, setError] = useState<string>('')
-    const { mutateAsync: artistMutation, isSuccess: artistMutationIsSuccess } =
-        api.artist.create.useMutation()
-    const {
-        mutateAsync: editArtistMutation,
-        isSuccess: editArtistMutationIsSuccess
-    } = api.artist.update.useMutation()
+    const { toast } = useToast()
+    const { mutateAsync: artistMutation } = api.artist.create.useMutation()
+    const { mutateAsync: editArtistMutation } = api.artist.update.useMutation()
     const deleteartistPhotoMutation = api.artist.deletePhoto.useMutation()
 
     const defaultValues: ArtistFormValues = currentValues
@@ -69,10 +65,17 @@ export default function useArtistForm(
                 await deleteartistPhotoMutation.mutateAsync({
                     id: currentValues.id
                 })
+                toast({
+                    title: 'Success',
+                    message: 'Photo deleted successfully.',
+                    type: 'success'
+                })
             } catch {
-                setError(
-                    'There was an error deleting your photo. Please try again.'
-                )
+                toast({
+                    title: 'Error',
+                    message: 'There was an error deleting your photo.',
+                    type: 'error'
+                })
             }
         }
     }
@@ -81,13 +84,16 @@ export default function useArtistForm(
     const { startUpload } = useUploadThing({
         endpoint: 'uploadImage',
         onUploadError: () => {
-            setError('There was an error uploading your image data')
+            toast({
+                title: 'Error',
+                message: 'There was an error uploading your image data.',
+                type: 'error'
+            })
         }
     })
 
     const onSubmit = async (values: ArtistFormValues) => {
         try {
-            setError('')
             let newValues = values
             let addedArtist
             // if we have fileData in form Input
@@ -95,9 +101,12 @@ export default function useArtistForm(
             if (values?.fileData?.file) {
                 // First ensure file is not too large
                 if (values.fileData.file.size > MAX_FILE_SIZE) {
-                    setError(
-                        'File size is too large. Please upload a file smaller than 5MB.'
-                    )
+                    toast({
+                        title: 'Error',
+                        message:
+                            'File size is too large. Please upload a file smaller than 5MB.',
+                        type: 'error'
+                    })
                     return
                 }
                 const res = await startUpload([values.fileData.file])
@@ -121,8 +130,16 @@ export default function useArtistForm(
             // XXX: simplify this process, we shouldn't have to prop drill like this
             // maybe pull the modal context into this form?
             onAdd && (await onAdd(addedArtist))
+            toast({
+                title: 'Success',
+                message: 'Artist successfully submitted!'
+            })
         } catch (e) {
-            setError('There was an error adding your artist. Please try again.')
+            toast({
+                title: 'Error',
+                message: 'There was an error submitting. Please try again',
+                type: 'error'
+            })
         }
     }
 
@@ -136,12 +153,8 @@ export default function useArtistForm(
 
     return {
         isEditing,
-        artistMutationIsSuccess,
-        editArtistMutationIsSuccess,
         handleDeletePhoto,
         startUpload,
-        error,
-        setError,
         submit,
         errors,
         control,

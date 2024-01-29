@@ -2,7 +2,7 @@ import PlacesAutocomplete from '../Fields/PlacesAutoComplete'
 import { Input } from '../Fields'
 import * as Form from '@radix-ui/react-form'
 import Upload from '../Fields/Upload'
-import { Heading, Text, Flex, Box, Button } from '@radix-ui/themes'
+import { Heading, Flex, Box, Button } from '@radix-ui/themes'
 import useVenueForm from './hooks/useVenueForm'
 import { useRouter } from 'next/router'
 import { api } from '~/utils/api'
@@ -23,9 +23,6 @@ export default function VenueForm() {
         onSelectLocation,
         onUpload,
         handleDeletePhoto,
-        venueMutationIsSuccess,
-        editVenueMutationIsSuccess,
-        error,
         reset
     } = useVenueForm(!!param)
 
@@ -44,7 +41,7 @@ export default function VenueForm() {
             direction="column"
             align="center"
             width="100%"
-            className="max-w-xl"
+            className="min-h-[30rem] max-w-xl"
             py="6"
         >
             <Box className="w-full">
@@ -96,25 +93,6 @@ export default function VenueForm() {
                             error={errors.website}
                             control={control}
                         />
-                    </Flex>
-                    <Flex width="100%" align="center" mt="3">
-                        {venueMutationIsSuccess && (
-                            <Text size="2" color="green" align="center">
-                                Venue submitted successfully
-                            </Text>
-                        )}
-                        {editVenueMutationIsSuccess && (
-                            <Text size="2" color="green" align="center">
-                                Venue edited successfully
-                            </Text>
-                        )}
-                        {error && (
-                            <Text size="2" color="red" align="center">
-                                {error}
-                            </Text>
-                        )}
-                    </Flex>
-                    <Flex width="100%" justify="center">
                         <Form.Submit asChild>
                             <Button className="w-full" variant="solid">
                                 Submit

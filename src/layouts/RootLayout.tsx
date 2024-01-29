@@ -1,13 +1,16 @@
+import { ReactNode } from 'react'
 import Header from '~/components/Header'
 import Head from 'next/head'
 import Footer from '~/components/Footer'
 import { Flex, Callout } from '@radix-ui/themes'
 import { HeaderType } from '~/components/Header/utils'
-import { ReactNode } from 'react'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
 import { Breadcrumbs } from '~/components/Breadcrumbs/Breadcrumbs'
+import { Toast } from '~/components/Toast/Toast'
+import { useAtomValue } from 'jotai'
+import { toastAtom } from '~/hooks/useToast'
 
-interface Props {
+type Props = {
     pageTitle: string
     children: ReactNode | string
     breadcrumbs?: {
@@ -24,12 +27,15 @@ export default function RootLayout({
     breadcrumbs,
     calloutContent
 }: Props): JSX.Element {
+    const toastState = useAtomValue(toastAtom)
+
     return (
         <>
             <Head>
                 <title>{pageTitle}</title>
             </Head>
             <Flex direction="column" className="h-screen">
+                {(toastState.visible || toastState.animating) && <Toast />}
                 <Header headerType={HeaderType.Public} />
                 {calloutContent && (
                     <Callout.Root>

@@ -11,29 +11,27 @@ import {
     createColumnHelper
 } from '@tanstack/react-table'
 import { EventWithArtistVenue } from '~/types/data'
-import { Table, Flex, TextField, Heading, Text } from '@radix-ui/themes'
+import { Table, Flex, TextField, Heading } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import { useMemo } from 'react'
 import Loading from '../Loading'
 import { HeaderCell, TableActionMenu } from './components'
 import { fuzzyFilter } from './utils/filters'
 import { useRouter } from 'next/router'
-import FadeOutText from '../FadeOutText'
+import { useToast } from '~/hooks/useToast'
 
 const columnHelper = createColumnHelper<EventWithArtistVenue>()
 
 export function EventsTable() {
+    const { toast } = useToast()
     const [filteredDate, setFilteredDate] = useState<Date>(new Date())
-    const [error, setError] = useState<string | null>(null)
     const { data, isLoading, isFetched, refetch } =
         api.event.getAllByDay.useQuery({
             date: filteredDate
         })
     const router = useRouter()
-    const { mutate: setFeaturedMutation, isSuccess: setFeaturedIsSuccess } =
-        api.event.setFeatured.useMutation()
-    const { mutate: deleteMutation, isSuccess: deleteMutationIsSuccess } =
-        api.event.delete.useMutation()
+    const { mutate: setFeaturedMutation } = api.event.setFeatured.useMutation()
+    const { mutate: deleteMutation } = api.event.delete.useMutation()
 
     const handleEditClick = useCallback(
         async (event: EventWithArtistVenue) => {
@@ -59,18 +57,23 @@ export function EventsTable() {
                 { id: event.id },
                 {
                     onSuccess: () => {
+                        toast({
+                            title: 'Success',
+                            message: 'Featured event updated'
+                        })
                         void refetch()
                     },
-                    onError: (e) => {
-                        setError(
-                            'Setting featured event failed. Please try again later.'
-                        )
-                        console.error(e)
+                    onError: () => {
+                        toast({
+                            title: 'Error',
+                            message: 'Setting featured event failed',
+                            type: 'error'
+                        })
                     }
                 }
             )
         },
-        [setFeaturedMutation, refetch]
+        [setFeaturedMutation, refetch, toast]
     )
 
     const handleDelete = useCallback(
@@ -80,15 +83,22 @@ export function EventsTable() {
                 {
                     onSuccess: () => {
                         void refetch()
+                        toast({
+                            title: 'Success',
+                            message: 'Event deleted'
+                        })
                     },
-                    onError: (e) => {
-                        setError('Delete event failed. Please try again later.')
-                        console.error(e)
+                    onError: () => {
+                        toast({
+                            title: 'Error',
+                            message: 'Delete event failed',
+                            type: 'error'
+                        })
                     }
                 }
             )
         },
-        [deleteMutation, refetch]
+        [deleteMutation, refetch, toast]
     )
 
     const columns = useMemo(
@@ -173,27 +183,6 @@ export function EventsTable() {
 
     return (
         <Flex direction="column">
-            {setFeaturedIsSuccess && (
-                <FadeOutText>
-                    <Text color="green" size="2" align="center">
-                        Event successfully set as featured
-                    </Text>
-                </FadeOutText>
-            )}
-            {deleteMutationIsSuccess && (
-                <FadeOutText>
-                    <Text color="red" size="2" align="center">
-                        Event has been deleted
-                    </Text>
-                </FadeOutText>
-            )}
-            {error ? (
-                <FadeOutText>
-                    <Text color="yellow" size="2" align="center">
-                        {error}
-                    </Text>
-                </FadeOutText>
-            ) : null}
             <Flex mb="4" direction="column" className="max-w-xs" gap="3">
                 <Heading>Filter by date:</Heading>
                 <TextField.Root className="px-2 pt-1">
