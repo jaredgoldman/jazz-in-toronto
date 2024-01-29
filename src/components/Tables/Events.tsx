@@ -24,14 +24,14 @@ const columnHelper = createColumnHelper<EventWithArtistVenue>()
 
 export function EventsTable() {
     const { toast } = useToast()
+    const router = useRouter()
     const [filteredDate, setFilteredDate] = useState<Date>(new Date())
+    const { mutate: setFeaturedMutation } = api.event.setFeatured.useMutation()
+    const { mutate: deleteMutation } = api.event.delete.useMutation()
     const { data, isLoading, isFetched, refetch } =
         api.event.getAllByDay.useQuery({
             date: filteredDate
         })
-    const router = useRouter()
-    const { mutate: setFeaturedMutation } = api.event.setFeatured.useMutation()
-    const { mutate: deleteMutation } = api.event.delete.useMutation()
 
     const handleEditClick = useCallback(
         async (event: EventWithArtistVenue) => {
