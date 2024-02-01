@@ -1,6 +1,6 @@
 import RootLayout from '~/layouts/RootLayout'
 import Featured from '~/components/Featured'
-import { Flex, Heading, Link, Text, Box } from '@radix-ui/themes'
+import { Flex, Heading, Link, Text } from '@radix-ui/themes'
 import Image from 'next/image'
 import { api } from '~/utils/api'
 
@@ -12,8 +12,8 @@ export default function Home() {
             <Flex
                 direction="column"
                 align="center"
-                justify="start"
-                className="bg-hero-pattern bg-cover bg-center bg-no-repeat pb-60 pt-36"
+                justify="center"
+                className="h-[50rem] bg-hero-pattern bg-cover bg-center bg-no-repeat"
             >
                 <Heading
                     size={{ initial: '8', sm: '9' }}
@@ -41,20 +41,16 @@ export default function Home() {
                 </Text>
             </Flex>
             <Flex
-                className=" gap-12 bg-gray-900 py-20"
-                justify="center"
+                className="h-[30rem] bg-gray-900"
                 align="center"
-                direction={{ initial: 'column', sm: 'row' }}
-                px="2"
+                justify="center"
+                direction={{ initial: 'column', md: 'row' }}
+                gap="6"
             >
-                <Heading
-                    size="9"
-                    align={{ initial: 'center', xs: 'left' }}
-                    mb={{ initial: '6', xs: '0' }}
-                >
+                <Heading size="9" align="center" mb={{ initial: '6', xs: '0' }}>
                     Follow us on our socials!
                 </Heading>
-                <Flex gap="6">
+                <Flex gap="6" justify="between">
                     <Link href="https://www.instagram.com/jazzintoronto/ ">
                         <Image
                             src="/images/facebook.png"
@@ -77,15 +73,12 @@ export default function Home() {
             Object.values(featuredItems).filter(Boolean).length >= 3 ? (
                 <Flex
                     justify="center"
-                    className="mb-0 min-h-[70rem] bg-hero-pattern-2 bg-cover bg-center bg-no-repeat pb-36 pt-60"
+                    grow="1"
+                    className="bg-hero-pattern-2 bg-cover bg-center bg-no-repeat"
                 >
-                    <Flex className="max-w-6xl" grow="1">
-                        <Featured />
-                    </Flex>
+                    <Featured />
                 </Flex>
-            ) : (
-                <Box className="bg-gray-900 py-20"></Box>
-            )}
+            ) : null}
         </RootLayout>
     )
 }

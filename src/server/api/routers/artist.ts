@@ -113,17 +113,28 @@ export const artistRouter = createTRPCRouter({
     }),
 
     setFeatured: protectedProcedure
-        .input(z.object({ id: z.string().cuid() }))
+        .input(z.object({ id: z.string().cuid(), featured: z.boolean() }))
         .mutation(async ({ ctx, input }) => {
-            // First remove any other features
-            // Only one artist hsould be featured at a time
-            await ctx.prisma.artist.updateMany({
-                where: { featured: true },
-                data: { featured: false }
-            })
+            // First remove any other featured artists
+            // Only one artist should be featured at a time
+            if (input.featured) {
+                await ctx.prisma.artist.updateMany({
+                    where: { featured: true },
+                    data: { featured: false }
+                })
+            }
             return ctx.prisma.artist.update({
                 where: { id: input.id },
-                data: { featured: true }
+                data: { featured: input.featured }
+            })
+        }),
+
+    approve: protectedProcedure
+        .input(z.object({ id: z.string().cuid(), approved: z.boolean() }))
+        .mutation(async ({ ctx, input }) => {
+            return ctx.prisma.artist.update({
+                where: { id: input.id },
+                data: { approved: input.approved }
             })
         })
 })

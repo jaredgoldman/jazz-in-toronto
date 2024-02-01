@@ -24,6 +24,7 @@ export function useToast() {
     const [toastData, setToastData] = useAtom(toastAtom)
 
     useEffect(() => {
+        if (!toastData.visible || !toastData.animating) return
         const timer1 = setTimeout(() => {
             setToastData({
                 ...toastData,
@@ -59,7 +60,9 @@ export function useToast() {
     }, [setToastData])
 
     useEffect(() => {
-        resetToast()
+        return () => {
+            resetToast()
+        }
     }, [resetToast])
 
     return { toast, resetToast }

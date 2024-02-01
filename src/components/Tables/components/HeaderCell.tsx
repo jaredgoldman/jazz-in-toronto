@@ -24,7 +24,7 @@ export function HeaderCell<TData>({ header }: Props<TData>) {
                 header.column.getCanSort() ? 'cursor-pointer select-none' : ''
             } min-w-[100px]`}
         >
-            <Flex direction="column" gap="2" align="center">
+            <Flex direction="column" gap="2">
                 <Flex align="center" gap="2">
                     {header.isPlaceholder
                         ? null

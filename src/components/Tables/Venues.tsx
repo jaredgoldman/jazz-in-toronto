@@ -11,7 +11,7 @@ import {
     createColumnHelper
 } from '@tanstack/react-table'
 import { Venue } from '~/types/data'
-import { Table, Box, Flex } from '@radix-ui/themes'
+import { Table, Box, Flex, Badge } from '@radix-ui/themes'
 import { HeaderCell, TableActionMenu } from './components'
 import Loading from '../Loading'
 import { fuzzyFilter } from './utils/filters'
@@ -22,10 +22,11 @@ import { useToast } from '~/hooks/useToast'
 const columnHelper = createColumnHelper<Venue>()
 
 export function VenuesTable() {
+    const router = useRouter()
     const { toast } = useToast()
     const { data, isFetched, isLoading, refetch } = api.venue.getAll.useQuery()
-    const router = useRouter()
     const { mutate: setFeaturedMutation } = api.venue.setFeatured.useMutation()
+    const { mutate: approveMutation } = api.venue.approve.useMutation()
     const { mutate: deleteMutation } = api.venue.delete.useMutation()
 
     const handleEditClick = useCallback(
@@ -44,10 +45,34 @@ export function VenuesTable() {
         [router]
     )
 
+    const handleApprove = useCallback(
+        (venue: Venue) => {
+            approveMutation(
+                { id: venue.id, approved: !venue.approved },
+                {
+                    onSuccess: () => {
+                        void refetch()
+                        toast({
+                            title: 'Success',
+                            message: 'Venue has been approved'
+                        })
+                    },
+                    onError: () =>
+                        toast({
+                            title: 'Error',
+                            message: 'Approve venue failed',
+                            type: 'error'
+                        })
+                }
+            )
+        },
+        [approveMutation, refetch, toast]
+    )
+
     const handleToggleFeatured = useCallback(
         (venue: Venue) => {
             setFeaturedMutation(
-                { id: venue.id },
+                { id: venue.id, featured: !venue.featured },
                 {
                     onSuccess: () => {
                         void refetch()
@@ -114,14 +139,26 @@ export function VenuesTable() {
                 cell: (info) => info.getValue(),
                 header: 'Instagram'
             }),
-            columnHelper.accessor((row) => row.active, {
-                cell: (info) => info.getValue()?.toString(),
-                header: 'Active',
+            columnHelper.accessor((row) => row.featured, {
+                header: 'Featured',
+                cell: (info) =>
+                    info.renderValue() ? (
+                        <Badge color="green">Featured</Badge>
+                    ) : (
+                        <Badge variant="soft" color="gray">
+                            Not Featured
+                        </Badge>
+                    ),
                 enableColumnFilter: false
             }),
-            columnHelper.accessor((row) => row.featured, {
-                cell: (info) => info.getValue()?.toString(),
-                header: 'Featured',
+            columnHelper.accessor((row) => row.approved, {
+                cell: (info) =>
+                    info.renderValue() ? (
+                        <Badge color="green">Approved</Badge>
+                    ) : (
+                        <Badge color="blue">Not Approved</Badge>
+                    ),
+                header: 'Approved',
                 enableColumnFilter: false
             }),
             columnHelper.display({
@@ -129,20 +166,25 @@ export function VenuesTable() {
                 cell: ({ row }) => (
                     <TableActionMenu
                         isFeatured={row.original.featured}
+                        isApproved={row.original.approved}
                         onToggleFeatured={() => {
                             handleToggleFeatured(row.original)
                         }}
                         onEdit={() => handleEditClick(row.original)}
                         onDelete={() => handleDelete(row.original)}
+                        onApprove={() => handleApprove(row.original)}
                     />
                 ),
                 header: 'Edit'
             })
         ],
-        [handleDelete, handleEditClick, handleToggleFeatured]
+        [handleDelete, handleEditClick, handleToggleFeatured, handleApprove]
     )
 
-    const [sorting, setSorting] = useState<SortingState>([])
+    const [sorting, setSorting] = useState<SortingState>([
+        { id: 'Featured', desc: true },
+        { id: 'Approved', desc: false }
+    ])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
     const table = useReactTable<Venue>({

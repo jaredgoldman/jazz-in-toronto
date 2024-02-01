@@ -7,21 +7,29 @@ export default function Featured() {
     const { data: featuredItems, isLoading } = api.data.getFeatured.useQuery()
 
     return (
-        <Flex display="flex" direction="column" justify="center" grow="1">
-            <Heading size="9" m="5">
-                Featured
-            </Heading>
+        <Flex
+            display="flex"
+            direction="column"
+            justify="center"
+            grow="1"
+            gap="9"
+            pt="9"
+            px="6"
+            mb="6"
+        >
+            <Heading size="9">Our Favourites</Heading>
             {featuredItems && !isLoading ? (
                 <Flex
                     gap="7"
                     direction={{ initial: 'column', md: 'row' }}
-                    p="5"
+                    grow="1"
                 >
                     {featuredItems?.venue && (
                         <FeaturedCard
                             image={featuredItems.venue?.photoPath}
                             title={featuredItems.venue.name}
                             link={featuredItems.venue?.website}
+                            type="Venue"
                         />
                     )}
                     {featuredItems?.event && (
@@ -29,6 +37,7 @@ export default function Featured() {
                             image={featuredItems.event.artist.photoPath}
                             title={featuredItems.event.name}
                             link={featuredItems.event?.website}
+                            type="Event"
                         />
                     )}
                     {featuredItems?.artist && (
@@ -36,6 +45,7 @@ export default function Featured() {
                             image={featuredItems.artist.photoPath}
                             title={featuredItems.artist.name}
                             link={featuredItems.artist?.website}
+                            type="Artist"
                         />
                     )}
                 </Flex>
