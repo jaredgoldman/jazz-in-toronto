@@ -17,7 +17,9 @@ export default function Featured() {
             px="6"
             mb="6"
         >
-            <Heading size="9">Our Favourites</Heading>
+            <Heading size="9" align="center">
+                Our Favourites
+            </Heading>
             {featuredItems && !isLoading ? (
                 <Flex
                     gap="7"

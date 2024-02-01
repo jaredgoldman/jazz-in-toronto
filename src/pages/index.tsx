@@ -45,26 +45,26 @@ export default function Home() {
                 align="center"
                 justify="center"
                 direction={{ initial: 'column', md: 'row' }}
-                gap="6"
+                gap="9"
             >
                 <Heading size="9" align="center" mb={{ initial: '6', xs: '0' }}>
                     Follow us on our socials!
                 </Heading>
-                <Flex gap="6" justify="between">
+                <Flex gap="9" justify="between">
                     <Link href="https://www.instagram.com/jazzintoronto/ ">
                         <Image
                             src="/images/facebook.png"
                             alt="facebook"
-                            width={100}
-                            height={100}
+                            width={130}
+                            height={130}
                         />
                     </Link>
                     <Link href="https://www.facebook.com/jazzintoronto/ ">
                         <Image
                             src="/images/instagram.svg"
                             alt="facebook"
-                            width={100}
-                            height={100}
+                            width={130}
+                            height={130}
                         />
                     </Link>
                 </Flex>
