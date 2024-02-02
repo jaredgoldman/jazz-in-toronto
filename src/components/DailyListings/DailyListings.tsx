@@ -81,7 +81,7 @@ export default function DailyListings({ selectedDate }: Props) {
 
     return (
         <Flex direction="column" grow="1">
-            {data?.length && (
+            {data?.length ? (
                 <Table.Root variant="surface">
                     <Table.Header>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -110,8 +110,8 @@ export default function DailyListings({ selectedDate }: Props) {
                         ))}
                     </Table.Body>
                 </Table.Root>
-            )}
-            {isFetched && !data?.length && <div>Empty state placeholder</div>}
+            ) : null}
+            {isFetched && !data?.length && <div>No events yet</div>}
             {isLoading && <Loading />}
         </Flex>
     )

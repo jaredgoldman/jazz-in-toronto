@@ -2,25 +2,20 @@
 import { Card, Heading, Text, Flex, Link } from '@radix-ui/themes'
 
 interface Props {
-    title: string
+    heading: string
     content?: string
     image?: string | null
     link?: string | null
-    type: 'Artist' | 'Venue' | 'Event'
+    headingClassname: string
 }
 
-const typeColorMap = {
-    Artist: 'bronze',
-    Venue: 'blue',
-    Event: 'mint'
-} as const
 
 const FeaturedCard = ({
-    title,
+    heading,
     content = 'This is a short sample description for a featured card. Come check out our band/event/venue',
     image,
     link,
-    type
+    headingClassname
 }: Props) => {
     return (
         <Card
@@ -31,25 +26,21 @@ const FeaturedCard = ({
             }}
             variant="classic"
             className="bg-cover bg-center bg-no-repeat"
-            size="5"
+            size="3"
         >
             <Flex
                 direction="column"
                 grow="1"
                 justify="end"
-                className="h-[23rem]"
+                className="h-[26rem]"
                 gap="2"
             >
-                <Heading>
-                    Featured
-                    <Text color={typeColorMap[type]}>{` ${type}`}</Text>
-                </Heading>
-                <Heading size="9" className="text-1xl font-bold text-white">
-                    {title}
+                <Heading size="9" mb="4" className={headingClassname}>
+                    {heading}
                 </Heading>
                 <Text className="text-gray-200">{content}</Text>
                 {link && (
-                    <Link href={link} color="bronze">
+                    <Link href={link} color="orange">
                         Learn more
                     </Link>
                 )}

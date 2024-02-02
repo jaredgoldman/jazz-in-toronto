@@ -1,10 +1,30 @@
+import { useMemo } from 'react'
 import Loading from '../Loading'
 import FeaturedCard from './FeaturedCard'
-import { Flex, Heading } from '@radix-ui/themes'
+import { Flex, Heading, Text } from '@radix-ui/themes'
 import { api } from '~/utils/api'
+import { getRandomHeadingColor } from './utils'
 
 export default function Featured() {
     const { data: featuredItems, isLoading } = api.data.getFeatured.useQuery()
+
+    /*
+     * Generate 3 tailwind classes with random colors
+     * for the featured card headings
+     */
+    const [c1, c2, c3] = useMemo(() => {
+        const set = new Set<string>()
+        while (set.size < 3) {
+            set.add(getRandomHeadingColor())
+        }
+        return Array.from(set)
+    }, [])
+
+    console.log({
+        c1,
+        c2,
+        c3
+    })
 
     return (
         <Flex
@@ -17,7 +37,7 @@ export default function Featured() {
             px="6"
             mb="6"
         >
-            <Heading size="9" align="center">
+            <Heading size="9" align="center" mb="5">
                 Our Favourites
             </Heading>
             {featuredItems && !isLoading ? (
@@ -27,28 +47,43 @@ export default function Featured() {
                     grow="1"
                 >
                     {featuredItems?.venue && (
-                        <FeaturedCard
-                            image={featuredItems.venue?.photoPath}
-                            title={featuredItems.venue.name}
-                            link={featuredItems.venue?.website}
-                            type="Venue"
-                        />
+                        <Flex direction="column">
+                            <Heading mb="2" ml="4">
+                                Featured <Text>Venue</Text>
+                            </Heading>
+                            <FeaturedCard
+                                image={featuredItems.venue?.photoPath}
+                                heading={featuredItems.venue.name}
+                                link={featuredItems.venue?.website}
+                                headingClassname={c1 as string}
+                            />
+                        </Flex>
                     )}
                     {featuredItems?.event && (
-                        <FeaturedCard
-                            image={featuredItems.event.artist.photoPath}
-                            title={featuredItems.event.name}
-                            link={featuredItems.event?.website}
-                            type="Event"
-                        />
+                        <Flex direction="column">
+                            <Heading mb="2" ml="4">
+                                Featured <Text>Event</Text>
+                            </Heading>
+                            <FeaturedCard
+                                image={featuredItems.event.artist.photoPath}
+                                heading={featuredItems.event.name}
+                                link={featuredItems.event?.website}
+                                headingClassname={c2 as string}
+                            />
+                        </Flex>
                     )}
                     {featuredItems?.artist && (
-                        <FeaturedCard
-                            image={featuredItems.artist.photoPath}
-                            title={featuredItems.artist.name}
-                            link={featuredItems.artist?.website}
-                            type="Artist"
-                        />
+                        <Flex direction="column">
+                            <Heading mb="2" ml="4">
+                                Featured <Text>Artist</Text>
+                            </Heading>
+                            <FeaturedCard
+                                image={featuredItems.artist.photoPath}
+                                heading={featuredItems.artist.name}
+                                link={featuredItems.artist?.website}
+                                headingClassname={c3 as string}
+                            />
+                        </Flex>
                     )}
                 </Flex>
             ) : (

@@ -59,7 +59,7 @@ export const venueRouter = createTRPCRouter({
             return ctx.prisma.venue.findFirst({
                 where: {
                     id: input.id,
-                    approved: env.SHOW_UNAPPROVED_ITEMS ? undefined : true
+                    approved: true
                 }
             })
         }),
@@ -67,7 +67,7 @@ export const venueRouter = createTRPCRouter({
     getAll: publicProcedure.query(({ ctx }) => {
         return ctx.prisma.venue.findMany({
             where: {
-                approved: env.SHOW_UNAPPROVED_ITEMS ? undefined : true
+                approved: true
             }
         })
     }),

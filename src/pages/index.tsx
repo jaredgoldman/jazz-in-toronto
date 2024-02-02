@@ -41,7 +41,7 @@ export default function Home() {
                 </Text>
             </Flex>
             <Flex
-                className="h-[30rem] bg-gray-900"
+                className="h-[30rem] bg-[var(--slate-1)]"
                 align="center"
                 justify="center"
                 direction={{ initial: 'column', md: 'row' }}
@@ -75,6 +75,7 @@ export default function Home() {
                     justify="center"
                     grow="1"
                     className="bg-hero-pattern-2 bg-cover bg-center bg-no-repeat"
+                    pb="6"
                 >
                     <Featured />
                 </Flex>

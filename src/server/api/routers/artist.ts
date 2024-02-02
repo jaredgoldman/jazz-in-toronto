@@ -50,7 +50,7 @@ export const artistRouter = createTRPCRouter({
             return ctx.prisma.artist.findFirst({
                 where: {
                     id: input.id,
-                    approved: env.SHOW_UNAPPROVED_ITEMS ? undefined : true
+                    approved: true
                 }
             })
         }),
@@ -58,7 +58,7 @@ export const artistRouter = createTRPCRouter({
     getAll: publicProcedure.query(({ ctx }) => {
         return ctx.prisma.artist.findMany({
             where: {
-                approved: env.SHOW_UNAPPROVED_ITEMS ? undefined : true
+                approved: true
             }
         })
     }),
