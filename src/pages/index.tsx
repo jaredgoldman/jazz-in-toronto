@@ -15,11 +15,7 @@ export default function Home() {
                 justify="center"
                 className="h-[50rem] bg-hero-pattern bg-cover bg-center bg-no-repeat"
             >
-                <Heading
-                    size={{ initial: '8', sm: '9' }}
-                    align="center"
-                    weight="bold"
-                >
+                <Heading size="9" align="center" weight="bold">
                     We are JazzInToronto
                 </Heading>
                 <Image

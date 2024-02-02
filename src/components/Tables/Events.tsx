@@ -30,7 +30,7 @@ export function EventsTable() {
     const { mutate: deleteMutation } = api.event.delete.useMutation()
     const { mutate: approveMutation } = api.event.approve.useMutation()
     const { data, isLoading, isFetched, refetch } =
-        api.event.getAllByDay.useQuery({
+        api.event.getAllBByDayAdmin.useQuery({
             date: filteredDate
         })
 
