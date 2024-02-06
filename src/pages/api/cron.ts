@@ -20,8 +20,7 @@ export default async function handler() {
             env.EMAIL_SERVER_USER,
             admin.email,
             'ACTION: Unapproved Events',
-            `There are ${unapprovedEvents} unapproved events, ${unapprovedVenues} unapproved venues, and ${unapprovedArtists} unapproved artists.
-             Please visit ${env.BASE_URL}/admin/events to approve them.`
+            `There are ${unapprovedEvents} unapproved events, ${unapprovedVenues} unapproved venues, and ${unapprovedArtists} unapproved artists. Please visit ${env.BASE_URL}/admin to approve them.`
         )
     }
 }

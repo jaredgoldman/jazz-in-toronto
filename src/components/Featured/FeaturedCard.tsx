@@ -9,7 +9,6 @@ interface Props {
     headingClassname: string
 }
 
-
 const FeaturedCard = ({
     heading,
     content = 'This is a short sample description for a featured card. Come check out our band/event/venue',
@@ -17,6 +16,9 @@ const FeaturedCard = ({
     link,
     headingClassname
 }: Props) => {
+    console.log({
+        image
+    })
     return (
         <Card
             style={{
@@ -25,7 +27,7 @@ const FeaturedCard = ({
                 })`
             }}
             variant="classic"
-            className="bg-cover bg-center bg-no-repeat"
+            className="max-w-xl bg-cover bg-center bg-no-repeat"
             size="3"
         >
             <Flex

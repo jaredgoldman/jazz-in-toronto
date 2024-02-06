@@ -107,6 +107,9 @@ export default function useVenueForm(
     })
 
     const onSubmit = async (values: VenueFormValues) => {
+        console.log({
+            values
+        })
         try {
             // Make coapy of values and convert phoneNumber to string
             let newValues = {
@@ -129,6 +132,9 @@ export default function useVenueForm(
                 }
                 const res = await startUpload([values.fileData.file])
                 if (res) {
+                    console.log({
+                        res
+                    })
                     newValues = {
                         ...values,
                         photoPath: res[0]?.fileUrl
