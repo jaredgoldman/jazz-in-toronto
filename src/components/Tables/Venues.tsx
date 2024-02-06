@@ -24,7 +24,8 @@ const columnHelper = createColumnHelper<Venue>()
 export function VenuesTable() {
     const router = useRouter()
     const { toast } = useToast()
-    const { data, isFetched, isLoading, refetch } = api.venue.getAll.useQuery()
+    const { data, isFetched, isLoading, refetch } =
+        api.venue.getAllAdmin.useQuery()
     const { mutate: setFeaturedMutation } = api.venue.setFeatured.useMutation()
     const { mutate: approveMutation } = api.venue.approve.useMutation()
     const { mutate: deleteMutation } = api.venue.delete.useMutation()

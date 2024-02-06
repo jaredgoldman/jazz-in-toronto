@@ -10,13 +10,14 @@ import { PrismaClient, Venue } from '@prisma/client'
 import { EventWithArtistVenue } from '~/types/data'
 
 // Shared helpers
-const getAllByDay = (date: Date, prisma: PrismaClient) => {
+const getAllByDay = (date: Date, prisma: PrismaClient, approved: boolean) => {
     return prisma.event.findMany({
         where: {
             startDate: {
                 gte: new Date(date.setHours(0, 0, 0, 0)),
                 lt: new Date(addDays(date, 1))
             },
+            approved: approved ? true : undefined
         },
         include: {
             artist: true,
@@ -146,13 +147,19 @@ export const eventRouter = createTRPCRouter({
     getAllByDay: publicProcedure
         .input(z.object({ date: z.date() }))
         .query(({ ctx, input }) => {
-            return getAllByDay(input.date, ctx.prisma)
+            return getAllByDay(input.date, ctx.prisma, true)
+        }),
+
+    getAllBByDayAdmin: protectedProcedure
+        .input(z.object({ date: z.date() }))
+        .query(({ ctx, input }) => {
+            return getAllByDay(input.date, ctx.prisma, false)
         }),
 
     getAllByDayByVenue: publicProcedure
         .input(z.object({ date: z.date() }))
         .query(async ({ ctx, input }) => {
-            const dailyEvents = await getAllByDay(input.date, ctx.prisma)
+            const dailyEvents = await getAllByDay(input.date, ctx.prisma, true)
             const dailyEventsByVenue: {
                 venue: Venue
                 events: EventWithArtistVenue[]

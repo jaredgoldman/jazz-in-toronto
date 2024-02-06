@@ -5,7 +5,6 @@ import {
     publicProcedure,
     protectedProcedure
 } from '~/server/api/trpc'
-import { env } from '~/env.mjs'
 
 export const artistRouter = createTRPCRouter({
     create: publicProcedure
@@ -61,6 +60,10 @@ export const artistRouter = createTRPCRouter({
                 approved: true
             }
         })
+    }),
+
+    getAllAdmin: publicProcedure.query(({ ctx }) => {
+        return ctx.prisma.artist.findMany()
     }),
 
     update: protectedProcedure

@@ -4,7 +4,6 @@ import {
     publicProcedure,
     protectedProcedure
 } from '~/server/api/trpc'
-import { env } from '~/env.mjs'
 
 export const venueRouter = createTRPCRouter({
     create: publicProcedure
@@ -70,6 +69,10 @@ export const venueRouter = createTRPCRouter({
                 approved: true
             }
         })
+    }),
+
+    getAllAdmin: protectedProcedure.query(({ ctx }) => {
+        return ctx.prisma.venue.findMany()
     }),
 
     getAllCrawlable: publicProcedure.query(({ ctx }) => {

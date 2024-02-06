@@ -20,12 +20,6 @@ export default function Featured() {
         return Array.from(set)
     }, [])
 
-    console.log({
-        c1,
-        c2,
-        c3
-    })
-
     return (
         <Flex
             display="flex"
