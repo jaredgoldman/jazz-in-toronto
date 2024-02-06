@@ -53,7 +53,7 @@ export default function EventForm(): JSX.Element {
                         align={{ initial: 'center', xs: 'left' }}
                         mb="6"
                     >
-                        {isAdmin ? 'Edit Event' : 'Book Your Gig'}
+                        {isAdmin ? 'Edit Event' : 'Submit Event'}
                     </Heading>
                     {isAdmin ?? (
                         <Callout.Root my="6">

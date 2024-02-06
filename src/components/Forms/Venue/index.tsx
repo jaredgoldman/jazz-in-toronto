@@ -24,7 +24,7 @@ export default function VenueForm() {
         onUpload,
         handleDeletePhoto,
         reset
-    } = useVenueForm(isAdmin)
+    } = useVenueForm(param)
 
     useEffect(() => {
         if (data) {
@@ -51,7 +51,7 @@ export default function VenueForm() {
                     mb="6"
                     align={{ initial: 'center', xs: 'left' }}
                 >
-                    {isAdmin ? 'Edit venue' : 'Add your venue'}
+                    {param ? 'Edit venue' : 'Submit venue'}
                 </Heading>
                 <Form.Root onSubmit={submit}>
                     <Flex direction="column" gap="5">

@@ -24,7 +24,7 @@ export default function ArtistForm() {
         handleDeletePhoto,
         reset,
         getValues
-    } = useArtistForm(isAdmin)
+    } = useArtistForm(param)
 
     useEffect(() => {
         if (data) {
