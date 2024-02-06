@@ -57,8 +57,7 @@ export const venueRouter = createTRPCRouter({
         .query(({ ctx, input }) => {
             return ctx.prisma.venue.findFirst({
                 where: {
-                    id: input.id,
-                    approved: true
+                    id: input.id
                 }
             })
         }),
@@ -96,7 +95,8 @@ export const venueRouter = createTRPCRouter({
                 featured: z.boolean().optional(),
                 instagramHandle: z.string().optional(),
                 website: z.string().optional(),
-                active: z.boolean().optional()
+                active: z.boolean().optional(),
+                description: z.string().optional()
             })
         )
         .mutation(async ({ ctx, input }) => {

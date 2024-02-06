@@ -18,11 +18,11 @@ export interface VenueFormValues {
     photoPath?: string
     phoneNumber: string
     featured: boolean
+    description?: string
 }
 
 export default function useVenueForm(
-    isEditing?: boolean,
-    currentValues?: Venue,
+    id: string | undefined,
     onAdd?: (data: Venue) => Promise<void>
 ) {
     const { toast } = useToast()
@@ -30,32 +30,20 @@ export default function useVenueForm(
     const { mutateAsync: editVenueMutation } = api.venue.update.useMutation()
     const deleteVenuePhotoMutation = api.venue.deletePhoto.useMutation()
 
-    const defaultValues: VenueFormValues = currentValues
-        ? {
-              name: currentValues.name,
-              photoPath: currentValues.photoPath || '',
-              latitude: currentValues.latitude || 0,
-              longitude: currentValues.longitude || 0,
-              city: currentValues.city || '',
-              address: currentValues.address || '',
-              website: currentValues.website || '',
-              instagramHandle: currentValues.instagramHandle || '',
-              phoneNumber: currentValues.phoneNumber || '',
-              featured: currentValues.featured || false
-          }
-        : {
-              name: '',
-              photoPath: '',
-              latitude: 0,
-              longitude: 0,
-              city: '',
-              address: '',
-              instagramHandle: '',
-              website: '',
-              fileData: undefined,
-              phoneNumber: '',
-              featured: false
-          }
+    const defaultValues: VenueFormValues = {
+        name: '',
+        photoPath: '',
+        latitude: 0,
+        longitude: 0,
+        city: '',
+        address: '',
+        instagramHandle: '',
+        website: '',
+        fileData: undefined,
+        phoneNumber: '',
+        featured: false,
+        description: ''
+    }
 
     const {
         handleSubmit,
@@ -85,10 +73,11 @@ export default function useVenueForm(
     }
 
     const handleDeletePhoto = async () => {
-        if (currentValues?.photoPath) {
+        const currentValues = getValues()
+        if (currentValues?.photoPath && id) {
             try {
                 await deleteVenuePhotoMutation.mutateAsync({
-                    id: currentValues.id
+                    id
                 })
                 toast({
                     title: 'Success',
@@ -146,9 +135,9 @@ export default function useVenueForm(
                     }
                 }
             }
-            if (isEditing && currentValues) {
+            if (id) {
                 addedVenue = await editVenueMutation({
-                    id: currentValues?.id,
+                    id,
                     ...newValues
                 })
             } else {
@@ -172,7 +161,6 @@ export default function useVenueForm(
     const submit = handleSubmit(async (data) => await onSubmit(data))
 
     return {
-        isEditing,
         handleDeletePhoto,
         startUpload,
         errors,

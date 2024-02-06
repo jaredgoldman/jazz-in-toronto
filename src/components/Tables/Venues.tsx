@@ -11,7 +11,7 @@ import {
     createColumnHelper
 } from '@tanstack/react-table'
 import { Venue } from '~/types/data'
-import { Table, Box, Flex, Badge } from '@radix-ui/themes'
+import { Table, Box, Flex, Badge, Button } from '@radix-ui/themes'
 import { HeaderCell, TableActionMenu } from './components'
 import Loading from '../Loading'
 import { fuzzyFilter } from './utils/filters'
@@ -31,12 +31,12 @@ export function VenuesTable() {
     const { mutate: deleteMutation } = api.venue.delete.useMutation()
 
     const handleEditClick = useCallback(
-        async (venue: Venue) => {
+        async (venue?: Venue) => {
             const params = new URLSearchParams()
-            params.set('id', venue.id)
+            if (venue) params.set('id', venue.id)
             await router.push(
                 {
-                    pathname: '/admin/edit-venue',
+                    pathname: '/admin/venue',
                     query: params.toString()
                 },
                 undefined,
@@ -204,6 +204,15 @@ export function VenuesTable() {
 
     return (
         <Box>
+            <Flex justify="end" mb="4">
+                <Button
+                    variant="outline"
+                    size="4"
+                    onClick={() => handleEditClick()}
+                >
+                    Add New Venue
+                </Button>
+            </Flex>
             {data?.length && (
                 <>
                     <Table.Root variant="surface">

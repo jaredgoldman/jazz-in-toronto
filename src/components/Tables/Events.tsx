@@ -19,6 +19,7 @@ import { HeaderCell, TableActionMenu } from './components'
 import { fuzzyFilter } from './utils/filters'
 import { useRouter } from 'next/router'
 import { useToast } from '~/hooks/useToast'
+import { Button } from '@radix-ui/themes'
 
 const columnHelper = createColumnHelper<EventWithArtistVenue>()
 
@@ -35,12 +36,12 @@ export function EventsTable() {
         })
 
     const handleEditClick = useCallback(
-        async (event: EventWithArtistVenue) => {
+        async (event?: EventWithArtistVenue) => {
             const params = new URLSearchParams()
-            params.set('id', event.id)
+            if (event) params.set('id', event.id)
             await router.push(
                 {
-                    pathname: '/admin/edit-event',
+                    pathname: '/admin/event',
                     query: params.toString()
                 },
                 undefined,
@@ -239,18 +240,27 @@ export function EventsTable() {
 
     return (
         <Flex direction="column">
-            <Flex mb="4" direction="column" className="max-w-xs" gap="3">
-                <Heading>Filter by date:</Heading>
-                <TextField.Root className="px-2 pt-1">
-                    <TextField.Input
-                        type="date"
-                        value={format(filteredDate, 'yyyy-MM-dd')}
-                        onChange={(e) =>
-                            setFilteredDate(new Date(e.target.value))
-                        }
-                        placeholder="Filter by date"
-                    />
-                </TextField.Root>
+            <Flex justify="between" align="end" mb="4">
+                <Flex direction="column" className="max-w-xs" gap="3">
+                    <Heading>Filter by date:</Heading>
+                    <TextField.Root className="px-2 pt-1">
+                        <TextField.Input
+                            type="date"
+                            value={format(filteredDate, 'yyyy-MM-dd')}
+                            onChange={(e) =>
+                                setFilteredDate(new Date(e.target.value))
+                            }
+                            placeholder="Filter by date"
+                        />
+                    </TextField.Root>
+                </Flex>
+                <Button
+                    size="4"
+                    variant="outline"
+                    onClick={() => handleEditClick()}
+                >
+                    Add New Event
+                </Button>
             </Flex>
             {data?.length ? (
                 <Table.Root variant="surface">

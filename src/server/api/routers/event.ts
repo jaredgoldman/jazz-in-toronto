@@ -126,8 +126,11 @@ export const eventRouter = createTRPCRouter({
         .query(({ ctx, input }) => {
             return ctx.prisma.event.findFirst({
                 where: {
-                    id: input.id,
-                    approved: true
+                    id: input.id
+                },
+                include: {
+                    artist: true,
+                    venue: true
                 }
             })
         }),
@@ -211,7 +214,8 @@ export const eventRouter = createTRPCRouter({
                 artistId: z.string().cuid().optional(),
                 venueId: z.string().cuid().optional(),
                 cancelled: z.boolean().optional(),
-                approved: z.boolean().optional()
+                approved: z.boolean().optional(),
+                description: z.string().optional()
             })
         )
         .mutation(async ({ ctx, input }) => {

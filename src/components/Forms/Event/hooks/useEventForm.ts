@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
-import { EventWithArtistVenue, Artist, Venue } from '~/types/data'
+import { Artist, Venue } from '~/types/data'
 import { isArtist, isVenue } from '~/utils/typeguards'
 import { parseISO } from 'date-fns'
 import { useToast } from '~/hooks/useToast'
@@ -12,6 +12,7 @@ export interface EventFormValues {
     artistId: string
     instagramHandle?: string
     website?: string
+    description?: string
     venueId: string
     featured: boolean
 }
@@ -30,47 +31,36 @@ export const toDateTimeLocal = (date: Date): string => {
     return `${formattedDate}T${formattedTime}`
 }
 
-export default function useEventForm(
-    isEditing?: boolean,
-    currentValues?: EventWithArtistVenue
-) {
+export default function useEventForm(id?: string) {
     const { toast } = useToast()
 
     const {
         data: venueData,
         refetch: refetchVenues,
         isLoading: venuesLoading
-    } = api.venue.getAll.useQuery()
+    } = api.venue.getAllAdmin.useQuery()
 
     const {
         data: artistData,
         refetch: refetchArtists,
         isLoading: artistsLoading
-    } = api.artist.getAll.useQuery()
+    } = api.artist.getAllAdmin.useQuery()
 
     const { mutateAsync: eventMutation } = api.event.create.useMutation()
     const { mutateAsync: editEventMutation } = api.event.update.useMutation()
 
     const isLoading = venuesLoading || artistsLoading
-    const defaultValues: EventFormValues = currentValues
-        ? {
-              ...currentValues,
-              startDate: toDateTimeLocal(new Date(currentValues?.startDate)),
-              endDate: toDateTimeLocal(new Date(currentValues?.endDate)),
-              instagramHandle: currentValues.instagramHandle || undefined,
-              website: currentValues.website || undefined,
-              featured: currentValues.featured || false
-          }
-        : {
-              name: '',
-              startDate: toDateTimeLocal(new Date()),
-              endDate: toDateTimeLocal(new Date()),
-              artistId: '',
-              venueId: '',
-              instagramHandle: '',
-              website: '',
-              featured: false
-          }
+    const defaultValues: EventFormValues = {
+        name: '',
+        startDate: toDateTimeLocal(new Date()),
+        endDate: toDateTimeLocal(new Date()),
+        artistId: '',
+        venueId: '',
+        instagramHandle: '',
+        website: '',
+        featured: false,
+        description: ''
+    }
 
     const {
         register,
@@ -83,11 +73,14 @@ export default function useEventForm(
     } = useForm<EventFormValues>({ defaultValues })
 
     const onSubmit = async (values: EventFormValues) => {
+        console.log({
+            values
+        })
         try {
-            if (isEditing && currentValues && editEventMutation) {
+            if (id) {
                 await editEventMutation({
                     ...values,
-                    id: currentValues?.id,
+                    id,
                     startDate: parseISO(values.startDate),
                     endDate: parseISO(values.endDate)
                 })
@@ -140,7 +133,6 @@ export default function useEventForm(
     })
 
     return {
-        isEditing,
         venueData,
         artistData,
         submit,
