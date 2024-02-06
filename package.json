@@ -12,6 +12,7 @@
         "db:push": "prisma db push",
         "db:reset": "NODE_ENV=development prisma migrate reset --force --skip-seed && pnpm run db:push && pnpm run db:seed",
         "db:clear": "NODE_ENV=development prisma migrate reset --force --skip-seed",
+        "db:prod:reset": "NODE_ENV=production prisma migrate reset --force --skip-seed && pnpm run db:push",
         "db:seed": "NODE_ENV=development prisma db seed",
         "db:generate": "prisma generate",
         "db:format": "prisma format",
