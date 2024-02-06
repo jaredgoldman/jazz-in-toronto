@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import Loading from '../Loading'
 import FeaturedCard from './FeaturedCard'
 import { Flex, Heading, Text } from '@radix-ui/themes'
@@ -7,11 +7,7 @@ import { getRandomHeadingColor } from './utils'
 
 export default function Featured() {
     const { data: featuredItems, isLoading } = api.data.getFeatured.useQuery()
-    useEffect(() => {
-        console.log({
-            featuredItems
-        })
-    }, [featuredItems])
+
     /*
      * Generate 3 tailwind classes with random colors
      * for the featured card headings

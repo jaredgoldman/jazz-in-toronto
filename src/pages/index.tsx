@@ -6,9 +6,6 @@ import { api } from '~/utils/api'
 
 export default function Home() {
     const { data: featuredItems } = api.data.getFeatured.useQuery()
-        console.log({
-                featuredItems
-                })
 
     return (
         <RootLayout pageTitle="Jazz In Toronto | Home">

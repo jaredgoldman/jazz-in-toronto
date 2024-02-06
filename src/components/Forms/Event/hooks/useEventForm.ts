@@ -73,9 +73,6 @@ export default function useEventForm(id?: string) {
     } = useForm<EventFormValues>({ defaultValues })
 
     const onSubmit = async (values: EventFormValues) => {
-        console.log({
-            values
-        })
         try {
             if (id) {
                 await editEventMutation({
