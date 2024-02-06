@@ -1,5 +1,5 @@
 import CalendarDay from './components/CalendarDay'
-import { Flex, Button, Table, Heading } from '@radix-ui/themes'
+import { Flex, Table } from '@radix-ui/themes'
 import Loading from '../Loading'
 import useCalendar from './hooks/useCalendar'
 import { api } from '~/utils/api'
@@ -10,7 +10,7 @@ export type Props = {
     selectedDate: Date
 }
 
-export default function Calendar({ selectedDate, setSelectedDate }: Props) {
+export default function Calendar({ selectedDate }: Props) {
     const currentYear = selectedDate.getFullYear()
     const currentMonth = selectedDate.getMonth()
 
@@ -28,7 +28,6 @@ export default function Calendar({ selectedDate, setSelectedDate }: Props) {
         currentYear,
         currentMonth,
         selectedDate,
-        setSelectedDate,
         refetch
     )
 

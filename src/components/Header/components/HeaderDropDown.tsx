@@ -21,7 +21,7 @@ export function HeaderDropDown({ links }: Props) {
                     direction="column"
                     align="center"
                     gap="4"
-                    className="m-0 min-w-[6.5rem] max-w-[6.5rem] p-0"
+                    className="m-0 min-w-[6.5rem] max-w-[6.5rem] rounded-none p-0"
                 >
                     {links.map((link) => (
                         <Link href={link.href} size="3" key={link.title}>

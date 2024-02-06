@@ -11,7 +11,7 @@ import {
     createColumnHelper
 } from '@tanstack/react-table'
 import { EventWithArtistVenue } from '~/types/data'
-import { Table, Flex, TextField, Heading } from '@radix-ui/themes'
+import { Table, Flex, TextField, Heading, Badge } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import { useMemo } from 'react'
 import Loading from '../Loading'
@@ -24,14 +24,15 @@ const columnHelper = createColumnHelper<EventWithArtistVenue>()
 
 export function EventsTable() {
     const { toast } = useToast()
+    const router = useRouter()
     const [filteredDate, setFilteredDate] = useState<Date>(new Date())
+    const { mutate: setFeaturedMutation } = api.event.setFeatured.useMutation()
+    const { mutate: deleteMutation } = api.event.delete.useMutation()
+    const { mutate: approveMutation } = api.event.approve.useMutation()
     const { data, isLoading, isFetched, refetch } =
         api.event.getAllByDay.useQuery({
             date: filteredDate
         })
-    const router = useRouter()
-    const { mutate: setFeaturedMutation } = api.event.setFeatured.useMutation()
-    const { mutate: deleteMutation } = api.event.delete.useMutation()
 
     const handleEditClick = useCallback(
         async (event: EventWithArtistVenue) => {
@@ -51,10 +52,35 @@ export function EventsTable() {
         [router]
     )
 
+    const handleApprove = useCallback(
+        (event: EventWithArtistVenue) => {
+            approveMutation(
+                { id: event.id, approved: !event.approved },
+                {
+                    onSuccess: () => {
+                        toast({
+                            title: 'Success',
+                            message: 'Event approved'
+                        })
+                        void refetch()
+                    },
+                    onError: () => {
+                        toast({
+                            title: 'Error',
+                            message: 'Approving event failed',
+                            type: 'error'
+                        })
+                    }
+                }
+            )
+        },
+        [approveMutation, refetch, toast]
+    )
+
     const handleToggleFeatured = useCallback(
         (event: EventWithArtistVenue) => {
             setFeaturedMutation(
-                { id: event.id },
+                { id: event.id, featured: !event.featured },
                 {
                     onSuccess: () => {
                         toast({
@@ -134,13 +160,37 @@ export function EventsTable() {
                 header: 'Instagram'
             }),
             columnHelper.accessor((row) => row.cancelled, {
-                cell: (info) => info.getValue()?.toString(),
                 header: 'Cancelled',
+                cell: (info) =>
+                    !info.renderValue() ? (
+                        <Badge color="green">Not Cancelled</Badge>
+                    ) : (
+                        <Badge variant="soft" color="gray">
+                            Cancelled
+                        </Badge>
+                    ),
                 enableColumnFilter: false
             }),
             columnHelper.accessor((row) => row.featured, {
-                cell: (info) => info.getValue()?.toString(),
                 header: 'Featured',
+                cell: (info) =>
+                    info.renderValue() ? (
+                        <Badge color="green">Featured</Badge>
+                    ) : (
+                        <Badge variant="soft" color="gray">
+                            Not Featured
+                        </Badge>
+                    ),
+                enableColumnFilter: false
+            }),
+            columnHelper.accessor((row) => row.approved, {
+                cell: (info) =>
+                    info.renderValue() ? (
+                        <Badge color="green">Approved</Badge>
+                    ) : (
+                        <Badge color="blue">Not Approved</Badge>
+                    ),
+                header: 'Approved',
                 enableColumnFilter: false
             }),
             columnHelper.display({
@@ -148,20 +198,26 @@ export function EventsTable() {
                 cell: ({ row }) => (
                     <TableActionMenu
                         isFeatured={row.original.featured}
+                        isApproved={row.original.approved}
                         onToggleFeatured={() => {
                             handleToggleFeatured(row.original)
                         }}
                         onEdit={() => handleEditClick(row.original)}
                         onDelete={() => handleDelete(row.original)}
+                        onApprove={() => handleApprove(row.original)}
                     />
                 ),
                 header: 'Edit'
             })
         ],
-        [handleDelete, handleEditClick, handleToggleFeatured]
+        [handleDelete, handleEditClick, handleToggleFeatured, handleApprove]
     )
 
-    const [sorting, setSorting] = useState<SortingState>([])
+    const [sorting, setSorting] = useState<SortingState>([
+        { id: 'Featured', desc: true },
+        { id: 'Approved', desc: false }
+    ])
+
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
     const table = useReactTable<EventWithArtistVenue>({

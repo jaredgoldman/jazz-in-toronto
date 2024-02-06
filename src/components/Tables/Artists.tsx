@@ -13,7 +13,7 @@ import {
     getPaginationRowModel,
     createColumnHelper
 } from '@tanstack/react-table'
-import { Table, Box, Flex } from '@radix-ui/themes'
+import { Table, Box, Flex, Badge } from '@radix-ui/themes'
 import Loading from '../Loading'
 import { fuzzyFilter } from './utils/filters'
 import { PaginationButtonGroup } from './components/PaginationButtonGroup'
@@ -27,6 +27,7 @@ export function ArtistsTable() {
     const { toast } = useToast()
     const { data, isFetched, isLoading, refetch } = api.artist.getAll.useQuery()
     const router = useRouter()
+    const { mutate: approveMutation } = api.artist.approve.useMutation()
     const { mutate: setFeaturedMutation } = api.artist.setFeatured.useMutation()
     const { mutate: deleteMutation } = api.artist.delete.useMutation()
 
@@ -46,17 +47,42 @@ export function ArtistsTable() {
         [router]
     )
 
-    const handleToggleFeatured = useCallback(
+    const hanldeApprove = useCallback(
         (artist: Artist) => {
-            setFeaturedMutation(
-                { id: artist.id },
+            approveMutation(
+                { id: artist.id, approved: !artist.approved },
                 {
                     onSuccess: () => {
                         void refetch()
                         toast({
                             title: 'Success',
+                            message: 'Artist has been approved'
+                        })
+                    },
+                    onError: () => {
+                        toast({
+                            title: 'Error',
+                            message: 'Approve artist failed',
+                            type: 'error'
+                        })
+                    }
+                }
+            )
+        },
+        [approveMutation, refetch, toast]
+    )
+
+    const handleToggleFeatured = useCallback(
+        (artist: Artist) => {
+            setFeaturedMutation(
+                { id: artist.id, featured: !artist.featured },
+                {
+                    onSuccess: () => {
+                        toast({
+                            title: 'Success',
                             message: 'Artist successfully set as featured'
                         })
+                        void refetch()
                     },
                     onError: () =>
                         toast({
@@ -113,35 +139,54 @@ export function ArtistsTable() {
                 cell: (info) => info.getValue(),
                 header: 'Instagram'
             }),
-            columnHelper.accessor((row) => row.active, {
-                cell: (info) => info.renderValue()?.toString(),
-                header: 'Active',
+            columnHelper.accessor((row) => row.featured, {
+                header: 'Featured',
+                cell: (info) =>
+                    info.renderValue() ? (
+                        <Badge color="green">Featured</Badge>
+                    ) : (
+                        <Badge variant="soft" color="gray">
+                            Not Featured
+                        </Badge>
+                    ),
                 enableColumnFilter: false
             }),
-            columnHelper.accessor((row) => row.featured, {
-                cell: (info) => info.renderValue()?.toString(),
-                header: 'Featured',
+            columnHelper.accessor((row) => row.approved, {
+                cell: (info) =>
+                    info.renderValue() ? (
+                        <Badge color="green">Approved</Badge>
+                    ) : (
+                        <Badge color="blue">Not Approved</Badge>
+                    ),
+                header: 'Approved',
                 enableColumnFilter: false
             }),
             columnHelper.display({
                 id: 'edit',
                 cell: ({ row }) => (
                     <TableActionMenu
+                        isApproved={row.original.approved}
                         isFeatured={row.original.featured}
                         onToggleFeatured={() => {
                             handleToggleFeatured(row.original)
                         }}
                         onEdit={() => handleEditClick(row.original)}
                         onDelete={() => handleDelete(row.original)}
+                        onApprove={() => hanldeApprove(row.original)}
                     />
                 ),
                 header: 'Edit'
             })
         ],
-        [handleDelete, handleEditClick, handleToggleFeatured]
+        [handleDelete, handleEditClick, handleToggleFeatured, hanldeApprove]
     )
 
-    const [sorting, setSorting] = useState<SortingState>([])
+    const [sorting, setSorting] = useState<SortingState>([
+        { id: 'Featured', desc: true },
+        { id: 'Approved', desc: false },
+        { id: 'Name', desc: false }
+    ])
+
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
     const table = useReactTable({
@@ -171,7 +216,7 @@ export function ArtistsTable() {
     return (
         <Box>
             {data?.length && (
-                <>
+                <Flex gap="3" direction="column">
                     <Table.Root variant="surface">
                         <Table.Header>
                             {table.getHeaderGroups().map((headerGroup) => (
@@ -205,7 +250,7 @@ export function ArtistsTable() {
                             <PaginationButtonGroup table={table} />
                         </Flex>
                     )}
-                </>
+                </Flex>
             )}
             {isFetched && !data?.length && <div>Empty state placeholder</div>}
             {isLoading && <Loading />}

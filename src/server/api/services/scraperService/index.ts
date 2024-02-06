@@ -1,16 +1,12 @@
-// Libraries
 import { cheerioJsonMapper, JsonTemplate } from 'cheerio-json-mapper'
 import { TRPCError } from '@trpc/server'
 import puppeterr, { Page } from 'puppeteer-core'
 import { createId } from '@paralleldrive/cuid2'
-// types
 import type { Venue, EventWithArtistVenue } from '~/types/data'
-// Utils
 import chromium from '@sparticuz/chromium-min'
 import { wait } from '~/utils/shared'
 import type { RexEvent, VenueEvents } from './types'
 import { env } from '~/env.mjs'
-// Data
 import rexJson from './templates/rex.json'
 
 export default class ScraperService {
@@ -110,7 +106,7 @@ export default class ScraperService {
         const isFutureMonth = currentMonthIndex - monthIndex < 0
         let monthNavButton
 
-        // // If the month is in the future, we need to click the next month button
+        // If the month is in the future, we need to click the next month button
         if (isFutureMonth) {
             monthNavButton = await this.page.waitForSelector(
                 `${rexJson['$']} > .yui3-calendar-header > .yui3-calendarnav-nextmonth`
@@ -160,6 +156,7 @@ export default class ScraperService {
 
         // Map partial events, convert strings to numbers where necessary
         const processedEvents: EventWithArtistVenue[] = []
+
         dailyEvents.forEach(({ date, sets }: RexEvent) => {
             if (date && sets?.each) {
                 // map through sets in each daily events object

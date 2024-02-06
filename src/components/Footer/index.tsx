@@ -1,21 +1,17 @@
-// Components
-import { Text, Separator, Box, Link as RLink } from '@radix-ui/themes'
-import Link from 'next/link'
+import { Separator, Flex, Link } from '@radix-ui/themes'
 
 export default function Footer(): JSX.Element {
     return (
         <footer className="w-full">
             <Separator size="4" />
-            <Box p="4">
-                <Text as="span" align="left" size="2">
-                    Made by{' '}
-                    <RLink asChild>
-                        <Link href="https://jaredgoldman.dev">
-                            Jared Goldman
-                        </Link>
-                    </RLink>
-                </Text>
-            </Box>
+            <Flex p="4" gap="5">
+                <Link href="https://github.com/jaredgoldman/jazz-in-toronto">
+                    Github
+                </Link>
+                <Link href="https://github.com/jaredgoldman/jazz-in-toronto">
+                    Privacy Policy
+                </Link>
+            </Flex>
         </footer>
     )
 }

@@ -2,35 +2,45 @@
 import { Card, Heading, Text, Flex, Link } from '@radix-ui/themes'
 
 interface Props {
-    title: string
+    heading: string
     content?: string
     image?: string | null
     link?: string | null
+    headingClassname: string
 }
 
+
 const FeaturedCard = ({
-    title,
+    heading,
     content = 'This is a short sample description for a featured card. Come check out our band/event/venue',
     image,
-    link
+    link,
+    headingClassname
 }: Props) => {
     return (
         <Card
             style={{
-                backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(1,1,1,1) 70%), url(${
+                backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(1,1,1,1) 80%), url(${
                     image ? image : 'none'
                 })`
             }}
             variant="classic"
-            className="min-h-[20rem] bg-cover bg-center bg-no-repeat"
+            className="bg-cover bg-center bg-no-repeat"
+            size="3"
         >
-            <Flex direction="column" justify="end" height="100%" p="2">
-                <Heading className="text-1xl mb-2 font-bold text-white">
-                    {title}
+            <Flex
+                direction="column"
+                grow="1"
+                justify="end"
+                className="h-[26rem]"
+                gap="2"
+            >
+                <Heading size="9" mb="4" className={headingClassname}>
+                    {heading}
                 </Heading>
                 <Text className="text-gray-200">{content}</Text>
                 {link && (
-                    <Link href={link} color="bronze">
+                    <Link href={link} color="orange">
                         Learn more
                     </Link>
                 )}

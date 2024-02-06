@@ -2,11 +2,6 @@ import { useEffect, useCallback } from 'react'
 import { useAtom } from 'jotai'
 import { atom } from 'jotai'
 
-export enum ToastType {
-    Success = 'success',
-    Error = 'error'
-}
-
 type ToastProps = {
     title: string
     message: string
@@ -29,6 +24,7 @@ export function useToast() {
     const [toastData, setToastData] = useAtom(toastAtom)
 
     useEffect(() => {
+        if (!toastData.visible || !toastData.animating) return
         const timer1 = setTimeout(() => {
             setToastData({
                 ...toastData,
@@ -64,7 +60,9 @@ export function useToast() {
     }, [setToastData])
 
     useEffect(() => {
-        resetToast()
+        return () => {
+            resetToast()
+        }
     }, [resetToast])
 
     return { toast, resetToast }

@@ -50,7 +50,7 @@ export const artistRouter = createTRPCRouter({
             return ctx.prisma.artist.findFirst({
                 where: {
                     id: input.id,
-                    approved: env.SHOW_UNAPPROVED_ITEMS ? undefined : true
+                    approved: true
                 }
             })
         }),
@@ -58,7 +58,7 @@ export const artistRouter = createTRPCRouter({
     getAll: publicProcedure.query(({ ctx }) => {
         return ctx.prisma.artist.findMany({
             where: {
-                approved: env.SHOW_UNAPPROVED_ITEMS ? undefined : true
+                approved: true
             }
         })
     }),
@@ -113,17 +113,28 @@ export const artistRouter = createTRPCRouter({
     }),
 
     setFeatured: protectedProcedure
-        .input(z.object({ id: z.string().cuid() }))
+        .input(z.object({ id: z.string().cuid(), featured: z.boolean() }))
         .mutation(async ({ ctx, input }) => {
-            // First remove any other features
-            // Only one artist hsould be featured at a time
-            await ctx.prisma.artist.updateMany({
-                where: { featured: true },
-                data: { featured: false }
-            })
+            // First remove any other featured artists
+            // Only one artist should be featured at a time
+            if (input.featured) {
+                await ctx.prisma.artist.updateMany({
+                    where: { featured: true },
+                    data: { featured: false }
+                })
+            }
             return ctx.prisma.artist.update({
                 where: { id: input.id },
-                data: { featured: true }
+                data: { featured: input.featured }
+            })
+        }),
+
+    approve: protectedProcedure
+        .input(z.object({ id: z.string().cuid(), approved: z.boolean() }))
+        .mutation(async ({ ctx, input }) => {
+            return ctx.prisma.artist.update({
+                where: { id: input.id },
+                data: { approved: input.approved }
             })
         })
 })

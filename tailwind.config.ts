@@ -3,6 +3,8 @@ import { Config } from 'tailwindcss'
 export default {
     darkMode: 'class',
     content: ['./src/**/*.{js,ts,jsx,tsx}'],
+    mode: 'jit',
+    purge: ['./public/**/*.html', './src/**/*.{js,jsx,ts,tsx,vue}'],
     theme: {
         fontFamily: {
             body: 'var(--body-font)'
@@ -27,9 +29,9 @@ export default {
             },
             backgroundImage: {
                 'hero-pattern':
-                    "linear-gradient(to bottom, rgba(0, 0, 0, 0.25), theme('colors.gray.900')), url('../../public/images/jit-gig.jpg')",
+                    "linear-gradient(to bottom, rgb(0, 0, 0, 0.25), var(--slate-1)), url('../../public/images/jit-no-logo.png')",
                 'hero-pattern-2':
-                    "linear-gradient(to bottom, theme('colors.gray.900'), rgba(0, 0, 0, 0.1)), url('../../public/images/emmet.jpg')"
+                    'linear-gradient(to bottom, var(--slate-1), var(--orange-2))'
             }
         },
         animation: {
