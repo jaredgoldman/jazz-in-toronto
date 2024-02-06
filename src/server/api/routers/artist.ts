@@ -48,8 +48,7 @@ export const artistRouter = createTRPCRouter({
         .query(({ ctx, input }) => {
             return ctx.prisma.artist.findFirst({
                 where: {
-                    id: input.id,
-                    approved: true
+                    id: input.id
                 }
             })
         }),
@@ -75,17 +74,12 @@ export const artistRouter = createTRPCRouter({
                 photoPath: z.string().optional(),
                 featured: z.boolean().optional(),
                 instagramHandle: z.string().optional(),
-                website: z.string().optional()
+                website: z.string().optional(),
+                description: z.string().optional()
             })
         )
         .mutation(async ({ ctx, input }) => {
-            const { id, featured, ...artistData } = input
-            if (featured) {
-                await ctx.prisma.artist.updateMany({
-                    where: { featured: true },
-                    data: { featured: false }
-                })
-            }
+            const { id, ...artistData } = input
             return ctx.prisma.artist.update({
                 where: { id },
                 data: artistData

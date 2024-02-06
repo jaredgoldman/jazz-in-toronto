@@ -13,7 +13,7 @@ import {
     getPaginationRowModel,
     createColumnHelper
 } from '@tanstack/react-table'
-import { Table, Box, Flex, Badge } from '@radix-ui/themes'
+import { Table, Box, Flex, Badge, Button } from '@radix-ui/themes'
 import Loading from '../Loading'
 import { fuzzyFilter } from './utils/filters'
 import { PaginationButtonGroup } from './components/PaginationButtonGroup'
@@ -33,12 +33,12 @@ export function ArtistsTable() {
     const { mutate: deleteMutation } = api.artist.delete.useMutation()
 
     const handleEditClick = useCallback(
-        async (artist: Artist) => {
+        async (artist?: Artist) => {
             const params = new URLSearchParams()
-            params.set('id', artist.id)
+            if (artist) params.set('id', artist.id)
             await router.push(
                 {
-                    pathname: '/admin/edit-artist',
+                    pathname: '/admin/artist',
                     query: params.toString()
                 },
                 undefined,
@@ -216,6 +216,15 @@ export function ArtistsTable() {
 
     return (
         <Box>
+            <Flex justify="end" mb="4">
+                <Button
+                    variant="outline"
+                    size="4"
+                    onClick={() => handleEditClick()}
+                >
+                    Add New Artist
+                </Button>
+            </Flex>
             {data?.length && (
                 <Flex gap="3" direction="column">
                     <Table.Root variant="surface">

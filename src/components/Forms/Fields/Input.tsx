@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import * as Form from '@radix-ui/react-form'
-import { TextField, Text } from '@radix-ui/themes'
+import { TextField, Text, TextArea } from '@radix-ui/themes'
 import {
     FieldError,
     FieldValues,
@@ -35,7 +35,11 @@ export default function Input<T extends FieldValues>({
                 <Form.Field name={name}>
                     <Form.Label>{label}</Form.Label>
                     <Form.Control asChild>
-                        <TextField.Input type={type} {...field} />
+                        {type === 'textarea' ? (
+                            <TextArea {...field} />
+                        ) : (
+                            <TextField.Input type={type} {...field} />
+                        )}
                     </Form.Control>
                     {error && (
                         <Text size="2" color="red">

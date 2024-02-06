@@ -10,6 +10,7 @@ import { useEffect } from 'react'
 export default function ArtistForm() {
     const router = useRouter()
     const param = router.query.id as string
+    const isAdmin = router.asPath.includes('admin')
     const { data } = api.artist.get.useQuery(
         { id: param },
         { enabled: Boolean(param) }
@@ -17,14 +18,13 @@ export default function ArtistForm() {
 
     const {
         submit,
-        isEditing,
         errors,
         control,
         onUpload,
         handleDeletePhoto,
         reset,
         getValues
-    } = useArtistForm(!!param)
+    } = useArtistForm(param)
 
     useEffect(() => {
         if (data) {
@@ -33,7 +33,8 @@ export default function ArtistForm() {
                 instagramHandle: data.instagramHandle ?? '',
                 genre: data.genre ?? '',
                 photoPath: data.photoPath ?? '',
-                website: data.website ?? ''
+                website: data.website ?? '',
+                description: data.description ?? ''
             })
         }
     }, [data, reset, getValues])
@@ -53,7 +54,7 @@ export default function ArtistForm() {
                         align={{ initial: 'center', xs: 'left' }}
                         mb="6"
                     >
-                        {isEditing ? 'Edit artist' : 'Submit artist'}
+                        {isAdmin ? 'Edit artist' : 'Submit artist'}
                     </Heading>
                     <Flex direction="column" gap="5">
                         <Input
@@ -88,6 +89,16 @@ export default function ArtistForm() {
                             error={errors.website}
                             control={control}
                         />
+                        {isAdmin && (
+                            <Input
+                                name="description"
+                                label="Featured description"
+                                type="textarea"
+                                error={errors.description}
+                                control={control}
+                            />
+                        )}
+
                         <Form.Submit asChild>
                             <Button className="w-full">Submit</Button>
                         </Form.Submit>

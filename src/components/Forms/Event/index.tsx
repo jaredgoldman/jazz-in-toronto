@@ -13,13 +13,14 @@ import Loading from '~/components/Loading'
 export default function EventForm(): JSX.Element {
     const router = useRouter()
     const param = router.query.id as string
+    const isAdmin = router.asPath.includes('admin')
     const { data } = api.event.get.useQuery(
         { id: param },
         { enabled: Boolean(param) }
     )
 
-    const { submit, errors, control, venueData, artistData, isEditing, reset } =
-        useEventForm(!!param)
+    const { submit, errors, control, venueData, artistData, reset } =
+        useEventForm(param)
 
     useEffect(() => {
         if (data) {
@@ -28,8 +29,11 @@ export default function EventForm(): JSX.Element {
                 ...data,
                 instagramHandle: data.instagramHandle ?? '',
                 website: data.website ?? '',
+                description: data.description ?? '',
                 startDate: toDateTimeLocal(data.startDate),
-                endDate: toDateTimeLocal(data.endDate)
+                endDate: toDateTimeLocal(data.endDate),
+                artistId: data.artistId,
+                venueId: data.venueId
             })
         }
     }, [data, reset])
@@ -49,9 +53,9 @@ export default function EventForm(): JSX.Element {
                         align={{ initial: 'center', xs: 'left' }}
                         mb="6"
                     >
-                        {isEditing ? 'Edit Event' : 'Book Your Gig'}
+                        {isAdmin ? 'Edit Event' : 'Submit Event'}
                     </Heading>
-                    {isEditing ?? (
+                    {isAdmin ?? (
                         <Callout.Root my="6">
                             <Callout.Icon>
                                 <InfoCircledIcon />
@@ -130,6 +134,15 @@ export default function EventForm(): JSX.Element {
                                 error={errors.website}
                                 control={control}
                             />
+                            {isAdmin && (
+                                <Input
+                                    name="description"
+                                    label="Featured description"
+                                    type="textarea"
+                                    error={errors.description}
+                                    control={control}
+                                />
+                            )}
                             <Form.Submit asChild>
                                 <Button className="w-full" variant="solid">
                                     Submit

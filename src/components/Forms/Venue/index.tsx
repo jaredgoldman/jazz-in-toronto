@@ -10,13 +10,13 @@ import { useEffect } from 'react'
 
 export default function VenueForm() {
     const router = useRouter()
+    const isAdmin = router.asPath.includes('admin')
     const param = router.query.id as string
     const { data } = api.venue.get.useQuery(
         { id: param },
         { enabled: Boolean(param) }
     )
     const {
-        isEditing,
         submit,
         errors,
         control,
@@ -24,14 +24,15 @@ export default function VenueForm() {
         onUpload,
         handleDeletePhoto,
         reset
-    } = useVenueForm(!!param)
+    } = useVenueForm(param)
 
     useEffect(() => {
         if (data) {
             reset({
                 ...data,
                 instagramHandle: data.instagramHandle ?? '',
-                photoPath: data.photoPath ?? ''
+                photoPath: data.photoPath ?? '',
+                description: data.description ?? ''
             })
         }
     }, [data, reset])
@@ -50,7 +51,7 @@ export default function VenueForm() {
                     mb="6"
                     align={{ initial: 'center', xs: 'left' }}
                 >
-                    {isEditing ? 'Edit venue' : 'Add your venue'}
+                    {param ? 'Edit venue' : 'Submit venue'}
                 </Heading>
                 <Form.Root onSubmit={submit}>
                     <Flex direction="column" gap="5">
@@ -93,6 +94,15 @@ export default function VenueForm() {
                             error={errors.website}
                             control={control}
                         />
+                        {isAdmin && (
+                            <Input
+                                name="description"
+                                label="Featured description"
+                                type="textarea"
+                                error={errors.description}
+                                control={control}
+                            />
+                        )}
                         <Form.Submit asChild>
                             <Button className="w-full" variant="solid">
                                 Submit

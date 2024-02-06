@@ -8,10 +8,10 @@ export default function AdminArtists() {
     return (
         <AdminLayout pageTitle="Jazz In Toronto | Admin - artists">
             <>
-                <Heading align="center" size="9" mb="9">
+                <Heading align="center" size="9" mb="2">
                     Artists
                 </Heading>
-                <ArtistsTable/>
+                <ArtistsTable />
             </>
         </AdminLayout>
     )

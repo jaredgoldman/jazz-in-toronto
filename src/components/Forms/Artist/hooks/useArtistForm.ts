@@ -16,11 +16,11 @@ export interface ArtistFormValues {
         dataURL: string
     }
     featured: boolean
+    description?: string
 }
 
 export default function useArtistForm(
-    isEditing?: boolean,
-    currentValues?: Artist | undefined,
+    id: string | undefined,
     onAdd?: (values: Artist) => Promise<void>
 ) {
     const { toast } = useToast()
@@ -28,24 +28,16 @@ export default function useArtistForm(
     const { mutateAsync: editArtistMutation } = api.artist.update.useMutation()
     const deleteartistPhotoMutation = api.artist.deletePhoto.useMutation()
 
-    const defaultValues: ArtistFormValues = currentValues
-        ? {
-              ...currentValues,
-              name: currentValues.name,
-              instagramHandle: currentValues.instagramHandle || '',
-              genre: currentValues.genre || '',
-              website: currentValues.website || '',
-              photoPath: currentValues.photoPath || ''
-          }
-        : {
-              name: '',
-              instagramHandle: '',
-              genre: '',
-              website: '',
-              photoPath: '',
-              fileData: undefined,
-              featured: false
-          }
+    const defaultValues: ArtistFormValues = {
+        name: '',
+        instagramHandle: '',
+        genre: '',
+        website: '',
+        photoPath: '',
+        fileData: undefined,
+        featured: false,
+        description: ''
+    }
 
     const {
         handleSubmit,
@@ -60,10 +52,11 @@ export default function useArtistForm(
     })
 
     const handleDeletePhoto = async () => {
-        if (currentValues?.photoPath) {
+        const currentValues = getValues()
+        if (currentValues?.photoPath && id) {
             try {
                 await deleteartistPhotoMutation.mutateAsync({
-                    id: currentValues.id
+                    id
                 })
                 toast({
                     title: 'Success',
@@ -119,9 +112,9 @@ export default function useArtistForm(
                     }
                 }
             }
-            if (isEditing && currentValues) {
+            if (id) {
                 addedArtist = await editArtistMutation({
-                    id: currentValues?.id,
+                    id,
                     ...newValues
                 })
             } else {
@@ -152,7 +145,6 @@ export default function useArtistForm(
     })
 
     return {
-        isEditing,
         handleDeletePhoto,
         startUpload,
         submit,

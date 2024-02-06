@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from 'react'
+import { ReactNode } from 'react'
 import { signIn, useSession } from 'next-auth/react'
 import Header from '~/components/Header'
 import Footer from '~/components/Footer'
@@ -9,15 +9,21 @@ import { HeaderType } from '~/components/Header/utils'
 import { Toast } from '~/components/Toast/Toast'
 import { useAtomValue } from 'jotai'
 import { toastAtom } from '~/hooks/useToast'
+import {
+    Breadcrumbs,
+    BreadcrumbProps
+} from '~/components/Breadcrumbs/Breadcrumbs'
 
 interface Props {
     pageTitle: string
+    breadcrumbs?: BreadcrumbProps
     children: ReactNode | undefined
 }
 
 export default function AdminLayout({
     pageTitle,
-    children
+    children,
+    breadcrumbs
 }: Props): JSX.Element {
     const { data: session } = useSession()
     const toastState = useAtomValue(toastAtom)
@@ -30,6 +36,7 @@ export default function AdminLayout({
             <Flex direction="column" className="h-screen">
                 {(toastState.visible || toastState.animating) && <Toast />}
                 <Header headerType={HeaderType.Admin} />
+                {breadcrumbs && <Breadcrumbs {...breadcrumbs} />}
                 <Container className="flex-grow overflow-x-hidden" py="7">
                     {session ? (
                         children
