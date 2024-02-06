@@ -14,6 +14,7 @@ export default async function handler() {
     const unapprovedArtists = await prisma.artist.count({
         where: { approved: false }
     })
+
     for (const admin of admins) {
         await emailService.sendEmail(
             env.EMAIL_SERVER_USER,

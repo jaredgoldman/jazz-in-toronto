@@ -55,7 +55,7 @@ export default function Featured() {
                         </Flex>
                     )}
                     {featuredItems?.event?.description && (
-                        <Flex direction="column">
+                        <Flex direction="column" grow="1">
                             <Heading mb="2" ml="4">
                                 Featured <Text>Event</Text>
                             </Heading>
@@ -69,7 +69,7 @@ export default function Featured() {
                         </Flex>
                     )}
                     {featuredItems?.artist?.description && (
-                        <Flex direction="column">
+                        <Flex direction="column" grow="1">
                             <Heading mb="2" ml="4">
                                 Featured <Text>Artist</Text>
                             </Heading>
