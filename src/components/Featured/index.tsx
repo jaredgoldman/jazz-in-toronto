@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import Loading from '../Loading'
 import FeaturedCard from './FeaturedCard'
 import { Flex, Heading, Text } from '@radix-ui/themes'
@@ -7,7 +7,11 @@ import { getRandomHeadingColor } from './utils'
 
 export default function Featured() {
     const { data: featuredItems, isLoading } = api.data.getFeatured.useQuery()
-
+    useEffect(() => {
+        console.log({
+            featuredItems
+        })
+    }, [featuredItems])
     /*
      * Generate 3 tailwind classes with random colors
      * for the featured card headings
@@ -40,7 +44,7 @@ export default function Featured() {
                     direction={{ initial: 'column', md: 'row' }}
                     grow="1"
                 >
-                    {featuredItems?.venue && (
+                    {featuredItems?.venue?.description && (
                         <Flex direction="column">
                             <Heading mb="2" ml="4">
                                 Featured <Text>Venue</Text>
@@ -50,10 +54,11 @@ export default function Featured() {
                                 heading={featuredItems.venue.name}
                                 link={featuredItems.venue?.website}
                                 headingClassname={c1 as string}
+                                content={featuredItems.venue.description}
                             />
                         </Flex>
                     )}
-                    {featuredItems?.event && (
+                    {featuredItems?.event?.description && (
                         <Flex direction="column">
                             <Heading mb="2" ml="4">
                                 Featured <Text>Event</Text>
@@ -63,10 +68,11 @@ export default function Featured() {
                                 heading={featuredItems.event.name}
                                 link={featuredItems.event?.website}
                                 headingClassname={c2 as string}
+                                content={featuredItems.event.description}
                             />
                         </Flex>
                     )}
-                    {featuredItems?.artist && (
+                    {featuredItems?.artist?.description && (
                         <Flex direction="column">
                             <Heading mb="2" ml="4">
                                 Featured <Text>Artist</Text>
@@ -76,6 +82,7 @@ export default function Featured() {
                                 heading={featuredItems.artist.name}
                                 link={featuredItems.artist?.website}
                                 headingClassname={c3 as string}
+                                content={featuredItems.artist.description}
                             />
                         </Flex>
                     )}
