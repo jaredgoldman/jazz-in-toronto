@@ -13,7 +13,7 @@ export default function ArtistForm() {
     const isAdmin = router.asPath.includes('admin')
     const { data } = api.artist.get.useQuery(
         { id: param },
-        { enabled: Boolean(param) }
+        { enabled: Boolean(param), staleTime: Infinity, cacheTime: Infinity }
     )
 
     const {

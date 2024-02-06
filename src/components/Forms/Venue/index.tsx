@@ -14,7 +14,7 @@ export default function VenueForm() {
     const param = router.query.id as string
     const { data } = api.venue.get.useQuery(
         { id: param },
-        { enabled: Boolean(param) }
+        { enabled: Boolean(param), staleTime: Infinity, cacheTime: Infinity }
     )
     const {
         submit,
@@ -30,8 +30,8 @@ export default function VenueForm() {
         if (data) {
             reset({
                 ...data,
-                instagramHandle: data.instagramHandle ?? '',
                 photoPath: data.photoPath ?? '',
+                instagramHandle: data.instagramHandle ?? '',
                 description: data.description ?? ''
             })
         }

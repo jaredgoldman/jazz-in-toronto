@@ -16,7 +16,7 @@ export default function EventForm(): JSX.Element {
     const isAdmin = router.asPath.includes('admin')
     const { data } = api.event.get.useQuery(
         { id: param },
-        { enabled: Boolean(param) }
+        { enabled: Boolean(param), staleTime: Infinity, cacheTime: Infinity }
     )
 
     const { submit, errors, control, venueData, artistData, reset } =

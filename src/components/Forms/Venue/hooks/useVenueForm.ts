@@ -96,6 +96,11 @@ export default function useVenueForm(
 
     const { startUpload } = useUploadThing({
         endpoint: 'uploadImage',
+        onClientUploadComplete: (data) => {
+            console.log({
+                data
+            })
+        },
         onUploadError: () => {
             toast({
                 title: 'Error',
@@ -107,9 +112,6 @@ export default function useVenueForm(
     })
 
     const onSubmit = async (values: VenueFormValues) => {
-        console.log({
-            values
-        })
         try {
             // Make coapy of values and convert phoneNumber to string
             let newValues = {
