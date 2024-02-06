@@ -62,6 +62,10 @@ export const artistRouter = createTRPCRouter({
         })
     }),
 
+    getAllAdmin: publicProcedure.query(({ ctx }) => {
+        return ctx.prisma.artist.findMany()
+    }),
+
     update: protectedProcedure
         .input(
             z.object({

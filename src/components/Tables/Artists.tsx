@@ -25,7 +25,8 @@ const columnHelper = createColumnHelper<Artist>()
 
 export function ArtistsTable() {
     const { toast } = useToast()
-    const { data, isFetched, isLoading, refetch } = api.artist.getAll.useQuery()
+    const { data, isFetched, isLoading, refetch } =
+        api.artist.getAllAdmin.useQuery()
     const router = useRouter()
     const { mutate: approveMutation } = api.artist.approve.useMutation()
     const { mutate: setFeaturedMutation } = api.artist.setFeatured.useMutation()
