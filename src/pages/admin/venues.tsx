@@ -11,7 +11,7 @@ export default function AdminVenues() {
                 <Heading align="center" size="9" mb="9">
                     Venues
                 </Heading>
-                  <VenuesTable/>
+                <VenuesTable />
             </>
         </AdminLayout>
     )

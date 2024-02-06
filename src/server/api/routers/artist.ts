@@ -5,7 +5,6 @@ import {
     publicProcedure,
     protectedProcedure
 } from '~/server/api/trpc'
-import { env } from '~/env.mjs'
 
 export const artistRouter = createTRPCRouter({
     create: publicProcedure
