@@ -16,9 +16,6 @@ const FeaturedCard = ({
     link,
     headingClassname
 }: Props) => {
-    console.log({
-        image
-    })
     return (
         <Card
             style={{

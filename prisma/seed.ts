@@ -1,6 +1,7 @@
 import { Venue } from '@prisma/client'
 import { prisma } from '../src/server/db'
 import { ArtistNameGenerator } from './artistNameGenerator'
+import { env } from '~/env.mjs'
 
 const artistNameGenerator = new ArtistNameGenerator()
 const seed = async () => {
@@ -9,6 +10,7 @@ const seed = async () => {
         name: artistNameGenerator.generateArtistName(),
         genre: 'jazz',
         photoPath: 'https://picsum.photos/200/300',
+        photoName: 'photo.jpg',
         instagramHandle: `@artist${i + 1}`,
         website: `https://google.com`
     }))
@@ -37,6 +39,7 @@ const seed = async () => {
 
         await prisma.event.createMany({ data: events })
     }
+    await generateAdmin()
 }
 
 const generateVenues = async () => {
@@ -46,6 +49,7 @@ const generateVenues = async () => {
             address: '194 Queen St W',
             city: 'Toronto',
             photoPath: 'https://picsum.photos/200/300',
+            photoName: 'photo.jpg',
             instagramHandle: '@therextoronto',
             website: 'therex.ca',
             latitude: 43.6509,
@@ -62,6 +66,7 @@ const generateVenues = async () => {
             address: '458 Queen St W',
             city: 'Toronto',
             photoPath: 'https://picsum.photos/200/300',
+            photoName: 'photo.jpg',
             instagramHandle: '@dromtaberna',
             website: 'dromtaberna.com',
             latitude: 43.6479,
@@ -78,6 +83,7 @@ const generateVenues = async () => {
             address: '251 Victoria St',
             city: 'Toronto',
             photoPath: 'https://picsum.photos/200/300',
+            photoName: 'photo.jpg',
             instagramHandle: '@jazzbistroto',
             website: 'jazzbistro.ca',
             latitude: 43.6559,
@@ -86,6 +92,14 @@ const generateVenues = async () => {
             eventsPath: '/performance_calendar',
             phoneNumber: '416-363-5299',
             facebookLink: 'https://www.facebook.com/JazzBistroTO'
+        }
+    })
+}
+
+const generateAdmin = async () => {
+    await prisma.admin.create({
+        data: {
+            email: env.EMAIL_SERVER_USER
         }
     })
 }

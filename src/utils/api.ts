@@ -11,7 +11,7 @@ import superjson from 'superjson'
 import { AppRouter } from '~/server/api/root'
 import { env } from '~/env.mjs'
 
-const getBaseUrl = () => {
+export const getBaseUrl = () => {
     if (typeof window !== 'undefined') return '' // browser should use relative url
     if (env.BASE_URL) return `https://${env.BASE_URL}` // SSR should use vercel url
     return `http://localhost:${process.env.PORT ?? 3000}` // dev SSR should use localhost

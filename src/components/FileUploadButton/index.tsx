@@ -1,10 +1,13 @@
-import { ChangeEvent, useState, useRef, useEffect } from 'react'
-import { FileData } from '~/types/data'
+import { ChangeEvent, useState, useRef, useEffect, useCallback } from 'react'
 import { Flex } from '@radix-ui/themes'
+import { FileData } from '~/types/data'
 
 interface Props {
     onUpload: (data: FileData) => Promise<void> | void
     label: string
+    name?: string
+    buttonComponent?: JSX.Element
+    isPostUpload?: boolean
 }
 
 const trimFileName = (originalFile: File) => {
@@ -15,33 +18,33 @@ const trimFileName = (originalFile: File) => {
     })
 }
 
-/*
- * Re-usable file upload component
- */
 const FileUploadButton = ({ onUpload, label }: Props) => {
-    const [selectedFile, setSelectedFile] = useState<FileData | null>(null)
-
+    const [file, setFile] = useState<FileData | undefined>()
     const fileInputRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
-        if (selectedFile) {
-            void onUpload(selectedFile)
-        }
-    }, [selectedFile, onUpload])
-
-    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0]
         if (file) {
-            const dataURL = URL.createObjectURL(file)
-            setSelectedFile({ file: trimFileName(file), dataURL })
+            void onUpload(file)
         }
-    }
+    }, [file, onUpload])
 
-    const handleButtonClick = () => {
+    const handleFileChange = useCallback(
+        (event: ChangeEvent<HTMLInputElement>) => {
+            const file = event.target.files?.[0]
+            if (file) {
+                const dataURL = URL.createObjectURL(file)
+                setFile({ file: trimFileName(file), dataURL })
+            }
+            event.target.value = ''
+        },
+        []
+    )
+
+    const handleButtonClick = useCallback(() => {
         if (fileInputRef.current) {
             fileInputRef.current.click()
         }
-    }
+    }, [fileInputRef])
 
     return (
         <>
@@ -52,7 +55,15 @@ const FileUploadButton = ({ onUpload, label }: Props) => {
                 ref={fileInputRef}
                 name="file"
             ></input>
-            <Flex onClick={handleButtonClick}>{label}</Flex>
+            <Flex
+                width="100%"
+                height="9"
+                justify="center"
+                align="center"
+                onClick={handleButtonClick}
+            >
+                {label}
+            </Flex>
         </>
     )
 }
