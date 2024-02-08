@@ -31,7 +31,7 @@ export default function Upload<T extends FieldValues>({
     label
 }: Props<T>) {
     const { setValue, watch, getValues } = useFormContext<{
-        fileData: File | undefined
+        fileData: FileData | undefined
         photoPath: string
         photoName: string
     }>()
@@ -44,7 +44,7 @@ export default function Upload<T extends FieldValues>({
 
     const handleUpload = useCallback(
         (data: FileData) => {
-            setValue('fileData', data.file)
+            setValue('fileData', data)
             setValue('photoPath', data.dataURL)
             setValue('photoName', data.file.name)
         },

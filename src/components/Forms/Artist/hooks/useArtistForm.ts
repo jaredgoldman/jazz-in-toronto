@@ -4,6 +4,7 @@ import { api } from '~/utils/api'
 import { useUploadThing } from '~/hooks/useUploadThing'
 import { MAX_FILE_SIZE } from '~/utils/constants'
 import { useToast } from '~/hooks/useToast'
+import { FileData } from '~/types/data'
 
 export interface ArtistFormValues {
     name: string
@@ -12,10 +13,7 @@ export interface ArtistFormValues {
     photoName?: string
     instagramHandle?: string
     website?: string
-    fileData?: {
-        file: File
-        dataURL: string
-    }
+    fileData?: FileData
     featured: boolean
     description?: string
 }
@@ -89,6 +87,9 @@ export default function useArtistForm(id = '') {
     })
 
     const onSubmit = async (values: ArtistFormValues) => {
+        console.log({
+            values
+        })
         try {
             let photoPath = values.photoPath
 
@@ -144,7 +145,7 @@ export default function useArtistForm(id = '') {
 
             toast({
                 title: 'Success',
-                message: 'Venue successfully submitted!'
+                message: 'Artist successfully submitted!'
             })
         } catch (e) {
             toast({

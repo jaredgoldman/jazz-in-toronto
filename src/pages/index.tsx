@@ -2,11 +2,8 @@ import RootLayout from '~/layouts/RootLayout'
 import Featured from '~/components/Featured'
 import { Flex, Heading, Link, Text } from '@radix-ui/themes'
 import Image from 'next/image'
-import { api } from '~/utils/api'
 
 export default function Home() {
-    const { data: featuredItems } = api.data.getFeatured.useQuery()
-
     return (
         <RootLayout pageTitle="Jazz In Toronto | Home">
             <Flex
@@ -65,17 +62,14 @@ export default function Home() {
                     </Link>
                 </Flex>
             </Flex>
-            {featuredItems &&
-            Object.values(featuredItems).filter(Boolean).length >= 3 ? (
-                <Flex
-                    justify="center"
-                    grow="1"
-                    className="bg-hero-pattern-2 bg-cover bg-center bg-no-repeat"
-                    pb="6"
-                >
-                    <Featured />
-                </Flex>
-            ) : null}
+            <Flex
+                justify="center"
+                grow="1"
+                className="bg-hero-pattern-2 bg-cover bg-center bg-no-repeat"
+                pb="6"
+            >
+                <Featured />
+            </Flex>
         </RootLayout>
     )
 }

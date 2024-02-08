@@ -12,8 +12,7 @@ export default function VenueForm() {
     const isAdmin = router.asPath.includes('admin')
     const param = router.query.id as string | undefined
 
-    const { submit, onSelectLocation, handleDeletePhoto, methods } =
-        useVenueForm(param)
+    const { submit, onSelectLocation, methods } = useVenueForm(param)
 
     const {
         control,
@@ -56,7 +55,6 @@ export default function VenueForm() {
                                 name="fileData"
                                 label="Upload a photo of your venue"
                                 control={control}
-                                onDeletePhoto={handleDeletePhoto}
                             />
                             <Input
                                 name="phoneNumber"
