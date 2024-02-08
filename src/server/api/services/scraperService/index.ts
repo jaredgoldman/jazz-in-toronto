@@ -203,6 +203,7 @@ export default class ScraperService {
                             createdAt,
                             updatedAt,
                             photoPath: null,
+                            photoName: null,
                             instagramHandle: null,
                             website: null,
                             featured: false,
