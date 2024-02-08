@@ -1,5 +1,6 @@
 import { prisma } from '~/server/db'
 import EmailService from '~/server/api/services/emailService'
+import { getBaseUrl } from '~/utils/api'
 import { env } from '~/env.mjs'
 
 export default async function handler() {
@@ -20,7 +21,7 @@ export default async function handler() {
             env.EMAIL_SERVER_USER,
             admin.email,
             'ACTION: Unapproved Events',
-            `There are ${unapprovedEvents} unapproved events, ${unapprovedVenues} unapproved venues, and ${unapprovedArtists} unapproved artists. Please visit ${env.BASE_URL}/admin to approve them.`
+            `There are ${unapprovedEvents} unapproved events, ${unapprovedVenues} unapproved venues, and ${unapprovedArtists} unapproved artists. Please visit ${getBaseUrl()}/admin to approve them.`
         )
     }
 }

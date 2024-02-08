@@ -1,7 +1,7 @@
+import { useEffect } from 'react'
 import { useUploadThing } from '~/hooks/useUploadThing'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
-import { Venue } from '~/types/data'
 import { FileData } from '~/types/data'
 import { MAX_FILE_SIZE } from '~/utils/constants'
 import { useToast } from '~/hooks/useToast'
@@ -16,23 +16,26 @@ export interface VenueFormValues {
     instagramHandle?: string
     fileData?: FileData
     photoPath?: string
+    photoName?: string
     phoneNumber: string
     featured: boolean
     description?: string
 }
 
-export default function useVenueForm(
-    id: string | undefined,
-    onAdd?: (data: Venue) => Promise<void>
-) {
+export default function useVenueForm(id = '') {
     const { toast } = useToast()
-    const { mutateAsync: venueMutation } = api.venue.create.useMutation()
-    const { mutateAsync: editVenueMutation } = api.venue.update.useMutation()
+    const createVenueMutation = api.venue.create.useMutation()
+    const editVenueMutation = api.venue.update.useMutation()
     const deleteVenuePhotoMutation = api.venue.deletePhoto.useMutation()
+    const useGetVenueQuery = api.venue.get.useQuery(
+        { id },
+        { enabled: Boolean(id), staleTime: Infinity, cacheTime: Infinity }
+    )
 
     const defaultValues: VenueFormValues = {
         name: '',
         photoPath: '',
+        photoName: '',
         latitude: 0,
         longitude: 0,
         city: '',
@@ -45,20 +48,22 @@ export default function useVenueForm(
         description: ''
     }
 
-    const {
-        handleSubmit,
-        setValue,
-        control,
-        getValues,
-        reset,
-        formState: { errors }
-    } = useForm<VenueFormValues>({
+    const methods = useForm<VenueFormValues>({
         defaultValues
     })
 
-    const onUpload = (data: FileData) => {
-        setValue('photoPath', data.dataURL)
-    }
+    useEffect(() => {
+        const data = useGetVenueQuery.data
+        if (useGetVenueQuery.data) {
+            methods.reset({
+                ...data,
+                instagramHandle: data?.instagramHandle ?? '',
+                photoPath: data?.photoPath ?? '',
+                photoName: (data?.photoName as string) ?? '',
+                description: data?.description ?? ''
+            })
+        }
+    }, [useGetVenueQuery.data, methods])
 
     const onSelectLocation = (
         address: string,
@@ -66,14 +71,14 @@ export default function useVenueForm(
         longitude: number,
         city: string
     ) => {
-        setValue('address', address)
-        setValue('latitude', latitude)
-        setValue('longitude', longitude)
-        setValue('city', city)
+        methods.setValue('address', address)
+        methods.setValue('latitude', latitude)
+        methods.setValue('longitude', longitude)
+        methods.setValue('city', city)
     }
 
     const handleDeletePhoto = async () => {
-        const currentValues = getValues()
+        const currentValues = methods.getValues()
         if (currentValues?.photoPath && id) {
             try {
                 await deleteVenuePhotoMutation.mutateAsync({
@@ -96,11 +101,6 @@ export default function useVenueForm(
 
     const { startUpload } = useUploadThing({
         endpoint: 'uploadImage',
-        onClientUploadComplete: (data) => {
-            console.log({
-                data
-            })
-        },
         onUploadError: () => {
             toast({
                 title: 'Error',
@@ -112,18 +112,30 @@ export default function useVenueForm(
     })
 
     const onSubmit = async (values: VenueFormValues) => {
+        console.log({
+            values
+        })
         try {
-            // Make coapy of values and convert phoneNumber to string
-            let newValues = {
-                ...values,
-                phoneNumber: values.phoneNumber.toString()
+            let photoPath = values.photoPath
+
+            // Photo has been removed
+            const photoRemoved =
+                !values.photoPath &&
+                !values.photoName &&
+                !values.fileData &&
+                useGetVenueQuery.data?.photoPath
+
+            // Photo has been changed
+            const photoChanged =
+                values.photoPath !== useGetVenueQuery.data?.photoPath
+
+            // In either case, we need to delete the photo
+            if (photoRemoved || photoChanged) {
+                await handleDeletePhoto()
             }
-            let addedVenue
-            // if we have fileData in form Input
-            // upload it first
-            //
+
+            // Upload image if it exists
             if (values?.fileData?.file) {
-                // First ensure file is not too large
                 if (values.fileData.file.size > MAX_FILE_SIZE) {
                     return toast({
                         title: 'Error',
@@ -132,27 +144,30 @@ export default function useVenueForm(
                         type: 'error'
                     })
                 }
+
                 const res = await startUpload([values.fileData.file])
+
                 if (res) {
-                    console.log({
-                        res
-                    })
-                    newValues = {
-                        ...values,
-                        photoPath: res[0]?.fileUrl
-                    }
+                    photoPath = res[0]?.fileUrl
                 }
             }
+
+            // Do final edit or create mutation
             if (id) {
-                addedVenue = await editVenueMutation({
+                await editVenueMutation.mutateAsync({
+                    ...values,
                     id,
-                    ...newValues
+                    photoPath
                 })
             } else {
-                addedVenue = await venueMutation(newValues)
+                await createVenueMutation.mutateAsync({
+                    ...values,
+                    photoPath
+                })
             }
-            // If we're in a modal form, handle accordingly
-            onAdd && (await onAdd(addedVenue))
+
+            await useGetVenueQuery.refetch()
+
             toast({
                 title: 'Success',
                 message: 'Venue successfully submitted!'
@@ -166,17 +181,13 @@ export default function useVenueForm(
         }
     }
 
-    const submit = handleSubmit(async (data) => await onSubmit(data))
+    const submit = methods.handleSubmit(async (data) => await onSubmit(data))
 
     return {
         handleDeletePhoto,
         startUpload,
-        errors,
-        control,
-        submit,
-        onUpload,
         onSelectLocation,
-        reset,
-        getValues
+        submit,
+        methods
     }
 }

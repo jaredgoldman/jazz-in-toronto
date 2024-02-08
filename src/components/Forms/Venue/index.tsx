@@ -5,37 +5,19 @@ import Upload from '../Fields/Upload'
 import { Heading, Flex, Box, Button } from '@radix-ui/themes'
 import useVenueForm from './hooks/useVenueForm'
 import { useRouter } from 'next/router'
-import { api } from '~/utils/api'
-import { useEffect } from 'react'
+import { FormProvider } from 'react-hook-form'
 
 export default function VenueForm() {
     const router = useRouter()
     const isAdmin = router.asPath.includes('admin')
-    const param = router.query.id as string
-    const { data } = api.venue.get.useQuery(
-        { id: param },
-        { enabled: Boolean(param), staleTime: Infinity, cacheTime: Infinity }
-    )
-    const {
-        submit,
-        errors,
-        control,
-        onSelectLocation,
-        onUpload,
-        handleDeletePhoto,
-        reset
-    } = useVenueForm(param)
+    const param = router.query.id as string | undefined
 
-    useEffect(() => {
-        if (data) {
-            reset({
-                ...data,
-                photoPath: data.photoPath ?? '',
-                instagramHandle: data.instagramHandle ?? '',
-                description: data.description ?? ''
-            })
-        }
-    }, [data, reset])
+    const { submit, onSelectLocation, methods } = useVenueForm(param)
+
+    const {
+        control,
+        formState: { errors }
+    } = methods
 
     return (
         <Flex
@@ -53,63 +35,62 @@ export default function VenueForm() {
                 >
                     {param ? 'Edit venue' : 'Submit venue'}
                 </Heading>
-                <Form.Root onSubmit={submit}>
-                    <Flex direction="column" gap="5">
-                        <Input
-                            name="name"
-                            label="Venue Name"
-                            error={errors.name}
-                            control={control}
-                            required="Please enter your venues name"
-                        />
-                        <PlacesAutocomplete
-                            name="address"
-                            initialValue={data?.address}
-                            label="Address"
-                            control={control}
-                            onSelect={onSelectLocation}
-                        />
-                        <Upload
-                            name="fileData"
-                            label="Upload a photo of your venue"
-                            onUpload={onUpload}
-                            control={control}
-                            onDeletePhoto={handleDeletePhoto}
-                        />
-                        <Input
-                            name="phoneNumber"
-                            label="Enter your venues phone number"
-                            error={errors.phoneNumber}
-                            control={control}
-                        />
-                        <Input
-                            name="instagramHandle"
-                            label="Instagram Handle"
-                            error={errors.instagramHandle}
-                            control={control}
-                        />
-                        <Input
-                            name="website"
-                            label="Venue Website"
-                            error={errors.website}
-                            control={control}
-                        />
-                        {isAdmin && (
+                <FormProvider {...methods}>
+                    <Form.Root onSubmit={submit}>
+                        <Flex direction="column" gap="5">
                             <Input
-                                name="description"
-                                label="Featured description"
-                                type="textarea"
-                                error={errors.description}
+                                name="name"
+                                label="Venue Name"
+                                error={errors.name}
+                                control={control}
+                                required="Please enter your venues name"
+                            />
+                            <PlacesAutocomplete
+                                name="address"
+                                label="Address"
+                                control={control}
+                                onSelect={onSelectLocation}
+                            />
+                            <Upload
+                                name="fileData"
+                                label="Upload a photo of your venue"
                                 control={control}
                             />
-                        )}
-                        <Form.Submit asChild>
-                            <Button className="w-full" variant="solid">
-                                Submit
-                            </Button>
-                        </Form.Submit>
-                    </Flex>
-                </Form.Root>
+                            <Input
+                                name="phoneNumber"
+                                label="Enter your venues phone number"
+                                error={errors.phoneNumber}
+                                control={control}
+                            />
+                            <Input
+                                name="instagramHandle"
+                                label="Instagram Handle"
+                                error={errors.instagramHandle}
+                                control={control}
+                            />
+                            <Input
+                                name="website"
+                                label="Venue Website"
+                                error={errors.website}
+                                control={control}
+                            />
+                            {isAdmin && (
+                                <Input
+                                    name="description"
+                                    label="Featured description"
+                                    type="textarea"
+                                    error={errors.description}
+                                    control={control}
+                                />
+                            )}
+                            <Form.Submit asChild>
+                                <Button className="w-full" variant="solid">
+                                    Submit
+                                </Button>
+                            </Form.Submit>
+                        </Flex>
+                    </Form.Root>
+                </FormProvider>
             </Box>
         </Flex>
     )

@@ -5,23 +5,25 @@ import {
     protectedProcedure
 } from '~/server/api/trpc'
 
+const venueValidation = z.object({
+    name: z.string(),
+    address: z.string(),
+    city: z.string(),
+    latitude: z.number(),
+    longitude: z.number(),
+    photoPath: z.string().optional(),
+    photoName: z.string().optional(),
+    featured: z.boolean().optional(),
+    instagramHandle: z.string().optional(),
+    website: z.string(),
+    active: z.boolean().optional(),
+    phoneNumber: z.string(),
+    description: z.string().optional()
+})
+
 export const venueRouter = createTRPCRouter({
     create: publicProcedure
-        .input(
-            z.object({
-                name: z.string(),
-                address: z.string(),
-                city: z.string(),
-                latitude: z.number(),
-                longitude: z.number(),
-                photoPath: z.string().optional(),
-                featured: z.boolean().optional(),
-                instagramHandle: z.string().optional(),
-                website: z.string(),
-                active: z.boolean().optional(),
-                phoneNumber: z.string()
-            })
-        )
+        .input(venueValidation)
         .mutation(({ ctx, input }) => {
             return ctx.prisma.venue.create({
                 data: input
@@ -29,23 +31,7 @@ export const venueRouter = createTRPCRouter({
         }),
 
     createMany: protectedProcedure
-        .input(
-            z.array(
-                z.object({
-                    name: z.string(),
-                    address: z.string(),
-                    city: z.string(),
-                    latitude: z.number(),
-                    longitude: z.number(),
-                    photoPath: z.string().nullable(),
-                    featured: z.boolean().optional(),
-                    instagramHandle: z.string().nullable(),
-                    website: z.string(),
-                    active: z.boolean().optional(),
-                    phoneNumber: z.string()
-                })
-            )
-        )
+        .input(z.array(venueValidation))
         .mutation(({ ctx, input }) => {
             return ctx.prisma.venue.createMany({
                 data: input
@@ -92,6 +78,7 @@ export const venueRouter = createTRPCRouter({
                 latitude: z.number().optional(),
                 longitude: z.number().optional(),
                 photoPath: z.string().optional(),
+                photoName: z.string().optional(),
                 featured: z.boolean().optional(),
                 instagramHandle: z.string().optional(),
                 website: z.string().optional(),

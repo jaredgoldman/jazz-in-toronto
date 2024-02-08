@@ -12,7 +12,6 @@ import {
     FieldValues,
     Path
 } from 'react-hook-form'
-import { useEffect } from 'react'
 
 interface Props<T extends FieldValues> {
     label: string
@@ -27,13 +26,11 @@ interface Props<T extends FieldValues> {
     error?: FieldError
     placeHolder?: string
     required?: boolean | string
-    initialValue?: string
 }
 
 export default function PlacesAutocomplete<T extends FieldValues>({
     label,
     name,
-    initialValue,
     placeHolder,
     onSelect,
     error,
@@ -61,11 +58,7 @@ export default function PlacesAutocomplete<T extends FieldValues>({
         },
         debounce: 300
     })
-    
-    useEffect(() => {
-        setValue(initialValue ?? '')
-    }, [initialValue, setValue])
-            
+
     const ref = useOnclickOutside(() => {
         // When user clicks outside of the component, we can dismiss
         // the searched suggestions by calling this method

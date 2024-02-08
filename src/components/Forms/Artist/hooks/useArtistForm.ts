@@ -1,32 +1,32 @@
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
 import { useUploadThing } from '~/hooks/useUploadThing'
-import { FileData, Artist } from '~/types/data'
 import { MAX_FILE_SIZE } from '~/utils/constants'
 import { useToast } from '~/hooks/useToast'
+import { FileData } from '~/types/data'
 
 export interface ArtistFormValues {
     name: string
     genre: string
     photoPath?: string
+    photoName?: string
     instagramHandle?: string
-    website: string
-    fileData?: {
-        file: File
-        dataURL: string
-    }
+    website?: string
+    fileData?: FileData
     featured: boolean
     description?: string
 }
 
-export default function useArtistForm(
-    id: string | undefined,
-    onAdd?: (values: Artist) => Promise<void>
-) {
+export default function useArtistForm(id = '') {
     const { toast } = useToast()
-    const { mutateAsync: artistMutation } = api.artist.create.useMutation()
-    const { mutateAsync: editArtistMutation } = api.artist.update.useMutation()
+    const createArtistMutation = api.artist.create.useMutation()
+    const editArtistMutation = api.artist.update.useMutation()
     const deleteartistPhotoMutation = api.artist.deletePhoto.useMutation()
+    const useGetArtistQuery = api.artist.get.useQuery(
+        { id },
+        { enabled: Boolean(id), staleTime: Infinity, cacheTime: Infinity }
+    )
 
     const defaultValues: ArtistFormValues = {
         name: '',
@@ -39,29 +39,30 @@ export default function useArtistForm(
         description: ''
     }
 
-    const {
-        handleSubmit,
-        control,
-        watch,
-        setValue,
-        getValues,
-        reset,
-        formState: { errors }
-    } = useForm<ArtistFormValues>({
+    const methods = useForm<ArtistFormValues>({
         defaultValues
     })
 
+    useEffect(() => {
+        const data = useGetArtistQuery.data
+        if (data) {
+            methods.reset({
+                ...data,
+                instagramHandle: data.instagramHandle ?? '',
+                genre: data.genre ?? '',
+                photoPath: data.photoPath ?? '',
+                photoName: (data?.photoName as string) ?? '',
+                website: data.website ?? '',
+                description: data.description ?? ''
+            })
+        }
+    }, [useGetArtistQuery.data, methods])
+
     const handleDeletePhoto = async () => {
-        const currentValues = getValues()
-        if (currentValues?.photoPath && id) {
+        if (id) {
             try {
                 await deleteartistPhotoMutation.mutateAsync({
                     id
-                })
-                toast({
-                    title: 'Success',
-                    message: 'Photo deleted successfully.',
-                    type: 'success'
                 })
             } catch {
                 toast({
@@ -86,43 +87,62 @@ export default function useArtistForm(
     })
 
     const onSubmit = async (values: ArtistFormValues) => {
+        console.log({
+            values
+        })
         try {
-            let newValues = values
-            let addedArtist
-            // if we have fileData in form Input
-            // upload it first
+            let photoPath = values.photoPath
+
+            // Photo has been removed
+            const photoRemoved =
+                !values.photoPath &&
+                !values.photoName &&
+                !values.fileData &&
+                useGetArtistQuery.data?.photoPath
+
+            // Photo has been changed
+            const photoChanged =
+                values.photoPath !== useGetArtistQuery.data?.photoPath
+
+            // In either case, we need to delete the photo
+            if (photoRemoved || photoChanged) {
+                await handleDeletePhoto()
+            }
+
+            // Upload image if it exists
             if (values?.fileData?.file) {
-                // First ensure file is not too large
                 if (values.fileData.file.size > MAX_FILE_SIZE) {
-                    toast({
+                    return toast({
                         title: 'Error',
                         message:
                             'File size is too large. Please upload a file smaller than 5MB.',
                         type: 'error'
                     })
-                    return
                 }
+
                 const res = await startUpload([values.fileData.file])
-                // Strip fileDate from the mutation data
-                delete values.fileData
+
                 if (res) {
-                    newValues = {
-                        ...values,
-                        photoPath: res[0]?.fileUrl
-                    }
+                    photoPath = res[0]?.fileUrl
                 }
             }
+
+            // Do final edit or create mutation
             if (id) {
-                addedArtist = await editArtistMutation({
+                await editArtistMutation.mutateAsync({
+                    ...values,
                     id,
-                    ...newValues
+                    photoPath
                 })
             } else {
-                addedArtist = await artistMutation(newValues)
+                await createArtistMutation.mutateAsync({
+                    ...values,
+                    photoPath
+                })
             }
-            // XXX: simplify this process, we shouldn't have to prop drill like this
-            // maybe pull the modal context into this form?
-            onAdd && (await onAdd(addedArtist))
+
+            await useGetArtistQuery.refetch()
+
             toast({
                 title: 'Success',
                 message: 'Artist successfully submitted!'
@@ -136,11 +156,7 @@ export default function useArtistForm(
         }
     }
 
-    const onUpload = (data: FileData) => {
-        setValue('photoPath', data.dataURL)
-    }
-
-    const submit = handleSubmit(async (data) => {
+    const submit = methods.handleSubmit(async (data) => {
         await onSubmit(data)
     })
 
@@ -148,11 +164,6 @@ export default function useArtistForm(
         handleDeletePhoto,
         startUpload,
         submit,
-        errors,
-        control,
-        watch,
-        onUpload,
-        getValues,
-        reset
+        methods
     }
 }

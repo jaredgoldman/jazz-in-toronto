@@ -16,7 +16,6 @@ model Admin {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   email     String   @unique
-  password  String
   name      String?
   role      String   @default("ADMIN")
 }
@@ -28,6 +27,7 @@ model Artist {
   name            String   @unique
   genre           String?
   photoPath       String?
+  photoName       String?
   instagramHandle String?
   featured        Boolean  @default(false)
   website         String?
@@ -47,6 +47,7 @@ model Venue {
   address         String
   city            String
   photoPath       String?
+  photoName       String?
   featured        Boolean     @default(false)
   instagramHandle String?
   facebookLink    String?

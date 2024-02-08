@@ -1,4 +1,3 @@
-// Libraries
 import { z } from 'zod'
 import {
     createTRPCRouter,
@@ -6,18 +5,19 @@ import {
     protectedProcedure
 } from '~/server/api/trpc'
 
+const artistValidation = z.object({
+    name: z.string(),
+    genre: z.string().optional(),
+    photoPath: z.string().optional(),
+    photoName: z.string().optional(),
+    featured: z.boolean().optional(),
+    instagramHandle: z.string().optional(),
+    website: z.string().optional()
+})
+
 export const artistRouter = createTRPCRouter({
     create: publicProcedure
-        .input(
-            z.object({
-                name: z.string(),
-                genre: z.string().optional(),
-                photoPath: z.string().optional(),
-                featured: z.boolean().optional(),
-                instagramHandle: z.string().optional(),
-                website: z.string().optional()
-            })
-        )
+        .input(artistValidation)
         .mutation(({ ctx, input }) => {
             return ctx.prisma.artist.create({
                 data: input
@@ -25,18 +25,7 @@ export const artistRouter = createTRPCRouter({
         }),
 
     createMany: protectedProcedure
-        .input(
-            z.array(
-                z.object({
-                    name: z.string(),
-                    genre: z.string().nullable(),
-                    photoPath: z.string().nullable(),
-                    featured: z.boolean().optional(),
-                    instagramHandle: z.string().nullable().optional(),
-                    website: z.string().nullable().optional()
-                })
-            )
-        )
+        .input(z.array(artistValidation))
         .mutation(({ ctx, input }) => {
             return ctx.prisma.artist.createMany({
                 data: input
@@ -72,6 +61,7 @@ export const artistRouter = createTRPCRouter({
                 name: z.string().optional(),
                 genre: z.string().optional(),
                 photoPath: z.string().optional(),
+                photoName: z.string().optional(),
                 featured: z.boolean().optional(),
                 instagramHandle: z.string().optional(),
                 website: z.string().optional(),

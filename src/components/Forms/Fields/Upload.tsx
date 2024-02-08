@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import FileUploadButton from '~/components/FileUploadButton'
 import { Flex, Button, Text } from '@radix-ui/themes'
 import * as Form from '@radix-ui/react-form'
@@ -8,17 +7,17 @@ import {
     Path,
     FieldError,
     Control,
-    Controller
+    Controller,
+    useFormContext
 } from 'react-hook-form'
 import { TrashIcon } from '@radix-ui/react-icons'
+import { useCallback } from 'react'
 
 interface Props<T extends FieldValues> {
     name: Path<T>
-    onUpload: (data: FileData) => void
     control: Control<T>
     label?: string
     buttonLabel?: string
-    onDeletePhoto?: () => Promise<void>
     error?: FieldError
     required?: boolean | string
 }
@@ -26,23 +25,34 @@ interface Props<T extends FieldValues> {
 export default function Upload<T extends FieldValues>({
     name,
     buttonLabel = 'Upload',
-    onDeletePhoto,
     required,
     control,
     error,
-    onUpload,
     label
 }: Props<T>) {
-    const [fileData, setFileData] = useState<FileData | null>()
+    const { setValue, watch, getValues } = useFormContext<{
+        fileData: FileData | undefined
+        photoPath: string
+        photoName: string
+    }>()
 
-    const removeFile = async () => {
-        // If a photoPath and updatemutation func were provided
-        setFileData(null)
-        // we're editing and we can call the mutation to remove the photo
-        if (onDeletePhoto) {
-            await onDeletePhoto()
-        }
-    }
+    const removeFile = useCallback(() => {
+        setValue('fileData', undefined)
+        setValue('photoPath', '')
+        setValue('photoName', '')
+    }, [setValue])
+
+    const handleUpload = useCallback(
+        (data: FileData) => {
+            setValue('fileData', data)
+            setValue('photoPath', data.dataURL)
+            setValue('photoName', data.file.name)
+        },
+        [setValue]
+    )
+
+    const watchedFileData = watch('fileData')
+    const watchedPhotoPath = watch('photoPath')
 
     return (
         <Controller
@@ -50,11 +60,8 @@ export default function Upload<T extends FieldValues>({
             rules={{ required }}
             name={name}
             render={({ field }) => {
-                if (field.value) {
-                    setFileData(field.value as FileData)
-                }
                 return (
-                    <Form.Field name={name}>
+                    <Form.Field {...field}>
                         <Form.Label>{label}</Form.Label>
                         <Flex
                             width="100%"
@@ -63,23 +70,21 @@ export default function Upload<T extends FieldValues>({
                             py="6"
                             className="cursor-pointer rounded-md border-2 border-gray-600"
                         >
-                            {!fileData ? (
+                            {!watchedPhotoPath && !watchedFileData ? (
                                 <FileUploadButton
-                                    onUpload={(data: FileData) => {
-                                        setFileData(data)
-                                        onUpload(data)
-                                    }}
+                                    onUpload={handleUpload}
                                     label={buttonLabel}
                                 />
                             ) : (
                                 <Flex direction="column">
                                     <Text>File uploaded</Text>
                                     <Flex align="center" justify="between">
-                                        <Text>{fileData.file.name}</Text>
+                                        <Text>{getValues('photoName')}</Text>
                                         <Button
                                             variant="ghost"
                                             size="1"
                                             onClick={removeFile}
+                                            type="button"
                                         >
                                             <TrashIcon />
                                         </Button>
