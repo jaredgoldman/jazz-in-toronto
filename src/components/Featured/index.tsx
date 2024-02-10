@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import Loading from '../Loading'
 import FeaturedCard from './FeaturedCard'
-import { Flex, Heading, Text } from '@radix-ui/themes'
+import { Flex, Heading, Text, Grid } from '@radix-ui/themes'
 import { api } from '~/utils/api'
 import { getRandomHeadingColor } from './utils'
 
@@ -28,20 +28,22 @@ export default function Featured() {
             grow="1"
             gap="9"
             pt="9"
-            px="6"
+            px={{ initial: '1', sm: '6' }}
+            mx={{ initial: '1', sm: '0' }}
             mb="6"
         >
             <Heading size="9" align="center" mb="5">
                 Our Favourites
             </Heading>
             {featuredItems && !isLoading ? (
-                <Flex
+                <Grid
                     gap="7"
-                    direction={{ initial: 'column', md: 'row' }}
-                    grow="1"
+                    columns={{ initial: '1', md: '3' }}
+                    rows={{ initial: '3', md: '1' }}
+                    align="center"
                 >
-                    {featuredItems?.venue?.description && (
-                        <Flex direction="column">
+                    {featuredItems?.venue && (
+                        <Flex direction="column" width="100%">
                             <Heading mb="2" ml="4">
                                 Featured <Text>Venue</Text>
                             </Heading>
@@ -54,7 +56,7 @@ export default function Featured() {
                             />
                         </Flex>
                     )}
-                    {featuredItems?.event?.description && (
+                    {featuredItems?.event && (
                         <Flex direction="column" grow="1">
                             <Heading mb="2" ml="4">
                                 Featured <Text>Event</Text>
@@ -68,7 +70,7 @@ export default function Featured() {
                             />
                         </Flex>
                     )}
-                    {featuredItems?.artist?.description && (
+                    {featuredItems?.artist && (
                         <Flex direction="column" grow="1">
                             <Heading mb="2" ml="4">
                                 Featured <Text>Artist</Text>
@@ -82,7 +84,7 @@ export default function Featured() {
                             />
                         </Flex>
                     )}
-                </Flex>
+                </Grid>
             ) : (
                 <Loading />
             )}
