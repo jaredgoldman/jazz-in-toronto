@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
 import { useUploadThing } from '~/hooks/useUploadThing'
@@ -27,6 +27,20 @@ export default function useArtistForm(id = '') {
         { id },
         { enabled: Boolean(id), staleTime: Infinity, cacheTime: Infinity }
     )
+
+    const isLoading = useMemo(() => {
+        return (
+            editArtistMutation.isLoading ||
+            createArtistMutation.isLoading ||
+            useGetArtistQuery.isFetching ||
+            deleteartistPhotoMutation.isLoading
+        )
+    }, [
+        editArtistMutation.isLoading,
+        createArtistMutation.isLoading,
+        useGetArtistQuery.isFetching,
+        deleteartistPhotoMutation.isLoading
+    ])
 
     const defaultValues: ArtistFormValues = {
         name: '',
@@ -161,9 +175,8 @@ export default function useArtistForm(id = '') {
     })
 
     return {
-        handleDeletePhoto,
-        startUpload,
         submit,
-        methods
+        methods,
+        isLoading
     }
 }

@@ -4,6 +4,7 @@ import { Artist, Venue } from '~/types/data'
 import { isArtist, isVenue } from '~/utils/typeguards'
 import { parseISO } from 'date-fns'
 import { useToast } from '~/hooks/useToast'
+import { useMemo } from 'react'
 
 export interface EventFormValues {
     name: string
@@ -46,10 +47,15 @@ export default function useEventForm(id?: string) {
         isLoading: artistsLoading
     } = api.artist.getAllAdmin.useQuery()
 
-    const { mutateAsync: eventMutation } = api.event.create.useMutation()
-    const { mutateAsync: editEventMutation } = api.event.update.useMutation()
+    const { mutateAsync: eventMutation, isLoading: createLoading } =
+        api.event.create.useMutation()
+    const { mutateAsync: editEventMutation, isLoading: updateLoading } =
+        api.event.update.useMutation()
 
-    const isLoading = venuesLoading || artistsLoading
+    const isLoading = useMemo(
+        () => venuesLoading || artistsLoading || createLoading || updateLoading,
+        [venuesLoading, artistsLoading, createLoading, updateLoading]
+    )
     const defaultValues: EventFormValues = {
         name: '',
         startDate: toDateTimeLocal(new Date()),
@@ -133,15 +139,9 @@ export default function useEventForm(id?: string) {
         venueData,
         artistData,
         submit,
-        onAddArtist,
-        onAddVenue,
         isLoading,
-        register,
         errors,
-        setValue,
-        getValues,
         control,
-        getSpecificArtistData,
         reset
     }
 }

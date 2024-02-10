@@ -19,7 +19,7 @@ export default function EventForm(): JSX.Element {
         { enabled: Boolean(param) }
     )
 
-    const { submit, errors, control, venueData, artistData, reset } =
+    const { submit, errors, control, venueData, artistData, reset, isLoading } =
         useEventForm(param)
 
     useEffect(() => {
@@ -144,7 +144,11 @@ export default function EventForm(): JSX.Element {
                                 />
                             )}
                             <Form.Submit asChild>
-                                <Button className="w-full" variant="solid">
+                                <Button
+                                    className="w-full"
+                                    variant="solid"
+                                    disabled={isLoading}
+                                >
                                     Submit
                                 </Button>
                             </Form.Submit>
