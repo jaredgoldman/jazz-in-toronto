@@ -23,7 +23,7 @@ export function HeaderDrawer({ headerType }: Props) {
                     width: '50%',
                     maxWidth: '30rem',
                     minHeight: '100%',
-                    display: "flex"
+                    display: 'flex'
                 }}
             >
                 <Flex direction="column" justify="between" grow="1">

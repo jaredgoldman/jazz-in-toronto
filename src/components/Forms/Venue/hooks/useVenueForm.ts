@@ -55,12 +55,16 @@ export default function useVenueForm(id = '') {
     useEffect(() => {
         const data = useGetVenueQuery.data
         if (useGetVenueQuery.data) {
+            console.log({
+                data
+            })
             methods.reset({
                 ...data,
                 instagramHandle: data?.instagramHandle ?? '',
                 photoPath: data?.photoPath ?? '',
                 photoName: (data?.photoName as string) ?? '',
                 description: data?.description ?? ''
+
             })
         }
     }, [useGetVenueQuery.data, methods])
@@ -112,9 +116,6 @@ export default function useVenueForm(id = '') {
     })
 
     const onSubmit = async (values: VenueFormValues) => {
-        console.log({
-            values
-        })
         try {
             let photoPath = values.photoPath
 

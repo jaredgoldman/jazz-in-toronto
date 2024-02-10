@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import usePlacesAutocomplete, {
     getGeocode,
     getLatLng
@@ -10,7 +11,8 @@ import {
     Controller,
     FieldError,
     FieldValues,
-    Path
+    Path,
+    useFormContext
 } from 'react-hook-form'
 
 interface Props<T extends FieldValues> {
@@ -37,6 +39,7 @@ export default function PlacesAutocomplete<T extends FieldValues>({
     control,
     required = false
 }: Props<T>): JSX.Element {
+    const { getFieldState, watch } = useFormContext<{ address: string }>()
     const {
         ready,
         value,
@@ -58,6 +61,12 @@ export default function PlacesAutocomplete<T extends FieldValues>({
         },
         debounce: 300
     })
+
+    const watchedAddress = watch('address')
+
+    useEffect(() => {
+        if (watchedAddress) setValue(watchedAddress)
+    }, [watchedAddress, setValue])
 
     const ref = useOnclickOutside(() => {
         // When user clicks outside of the component, we can dismiss
@@ -129,7 +138,9 @@ export default function PlacesAutocomplete<T extends FieldValues>({
                         />
                     </Form.Control>
                     {/* We can use the "status" to decide whether we should display the dropdown or not */}
-                    {status === 'OK' && <ul>{renderSuggestions()}</ul>}
+                    {status === 'OK' && watch('address') !== value && (
+                        <ul>{renderSuggestions()}</ul>
+                    )}
                     {error && (
                         <Text size="2" color="red">
                             {error.message}
