@@ -19,9 +19,17 @@ export default function EventForm(): JSX.Element {
         { enabled: Boolean(param) }
     )
 
-    const { submit, errors, control, venueData, artistData, reset, isLoading } =
-        useEventForm(param)
+    const {
+        submit,
+        errors,
+        control,
+        venueData,
+        artistData,
+        reset,
+        isSubmitting
+    } = useEventForm(param)
 
+    // TODO: Factor into the useEventForm hook
     useEffect(() => {
         if (data) {
             delete (data as Partial<EventWithArtistVenue>).id
@@ -53,7 +61,7 @@ export default function EventForm(): JSX.Element {
                         align={{ initial: 'center', xs: 'left' }}
                         mb="6"
                     >
-                        {isAdmin ? 'Edit Event' : 'Submit Event'}
+                        {isAdmin ? 'Edit Event' : 'Submit a Gig'}
                     </Heading>
                     {isAdmin ?? (
                         <Callout.Root my="6">
@@ -147,7 +155,7 @@ export default function EventForm(): JSX.Element {
                                 <Button
                                     className="w-full"
                                     variant="solid"
-                                    disabled={isLoading}
+                                    disabled={isSubmitting}
                                 >
                                     Submit
                                 </Button>

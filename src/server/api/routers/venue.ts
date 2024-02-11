@@ -49,11 +49,11 @@ export const venueRouter = createTRPCRouter({
         }),
 
     getAll: publicProcedure
-        .input(z.object({ showUnapproved: z.boolean() }))
+        .input(z.object({ showUnapproved: z.boolean() }).optional())
         .query(({ ctx, input }) => {
             return ctx.prisma.venue.findMany({
                 where: {
-                    approved: input.showUnapproved ? false : true
+                    approved: input?.showUnapproved ? false : true
                 }
             })
         }),

@@ -35,27 +35,21 @@ export const toDateTimeLocal = (date: Date): string => {
 export default function useEventForm(id?: string) {
     const { toast } = useToast()
 
-    const {
-        data: venueData,
-        refetch: refetchVenues,
-        isLoading: venuesLoading
-    } = api.venue.getAllAdmin.useQuery()
-
-    const {
-        data: artistData,
-        refetch: refetchArtists,
-        isLoading: artistsLoading
-    } = api.artist.getAllAdmin.useQuery()
-
-    const { mutateAsync: eventMutation, isLoading: createLoading } =
-        api.event.create.useMutation()
-    const { mutateAsync: editEventMutation, isLoading: updateLoading } =
-        api.event.update.useMutation()
+    const getAllVenueQuery = api.venue.getAll.useQuery()
+    const getAllArtistQuery = api.artist.getAll.useQuery()
+    const createEventMutation = api.event.create.useMutation()
+    const updateEventMutation = api.event.update.useMutation()
 
     const isLoading = useMemo(
-        () => venuesLoading || artistsLoading || createLoading || updateLoading,
-        [venuesLoading, artistsLoading, createLoading, updateLoading]
+        () => getAllVenueQuery.isLoading || getAllArtistQuery.isLoading,
+        [getAllVenueQuery.isLoading, getAllArtistQuery.isLoading]
     )
+
+    const isSubmitting = useMemo(
+        () => createEventMutation.isLoading || updateEventMutation.isLoading,
+        [createEventMutation.isLoading, updateEventMutation.isLoading]
+    )
+
     const defaultValues: EventFormValues = {
         name: '',
         startDate: toDateTimeLocal(new Date()),
@@ -69,11 +63,8 @@ export default function useEventForm(id?: string) {
     }
 
     const {
-        register,
         handleSubmit,
-        setValue,
         control,
-        getValues,
         reset,
         formState: { errors }
     } = useForm<EventFormValues>({ defaultValues })
@@ -81,14 +72,14 @@ export default function useEventForm(id?: string) {
     const onSubmit = async (values: EventFormValues) => {
         try {
             if (id) {
-                await editEventMutation({
+                await updateEventMutation.mutateAsync({
                     ...values,
                     id,
                     startDate: parseISO(values.startDate),
                     endDate: parseISO(values.endDate)
                 })
-            } else if (eventMutation) {
-                await eventMutation({
+            } else {
+                await createEventMutation.mutateAsync({
                     ...values,
                     startDate: parseISO(values.startDate),
                     endDate: parseISO(values.endDate)
@@ -107,38 +98,15 @@ export default function useEventForm(id?: string) {
         }
     }
 
-    // TODO: Factor into single function
-    const onAddArtist = async (value: Artist | Venue) => {
-        if (isArtist(value)) {
-            await refetchArtists()
-            setValue('artistId', value.id)
-        }
-    }
-    const onAddVenue = async (value: Artist | Venue) => {
-        if (isVenue(value)) {
-            await refetchVenues()
-            setValue('venueId', value.id)
-        }
-    }
-
-    // Grab the specific artist data from the artist data array
-    // Helpful when editing an event in state in the eventScraper
-    const getSpecificArtistData = () => {
-        if (artistData) {
-            return artistData.filter(
-                (artist) => artist.id === getValues().artistId
-            )[0]
-        }
-    }
-
     const submit = handleSubmit(async (data) => {
         await onSubmit(data)
     })
 
     return {
-        venueData,
-        artistData,
+        venueData: getAllVenueQuery.data ?? [],
+        artistData: getAllArtistQuery.data ?? [],
         submit,
+        isSubmitting,
         isLoading,
         errors,
         control,
