@@ -29,7 +29,9 @@ export default function VenueCard({ venue }: Props) {
                 </Flex>
             )}
             <Flex gap="2" direction="column" justify="between">
-                <Heading size="8">{venue.name}</Heading>
+                <Heading size="8" mb="1">
+                    {venue.name}
+                </Heading>
                 <Flex direction="column" gap="1" mb="3">
                     {venue.description && (
                         <Flex className="max-w-xl">
