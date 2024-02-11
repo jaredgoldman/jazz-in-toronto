@@ -23,7 +23,7 @@ export default function useArtistForm(id = '') {
     const createArtistMutation = api.artist.create.useMutation()
     const editArtistMutation = api.artist.update.useMutation()
     const deleteartistPhotoMutation = api.artist.deletePhoto.useMutation()
-    const useGetArtistQuery = api.artist.get.useQuery(
+    const getArtistQuery = api.artist.get.useQuery(
         { id },
         { enabled: Boolean(id), staleTime: Infinity, cacheTime: Infinity }
     )
@@ -32,13 +32,13 @@ export default function useArtistForm(id = '') {
         return (
             editArtistMutation.isLoading ||
             createArtistMutation.isLoading ||
-            useGetArtistQuery.isFetching ||
+            getArtistQuery.isFetching ||
             deleteartistPhotoMutation.isLoading
         )
     }, [
         editArtistMutation.isLoading,
         createArtistMutation.isLoading,
-        useGetArtistQuery.isFetching,
+        getArtistQuery.isFetching,
         deleteartistPhotoMutation.isLoading
     ])
 
@@ -58,7 +58,7 @@ export default function useArtistForm(id = '') {
     })
 
     useEffect(() => {
-        const data = useGetArtistQuery.data
+        const data = getArtistQuery.data
         if (data) {
             methods.reset({
                 ...data,
@@ -70,7 +70,7 @@ export default function useArtistForm(id = '') {
                 description: data.description ?? ''
             })
         }
-    }, [useGetArtistQuery.data, methods])
+    }, [getArtistQuery.data, methods])
 
     const handleDeletePhoto = async () => {
         if (id) {

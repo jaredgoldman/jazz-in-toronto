@@ -1,50 +1,19 @@
 import * as Form from '@radix-ui/react-form'
 import { Input, Select } from '../Fields'
 import { Flex, Button, Heading, Box, Callout } from '@radix-ui/themes'
-import useEventForm, { toDateTimeLocal } from './hooks/useEventForm'
+import useEventForm from './hooks/useEventForm'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
 import Link from '~/components/Link'
 import { useRouter } from 'next/router'
-import { api } from '~/utils/api'
-import { useEffect } from 'react'
-import { EventWithArtistVenue } from '~/types/data'
 import Loading from '~/components/Loading'
 
 export default function EventForm(): JSX.Element {
     const router = useRouter()
     const param = router.query.id as string
     const isAdmin = router.asPath.includes('admin')
-    const { data } = api.event.get.useQuery(
-        { id: param },
-        { enabled: Boolean(param) }
-    )
 
-    const {
-        submit,
-        errors,
-        control,
-        venueData,
-        artistData,
-        reset,
-        isSubmitting
-    } = useEventForm(param)
-
-    // TODO: Factor into the useEventForm hook
-    useEffect(() => {
-        if (data) {
-            delete (data as Partial<EventWithArtistVenue>).id
-            reset({
-                ...data,
-                instagramHandle: data.instagramHandle ?? '',
-                website: data.website ?? '',
-                description: data.description ?? '',
-                startDate: toDateTimeLocal(data.startDate),
-                endDate: toDateTimeLocal(data.endDate),
-                artistId: data.artistId,
-                venueId: data.venueId
-            })
-        }
-    }, [data, reset])
+    const { submit, errors, control, venueData, artistData, isSubmitting } =
+        useEventForm(param)
 
     return (
         <Flex

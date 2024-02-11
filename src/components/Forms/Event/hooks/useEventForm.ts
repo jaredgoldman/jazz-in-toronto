@@ -1,10 +1,10 @@
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
-import { Artist, Venue } from '~/types/data'
-import { isArtist, isVenue } from '~/utils/typeguards'
 import { parseISO } from 'date-fns'
 import { useToast } from '~/hooks/useToast'
 import { useMemo } from 'react'
+import { EventWithArtistVenue } from '~/types/data'
 
 export interface EventFormValues {
     name: string
@@ -32,17 +32,28 @@ export const toDateTimeLocal = (date: Date): string => {
     return `${formattedDate}T${formattedTime}`
 }
 
-export default function useEventForm(id?: string) {
+export default function useEventForm(id = '') {
     const { toast } = useToast()
 
     const getAllVenueQuery = api.venue.getAll.useQuery()
     const getAllArtistQuery = api.artist.getAll.useQuery()
     const createEventMutation = api.event.create.useMutation()
     const updateEventMutation = api.event.update.useMutation()
+    const getEventQuery = api.event.get.useQuery(
+        { id },
+        { enabled: Boolean(id) }
+    )
 
     const isLoading = useMemo(
-        () => getAllVenueQuery.isLoading || getAllArtistQuery.isLoading,
-        [getAllVenueQuery.isLoading, getAllArtistQuery.isLoading]
+        () =>
+            getAllVenueQuery.isLoading ||
+            getAllArtistQuery.isLoading ||
+            getEventQuery.isFetching,
+        [
+            getAllVenueQuery.isLoading,
+            getAllArtistQuery.isLoading,
+            getEventQuery.isFetching
+        ]
     )
 
     const isSubmitting = useMemo(
@@ -68,6 +79,23 @@ export default function useEventForm(id?: string) {
         reset,
         formState: { errors }
     } = useForm<EventFormValues>({ defaultValues })
+
+    useEffect(() => {
+        const data = getEventQuery.data
+        if (data) {
+            delete (data as Partial<EventWithArtistVenue>).id
+            reset({
+                ...data,
+                instagramHandle: data.instagramHandle ?? '',
+                website: data.website ?? '',
+                description: data.description ?? '',
+                startDate: toDateTimeLocal(data.startDate),
+                endDate: toDateTimeLocal(data.endDate),
+                artistId: data.artistId,
+                venueId: data.venueId
+            })
+        }
+    }, [getEventQuery.data, reset])
 
     const onSubmit = async (values: EventFormValues) => {
         try {
