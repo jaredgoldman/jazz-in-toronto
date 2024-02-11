@@ -11,6 +11,8 @@ export type Props<TData> = {
     header: Header<TData, unknown>
 }
 
+// TODO: If the conditional logic in this component gets too complex, consider
+// creating seperate components for each filter type
 export function HeaderCell<TData>({ header }: Props<TData>) {
     const sortingIcons = {
         asc: <CaretUpIcon />,
@@ -25,7 +27,7 @@ export function HeaderCell<TData>({ header }: Props<TData>) {
             } min-w-[100px]`}
         >
             <Flex direction="column" gap="2">
-                <Flex align="center" gap="2" ml="1">
+                <Flex align="center" gap="2" ml="2">
                     {header.isPlaceholder
                         ? null
                         : flexRender(
