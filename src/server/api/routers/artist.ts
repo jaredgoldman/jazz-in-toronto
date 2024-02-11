@@ -47,7 +47,7 @@ export const artistRouter = createTRPCRouter({
         .query(({ ctx, input }) => {
             return ctx.prisma.artist.findMany({
                 where: {
-                    approved: input?.showUnapproved ? false : true
+                    approved: input?.showUnapproved ? undefined : true
                 }
             })
         }),

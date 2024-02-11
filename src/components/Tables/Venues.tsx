@@ -187,8 +187,7 @@ export function VenuesTable() {
                         onDelete={() => handleDelete(row.original)}
                         onApprove={() => handleApprove(row.original)}
                     />
-                ),
-                header: 'Edit'
+                )
             })
         ],
         [handleDelete, handleEditClick, handleToggleFeatured, handleApprove]

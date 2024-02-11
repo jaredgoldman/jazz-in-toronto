@@ -187,8 +187,7 @@ export function ArtistsTable() {
                         onDelete={() => handleDelete(row.original)}
                         onApprove={() => hanldeApprove(row.original)}
                     />
-                ),
-                header: 'Edit'
+                )
             })
         ],
         [handleDelete, handleEditClick, handleToggleFeatured, hanldeApprove]

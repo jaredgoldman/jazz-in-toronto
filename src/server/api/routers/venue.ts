@@ -53,7 +53,7 @@ export const venueRouter = createTRPCRouter({
         .query(({ ctx, input }) => {
             return ctx.prisma.venue.findMany({
                 where: {
-                    approved: input?.showUnapproved ? false : true
+                    approved: input?.showUnapproved ? undefined : true
                 }
             })
         }),

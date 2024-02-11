@@ -7,7 +7,7 @@ import Link from '~/components/Link'
 import { useRouter } from 'next/router'
 import Loading from '~/components/Loading'
 
-export default function EventForm(): JSX.Element {
+export default function EventForm() {
     const router = useRouter()
     const param = router.query.id as string
     const isAdmin = router.asPath.includes('admin')
@@ -30,7 +30,7 @@ export default function EventForm(): JSX.Element {
                         align={{ initial: 'center', xs: 'left' }}
                         mb="6"
                     >
-                        {isAdmin ? 'Edit Event' : 'Submit a Gig'}
+                        {isAdmin ? 'Edit Event' : 'Submit your gig/event'}
                     </Heading>
                     {isAdmin ?? (
                         <Callout.Root my="6">

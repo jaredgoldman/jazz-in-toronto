@@ -34,14 +34,14 @@ export default function Venues(): JSX.Element {
                 <Flex
                     direction="column"
                     mb="6"
-                    p={{initial: "4", xs: "6"}}
+                    p={{ initial: '4', xs: '6' }}
                     align="start"
-                    className='xs:min-w-none lg:min-w-[70rem]'
+                    className="xs:min-w-none lg:min-w-[70rem]"
                 >
                     <Heading mb="8" size="9">
                         Venues
                     </Heading>
-                    <Flex direction="column" gap="5">
+                    <Flex direction="column" gap="9">
                         {venueCards}
                     </Flex>
                 </Flex>
