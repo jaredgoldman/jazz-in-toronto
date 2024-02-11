@@ -32,16 +32,22 @@ export function HeaderCell<TData>({ header }: Props<TData>) {
                               header.column.columnDef.header,
                               header.getContext()
                           )}
-                    <Box>
-                        {sortingIcons[
-                            header.column.getIsSorted() as 'desc' | 'asc'
-                        ] ?? <CaretSortIcon />}
-                    </Box>
+                    {header.column.getCanSort() && (
+                        <Box>
+                            {sortingIcons[
+                                header.column.getIsSorted() as 'desc' | 'asc'
+                            ] ?? <CaretSortIcon />}
+                        </Box>
+                    )}
                 </Flex>
                 {header.column.getCanFilter() && (
                     <TextField.Root>
                         <TextField.Input
-                            type="text"
+                            type={
+                                header.column.columnDef.filterFn === 'date'
+                                    ? 'date'
+                                    : 'text'
+                            }
                             value={
                                 (header.column.getFilterValue() as string) ?? ''
                             }

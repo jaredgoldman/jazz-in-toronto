@@ -9,6 +9,17 @@ export default function Featured() {
     const { data: featuredItems, isLoading } = api.data.getFeatured.useQuery()
 
     /*
+     * Check if there are actually any featured items
+     */
+    const hasFeaturedItems = useMemo(() => {
+        return (
+            featuredItems?.venue ||
+            featuredItems?.event ||
+            featuredItems?.artist
+        )
+    }, [featuredItems])
+
+    /*
      * Generate 3 tailwind classes with random colors
      * for the featured card headings
      */
@@ -32,62 +43,63 @@ export default function Featured() {
             mx={{ initial: '1', sm: '0' }}
             mb="6"
         >
-            <Heading size="9" align="center" mb="5">
-                Our Favourites
-            </Heading>
-            {featuredItems && !isLoading ? (
-                <Grid
-                    gap="7"
-                    columns={{ initial: '1', md: '3' }}
-                    rows={{ initial: '3', md: '1' }}
-                    align="center"
-                >
-                    {featuredItems?.venue && (
-                        <Flex direction="column" width="100%">
-                            <Heading mb="2" ml="4">
-                                Featured <Text>Venue</Text>
-                            </Heading>
-                            <FeaturedCard
-                                image={featuredItems.venue?.photoPath}
-                                heading={featuredItems.venue.name}
-                                link={featuredItems.venue?.website}
-                                headingClassname={c1 as string}
-                                content={featuredItems.venue.description}
-                            />
-                        </Flex>
-                    )}
-                    {featuredItems?.event && (
-                        <Flex direction="column" grow="1">
-                            <Heading mb="2" ml="4">
-                                Featured <Text>Event</Text>
-                            </Heading>
-                            <FeaturedCard
-                                image={featuredItems.event.artist.photoPath}
-                                heading={featuredItems.event.name}
-                                link={featuredItems.event?.website}
-                                headingClassname={c2 as string}
-                                content={featuredItems.event.description}
-                            />
-                        </Flex>
-                    )}
-                    {featuredItems?.artist && (
-                        <Flex direction="column" grow="1">
-                            <Heading mb="2" ml="4">
-                                Featured <Text>Artist</Text>
-                            </Heading>
-                            <FeaturedCard
-                                image={featuredItems.artist.photoPath}
-                                heading={featuredItems.artist.name}
-                                link={featuredItems.artist?.website}
-                                headingClassname={c3 as string}
-                                content={featuredItems.artist.description}
-                            />
-                        </Flex>
-                    )}
-                </Grid>
-            ) : (
-                <Loading />
-            )}
+            {hasFeaturedItems && !isLoading ? (
+                <>
+                    <Heading size="9" align="center" mb="5">
+                        Our Favourites
+                    </Heading>
+                    <Grid
+                        gap="7"
+                        columns={{ initial: '1', md: '3' }}
+                        rows={{ initial: '3', md: '1' }}
+                        align="center"
+                    >
+                        {featuredItems?.venue && (
+                            <Flex direction="column" width="100%">
+                                <Heading mb="2" ml="4">
+                                    Featured <Text className={c1}>Venue</Text>
+                                </Heading>
+                                <FeaturedCard
+                                    image={featuredItems.venue?.photoPath}
+                                    heading={featuredItems.venue.name}
+                                    link={featuredItems.venue?.website}
+                                    headingClassname={c1 as string}
+                                    content={featuredItems.venue.description}
+                                />
+                            </Flex>
+                        )}
+                        {featuredItems?.event && (
+                            <Flex direction="column" grow="1">
+                                <Heading mb="2" ml="4">
+                                    Featured <Text className={c2}>Event</Text>
+                                </Heading>
+                                <FeaturedCard
+                                    image={featuredItems.event.artist.photoPath}
+                                    heading={featuredItems.event.name}
+                                    link={featuredItems.event?.website}
+                                    headingClassname={c2 as string}
+                                    content={featuredItems.event.description}
+                                />
+                            </Flex>
+                        )}
+                        {featuredItems?.artist && (
+                            <Flex direction="column" grow="1">
+                                <Heading mb="2" ml="4">
+                                    Featured <Text className={c3}>Artist</Text>
+                                </Heading>
+                                <FeaturedCard
+                                    image={featuredItems.artist.photoPath}
+                                    heading={featuredItems.artist.name}
+                                    link={featuredItems.artist?.website}
+                                    headingClassname={c3 as string}
+                                    content={featuredItems.artist.description}
+                                />
+                            </Flex>
+                        )}
+                    </Grid>
+                </>
+            ) : null}
+            {isLoading && <Loading />}
         </Flex>
     )
 }

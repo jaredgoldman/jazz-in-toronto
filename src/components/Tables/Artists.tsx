@@ -262,7 +262,6 @@ export function ArtistsTable() {
                     )}
                 </Flex>
             )}
-            {isFetched && !data?.length && <div>Empty state placeholder</div>}
             {isLoading && <Loading />}
         </Box>
     )
