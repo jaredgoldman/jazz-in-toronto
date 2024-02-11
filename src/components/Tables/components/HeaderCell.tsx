@@ -25,7 +25,7 @@ export function HeaderCell<TData>({ header }: Props<TData>) {
             } min-w-[100px]`}
         >
             <Flex direction="column" gap="2">
-                <Flex align="center" gap="2">
+                <Flex align="center" gap="2" ml="1">
                     {header.isPlaceholder
                         ? null
                         : flexRender(
