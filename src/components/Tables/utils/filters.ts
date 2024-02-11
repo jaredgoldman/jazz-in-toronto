@@ -26,3 +26,16 @@ export const dateFilter: FilterFn<unknown> = (row, columnId, value: string) => {
     const filterValue = parseISO(value)
     return isSameDay(rowValue, filterValue)
 }
+
+export const timeFilter: FilterFn<unknown> = (
+    row,
+    columnId: string,
+    filterValue: string
+) => {
+    const rowValue = new Date(row.getValue<string>(columnId))
+    const filterValueDate = new Date(filterValue)
+    return (
+        rowValue.getHours() === filterValueDate.getHours() &&
+        rowValue.getMinutes() === filterValueDate.getMinutes()
+    )
+}

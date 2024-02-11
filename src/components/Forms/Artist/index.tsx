@@ -76,9 +76,10 @@ export default function ArtistForm() {
                                     control={control}
                                 />
                             )}
-
                             <Form.Submit asChild>
-                                <Button className="w-full" disabled={isLoading}>Submit</Button>
+                                <Button className="w-full" disabled={isLoading}>
+                                    Submit
+                                </Button>
                             </Form.Submit>
                         </Flex>
                     </Form.Root>

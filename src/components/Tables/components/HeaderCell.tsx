@@ -19,6 +19,19 @@ export function HeaderCell<TData>({ header }: Props<TData>) {
         desc: <CaretDownIcon />
     }
 
+    const getFilterInputType = (filterFn?: string) => {
+        switch (filterFn) {
+            case 'date':
+                return 'date'
+            case 'fuzzy':
+                return 'text'
+            case 'time':
+                return 'time'
+            default:
+                return 'text'
+        }
+    }
+
     return (
         <Table.ColumnHeaderCell
             onClick={() => header.column.toggleSorting()}
@@ -45,11 +58,9 @@ export function HeaderCell<TData>({ header }: Props<TData>) {
                 {header.column.getCanFilter() && (
                     <TextField.Root>
                         <TextField.Input
-                            type={
-                                header.column.columnDef.filterFn === 'date'
-                                    ? 'date'
-                                    : 'text'
-                            }
+                            type={getFilterInputType(
+                                header.column.columnDef.filterFn as string
+                            )}
                             value={
                                 (header.column.getFilterValue() as string) ?? ''
                             }

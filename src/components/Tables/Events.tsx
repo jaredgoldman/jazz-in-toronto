@@ -12,12 +12,12 @@ import {
     getPaginationRowModel
 } from '@tanstack/react-table'
 import { EventWithArtistVenue } from '~/types/data'
-import { Table, Flex, Badge } from '@radix-ui/themes'
+import { Table, Flex, Badge, Heading } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import { useMemo } from 'react'
 import Loading from '../Loading'
 import { HeaderCell, TableActionMenu } from './components'
-import { dateFilter, fuzzyFilter } from './utils/filters'
+import { dateFilter, fuzzyFilter, timeFilter } from './utils/filters'
 import { useRouter } from 'next/router'
 import { useToast } from '~/hooks/useToast'
 import { Button } from '@radix-ui/themes'
@@ -28,6 +28,10 @@ const columnHelper = createColumnHelper<EventWithArtistVenue>()
 export function EventsTable() {
     const { toast } = useToast()
     const router = useRouter()
+
+    /*
+     * Queries/Mutations
+     */
     const setFeaturedMutation = api.event.setFeatured.useMutation()
     const deleteMutation = api.event.delete.useMutation()
     const approveMutation = api.event.approve.useMutation()
@@ -35,6 +39,9 @@ export function EventsTable() {
         showUnapproved: true
     })
 
+    /*
+     * Actions
+     */
     const handleEditClick = useCallback(
         async (event?: EventWithArtistVenue) => {
             const params = new URLSearchParams()
@@ -128,6 +135,9 @@ export function EventsTable() {
         [deleteMutation, getAllEventsQuery, toast]
     )
 
+    /*
+     * Table setup
+     */
     const columns = useMemo(
         () => [
             columnHelper.accessor((row) => row.startDate, {
@@ -146,12 +156,12 @@ export function EventsTable() {
             columnHelper.accessor((row) => row.startDate, {
                 cell: (info) => format(new Date(info.getValue()), 'h:mm a'),
                 header: 'Start',
-                enableColumnFilter: false
+                filterFn: 'time'
             }),
             columnHelper.accessor((row) => row.endDate, {
                 cell: (info) => format(new Date(info.getValue()), 'h:mm a'),
                 header: 'End',
-                enableColumnFilter: false
+                filterFn: 'time'
             }),
             columnHelper.accessor((row) => row.artist.name, {
                 cell: (info) => info.getValue(),
@@ -241,7 +251,8 @@ export function EventsTable() {
         },
         filterFns: {
             fuzzy: fuzzyFilter,
-            date: dateFilter
+            date: dateFilter,
+            time: timeFilter
         },
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
@@ -251,6 +262,9 @@ export function EventsTable() {
         getPaginationRowModel: getPaginationRowModel()
     })
 
+    /*
+     * Rendering
+     */
     return (
         <Flex direction="column">
             <Flex justify="end" align="end" mb="4">
@@ -299,8 +313,10 @@ export function EventsTable() {
                     )}
                 </>
             ) : null}
-            {getAllEventsQuery.isFetched && !getAllEventsQuery.data?.length && (
-                <div>Empty state placeholder</div>
+            {!table.getFilteredRowModel().rows.length && (
+                <Flex justify="center" align="center" py="7">
+                    <Heading>No events found</Heading>
+                </Flex>
             )}
             {getAllEventsQuery.isLoading && <Loading />}
         </Flex>

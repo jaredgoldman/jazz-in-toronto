@@ -8,13 +8,14 @@ import {
     getSortedRowModel,
     getFilteredRowModel,
     ColumnFiltersState,
-    createColumnHelper
+    createColumnHelper,
+    getPaginationRowModel
 } from '@tanstack/react-table'
 import { Venue } from '~/types/data'
-import { Table, Box, Flex, Badge, Button } from '@radix-ui/themes'
+import { Table, Box, Flex, Badge, Button, Heading } from '@radix-ui/themes'
 import { HeaderCell, TableActionMenu } from './components'
 import Loading from '../Loading'
-import { fuzzyFilter } from './utils/filters'
+import { dateFilter, fuzzyFilter } from './utils/filters'
 import { PaginationButtonGroup } from './components/PaginationButtonGroup'
 import { useRouter } from 'next/router'
 import { useToast } from '~/hooks/useToast'
@@ -24,12 +25,20 @@ const columnHelper = createColumnHelper<Venue>()
 export function VenuesTable() {
     const router = useRouter()
     const { toast } = useToast()
-    const { data, isFetched, isLoading, refetch } =
-        api.venue.getAllAdmin.useQuery()
-    const { mutate: setFeaturedMutation } = api.venue.setFeatured.useMutation()
-    const { mutate: approveMutation } = api.venue.approve.useMutation()
-    const { mutate: deleteMutation } = api.venue.delete.useMutation()
 
+    /*
+     * Queries/Mutations
+     */
+    const setFeaturedMutation = api.venue.setFeatured.useMutation()
+    const approveVenueMutation = api.venue.approve.useMutation()
+    const deleteVenueMutation = api.venue.delete.useMutation()
+    const getAllVenuesQuery = api.venue.getAll.useQuery({
+        showUnapproved: true
+    })
+
+    /*
+     * Actions
+     */
     const handleEditClick = useCallback(
         async (venue?: Venue) => {
             const params = new URLSearchParams()
@@ -48,11 +57,11 @@ export function VenuesTable() {
 
     const handleApprove = useCallback(
         (venue: Venue) => {
-            approveMutation(
+            approveVenueMutation.mutate(
                 { id: venue.id, approved: !venue.approved },
                 {
                     onSuccess: () => {
-                        void refetch()
+                        void getAllVenuesQuery.refetch()
                         toast({
                             title: 'Success',
                             message: 'Venue has been approved'
@@ -67,16 +76,16 @@ export function VenuesTable() {
                 }
             )
         },
-        [approveMutation, refetch, toast]
+        [approveVenueMutation, getAllVenuesQuery, toast]
     )
 
     const handleToggleFeatured = useCallback(
         (venue: Venue) => {
-            setFeaturedMutation(
+            setFeaturedMutation.mutate(
                 { id: venue.id, featured: !venue.featured },
                 {
                     onSuccess: () => {
-                        void refetch()
+                        void getAllVenuesQuery.refetch()
                         toast({
                             title: 'Success',
                             message: 'Venue successfully set as featured'
@@ -91,16 +100,16 @@ export function VenuesTable() {
                 }
             )
         },
-        [setFeaturedMutation, refetch, toast]
+        [setFeaturedMutation, getAllVenuesQuery, toast]
     )
 
     const handleDelete = useCallback(
         (venue: Venue) => {
-            deleteMutation(
+            deleteVenueMutation.mutate(
                 { id: venue.id },
                 {
                     onSuccess: () => {
-                        void refetch()
+                        void getAllVenuesQuery.refetch()
                         toast({
                             title: 'Success',
                             message: 'Venue has been deleted'
@@ -115,9 +124,12 @@ export function VenuesTable() {
                 }
             )
         },
-        [deleteMutation, refetch, toast]
+        [deleteVenueMutation, getAllVenuesQuery, toast]
     )
 
+    /*
+     * Table setup
+     */
     const columns = useMemo(
         () => [
             columnHelper.accessor((row) => row.name, {
@@ -189,19 +201,24 @@ export function VenuesTable() {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
     const table = useReactTable<Venue>({
-        data: data ?? [],
+        data: getAllVenuesQuery.data ?? [],
         columns,
         state: { sorting, columnFilters },
         filterFns: {
-            fuzzy: fuzzyFilter
+            fuzzy: fuzzyFilter,
+            date: dateFilter
         },
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
-        getFilteredRowModel: getFilteredRowModel()
+        getFilteredRowModel: getFilteredRowModel(),
+        getPaginationRowModel: getPaginationRowModel()
     })
 
+    /*
+     * Rendering
+     */
     return (
         <Box>
             <Flex justify="end" mb="4">
@@ -213,7 +230,7 @@ export function VenuesTable() {
                     Add New Venue
                 </Button>
             </Flex>
-            {data?.length && (
+            {getAllVenuesQuery.data?.length && (
                 <>
                     <Table.Root variant="surface">
                         <Table.Header>
@@ -231,7 +248,6 @@ export function VenuesTable() {
                         </Table.Header>
                         <Table.Body>
                             {table.getRowModel().rows.map((row) => (
-                                /*iterate through cells*/
                                 <Table.Row key={row.id}>
                                     {row.getVisibleCells().map((cell) => (
                                         <Table.Cell key={cell.id}>
@@ -252,8 +268,12 @@ export function VenuesTable() {
                     )}
                 </>
             )}
-            {isFetched && !data?.length && <div>Empty state placeholder</div>}
-            {isLoading && <Loading />}
+            {!table.getFilteredRowModel().rows.length && (
+                <Flex justify="center" align="center" py="7">
+                    <Heading>No venues found</Heading>
+                </Flex>
+            )}
+            {getAllVenuesQuery.isLoading && <Loading />}
         </Box>
     )
 }

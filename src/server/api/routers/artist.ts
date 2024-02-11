@@ -42,17 +42,15 @@ export const artistRouter = createTRPCRouter({
             })
         }),
 
-    getAll: publicProcedure.query(({ ctx }) => {
-        return ctx.prisma.artist.findMany({
-            where: {
-                approved: true
-            }
-        })
-    }),
-
-    getAllAdmin: publicProcedure.query(({ ctx }) => {
-        return ctx.prisma.artist.findMany()
-    }),
+    getAll: publicProcedure
+        .input(z.object({ showUnapproved: z.boolean() }))
+        .query(({ ctx, input }) => {
+            return ctx.prisma.artist.findMany({
+                where: {
+                    approved: input.showUnapproved ? false : true
+                }
+            })
+        }),
 
     update: protectedProcedure
         .input(

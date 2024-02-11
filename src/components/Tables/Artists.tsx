@@ -13,25 +13,34 @@ import {
     getPaginationRowModel,
     createColumnHelper
 } from '@tanstack/react-table'
-import { Table, Box, Flex, Badge, Button } from '@radix-ui/themes'
+import { Table, Box, Flex, Badge, Button, Heading } from '@radix-ui/themes'
 import Loading from '../Loading'
 import { fuzzyFilter } from './utils/filters'
 import { PaginationButtonGroup } from './components/PaginationButtonGroup'
 import { useRouter } from 'next/router'
 import { TableActionMenu } from './components/TableActionMenu'
 import { useToast } from '~/hooks/useToast'
+import { dateFilter } from './utils/filters'
 
 const columnHelper = createColumnHelper<Artist>()
 
 export function ArtistsTable() {
     const { toast } = useToast()
-    const { data, isFetched, isLoading, refetch } =
-        api.artist.getAllAdmin.useQuery()
     const router = useRouter()
-    const { mutate: approveMutation } = api.artist.approve.useMutation()
-    const { mutate: setFeaturedMutation } = api.artist.setFeatured.useMutation()
-    const { mutate: deleteMutation } = api.artist.delete.useMutation()
 
+    /*
+     * Queries/Mutations
+     */
+    const approveArtistMutation = api.artist.approve.useMutation()
+    const setFeaturedMutation = api.artist.setFeatured.useMutation()
+    const deleteArtistMutation = api.artist.delete.useMutation()
+    const getAllArtistsQuery = api.artist.getAll.useQuery({
+        showUnapproved: true
+    })
+
+    /*
+     * Actions
+     */
     const handleEditClick = useCallback(
         async (artist?: Artist) => {
             const params = new URLSearchParams()
@@ -50,11 +59,11 @@ export function ArtistsTable() {
 
     const hanldeApprove = useCallback(
         (artist: Artist) => {
-            approveMutation(
+            approveArtistMutation.mutate(
                 { id: artist.id, approved: !artist.approved },
                 {
                     onSuccess: () => {
-                        void refetch()
+                        void getAllArtistsQuery.refetch()
                         toast({
                             title: 'Success',
                             message: 'Artist has been approved'
@@ -70,12 +79,12 @@ export function ArtistsTable() {
                 }
             )
         },
-        [approveMutation, refetch, toast]
+        [getAllArtistsQuery, approveArtistMutation, toast]
     )
 
     const handleToggleFeatured = useCallback(
         (artist: Artist) => {
-            setFeaturedMutation(
+            setFeaturedMutation.mutate(
                 { id: artist.id, featured: !artist.featured },
                 {
                     onSuccess: () => {
@@ -83,7 +92,7 @@ export function ArtistsTable() {
                             title: 'Success',
                             message: 'Artist successfully set as featured'
                         })
-                        void refetch()
+                        void getAllArtistsQuery.refetch()
                     },
                     onError: () =>
                         toast({
@@ -94,16 +103,16 @@ export function ArtistsTable() {
                 }
             )
         },
-        [setFeaturedMutation, refetch, toast]
+        [setFeaturedMutation, getAllArtistsQuery, toast]
     )
 
     const handleDelete = useCallback(
         (artist: Artist) => {
-            deleteMutation(
+            deleteArtistMutation.mutate(
                 { id: artist.id },
                 {
                     onSuccess: () => {
-                        void refetch()
+                        void getAllArtistsQuery.refetch()
                         toast({
                             title: 'Success',
                             message: 'Artist has been deleted'
@@ -119,9 +128,12 @@ export function ArtistsTable() {
                 }
             )
         },
-        [deleteMutation, refetch, toast]
+        [deleteArtistMutation, getAllArtistsQuery, toast]
     )
 
+    /*
+     * Table setup
+     */
     const columns = useMemo(
         () => [
             columnHelper.accessor((row) => row.name, {
@@ -197,14 +209,15 @@ export function ArtistsTable() {
                 pageIndex: 0
             }
         },
-        data: data ?? [],
+        data: getAllArtistsQuery.data ?? [],
         columns,
         state: {
             sorting,
             columnFilters
         },
         filterFns: {
-            fuzzy: fuzzyFilter
+            fuzzy: fuzzyFilter,
+            date: dateFilter
         },
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
@@ -214,6 +227,9 @@ export function ArtistsTable() {
         getPaginationRowModel: getPaginationRowModel()
     })
 
+    /*
+     * Rendering
+     */
     return (
         <Box>
             <Flex justify="end" mb="4">
@@ -225,7 +241,7 @@ export function ArtistsTable() {
                     Add New Artist
                 </Button>
             </Flex>
-            {data?.length && (
+            {getAllArtistsQuery.data?.length && (
                 <Flex gap="3" direction="column">
                     <Table.Root variant="surface">
                         <Table.Header>
@@ -262,7 +278,12 @@ export function ArtistsTable() {
                     )}
                 </Flex>
             )}
-            {isLoading && <Loading />}
+            {!table.getFilteredRowModel().rows.length && (
+                <Flex justify="center" align="center" py="7">
+                    <Heading>No artists found</Heading>
+                </Flex>
+            )}
+            {getAllArtistsQuery.isLoading && <Loading />}
         </Box>
     )
 }
