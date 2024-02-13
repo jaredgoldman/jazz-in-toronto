@@ -49,10 +49,12 @@ export default function VenueCard({ venue }: Props) {
                             <GlobeIcon width="23" height="22" />
                             <Text size="5">{venue.address}</Text>
                         </Flex>
-                        <Flex gap="2" align="center">
-                            <FrameIcon width="23" height="22" />
-                            <Text size="5">{venue.phoneNumber}</Text>
-                        </Flex>
+                        {venue.phoneNumber && (
+                            <Flex gap="2" align="center">
+                                <FrameIcon width="23" height="22" />
+                                <Text size="5">{venue.phoneNumber}</Text>
+                            </Flex>
+                        )}
                         {venue.instagramHandle && (
                             <Flex gap="2" align="center">
                                 <InstagramLogoIcon width="23" height="22" />
