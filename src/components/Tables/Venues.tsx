@@ -15,7 +15,7 @@ import { Venue } from '~/types/data'
 import { Table, Box, Flex, Badge, Button, Heading } from '@radix-ui/themes'
 import { HeaderCell, TableActionMenu } from './components'
 import Loading from '../Loading'
-import { dateFilter, fuzzyFilter } from './utils/filters'
+import { dateFilter, fuzzyFilter, timeFilter } from './utils/filters'
 import { PaginationButtonGroup } from './components/PaginationButtonGroup'
 import { useRouter } from 'next/router'
 import { useToast } from '~/hooks/useToast'
@@ -205,7 +205,8 @@ export function VenuesTable() {
         state: { sorting, columnFilters },
         filterFns: {
             fuzzy: fuzzyFilter,
-            date: dateFilter
+            date: dateFilter,
+            time: timeFilter
         },
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),

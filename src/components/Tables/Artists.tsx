@@ -15,7 +15,7 @@ import {
 } from '@tanstack/react-table'
 import { Table, Box, Flex, Badge, Button, Heading } from '@radix-ui/themes'
 import Loading from '../Loading'
-import { fuzzyFilter } from './utils/filters'
+import { fuzzyFilter, timeFilter } from './utils/filters'
 import { PaginationButtonGroup } from './components/PaginationButtonGroup'
 import { useRouter } from 'next/router'
 import { TableActionMenu } from './components/TableActionMenu'
@@ -216,7 +216,8 @@ export function ArtistsTable() {
         },
         filterFns: {
             fuzzy: fuzzyFilter,
-            date: dateFilter
+            date: dateFilter,
+            time: timeFilter
         },
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),

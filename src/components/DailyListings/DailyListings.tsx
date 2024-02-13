@@ -13,7 +13,7 @@ import {
 import { EventWithArtistVenue } from '~/types/data'
 import Loading from '../Loading'
 import { HeaderCell } from '../Tables/components'
-import { fuzzyFilter } from '../Tables/utils/filters'
+import { fuzzyFilter, dateFilter, timeFilter } from '../Tables/utils/filters'
 
 interface Props {
     selectedDate: Date
@@ -73,7 +73,9 @@ export default function DailyListings({ selectedDate }: Props) {
             sorting
         },
         filterFns: {
-            fuzzy: fuzzyFilter
+            fuzzy: fuzzyFilter,
+            date: dateFilter,
+            time: timeFilter
         },
         getSortedRowModel: getSortedRowModel(),
         onSortingChange: setSorting
