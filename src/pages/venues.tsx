@@ -4,18 +4,19 @@ import VenueCard from '~/components/VenueCard/VenueCard'
 import { api } from '~/utils/api'
 import { Flex, Heading, Text } from '@radix-ui/themes'
 import Link from '~/components/Link'
+import Loading from '~/components/Loading'
 
 export default function Venues(): JSX.Element {
-    const { data } = api.venue.getAll.useQuery()
+    const getAllVenuesQuery = api.venue.getAll.useQuery()
 
     const venueCards = useMemo(
         () =>
-            data?.length
-                ? data.map((venue) => {
+            getAllVenuesQuery.data?.length
+                ? getAllVenuesQuery.data.map((venue) => {
                       return <VenueCard key={venue.id} venue={venue} />
                   })
                 : [],
-        [data]
+        [getAllVenuesQuery.data]
     )
 
     return (
@@ -39,13 +40,17 @@ export default function Venues(): JSX.Element {
                 <Heading mb="9" size="9">
                     Venues
                 </Heading>
-                <Flex
-                    direction="column"
-                    gap={{ initial: '5', xs: '9' }}
-                    grow="1"
-                >
-                    {venueCards}
-                </Flex>
+                {getAllVenuesQuery.isLoading ? (
+                    <Loading />
+                ) : (
+                    <Flex
+                        direction="column"
+                        gap={{ initial: '5', xs: '9' }}
+                        grow="1"
+                    >
+                        {venueCards}
+                    </Flex>
+                )}
             </Flex>
         </RootLayout>
     )
