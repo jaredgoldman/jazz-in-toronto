@@ -112,11 +112,11 @@ export default function useArtistForm(id = '') {
                 !values.photoPath &&
                 !values.photoName &&
                 !values.fileData &&
-                useGetArtistQuery.data?.photoPath
+                getArtistQuery.data?.photoPath
 
             // Photo has been changed
             const photoChanged =
-                values.photoPath !== useGetArtistQuery.data?.photoPath
+                values.photoPath !== getArtistQuery.data?.photoPath
 
             // In either case, we need to delete the photo
             if (photoRemoved || photoChanged) {
