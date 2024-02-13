@@ -29,7 +29,7 @@ beforeAll(async () => {
     venue = await prisma.venue.create({ data: testVenueData })
     artist = await prisma.artist.create({ data: testArtistData })
     admin = await prisma.admin.create({
-        data: { email: 'eventtest@test.com', password: 'password' }
+        data: { email: 'eventtest@test.com' }
     })
     testEventData = {
         name: 'event test event',

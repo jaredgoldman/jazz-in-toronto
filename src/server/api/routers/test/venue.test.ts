@@ -22,8 +22,7 @@ beforeAll(async () => {
     admin = await prisma.admin.create({
         data: {
             name: 'test admin',
-            email: 'venue@test.com',
-            password: 'test'
+            email: 'venue@test.com'
         }
     })
 })
