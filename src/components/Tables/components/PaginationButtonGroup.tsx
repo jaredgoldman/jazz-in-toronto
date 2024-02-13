@@ -1,5 +1,6 @@
 import { useState, ReactNode, useCallback, useEffect } from 'react'
-import { Flex, Button } from '@radix-ui/themes'
+import { Flex, Button, Grid, Box } from '@radix-ui/themes'
+import { Select } from '~/components/Forms/Fields'
 import {
     ArrowRightIcon,
     ArrowLeftIcon,
@@ -111,40 +112,54 @@ export function PaginationButtonGroup<T>({
     }, [renderButton, totalPages, pageIndex, getOffsets])
 
     return (
-        <Flex gap="2">
-            <Button
-                onClick={() => {
-                    table.setPageIndex(0)
-                }}
-                disabled={!table.getCanPreviousPage()}
-            >
-                <DoubleArrowLeftIcon />
-            </Button>
-            <Button
-                onClick={() => {
-                    table.previousPage()
-                }}
-                disabled={!table.getCanPreviousPage()}
-            >
-                <ArrowLeftIcon />
-            </Button>
-            {buttons}
-            <Button
-                onClick={() => {
-                    table.nextPage()
-                }}
-                disabled={!table.getCanNextPage()}
-            >
-                <ArrowRightIcon />
-            </Button>
-            <Button
-                onClick={() => {
-                    table.setPageIndex(table.getPageCount() - 1)
-                }}
-                disabled={!table.getCanNextPage()}
-            >
-                <DoubleArrowRightIcon />
-            </Button>
-        </Flex>
+        <Grid columns="3" rows="1" align="center">
+            <Box></Box>
+            <Flex gap="1">
+                <Button
+                    onClick={() => {
+                        table.setPageIndex(0)
+                    }}
+                    disabled={!table.getCanPreviousPage()}
+                >
+                    <DoubleArrowLeftIcon />
+                </Button>
+                <Button
+                    onClick={() => {
+                        table.previousPage()
+                    }}
+                    disabled={!table.getCanPreviousPage()}
+                >
+                    <ArrowLeftIcon />
+                </Button>
+                {buttons}
+                <Button
+                    onClick={() => {
+                        table.nextPage()
+                    }}
+                    disabled={!table.getCanNextPage()}
+                >
+                    <ArrowRightIcon />
+                </Button>
+                <Button
+                    onClick={() => {
+                        table.setPageIndex(table.getPageCount() - 1)
+                    }}
+                    disabled={!table.getCanNextPage()}
+                >
+                    <DoubleArrowRightIcon />
+                </Button>
+            </Flex>
+            <Flex justify="end">
+                <Select
+                    name="pageSize"
+                    label="Adjust page size"
+                    optionData={['10', '25', '50', '100'].map((size) => ({
+                        id: size,
+                        name: size
+                    }))}
+                    onChange={(value) => table.setPageSize(parseInt(value))}
+                />
+            </Flex>
+        </Grid>
     )
 }

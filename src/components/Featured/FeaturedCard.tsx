@@ -3,7 +3,7 @@ import { Card, Heading, Text, Flex, Link } from '@radix-ui/themes'
 
 interface Props {
     heading: string
-    content?: string
+    content?: string | null
     image?: string | null
     link?: string | null
     headingClassname: string
@@ -24,7 +24,7 @@ const FeaturedCard = ({
                 })`
             }}
             variant="classic"
-            className="max-w-xl bg-cover bg-center bg-no-repeat"
+            className="bg-cover bg-center bg-no-repeat"
             size="3"
         >
             <Flex

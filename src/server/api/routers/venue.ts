@@ -48,17 +48,15 @@ export const venueRouter = createTRPCRouter({
             })
         }),
 
-    getAll: publicProcedure.query(({ ctx }) => {
-        return ctx.prisma.venue.findMany({
-            where: {
-                approved: true
-            }
-        })
-    }),
-
-    getAllAdmin: protectedProcedure.query(({ ctx }) => {
-        return ctx.prisma.venue.findMany()
-    }),
+    getAll: publicProcedure
+        .input(z.object({ showUnapproved: z.boolean() }).optional())
+        .query(({ ctx, input }) => {
+            return ctx.prisma.venue.findMany({
+                where: {
+                    approved: input?.showUnapproved ? undefined : true
+                }
+            })
+        }),
 
     getAllCrawlable: publicProcedure.query(({ ctx }) => {
         return ctx.prisma.venue.findMany({

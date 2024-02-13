@@ -48,7 +48,12 @@ export default function Listings() {
                     >
                         Daily Listings
                     </Heading>
-                    <Flex mb="5" gap="3" wrap="wrap" justify={{ initial: "center", xs: "start"}}>
+                    <Flex
+                        mb="5"
+                        gap="3"
+                        wrap="wrap"
+                        justify={{ initial: 'center', xs: 'start' }}
+                    >
                         <Button
                             onClick={() => {
                                 setSelectedDate(addDays(selectedDate, -1))

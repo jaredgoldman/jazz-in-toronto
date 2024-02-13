@@ -15,17 +15,27 @@ import {
     FieldError,
     Control,
     Path,
-    Controller
+    Controller,
+    ControllerRenderProps
 } from 'react-hook-form'
 import { ReactNode } from 'react'
 
-interface Props<T extends FieldValues> {
+type Props<TData extends FieldValues> = {
     label: string | ReactNode
-    name: Path<T>
-    optionData: Venue[] | Artist[]
-    control: Control<T>
+    name: Path<TData>
+    optionData: Venue[] | Artist[] | { id: string; name: string }[]
+    control?: Control<TData>
     error?: FieldError
     required?: boolean | string
+    onChange?: (value: string) => void
+}
+
+type BaseSelectProps<TData extends FieldValues> = {
+    name: string
+    label: string | ReactNode
+    field?: ControllerRenderProps<TData, Path<TData>>
+    options?: JSX.Element[]
+    onChange?: (value: string) => void
 }
 
 export default function Select<T extends FieldValues>({
@@ -34,14 +44,54 @@ export default function Select<T extends FieldValues>({
     error,
     optionData,
     control,
-    required = false
-}: Props<T>): JSX.Element {
-    const mappedOptions = optionData.map((option) => {
-        return {
-            value: option.id,
-            label: option.name
-        }
-    })
+    required = false,
+    onChange
+}: Props<T>) {
+    const options = optionData.map((option) => (
+        <SelectItem key={option.id} value={option.id}>
+            {option.name}
+        </SelectItem>
+    ))
+
+    const BaseSelect = <TData extends FieldValues>({
+        name,
+        label,
+        field,
+        options,
+        onChange
+    }: BaseSelectProps<TData>) => {
+        return (
+            <SelectRoot
+                onValueChange={(value) => {
+                    if (field && !onChange) {
+                        field.onChange(value)
+                    } else if (onChange) {
+                        onChange(value)
+                    }
+                }}
+                {...(field ? field : {})} // Conditionally apply field props if field is provided
+            >
+                <SelectTrigger>{`Select a ${name}`}</SelectTrigger>
+                <SelectContent>
+                    <SelectGroup>
+                        <SelectLabel>{label}</SelectLabel>
+                        {options}
+                    </SelectGroup>
+                </SelectContent>
+            </SelectRoot>
+        )
+    }
+
+    if (!control) {
+        return (
+            <BaseSelect
+                name={name}
+                label={label}
+                options={options}
+                onChange={onChange}
+            />
+        )
+    }
 
     return (
         <Controller
@@ -53,29 +103,12 @@ export default function Select<T extends FieldValues>({
                     <Form.Label>{label}</Form.Label>
                     <Flex direction="column">
                         <Form.Control asChild>
-                            <SelectRoot
-                                onValueChange={field.onChange}
-                                {...field}
-                            >
-                                <SelectTrigger>
-                                    ${`Select a ${name}`}
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <SelectLabel>{label}</SelectLabel>
-                                        {mappedOptions.map((option) => {
-                                            return (
-                                                <SelectItem
-                                                    key={option.value}
-                                                    value={option.value}
-                                                >
-                                                    {option.label}
-                                                </SelectItem>
-                                            )
-                                        })}
-                                    </SelectGroup>
-                                </SelectContent>
-                            </SelectRoot>
+                            <BaseSelect
+                                name={name}
+                                label={label}
+                                options={options}
+                                field={field}
+                            />
                         </Form.Control>
                         {error && (
                             <Text size="2" color="red">

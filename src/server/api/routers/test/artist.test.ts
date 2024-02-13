@@ -1,10 +1,10 @@
 import { expect, it, describe, beforeAll, afterAll } from 'vitest'
-import { type RouterInputs } from '~/utils/api'
+import { RouterInputs } from '~/utils/api'
 import { appRouter } from '~/server/api/root'
 import { createInnerTRPCContext } from '~/server/api/trpc'
 import { prisma } from '~/server/db'
 import { TRPCError } from '@trpc/server'
-import { type Admin, type Artist } from '@prisma/client'
+import { Admin, type Artist } from '@prisma/client'
 
 const testartistData = {
     name: 'test artist'
@@ -19,8 +19,7 @@ beforeAll(async () => {
     await prisma.artist.createMany({ data: artists })
     admin = await prisma.admin.create({
         data: {
-            email: 'admin@test.com',
-            password: 'password'
+            email: 'admin@test.com'
         }
     })
 })

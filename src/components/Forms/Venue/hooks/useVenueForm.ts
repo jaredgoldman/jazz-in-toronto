@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useUploadThing } from '~/hooks/useUploadThing'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
@@ -27,9 +27,23 @@ export default function useVenueForm(id = '') {
     const createVenueMutation = api.venue.create.useMutation()
     const editVenueMutation = api.venue.update.useMutation()
     const deleteVenuePhotoMutation = api.venue.deletePhoto.useMutation()
-    const useGetVenueQuery = api.venue.get.useQuery(
+    const getVenueQuery = api.venue.get.useQuery(
         { id },
         { enabled: Boolean(id), staleTime: Infinity, cacheTime: Infinity }
+    )
+
+    const isLoading = useMemo(
+        () =>
+            editVenueMutation.isLoading ||
+            createVenueMutation.isLoading ||
+            getVenueQuery.isFetching ||
+            deleteVenuePhotoMutation.isLoading,
+        [
+            editVenueMutation.isLoading,
+            createVenueMutation.isLoading,
+            getVenueQuery.isFetching,
+            deleteVenuePhotoMutation.isLoading
+        ]
     )
 
     const defaultValues: VenueFormValues = {
@@ -53,8 +67,8 @@ export default function useVenueForm(id = '') {
     })
 
     useEffect(() => {
-        const data = useGetVenueQuery.data
-        if (useGetVenueQuery.data) {
+        const data = getVenueQuery.data
+        if (getVenueQuery.data) {
             methods.reset({
                 ...data,
                 instagramHandle: data?.instagramHandle ?? '',
@@ -63,7 +77,7 @@ export default function useVenueForm(id = '') {
                 description: data?.description ?? ''
             })
         }
-    }, [useGetVenueQuery.data, methods])
+    }, [getVenueQuery.data, methods])
 
     const onSelectLocation = (
         address: string,
@@ -112,9 +126,6 @@ export default function useVenueForm(id = '') {
     })
 
     const onSubmit = async (values: VenueFormValues) => {
-        console.log({
-            values
-        })
         try {
             let photoPath = values.photoPath
 
@@ -123,11 +134,11 @@ export default function useVenueForm(id = '') {
                 !values.photoPath &&
                 !values.photoName &&
                 !values.fileData &&
-                useGetVenueQuery.data?.photoPath
+                getVenueQuery.data?.photoPath
 
             // Photo has been changed
             const photoChanged =
-                values.photoPath !== useGetVenueQuery.data?.photoPath
+                values.photoPath !== getVenueQuery.data?.photoPath
 
             // In either case, we need to delete the photo
             if (photoRemoved || photoChanged) {
@@ -166,7 +177,7 @@ export default function useVenueForm(id = '') {
                 })
             }
 
-            await useGetVenueQuery.refetch()
+            await getVenueQuery.refetch()
 
             toast({
                 title: 'Success',
@@ -188,6 +199,7 @@ export default function useVenueForm(id = '') {
         startUpload,
         onSelectLocation,
         submit,
-        methods
+        methods,
+        isLoading
     }
 }

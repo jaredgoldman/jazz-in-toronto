@@ -12,17 +12,22 @@ export default function Home() {
                 justify="center"
                 className="h-[50rem] bg-hero-pattern bg-cover bg-center bg-no-repeat"
             >
-                <Heading size="9" align="center" weight="bold">
+                <Heading
+                    size={{ initial: '8', xs: '9' }}
+                    align="center"
+                    weight="bold"
+                >
                     We are JazzInToronto
                 </Heading>
-                <Image
-                    src="/images/logo.svg"
-                    alt="facebook"
-                    width={350}
-                    height={350}
-                    className="my-16"
-                />
-
+                <Flex>
+                    <Image
+                        src="/images/logo.svg"
+                        alt="facebook"
+                        width={350}
+                        height={350}
+                        className="my-16"
+                    />
+                </Flex>
                 <Text
                     size={{ initial: '6', xs: '7' }}
                     align="center"

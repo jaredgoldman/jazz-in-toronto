@@ -8,33 +8,40 @@ import {
     getSortedRowModel,
     getFilteredRowModel,
     ColumnFiltersState,
-    createColumnHelper
+    createColumnHelper,
+    getPaginationRowModel
 } from '@tanstack/react-table'
 import { EventWithArtistVenue } from '~/types/data'
-import { Table, Flex, TextField, Heading, Badge } from '@radix-ui/themes'
+import { Table, Flex, Badge, Heading } from '@radix-ui/themes'
 import { format } from 'date-fns'
 import { useMemo } from 'react'
 import Loading from '../Loading'
 import { HeaderCell, TableActionMenu } from './components'
-import { fuzzyFilter } from './utils/filters'
+import { dateFilter, fuzzyFilter, timeFilter } from './utils/filters'
 import { useRouter } from 'next/router'
 import { useToast } from '~/hooks/useToast'
 import { Button } from '@radix-ui/themes'
+import { PaginationButtonGroup } from './components/PaginationButtonGroup'
 
 const columnHelper = createColumnHelper<EventWithArtistVenue>()
 
 export function EventsTable() {
     const { toast } = useToast()
     const router = useRouter()
-    const [filteredDate, setFilteredDate] = useState<Date>(new Date())
-    const { mutate: setFeaturedMutation } = api.event.setFeatured.useMutation()
-    const { mutate: deleteMutation } = api.event.delete.useMutation()
-    const { mutate: approveMutation } = api.event.approve.useMutation()
-    const { data, isLoading, isFetched, refetch } =
-        api.event.getAllBByDayAdmin.useQuery({
-            date: filteredDate
-        })
 
+    /*
+     * Queries/Mutations
+     */
+    const setFeaturedMutation = api.event.setFeatured.useMutation()
+    const deleteMutation = api.event.delete.useMutation()
+    const approveMutation = api.event.approve.useMutation()
+    const getAllEventsQuery = api.event.getAll.useQuery({
+        showUnapproved: true
+    })
+
+    /*
+     * Actions
+     */
     const handleEditClick = useCallback(
         async (event?: EventWithArtistVenue) => {
             const params = new URLSearchParams()
@@ -55,7 +62,7 @@ export function EventsTable() {
 
     const handleApprove = useCallback(
         (event: EventWithArtistVenue) => {
-            approveMutation(
+            approveMutation.mutate(
                 { id: event.id, approved: !event.approved },
                 {
                     onSuccess: () => {
@@ -63,7 +70,7 @@ export function EventsTable() {
                             title: 'Success',
                             message: 'Event approved'
                         })
-                        void refetch()
+                        void getAllEventsQuery.refetch()
                     },
                     onError: () => {
                         toast({
@@ -75,12 +82,12 @@ export function EventsTable() {
                 }
             )
         },
-        [approveMutation, refetch, toast]
+        [approveMutation, toast, getAllEventsQuery]
     )
 
     const handleToggleFeatured = useCallback(
         (event: EventWithArtistVenue) => {
-            setFeaturedMutation(
+            setFeaturedMutation.mutate(
                 { id: event.id, featured: !event.featured },
                 {
                     onSuccess: () => {
@@ -88,7 +95,7 @@ export function EventsTable() {
                             title: 'Success',
                             message: 'Featured event updated'
                         })
-                        void refetch()
+                        void getAllEventsQuery.refetch()
                     },
                     onError: () => {
                         toast({
@@ -100,16 +107,16 @@ export function EventsTable() {
                 }
             )
         },
-        [setFeaturedMutation, refetch, toast]
+        [setFeaturedMutation, getAllEventsQuery, toast]
     )
 
     const handleDelete = useCallback(
         (event: EventWithArtistVenue) => {
-            deleteMutation(
+            deleteMutation.mutate(
                 { id: event.id },
                 {
                     onSuccess: () => {
-                        void refetch()
+                        void getAllEventsQuery.refetch()
                         toast({
                             title: 'Success',
                             message: 'Event deleted'
@@ -125,11 +132,19 @@ export function EventsTable() {
                 }
             )
         },
-        [deleteMutation, refetch, toast]
+        [deleteMutation, getAllEventsQuery, toast]
     )
 
+    /*
+     * Table setup
+     */
     const columns = useMemo(
         () => [
+            columnHelper.accessor((row) => row.startDate, {
+                cell: (info) => format(new Date(info.getValue()), 'MM/dd/yyyy'),
+                filterFn: 'date',
+                header: 'Date'
+            }),
             columnHelper.accessor((row) => row.name, {
                 cell: (info) => info.getValue(),
                 header: 'Event'
@@ -141,12 +156,12 @@ export function EventsTable() {
             columnHelper.accessor((row) => row.startDate, {
                 cell: (info) => format(new Date(info.getValue()), 'h:mm a'),
                 header: 'Start',
-                enableColumnFilter: false
+                filterFn: 'time'
             }),
             columnHelper.accessor((row) => row.endDate, {
                 cell: (info) => format(new Date(info.getValue()), 'h:mm a'),
                 header: 'End',
-                enableColumnFilter: false
+                filterFn: 'time'
             }),
             columnHelper.accessor((row) => row.artist.name, {
                 cell: (info) => info.getValue(),
@@ -207,8 +222,7 @@ export function EventsTable() {
                         onDelete={() => handleDelete(row.original)}
                         onApprove={() => handleApprove(row.original)}
                     />
-                ),
-                header: 'Edit'
+                )
             })
         ],
         [handleDelete, handleEditClick, handleToggleFeatured, handleApprove]
@@ -222,38 +236,37 @@ export function EventsTable() {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
     const table = useReactTable<EventWithArtistVenue>({
-        data: data ?? [],
+        data: getAllEventsQuery.data ?? [],
         columns,
+        initialState: {
+            pagination: {
+                pageSize: 25,
+                pageIndex: 0
+            }
+        },
         state: {
             sorting,
             columnFilters
         },
         filterFns: {
-            fuzzy: fuzzyFilter
+            fuzzy: fuzzyFilter,
+            date: dateFilter,
+            time: timeFilter
         },
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
-        getFilteredRowModel: getFilteredRowModel()
+        getFilteredRowModel: getFilteredRowModel(),
+        getPaginationRowModel: getPaginationRowModel()
     })
 
+    /*
+     * Rendering
+     */
     return (
         <Flex direction="column">
-            <Flex justify="between" align="end" mb="4">
-                <Flex direction="column" className="max-w-xs" gap="3">
-                    <Heading>Filter by date:</Heading>
-                    <TextField.Root className="px-2 pt-1">
-                        <TextField.Input
-                            type="date"
-                            value={format(filteredDate, 'yyyy-MM-dd')}
-                            onChange={(e) =>
-                                setFilteredDate(new Date(e.target.value))
-                            }
-                            placeholder="Filter by date"
-                        />
-                    </TextField.Root>
-                </Flex>
+            <Flex justify="end" align="end" mb="4">
                 <Button
                     size="4"
                     variant="outline"
@@ -262,38 +275,49 @@ export function EventsTable() {
                     Add New Event
                 </Button>
             </Flex>
-            {data?.length ? (
-                <Table.Root variant="surface">
-                    <Table.Header>
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <Table.Row key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => (
-                                    <HeaderCell
-                                        header={header}
-                                        key={header.id}
-                                    />
-                                ))}
-                            </Table.Row>
-                        ))}
-                    </Table.Header>
-                    <Table.Body>
-                        {table.getRowModel().rows.map((row) => (
-                            <Table.Row key={row.id}>
-                                {row.getVisibleCells().map((cell) => (
-                                    <Table.Cell key={cell.id}>
-                                        {flexRender(
-                                            cell.column.columnDef.cell,
-                                            cell.getContext()
-                                        )}
-                                    </Table.Cell>
-                                ))}
-                            </Table.Row>
-                        ))}
-                    </Table.Body>
-                </Table.Root>
+            {getAllEventsQuery.data?.length ? (
+                <>
+                    <Table.Root variant="surface">
+                        <Table.Header>
+                            {table.getHeaderGroups().map((headerGroup) => (
+                                <Table.Row key={headerGroup.id}>
+                                    {headerGroup.headers.map((header) => (
+                                        <HeaderCell
+                                            header={header}
+                                            key={header.id}
+                                        />
+                                    ))}
+                                </Table.Row>
+                            ))}
+                        </Table.Header>
+                        <Table.Body>
+                            {table.getRowModel().rows.map((row) => (
+                                <Table.Row key={row.id}>
+                                    {row.getVisibleCells().map((cell) => (
+                                        <Table.Cell key={cell.id}>
+                                            {flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext()
+                                            )}
+                                        </Table.Cell>
+                                    ))}
+                                </Table.Row>
+                            ))}
+                        </Table.Body>
+                    </Table.Root>
+                    {table.getPageCount() > 1 && (
+                        <Flex justify="center" mt="4">
+                            <PaginationButtonGroup table={table} />
+                        </Flex>
+                    )}
+                </>
             ) : null}
-            {isFetched && !data?.length && <div>Empty state placeholder</div>}
-            {isLoading && <Loading />}
+            {!table.getFilteredRowModel().rows.length && (
+                <Flex justify="center" align="center" py="7">
+                    <Heading>No events found</Heading>
+                </Flex>
+            )}
+            {getAllEventsQuery.isLoading && <Loading />}
         </Flex>
     )
 }

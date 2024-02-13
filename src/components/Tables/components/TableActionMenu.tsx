@@ -27,7 +27,7 @@ export function TableActionMenu({
         <>
             <DropdownMenu.Root>
                 <DropdownMenu.Trigger>
-                    <Flex justify="center">
+                    <Flex>
                         <DotsVerticalIcon className="cursor-pointer" />
                     </Flex>
                 </DropdownMenu.Trigger>

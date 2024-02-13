@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
 import { useUploadThing } from '~/hooks/useUploadThing'
@@ -23,10 +23,24 @@ export default function useArtistForm(id = '') {
     const createArtistMutation = api.artist.create.useMutation()
     const editArtistMutation = api.artist.update.useMutation()
     const deleteartistPhotoMutation = api.artist.deletePhoto.useMutation()
-    const useGetArtistQuery = api.artist.get.useQuery(
+    const getArtistQuery = api.artist.get.useQuery(
         { id },
         { enabled: Boolean(id), staleTime: Infinity, cacheTime: Infinity }
     )
+
+    const isLoading = useMemo(() => {
+        return (
+            editArtistMutation.isLoading ||
+            createArtistMutation.isLoading ||
+            getArtistQuery.isFetching ||
+            deleteartistPhotoMutation.isLoading
+        )
+    }, [
+        editArtistMutation.isLoading,
+        createArtistMutation.isLoading,
+        getArtistQuery.isFetching,
+        deleteartistPhotoMutation.isLoading
+    ])
 
     const defaultValues: ArtistFormValues = {
         name: '',
@@ -44,7 +58,7 @@ export default function useArtistForm(id = '') {
     })
 
     useEffect(() => {
-        const data = useGetArtistQuery.data
+        const data = getArtistQuery.data
         if (data) {
             methods.reset({
                 ...data,
@@ -56,7 +70,7 @@ export default function useArtistForm(id = '') {
                 description: data.description ?? ''
             })
         }
-    }, [useGetArtistQuery.data, methods])
+    }, [getArtistQuery.data, methods])
 
     const handleDeletePhoto = async () => {
         if (id) {
@@ -98,11 +112,11 @@ export default function useArtistForm(id = '') {
                 !values.photoPath &&
                 !values.photoName &&
                 !values.fileData &&
-                useGetArtistQuery.data?.photoPath
+                getArtistQuery.data?.photoPath
 
             // Photo has been changed
             const photoChanged =
-                values.photoPath !== useGetArtistQuery.data?.photoPath
+                values.photoPath !== getArtistQuery.data?.photoPath
 
             // In either case, we need to delete the photo
             if (photoRemoved || photoChanged) {
@@ -141,7 +155,7 @@ export default function useArtistForm(id = '') {
                 })
             }
 
-            await useGetArtistQuery.refetch()
+            await getArtistQuery.refetch()
 
             toast({
                 title: 'Success',
@@ -161,9 +175,8 @@ export default function useArtistForm(id = '') {
     })
 
     return {
-        handleDeletePhoto,
-        startUpload,
         submit,
-        methods
+        methods,
+        isLoading
     }
 }

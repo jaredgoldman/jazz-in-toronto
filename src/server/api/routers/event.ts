@@ -135,17 +135,19 @@ export const eventRouter = createTRPCRouter({
             })
         }),
 
-    getAll: publicProcedure.query(({ ctx }) => {
-        return ctx.prisma.event.findMany({
-            include: {
-                artist: true,
-                venue: true
-            },
-            where: {
-                approved: true
-            }
-        })
-    }),
+    getAll: publicProcedure
+        .input(z.object({ showUnapproved: z.boolean() }))
+        .query(({ ctx, input }) => {
+            return ctx.prisma.event.findMany({
+                include: {
+                    artist: true,
+                    venue: true
+                },
+                where: {
+                    approved: input.showUnapproved ? undefined : true
+                }
+            })
+        }),
 
     getAllByDay: publicProcedure
         .input(z.object({ date: z.date() }))
