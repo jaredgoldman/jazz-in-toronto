@@ -33,7 +33,7 @@ export default function About() {
                 mx="auto"
                 p={{ initial: '5', xs: '9' }}
             >
-                <Heading mb="8" align="center" size={{ initial: '8', xs: '9' }}>
+                <Heading mb="9" align="center" size={{ initial: '8', xs: '9' }}>
                     About Us
                 </Heading>
                 <Text
