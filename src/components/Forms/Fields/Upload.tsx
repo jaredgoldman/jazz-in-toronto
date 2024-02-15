@@ -1,8 +1,6 @@
 import { useCallback } from 'react'
-import FileUploadButton from '~/components/FileUploadButton'
-import { Flex, Button, Text } from '@radix-ui/themes'
+import { Flex, Button, Text, Box, Separator } from '@radix-ui/themes'
 import * as Form from '@radix-ui/react-form'
-import { FileData } from '~/types/data'
 import {
     FieldValues,
     Path,
@@ -10,7 +8,13 @@ import {
     Controller,
     useFormContext
 } from 'react-hook-form'
-import { TrashIcon } from '@radix-ui/react-icons'
+import {
+    TrashIcon,
+    UploadIcon,
+    CheckIcon,
+    TargetIcon,
+    ImageIcon
+} from '@radix-ui/react-icons'
 import { useDropzone } from 'react-dropzone'
 import { trimFileName } from '../utils'
 
@@ -24,7 +28,6 @@ interface Props<T extends FieldValues> {
 
 export default function Upload<T extends FieldValues>({
     name,
-    buttonLabel = 'Upload',
     required,
     control,
     label
@@ -73,35 +76,91 @@ export default function Upload<T extends FieldValues>({
                         <Flex
                             width="100%"
                             justify="center"
+                            align="center"
                             my="2"
-                            py="6"
-                            className="cursor-pointer rounded-md border-2 border-gray-600"
+                            className="h-[12.5rem] rounded-md border-2 border-gray-600"
                         >
                             {!watchedPhotoPath && !watchedFileData ? (
-                                <Flex {...getRootProps()}>
+                                <Box
+                                    {...getRootProps()}
+                                    className="cursor-pointer"
+                                >
                                     <input {...getInputProps()} />
                                     {isDragActive ? (
-                                        <p>Drop the files here ...</p>
-                                    ) : (
-                                        <p>
-                                            Drop some files here, or click to
-                                            select files
-                                        </p>
-                                    )}
-                                </Flex>
-                            ) : (
-                                <Flex direction="column">
-                                    <Text>File uploaded</Text>
-                                    <Flex align="center" justify="between">
-                                        <Text>{getValues('photoName')}</Text>
-                                        <Button
-                                            variant="ghost"
-                                            size="1"
-                                            onClick={removeFile}
-                                            type="button"
+                                        <Flex
+                                            direction="column"
+                                            align="center"
+                                            gap="4"
                                         >
-                                            <TrashIcon />
-                                        </Button>
+                                            <TargetIcon
+                                                width="50"
+                                                height="50"
+                                            />
+                                            <Text>Drop the files here ...</Text>
+                                        </Flex>
+                                    ) : (
+                                        <Flex
+                                            direction="column"
+                                            align="center"
+                                            gap="4"
+                                        >
+                                            <UploadIcon
+                                                width="50"
+                                                height="50"
+                                            />
+                                            <Text>
+                                                Drop some files here, or click
+                                                to select files
+                                            </Text>
+                                        </Flex>
+                                    )}
+                                </Box>
+                            ) : (
+                                <Flex
+                                    direction="column"
+                                    align="center"
+                                    gap="4"
+                                    width="100%"
+                                >
+                                    <CheckIcon
+                                        width="50"
+                                        height="50"
+                                        className="text-green-500"
+                                    />
+                                    <Flex
+                                        direction="column"
+                                        align="start"
+                                        gap="2"
+                                        width="100%"
+                                        px={{ initial: '5', xs: '9' }}
+                                    >
+                                        <Text>File uploaded</Text>
+                                        <Separator
+                                            orientation="horizontal"
+                                            size="4"
+                                        />
+                                        <Flex
+                                            align="center"
+                                            justify="between"
+                                            width="100%"
+                                        >
+                                            <Flex gap="2" align="center">
+                                                <ImageIcon
+                                                    width="10"
+                                                    height="10"
+                                                />
+                                                <Text color="orange">
+                                                    {getValues('photoName')}
+                                                </Text>
+                                            </Flex>
+                                            <Button variant="ghost">
+                                                <TrashIcon
+                                                    width="20"
+                                                    height="20"
+                                                    onClick={removeFile}
+                                                />
+                                            </Button>
+                                        </Flex>
                                     </Flex>
                                 </Flex>
                             )}
