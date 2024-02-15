@@ -6,7 +6,7 @@ import { Flex, Heading, Text } from '@radix-ui/themes'
 import Link from '~/components/Link'
 import Loading from '~/components/Loading'
 
-export default function Venues(): JSX.Element {
+export default function Venues() {
     const getAllVenuesQuery = api.venue.getAll.useQuery()
 
     const venueCards = useMemo(

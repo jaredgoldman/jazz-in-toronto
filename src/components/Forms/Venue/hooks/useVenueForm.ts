@@ -14,7 +14,7 @@ export interface VenueFormValues {
     city: string
     website: string
     instagramHandle?: string
-    fileData?: FileData
+    fileData?: File
     photoPath?: string
     photoName?: string
     phoneNumber: string
@@ -146,8 +146,8 @@ export default function useVenueForm(id = '') {
             }
 
             // Upload image if it exists
-            if (values?.fileData?.file) {
-                if (values.fileData.file.size > MAX_FILE_SIZE) {
+            if (values?.fileData) {
+                if (values.fileData.size > MAX_FILE_SIZE) {
                     return toast({
                         title: 'Error',
                         message:
@@ -156,7 +156,7 @@ export default function useVenueForm(id = '') {
                     })
                 }
 
-                const res = await startUpload([values.fileData.file])
+                const res = await startUpload([values.fileData])
 
                 if (res) {
                     photoPath = res[0]?.fileUrl

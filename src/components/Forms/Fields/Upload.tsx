@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import FileUploadButton from '~/components/FileUploadButton'
 import { Flex, Button, Text } from '@radix-ui/themes'
 import * as Form from '@radix-ui/react-form'
@@ -5,20 +6,19 @@ import { FileData } from '~/types/data'
 import {
     FieldValues,
     Path,
-    FieldError,
     Control,
     Controller,
     useFormContext
 } from 'react-hook-form'
 import { TrashIcon } from '@radix-ui/react-icons'
-import { useCallback } from 'react'
+import { useDropzone } from 'react-dropzone'
+import { trimFileName } from '../utils'
 
 interface Props<T extends FieldValues> {
     name: Path<T>
     control: Control<T>
     label?: string
     buttonLabel?: string
-    error?: FieldError
     required?: boolean | string
 }
 
@@ -27,11 +27,10 @@ export default function Upload<T extends FieldValues>({
     buttonLabel = 'Upload',
     required,
     control,
-    error,
     label
 }: Props<T>) {
     const { setValue, watch, getValues } = useFormContext<{
-        fileData: FileData | undefined
+        fileData: File | undefined
         photoPath: string
         photoName: string
     }>()
@@ -43,13 +42,21 @@ export default function Upload<T extends FieldValues>({
     }, [setValue])
 
     const handleUpload = useCallback(
-        (data: FileData) => {
-            setValue('fileData', data)
-            setValue('photoPath', data.dataURL)
-            setValue('photoName', data.file.name)
+        (files: File[]) => {
+            let file = files[0]
+            if (file) {
+                file = trimFileName(file)
+                setValue('fileData', file)
+                setValue('photoPath', URL.createObjectURL(file))
+                setValue('photoName', file.name)
+            }
         },
         [setValue]
     )
+
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        onDrop: (files) => handleUpload(files)
+    })
 
     const watchedFileData = watch('fileData')
     const watchedPhotoPath = watch('photoPath')
@@ -71,10 +78,17 @@ export default function Upload<T extends FieldValues>({
                             className="cursor-pointer rounded-md border-2 border-gray-600"
                         >
                             {!watchedPhotoPath && !watchedFileData ? (
-                                <FileUploadButton
-                                    onUpload={handleUpload}
-                                    label={buttonLabel}
-                                />
+                                <Flex {...getRootProps()}>
+                                    <input {...getInputProps()} />
+                                    {isDragActive ? (
+                                        <p>Drop the files here ...</p>
+                                    ) : (
+                                        <p>
+                                            Drop some files here, or click to
+                                            select files
+                                        </p>
+                                    )}
+                                </Flex>
                             ) : (
                                 <Flex direction="column">
                                     <Text>File uploaded</Text>
@@ -92,11 +106,6 @@ export default function Upload<T extends FieldValues>({
                                 </Flex>
                             )}
                         </Flex>
-                        {error && (
-                            <Text size="2" color="red">
-                                {error.message}
-                            </Text>
-                        )}
                     </Form.Field>
                 )
             }}
