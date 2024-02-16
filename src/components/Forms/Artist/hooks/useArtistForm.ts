@@ -42,6 +42,10 @@ export default function useArtistForm(id = '') {
         deleteartistPhotoMutation.isLoading
     ])
 
+    const hasSubmitted = useMemo(() => {
+        return editArtistMutation.isSuccess || createArtistMutation.isSuccess
+    }, [editArtistMutation.isSuccess, createArtistMutation.isSuccess])
+
     const defaultValues: ArtistFormValues = {
         name: '',
         instagramHandle: '',
@@ -177,6 +181,7 @@ export default function useArtistForm(id = '') {
     return {
         submit,
         methods,
-        isLoading
+        isLoading,
+        hasSubmitted
     }
 }

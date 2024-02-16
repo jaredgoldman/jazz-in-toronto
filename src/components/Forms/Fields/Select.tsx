@@ -63,6 +63,7 @@ export default function Select<T extends FieldValues>({
         return (
             <SelectRoot
                 onValueChange={(value) => {
+                    // If field is provided, call its onChange method, otherwise call the onChange prop
                     if (field) {
                         field.onChange(value)
                     } else if (onChange) {

@@ -46,6 +46,11 @@ export default function useVenueForm(id = '') {
         ]
     )
 
+    const hasSubmitted = useMemo(
+        () => editVenueMutation.isSuccess || createVenueMutation.isSuccess,
+        [editVenueMutation.isSuccess, createVenueMutation.isSuccess]
+    )
+
     const defaultValues: VenueFormValues = {
         name: '',
         photoPath: '',
@@ -200,6 +205,7 @@ export default function useVenueForm(id = '') {
         onSelectLocation,
         submit,
         methods,
-        isLoading
+        isLoading,
+        hasSubmitted
     }
 }

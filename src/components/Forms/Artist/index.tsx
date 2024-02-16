@@ -11,7 +11,7 @@ export default function ArtistForm() {
     const param = router.query.id as string
     const isAdmin = router.asPath.includes('admin')
 
-    const { submit, methods, isLoading } = useArtistForm(param)
+    const { submit, methods, isLoading, hasSubmitted } = useArtistForm(param)
 
     const {
         control,
@@ -77,7 +77,10 @@ export default function ArtistForm() {
                                 />
                             )}
                             <Form.Submit asChild>
-                                <Button className="w-full" disabled={isLoading}>
+                                <Button
+                                    className="w-full"
+                                    disabled={isLoading || hasSubmitted}
+                                >
                                     Submit
                                 </Button>
                             </Form.Submit>

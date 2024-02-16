@@ -61,6 +61,11 @@ export default function useEventForm(id = '') {
         [createEventMutation.isLoading, updateEventMutation.isLoading]
     )
 
+    const hasSubmitted = useMemo(
+        () => createEventMutation.isSuccess || updateEventMutation.isSuccess,
+        [createEventMutation.isSuccess, updateEventMutation.isSuccess]
+    )
+
     const defaultValues: EventFormValues = {
         name: '',
         startDate: toDateTimeLocal(new Date()),
@@ -135,6 +140,7 @@ export default function useEventForm(id = '') {
         artistData: getAllArtistQuery.data ?? [],
         submit,
         isSubmitting,
+        hasSubmitted,
         isLoading,
         errors,
         control,

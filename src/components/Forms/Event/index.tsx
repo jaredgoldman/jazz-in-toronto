@@ -12,8 +12,15 @@ export default function EventForm() {
     const param = router.query.id as string
     const isAdmin = router.asPath.includes('admin')
 
-    const { submit, errors, control, venueData, artistData, isSubmitting } =
-        useEventForm(param)
+    const {
+        submit,
+        errors,
+        control,
+        venueData,
+        artistData,
+        isSubmitting,
+        hasSubmitted
+    } = useEventForm(param)
 
     return (
         <Flex
@@ -124,7 +131,7 @@ export default function EventForm() {
                                 <Button
                                     className="w-full"
                                     variant="solid"
-                                    disabled={isSubmitting}
+                                    disabled={isSubmitting || hasSubmitted}
                                 >
                                     Submit
                                 </Button>

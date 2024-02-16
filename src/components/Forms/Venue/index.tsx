@@ -12,7 +12,8 @@ export default function VenueForm() {
     const isAdmin = router.asPath.includes('admin')
     const param = router.query.id as string | undefined
 
-    const { submit, onSelectLocation, methods, isLoading } = useVenueForm(param)
+    const { submit, onSelectLocation, methods, isLoading, hasSubmitted } =
+        useVenueForm(param)
 
     const {
         control,
@@ -84,7 +85,11 @@ export default function VenueForm() {
                                 />
                             )}
                             <Form.Submit asChild>
-                                <Button className="w-full" variant="solid" disabled={isLoading}>
+                                <Button
+                                    className="w-full"
+                                    variant="solid"
+                                    disabled={isLoading || hasSubmitted}
+                                >
                                     Submit
                                 </Button>
                             </Form.Submit>
