@@ -33,9 +33,9 @@ type Props<TData extends FieldValues> = {
 type BaseSelectProps<TData extends FieldValues> = {
     name: string
     label: string | ReactNode
-    field?: ControllerRenderProps<TData, Path<TData>>
     options?: JSX.Element[]
     onChange?: (value: string) => void
+    field?: ControllerRenderProps<TData, Path<TData>>
 }
 
 export default function Select<T extends FieldValues>({
@@ -63,7 +63,7 @@ export default function Select<T extends FieldValues>({
         return (
             <SelectRoot
                 onValueChange={(value) => {
-                    if (field && !onChange) {
+                    if (field) {
                         field.onChange(value)
                     } else if (onChange) {
                         onChange(value)
