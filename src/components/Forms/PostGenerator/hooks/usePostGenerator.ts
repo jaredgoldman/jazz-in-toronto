@@ -41,9 +41,7 @@ export default function usePostGenerator() {
     const onSubmit = async ({ caption }: PostGeneratorValues) => {
         try {
             if (files?.length) {
-                const res = await startUpload([
-                    ...files.map((file) => file.file)
-                ])
+                const res = await startUpload([...files.map((file) => file)])
                 res && mutate({ files: res, caption })
             }
         } catch (error) {
