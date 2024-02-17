@@ -4,7 +4,6 @@ import { api } from '~/utils/api'
 import { useUploadThing } from '~/hooks/useUploadThing'
 import { MAX_FILE_SIZE } from '~/utils/constants'
 import { useToast } from '~/hooks/useToast'
-import { FileData } from '~/types/data'
 
 export interface ArtistFormValues {
     name: string

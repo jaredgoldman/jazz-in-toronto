@@ -1,5 +1,4 @@
 import { useState } from 'react'
-// Componenets
 import { DatePicker } from '../Fields'
 import { Input } from '../Fields'
 import FormLayout from '~/layouts/FormLayout'
@@ -8,10 +7,7 @@ import PostImage from './components/PostImage'
 import Loading from '~/components/Loading'
 import * as Form from '@radix-ui/react-form'
 import { Card } from '@radix-ui/themes'
-// Hooks
 import usePostGenerator from './hooks/usePostGenerator'
-import FileUploadButton from '~/components/FileUploadButton'
-import { type FileData } from '~/types/data'
 import { EventsTable } from '~/components/Tables'
 
 export default function PostGenerator(): JSX.Element {
@@ -25,7 +21,7 @@ export default function PostGenerator(): JSX.Element {
         isLoading,
         isSuccess,
         error,
-        events,
+        events
     } = usePostGenerator()
 
     const removeImage = (index: number) => {
@@ -36,13 +32,13 @@ export default function PostGenerator(): JSX.Element {
         })
     }
 
-    const onUpload = (data: FileData) => {
-        setSrcs((prev) => {
-            const newSet = new Set(prev)
-            newSet.add(data.dataURL)
-            return newSet
-        })
-    }
+    // const onUpload = (data: FileData) => {
+    //     setSrcs((prev) => {
+    //         const newSet = new Set(prev)
+    //         newSet.add(data.dataURL)
+    //         return newSet
+    //     })
+    // }
 
     return (
         <>
@@ -90,14 +86,14 @@ export default function PostGenerator(): JSX.Element {
                             direction={{ initial: 'column', md: 'row' }}
                             className="max-w-screen-2xl overflow-x-auto"
                         >
-                            {files.map((file) => {
+                            {/*{files.map((file) => {
                                 return (
                                     <PostImage
                                         key={file.file.name}
                                         src={file.dataURL}
                                     />
                                 )
-                            })}
+                            })}*/}
                             {srcs?.size
                                 ? Array.from(srcs).map((src, i) => {
                                       return (
@@ -129,10 +125,13 @@ export default function PostGenerator(): JSX.Element {
                                     height="100%"
                                     px="5"
                                 >
-                                    <FileUploadButton
+                                    {/*
+
+                            <FileUploadButton
                                         label="+"
                                         onUpload={onUpload}
                                     />
+*/}
                                 </Flex>
                             </Card>
                         </Flex>
@@ -150,9 +149,7 @@ export default function PostGenerator(): JSX.Element {
                     You can edit events that appear in the post here
                 </Text>
             </Box>
-            {events && (
-              <EventsTable/>
-            )}
+            {events && <EventsTable />}
         </>
     )
 }
