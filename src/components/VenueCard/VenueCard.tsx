@@ -26,7 +26,7 @@ export default function VenueCard({ venue }: Props) {
                 {venue.photoPath && (
                     <Flex
                         position="relative"
-                        className="h-96 w-full max-w-[35rem]"
+                        className="h-96 w-full lg:max-w-[30rem]"
                     >
                         <Image
                             fill={true}
