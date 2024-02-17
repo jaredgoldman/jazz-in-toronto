@@ -12,7 +12,7 @@ export interface ArtistFormValues {
     photoName?: string
     instagramHandle?: string
     website?: string
-    fileData?: FileData
+    fileData?: File
     featured: boolean
     description?: string
 }
@@ -127,8 +127,8 @@ export default function useArtistForm(id = '') {
             }
 
             // Upload image if it exists
-            if (values?.fileData?.file) {
-                if (values.fileData.file.size > MAX_FILE_SIZE) {
+            if (values?.fileData) {
+                if (values?.fileData.size > MAX_FILE_SIZE) {
                     return toast({
                         title: 'Error',
                         message:
@@ -137,7 +137,7 @@ export default function useArtistForm(id = '') {
                     })
                 }
 
-                const res = await startUpload([values.fileData.file])
+                const res = await startUpload([values.fileData])
 
                 if (res) {
                     photoPath = res[0]?.fileUrl

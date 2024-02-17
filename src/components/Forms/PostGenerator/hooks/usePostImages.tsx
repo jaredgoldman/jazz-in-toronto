@@ -1,9 +1,5 @@
-// Libraries
 import { useState, useEffect } from 'react'
-// Types
-import { type EventWithArtistVenue } from '~/types/data'
-import { type FileData } from '~/types/data'
-// Hookes
+import { EventWithArtistVenue } from '~/types/data'
 import useCanvas from './useCanvas'
 
 export default function usePostImages(
@@ -12,10 +8,10 @@ export default function usePostImages(
     eventsPerCanvas = 19
 ) {
     const createCanvas = useCanvas()
-    const [files, setFiles] = useState<FileData[]>([])
+    const [files, setFiles] = useState<File[]>([])
 
     useEffect(() => {
-        const files: FileData[] = []
+        const files: File[] = []
 
         const mapPostImages = async () => {
             const eventLength = events?.length || 0

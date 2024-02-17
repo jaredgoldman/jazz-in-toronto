@@ -1,13 +1,9 @@
-// Libraries
 import { useCallback } from 'react'
 import getDay from 'date-fns/getDay'
 import { getDaysOfTheWeek } from '~/utils/constants'
-// Types
-import { type EventWithArtistVenue } from '~/types/data'
-import { type FileData } from '~/types/data'
-// utils
+import { EventWithArtistVenue } from '~/types/data'
 import { getFormattedTime } from '~/utils/date'
-// Assets
+
 // Returns and canvas element for the outer element to render
 export default function useCanvas() {
     const canvas = document.createElement('canvas')
@@ -116,17 +112,14 @@ export default function useCanvas() {
     const getBlob = async (
         currentIndex: number,
         canvas: HTMLCanvasElement
-    ): Promise<FileData | undefined> => {
+    ): Promise<File | undefined> => {
         if (canvas) {
             const dataURL = canvas.toDataURL('image/png')
             const blob = await (await fetch(dataURL)).blob()
             const file = new File([blob], `jazzintoronto-${currentIndex}.png`, {
                 type: 'image/png'
             })
-            return {
-                file,
-                dataURL
-            }
+            return file
         }
     }
 
