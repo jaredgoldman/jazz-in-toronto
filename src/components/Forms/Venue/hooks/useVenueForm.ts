@@ -28,7 +28,7 @@ export default function useVenueForm(id = '') {
     const deleteVenuePhotoMutation = api.venue.deletePhoto.useMutation()
     const getVenueQuery = api.venue.get.useQuery(
         { id },
-        { enabled: Boolean(id), staleTime: Infinity, cacheTime: Infinity }
+        { enabled: !!id, staleTime: Infinity, cacheTime: Infinity }
     )
 
     const isLoading = useMemo(

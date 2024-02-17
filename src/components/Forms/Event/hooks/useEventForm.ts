@@ -41,7 +41,7 @@ export default function useEventForm(id = '') {
     const updateEventMutation = api.event.update.useMutation()
     const getEventQuery = api.event.get.useQuery(
         { id },
-        { enabled: Boolean(id) }
+        { enabled: !!id, staleTime: Infinity, cacheTime: Infinity }
     )
 
     const isLoading = useMemo(

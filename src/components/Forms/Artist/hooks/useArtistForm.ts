@@ -25,7 +25,7 @@ export default function useArtistForm(id = '') {
     const deleteartistPhotoMutation = api.artist.deletePhoto.useMutation()
     const getArtistQuery = api.artist.get.useQuery(
         { id },
-        { enabled: Boolean(id), staleTime: Infinity, cacheTime: Infinity }
+        { enabled: !!id, staleTime: Infinity, cacheTime: Infinity }
     )
 
     const isLoading = useMemo(() => {
