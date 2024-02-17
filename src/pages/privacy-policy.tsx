@@ -1,12 +1,10 @@
-// Componenets
 import RootLayout from '~/layouts/RootLayout'
 import { Container, Heading, Text } from '@radix-ui/themes'
 
-// TODO: Convert this comp to radix-ui componenets and link in UI
 export default function PrivacyPolicy() {
     return (
         <RootLayout pageTitle="Jazz In Toronto | Privacy Policy">
-            <Container>
+            <Container p="6">
                 <Heading align="center" mb="6" size="9">
                     Privacy Policy
                 </Heading>

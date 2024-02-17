@@ -8,9 +8,7 @@ export default function Footer(): JSX.Element {
                 <Link href="https://github.com/jaredgoldman/jazz-in-toronto">
                     Github
                 </Link>
-                <Link href="https://github.com/jaredgoldman/jazz-in-toronto">
-                    Privacy Policy
-                </Link>
+                <Link href="/privacy-policy">Privacy Policy</Link>
             </Flex>
         </footer>
     )
