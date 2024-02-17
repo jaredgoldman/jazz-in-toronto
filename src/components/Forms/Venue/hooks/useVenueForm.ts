@@ -2,7 +2,6 @@ import { useEffect, useMemo } from 'react'
 import { useUploadThing } from '~/hooks/useUploadThing'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
-import { FileData } from '~/types/data'
 import { MAX_FILE_SIZE } from '~/utils/constants'
 import { useToast } from '~/hooks/useToast'
 

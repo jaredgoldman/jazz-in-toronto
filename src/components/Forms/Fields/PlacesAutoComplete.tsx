@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import usePlacesAutocomplete, {
     getGeocode,
     getLatLng
@@ -39,7 +39,7 @@ export default function PlacesAutocomplete<T extends FieldValues>({
     control,
     required = false
 }: Props<T>): JSX.Element {
-    const { getFieldState, watch } = useFormContext<{ address: string }>()
+    const { watch } = useFormContext<{ address: string }>()
     const {
         ready,
         value,
