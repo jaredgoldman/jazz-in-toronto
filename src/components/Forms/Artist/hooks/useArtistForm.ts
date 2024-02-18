@@ -104,9 +104,6 @@ export default function useArtistForm(id = '') {
     })
 
     const onSubmit = async (values: ArtistFormValues) => {
-        console.log({
-            values
-        })
         try {
             let photoPath = values.photoPath
 

@@ -21,7 +21,7 @@ import {
 import { ReactNode } from 'react'
 
 type Props<TData extends FieldValues> = {
-    label: string | ReactNode
+    label?: string | ReactNode
     name: Path<TData>
     optionData: Venue[] | Artist[] | { id: string; name: string }[]
     control?: Control<TData>
@@ -32,8 +32,8 @@ type Props<TData extends FieldValues> = {
 
 type BaseSelectProps<TData extends FieldValues> = {
     name: string
-    label: string | ReactNode
-    options?: JSX.Element[]
+    label?: string | ReactNode
+    options: JSX.Element[]
     onChange?: (value: string) => void
     field?: ControllerRenderProps<TData, Path<TData>>
 }
@@ -63,7 +63,6 @@ export default function Select<T extends FieldValues>({
         return (
             <SelectRoot
                 onValueChange={(value) => {
-                    // If field is provided, call its onChange method, otherwise call the onChange prop
                     if (field) {
                         field.onChange(value)
                     } else if (onChange) {

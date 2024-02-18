@@ -83,18 +83,6 @@ export default function useVenueForm(id = '') {
         }
     }, [getVenueQuery.data, methods])
 
-    const onSelectLocation = (
-        address: string,
-        latitude: number,
-        longitude: number,
-        city: string
-    ) => {
-        methods.setValue('address', address)
-        methods.setValue('latitude', latitude)
-        methods.setValue('longitude', longitude)
-        methods.setValue('city', city)
-    }
-
     const handleDeletePhoto = async () => {
         const currentValues = methods.getValues()
         if (currentValues?.photoPath && id) {
@@ -201,7 +189,6 @@ export default function useVenueForm(id = '') {
     return {
         handleDeletePhoto,
         startUpload,
-        onSelectLocation,
         submit,
         methods,
         isLoading,

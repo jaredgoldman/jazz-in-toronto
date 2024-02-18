@@ -137,7 +137,7 @@ export function VenuesTable() {
                 header: 'Name'
             }),
             columnHelper.accessor((row) => row.address, {
-                cell: (info) => info.getValue(),
+                cell: (info) => info.getValue().split(',')[0],
                 header: 'Address'
             }),
             columnHelper.accessor((row) => row.city, {
@@ -268,11 +268,12 @@ export function VenuesTable() {
                     )}
                 </>
             )}
-            {!table.getFilteredRowModel().rows.length && (
-                <Flex justify="center" align="center" py="7">
-                    <Heading>No venues found</Heading>
-                </Flex>
-            )}
+            {!getAllVenuesQuery.isFetching &&
+                !table.getFilteredRowModel().rows.length && (
+                    <Flex justify="center" align="center" py="7">
+                        <Heading>No venues found</Heading>
+                    </Flex>
+                )}
             {getAllVenuesQuery.isLoading && <Loading />}
         </Box>
     )

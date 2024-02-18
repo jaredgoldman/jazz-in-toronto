@@ -50,7 +50,7 @@ export default function VenueCard({ venue }: Props) {
                         )}
                         <Flex gap="2" align="center">
                             <GlobeIcon width="23" height="22" />
-                            <Text size="5">{venue.address}</Text>
+                            <Text size="5">{venue.address.split(',')[0]}</Text>
                         </Flex>
                         {venue.phoneNumber && (
                             <Flex gap="2" align="center">
