@@ -1,10 +1,8 @@
-// Componenets
 import Loading from '~/components/Loading'
 import AdminLayout from '~/layouts/AdminLayout'
 import { Heading, Separator } from '@radix-ui/themes'
 import AdminStats from '~/components/AdminStats'
 import AdminControls from '~/components/AdminControls'
-// Utils
 import { api } from '~/utils/api'
 
 export default function AdminHome() {

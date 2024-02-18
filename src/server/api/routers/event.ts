@@ -150,15 +150,9 @@ export const eventRouter = createTRPCRouter({
         }),
 
     getAllByDay: publicProcedure
-        .input(z.object({ date: z.date() }))
+        .input(z.object({ date: z.date(), showUnapproved: z.boolean() }))
         .query(({ ctx, input }) => {
-            return getAllByDay(input.date, ctx.prisma, true)
-        }),
-
-    getAllBByDayAdmin: protectedProcedure
-        .input(z.object({ date: z.date() }))
-        .query(({ ctx, input }) => {
-            return getAllByDay(input.date, ctx.prisma, false)
+            return getAllByDay(input.date, ctx.prisma, input.showUnapproved)
         }),
 
     getAllByDayByVenue: publicProcedure

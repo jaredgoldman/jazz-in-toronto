@@ -28,21 +28,7 @@ export default function useVenueForm(id = '') {
     const deleteVenuePhotoMutation = api.venue.deletePhoto.useMutation()
     const getVenueQuery = api.venue.get.useQuery(
         { id },
-        { enabled: !!id, staleTime: Infinity, cacheTime: Infinity }
-    )
-
-    const isLoading = useMemo(
-        () =>
-            editVenueMutation.isLoading ||
-            createVenueMutation.isLoading ||
-            getVenueQuery.isFetching ||
-            deleteVenuePhotoMutation.isLoading,
-        [
-            editVenueMutation.isLoading,
-            createVenueMutation.isLoading,
-            getVenueQuery.isFetching,
-            deleteVenuePhotoMutation.isLoading
-        ]
+        { enabled: Boolean(id), staleTime: Infinity, cacheTime: Infinity }
     )
 
     const hasSubmitted = useMemo(
@@ -105,7 +91,7 @@ export default function useVenueForm(id = '') {
         }
     }
 
-    const { startUpload } = useUploadThing({
+    const { startUpload, isUploading } = useUploadThing({
         endpoint: 'uploadImage',
         onUploadError: () => {
             toast({
@@ -116,6 +102,21 @@ export default function useVenueForm(id = '') {
             })
         }
     })
+    const isLoading = useMemo(
+        () =>
+            editVenueMutation.isLoading ||
+            createVenueMutation.isLoading ||
+            getVenueQuery.isFetching ||
+            deleteVenuePhotoMutation.isLoading ||
+            isUploading,
+        [
+            editVenueMutation.isLoading,
+            createVenueMutation.isLoading,
+            getVenueQuery.isFetching,
+            deleteVenuePhotoMutation.isLoading,
+            isUploading
+        ]
+    )
 
     const onSubmit = async (values: VenueFormValues) => {
         try {
@@ -168,8 +169,6 @@ export default function useVenueForm(id = '') {
                     photoPath
                 })
             }
-
-            await getVenueQuery.refetch()
 
             toast({
                 title: 'Success',

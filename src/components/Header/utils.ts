@@ -20,6 +20,10 @@ export const navLinks = {
         {
             href: '/admin/venues',
             title: 'Venues'
+        },
+        {
+            href: '/admin/post',
+            title: 'Post'
         }
     ],
     [HeaderType.Public]: [
@@ -37,7 +41,7 @@ export const navLinks = {
                 {
                     href: '/venue',
                     title: 'Venue'
-                },
+                }
             ],
             href: '/'
         },
