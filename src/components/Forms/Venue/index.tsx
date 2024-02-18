@@ -12,8 +12,7 @@ export default function VenueForm() {
     const isAdmin = router.asPath.includes('admin')
     const param = router.query.id as string | undefined
 
-    const { submit, onSelectLocation, methods, isLoading, hasSubmitted } =
-        useVenueForm(param)
+    const { submit, methods, isLoading, hasSubmitted } = useVenueForm(param)
 
     const {
         control,
@@ -50,7 +49,6 @@ export default function VenueForm() {
                                 name="address"
                                 label="Address"
                                 control={control}
-                                onSelect={onSelectLocation}
                             />
                             <Upload
                                 name="fileData"

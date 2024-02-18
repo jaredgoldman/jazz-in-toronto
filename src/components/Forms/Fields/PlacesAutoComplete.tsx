@@ -5,7 +5,7 @@ import usePlacesAutocomplete, {
 } from 'use-places-autocomplete'
 import useOnclickOutside from 'react-cool-onclickoutside'
 import * as Form from '@radix-ui/react-form'
-import { TextField, Strong, Text } from '@radix-ui/themes'
+import { TextField, Strong, Text, Box } from '@radix-ui/themes'
 import {
     Control,
     Controller,
@@ -14,17 +14,13 @@ import {
     Path,
     useFormContext
 } from 'react-hook-form'
+import { VenueFormValues } from '../Venue/hooks/useVenueForm'
+import { setFormValues } from '../utils'
 
 interface Props<T extends FieldValues> {
     label: string
     name: Path<T>
     control: Control<T>
-    onSelect: (
-        address: string,
-        latitude: number,
-        longitude: number,
-        city: string
-    ) => void
     error?: FieldError
     placeHolder?: string
     required?: boolean | string
@@ -34,12 +30,11 @@ export default function PlacesAutocomplete<T extends FieldValues>({
     label,
     name,
     placeHolder,
-    onSelect,
     error,
     control,
     required = false
 }: Props<T>): JSX.Element {
-    const { watch } = useFormContext<{ address: string }>()
+    const { watch, setValue: setFormValue } = useFormContext<VenueFormValues>()
     const {
         ready,
         value,
@@ -93,7 +88,18 @@ export default function PlacesAutocomplete<T extends FieldValues>({
             )
             const city =
                 results[0]?.address_components[3]?.long_name || 'city unknown'
-            onSelect(description, lat, lng, city)
+
+            const fullAddress = results[0]?.formatted_address || description // Fallback to description if full address isn't available
+
+            setFormValues<VenueFormValues>(
+                {
+                    city,
+                    latitude: lat,
+                    longitude: lng,
+                    address: fullAddress
+                },
+                setFormValue
+            )
         } catch (e) {
             console.log('ERROR', e)
         }
@@ -112,6 +118,7 @@ export default function PlacesAutocomplete<T extends FieldValues>({
                     onClick={async () => {
                         await handleSelect(suggestion)
                     }}
+                    className="cursor-pointer"
                 >
                     <Strong>{main_text}</Strong> <Text>{secondary_text}</Text>
                 </li>
@@ -139,7 +146,11 @@ export default function PlacesAutocomplete<T extends FieldValues>({
                     </Form.Control>
                     {/* We can use the "status" to decide whether we should display the dropdown or not */}
                     {status === 'OK' && watch('address') !== value && (
-                        <ul>{renderSuggestions()}</ul>
+                        <Box className="relative">
+                            <ul className="bg-[var(--sand-1)]-opacity absolute w-full rounded-sm p-2 shadow-md backdrop-invert backdrop-opacity-40">
+                                {renderSuggestions()}
+                            </ul>
+                        </Box>
                     )}
                     {error && (
                         <Text size="2" color="red">

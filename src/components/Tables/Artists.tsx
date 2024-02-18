@@ -278,11 +278,12 @@ export function ArtistsTable() {
                     )}
                 </Flex>
             )}
-            {!table.getFilteredRowModel().rows.length && (
-                <Flex justify="center" align="center" py="7">
-                    <Heading>No artists found</Heading>
-                </Flex>
-            )}
+            {getAllArtistsQuery.isFetching &&
+                !table.getFilteredRowModel().rows.length && (
+                    <Flex justify="center" align="center" py="7">
+                        <Heading>No artists found</Heading>
+                    </Flex>
+                )}
             {getAllArtistsQuery.isLoading && <Loading />}
         </Box>
     )

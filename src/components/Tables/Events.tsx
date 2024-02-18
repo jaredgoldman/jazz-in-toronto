@@ -312,11 +312,12 @@ export function EventsTable() {
                     )}
                 </>
             ) : null}
-            {!table.getFilteredRowModel().rows.length && (
-                <Flex justify="center" align="center" py="7">
-                    <Heading>No events found</Heading>
-                </Flex>
-            )}
+            {getAllEventsQuery.isFetching &&
+                !table.getFilteredRowModel().rows.length && (
+                    <Flex justify="center" align="center" py="7">
+                        <Heading>No events found</Heading>
+                    </Flex>
+                )}
             {getAllEventsQuery.isLoading && <Loading />}
         </Flex>
     )
