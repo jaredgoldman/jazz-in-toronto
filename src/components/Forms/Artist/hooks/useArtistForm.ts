@@ -155,8 +155,6 @@ export default function useArtistForm(id = '') {
                 })
             }
 
-            await getArtistQuery.refetch()
-
             toast({
                 title: 'Success',
                 message: 'Artist successfully submitted!'

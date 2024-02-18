@@ -169,8 +169,6 @@ export default function useVenueForm(id = '') {
                 })
             }
 
-            await getVenueQuery.refetch()
-
             toast({
                 title: 'Success',
                 message: 'Venue successfully submitted!'
