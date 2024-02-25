@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { api } from '~/utils/api'
 import useCanvas from './useCanvas'
 import { EventWithArtistVenue } from '~/types/data'
-import { DateTime } from 'luxon'
 
 export default function usePostImages(date: string, eventsPerCanvas = 19) {
     const createCanvas = useCanvas()
@@ -23,6 +22,9 @@ export default function usePostImages(date: string, eventsPerCanvas = 19) {
      */
     const mapPostImages = useCallback(
         async (data: EventWithArtistVenue[]) => {
+            console.log({
+                date
+            })
             const tempFiles = []
             for (let i = 0; i < postImageEventsNeeded; i++) {
                 const eventsSlice = data.splice(0, eventsPerCanvas)
@@ -47,12 +49,12 @@ export default function usePostImages(date: string, eventsPerCanvas = 19) {
 
     // If we have all the events we need, we can start creating the files
     useEffect(() => {
-        if (getAllEventsQuery.data?.length && !files.length) {
+        if (getAllEventsQuery.data?.length) {
             setIsMapPostImagesLoading(true)
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
             mapPostImages(getAllEventsQuery.data)
         }
-    }, [getAllEventsQuery.data, mapPostImages, files])
+    }, [getAllEventsQuery.data, mapPostImages, files, date])
 
     const isLoading = useMemo(
         () => getAllEventsQuery.isLoading || isMapPostImagesLoading,

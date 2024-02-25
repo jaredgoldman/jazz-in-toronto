@@ -3,7 +3,6 @@ import getDay from 'date-fns/getDay'
 import { getDaysOfTheWeek } from '~/utils/constants'
 import { EventWithArtistVenue } from '~/types/data'
 import { getDateEST, getFormattedTime } from '~/utils/date'
-import { DateTime } from 'luxon'
 
 // Returns and canvas element for the outer element to render
 export default function useCanvas() {
@@ -54,7 +53,7 @@ export default function useCanvas() {
                     const dateEST = getDateEST(date)
 
                     // Set text properties
-                    const day = getDaysOfTheWeek('long')[getDay(date)] as string
+                    const day = getDaysOfTheWeek('long')[getDay(dateEST)] as string
                     const formattedDate = new Intl.DateTimeFormat('en-US', {
                         day: '2-digit',
                         month: 'long'
@@ -136,11 +135,9 @@ export default function useCanvas() {
     const createCanvas = useCallback(
         async (events: EventWithArtistVenue[], index: number, date: Date) => {
             // If not events, return as imgSrc is provided from another source
-            const ctx = canvas.getContext('2d')
-            if (ctx) {
-                await createPostCanvas(events, canvas, ctx, date)
-                return await getBlob(index, canvas)
-            }
+            const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+            await createPostCanvas(events, canvas, ctx, date)
+            return await getBlob(index, canvas)
         },
         [canvas, createPostCanvas, getBlob]
     )

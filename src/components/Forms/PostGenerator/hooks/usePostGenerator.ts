@@ -26,7 +26,9 @@ export default function usePostGenerator() {
         }
     })
 
-    const { files, isLoading } = usePostImages(watch('date'))
+    const watcheDate = watch('date')
+
+    const { files, isLoading } = usePostImages(watcheDate)
 
     const { startUpload } = useUploadThing({
         endpoint: 'uploadPosts',
