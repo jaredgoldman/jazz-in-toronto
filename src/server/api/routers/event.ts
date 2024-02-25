@@ -4,18 +4,25 @@ import {
     publicProcedure,
     protectedProcedure
 } from '~/server/api/trpc'
-import addDays from 'date-fns/addDays'
 import { env } from '~/env.mjs'
 import { PrismaClient, Venue } from '@prisma/client'
 import { EventWithArtistVenue } from '~/types/data'
+import { DateTime } from 'luxon'
 
 // Shared helpers
 const getAllByDay = (date: Date, prisma: PrismaClient, approved: boolean) => {
+    // Ensure that we're always using EST dates
+    const startDateISO = new Date(date).toISOString().slice(0, 10)
+    const gte = DateTime.fromISO(startDateISO)
+        .setZone('America/New_York')
+        .toJSDate()
+    const lt = DateTime.fromISO(startDateISO).plus({ days: 1 }).toJSDate()
+
     return prisma.event.findMany({
         where: {
             startDate: {
-                gte: new Date(date.setHours(0, 0, 0, 0)),
-                lt: new Date(addDays(date, 1))
+                gte,
+                lt
             },
             approved: approved ? true : undefined
         },
@@ -150,9 +157,15 @@ export const eventRouter = createTRPCRouter({
         }),
 
     getAllByDay: publicProcedure
-        .input(z.object({ date: z.date(), showUnapproved: z.boolean() }))
-        .query(({ ctx, input }) => {
-            return getAllByDay(input.date, ctx.prisma, input.showUnapproved)
+        .input(
+            z.object({ date: z.date(), showUnapproved: z.boolean().optional() })
+        )
+        .query(async ({ ctx, input }) => {
+            return await getAllByDay(
+                input.date,
+                ctx.prisma,
+                input.showUnapproved ?? false
+            )
         }),
 
     getAllByDayByVenue: publicProcedure

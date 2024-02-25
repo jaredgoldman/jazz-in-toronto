@@ -15,7 +15,7 @@ import {
     TargetIcon,
     ImageIcon
 } from '@radix-ui/react-icons'
-import { DropzoneRootProps, DropzoneState, useDropzone } from 'react-dropzone'
+import { DropzoneState, useDropzone } from 'react-dropzone'
 import { trimFileName } from '../utils'
 import { setFormValues } from '../utils'
 
@@ -107,6 +107,13 @@ export default function Upload<T extends FieldValues>({
     control,
     label
 }: Props<T>) {
+    const dzProps = useDropzone({
+        onDrop: (files) => handleUpload(files)
+    })
+
+    if (!control) {
+        return <BaseUpload />
+    }
     const { setValue, watch } = useFormContext<{
         fileData: File | undefined
         photoPath: string
@@ -141,10 +148,6 @@ export default function Upload<T extends FieldValues>({
         },
         [setValue]
     )
-
-    const dzProps = useDropzone({
-        onDrop: (files) => handleUpload(files)
-    })
 
     const watchedFileData = watch('fileData')
     const watchedPhotoPath = watch('photoPath')

@@ -3,6 +3,7 @@ import getDay from 'date-fns/getDay'
 import { getDaysOfTheWeek } from '~/utils/constants'
 import { EventWithArtistVenue } from '~/types/data'
 import { getFormattedTime } from '~/utils/date'
+import { DateTime } from 'luxon'
 
 // Returns and canvas element for the outer element to render
 export default function useCanvas() {
@@ -50,12 +51,17 @@ export default function useCanvas() {
 
                 // Draw the date rect
                 if (date) {
+                    const dateISO = new Date(date).toISOString().slice(0, 10)
+                    const dateEST = DateTime.fromISO(dateISO)
+                        .setZone('America/New_York')
+                        .toJSDate()
+
                     // Set text properties
                     const day = getDaysOfTheWeek('long')[getDay(date)] as string
                     const formattedDate = new Intl.DateTimeFormat('en-US', {
                         day: '2-digit',
                         month: 'long'
-                    }).format(date)
+                    }).format(dateEST)
 
                     const dateText = `${day}, ${formattedDate}`.toUpperCase()
                     ctx.font = '600 60px poppins' // Font size and family
@@ -109,32 +115,38 @@ export default function useCanvas() {
         []
     )
 
-    const getBlob = async (
-        currentIndex: number,
-        canvas: HTMLCanvasElement
-    ): Promise<File | undefined> => {
-        if (canvas) {
-            const dataURL = canvas.toDataURL('image/png')
-            const blob = await (await fetch(dataURL)).blob()
-            const file = new File([blob], `jazzintoronto-${currentIndex}.png`, {
-                type: 'image/png'
-            })
-            return file
-        }
-    }
+    const getBlob = useCallback(
+        async (
+            currentIndex: number,
+            canvas: HTMLCanvasElement
+        ): Promise<File | undefined> => {
+            if (canvas) {
+                const dataURL = canvas.toDataURL('image/png')
+                const blob = await (await fetch(dataURL)).blob()
+                const file = new File(
+                    [blob],
+                    `jazzintoronto-${currentIndex}.png`,
+                    {
+                        type: 'image/png'
+                    }
+                )
+                return file
+            }
+        },
+        []
+    )
 
-    const createCanvas = async (
-        events: EventWithArtistVenue[],
-        index: number,
-        date: Date
-    ) => {
-        // If not events, return as imgSrc is provided from another source
-        const ctx = canvas.getContext('2d')
-        if (ctx) {
-            await createPostCanvas(events, canvas, ctx, date)
-            return await getBlob(index, canvas)
-        }
-    }
+    const createCanvas = useCallback(
+        async (events: EventWithArtistVenue[], index: number, date: Date) => {
+            // If not events, return as imgSrc is provided from another source
+            const ctx = canvas.getContext('2d')
+            if (ctx) {
+                await createPostCanvas(events, canvas, ctx, date)
+                return await getBlob(index, canvas)
+            }
+        },
+        [canvas, createPostCanvas, getBlob]
+    )
 
     return createCanvas
 }
