@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import getDay from 'date-fns/getDay'
 import { getDaysOfTheWeek } from '~/utils/constants'
 import { EventWithArtistVenue } from '~/types/data'
-import { getFormattedTime } from '~/utils/date'
+import { getDateEST, getFormattedTime } from '~/utils/date'
 import { DateTime } from 'luxon'
 
 // Returns and canvas element for the outer element to render
@@ -51,10 +51,7 @@ export default function useCanvas() {
 
                 // Draw the date rect
                 if (date) {
-                    const dateISO = new Date(date).toISOString().slice(0, 10)
-                    const dateEST = DateTime.fromISO(dateISO)
-                        .setZone('America/New_York')
-                        .toJSDate()
+                    const dateEST = getDateEST(date)
 
                     // Set text properties
                     const day = getDaysOfTheWeek('long')[getDay(date)] as string

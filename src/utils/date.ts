@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon'
+
 export const getFormattedTime = (date: Date) => {
     return date.toLocaleString('en-US', {
         hour: 'numeric',
@@ -82,4 +84,11 @@ export const convertAndFormatTime = (timeString: string) => {
         return `${hours12}:${printMinutes} ${period}`
     }
     throw new Error('invalid time')
+}
+
+// Ensure that we're always using EST dates
+// XXX: Hacky solution at best, sould reconsider time handling
+export const getDateEST = (date: Date) => {
+    const dateISO = new Date(date).toISOString().slice(0, 10)
+    return DateTime.fromISO(dateISO).setZone('America/New_York').toJSDate()
 }

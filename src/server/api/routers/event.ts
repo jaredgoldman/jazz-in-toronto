@@ -8,15 +8,12 @@ import { env } from '~/env.mjs'
 import { PrismaClient, Venue } from '@prisma/client'
 import { EventWithArtistVenue } from '~/types/data'
 import { DateTime } from 'luxon'
+import { getDateEST } from '~/utils/date'
 
 // Shared helpers
 const getAllByDay = (date: Date, prisma: PrismaClient, approved: boolean) => {
-    // Ensure that we're always using EST dates
-    const startDateISO = new Date(date).toISOString().slice(0, 10)
-    const gte = DateTime.fromISO(startDateISO)
-        .setZone('America/New_York')
-        .toJSDate()
-    const lt = DateTime.fromISO(startDateISO).plus({ days: 1 }).toJSDate()
+    const gte = getDateEST(date)
+    const lt = DateTime.fromJSDate(gte).plus({ days: 1 }).toJSDate()
 
     return prisma.event.findMany({
         where: {
