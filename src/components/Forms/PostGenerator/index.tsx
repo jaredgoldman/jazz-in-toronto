@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Input } from '../Fields'
 import { Heading, Flex, Button, Text, Box } from '@radix-ui/themes'
 import PostImage from './components/PostImage'
@@ -11,6 +11,13 @@ export default function PostGenerator(): JSX.Element {
     const [srcs, setSrcs] = useState<Set<string>>(new Set())
 
     const { files, control, errors, submit, isLoading } = usePostGenerator()
+    useEffect(() => {
+        const loadFont = async () => {
+            await document.fonts.load('50px poppins')
+        }
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        loadFont()
+    }, [])
 
     // const removeImage = useCallback((index: number) => {
     //     setSrcs((prev) => {

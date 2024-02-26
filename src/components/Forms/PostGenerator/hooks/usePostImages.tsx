@@ -22,9 +22,6 @@ export default function usePostImages(date: string, eventsPerCanvas = 19) {
      */
     const mapPostImages = useCallback(
         async (data: EventWithArtistVenue[]) => {
-            console.log({
-                date
-            })
             const tempFiles = []
             for (let i = 0; i < postImageEventsNeeded; i++) {
                 const eventsSlice = data.splice(0, eventsPerCanvas)
