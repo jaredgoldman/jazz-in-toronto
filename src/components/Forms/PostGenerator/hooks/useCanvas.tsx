@@ -116,10 +116,10 @@ export default function useCanvas() {
         (ctx: CanvasRenderingContext2D, events: EventWithArtistVenue[]) => {
             const fontHeight = 30
             const fontMargin = 5
-            const postFontHeight = fontHeight + fontMargin
-            ctx.font = `200 ${fontHeight}px poppins`
+            const postFontHeight = fontHeight + fontMargin + 5
+            ctx.font = `400 ${fontHeight}px poppins`
 
-            let currentY = mainRectY + postFontHeight + 10
+            let currentY = mainRectY + postFontHeight + 4
             const eventTextX = rectX + 20
 
             // Print event dates
