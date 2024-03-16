@@ -16,21 +16,6 @@ export default function PostGenerator() {
     )
 
     const { files, isLoading } = usePostImages(date)
-
-    /**
-     * Download the files as a zip
-     * @returns The zip file
-     */
-    const downloadFiles = useCallback(async () => {
-        if (files?.length) {
-            const zip = new JSZip()
-            files.forEach((file) => {
-                zip.file(file.name, file)
-            })
-            saveAs(await zip.generateAsync({ type: 'blob' }), 'post-images.zip')
-        }
-    }, [files, saveAs])
-
     /**
      * Save the file as a blob
      * @param {Blob} blob - The blob to save
@@ -49,6 +34,20 @@ export default function PostGenerator() {
             window.URL.revokeObjectURL(url)
         }, 0)
     }, [])
+
+    /**
+     * Download the files as a zip
+     * @returns The zip file
+     */
+    const downloadFiles = useCallback(async () => {
+        if (files?.length) {
+            const zip = new JSZip()
+            files.forEach((file) => {
+                zip.file(file.name, file)
+            })
+            saveAs(await zip.generateAsync({ type: 'blob' }), 'post-images.zip')
+        }
+    }, [files, saveAs])
 
     return (
         <Flex align="center" direction="column" grow="1" gap="5">
