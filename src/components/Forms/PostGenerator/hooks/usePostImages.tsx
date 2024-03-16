@@ -9,10 +9,7 @@ import { EventWithArtistVenue } from '~/types/data'
  * @param {number} eventsPerCanvas - The number of events per canvas
  * @returns The files and loading state
  */
-export default function usePostImages(
-    dateString: string,
-    eventsPerCanvas = 19
-) {
+export default function usePostImages(dateString: string) {
     const createCanvas = useCanvas()
     const date = useMemo(() => new Date(dateString), [dateString])
     const [files, setFiles] = useState<File[]>([])
@@ -33,6 +30,7 @@ export default function usePostImages(
      */
     const generatePostImages = useCallback(
         async (data: EventWithArtistVenue[], date: Date) => {
+            const eventsPerCanvas = 19
             const imagesNeeded = Math.ceil(data.length / eventsPerCanvas)
             const postImageFiles = []
             const eventsData = [...data]
@@ -52,7 +50,7 @@ export default function usePostImages(
     useEffect(() => {
         if (getAllEventsQuery.isFetched && !hasMapped) {
             getAllEventsQuery?.data?.length
-                ? generatePostImages(getAllEventsQuery.data, date).then(
+                ? void generatePostImages(getAllEventsQuery.data, date).then(
                       (files) => {
                           setFiles(files)
                       }

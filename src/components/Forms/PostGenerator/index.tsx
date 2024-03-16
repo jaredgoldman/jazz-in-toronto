@@ -29,7 +29,7 @@ export default function PostGenerator() {
             })
             saveAs(await zip.generateAsync({ type: 'blob' }), 'post-images.zip')
         }
-    }, [])
+    }, [files, saveAs])
 
     /**
      * Save the file as a blob
