@@ -43,7 +43,7 @@ export default function usePostImages(dateString: string) {
             }
             return postImageFiles
         },
-        [createCanvas, getAllEventsQuery.data]
+        [createCanvas]
     )
 
     // Generate the files once when the events are fetched
