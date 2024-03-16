@@ -3,6 +3,12 @@ import { api } from '~/utils/api'
 import useCanvas from './useCanvas'
 import { EventWithArtistVenue } from '~/types/data'
 
+/**
+ * usePostImages hook
+ * @param {string} dateString - The date string formatted as MM-DD-YYYY
+ * @param {number} eventsPerCanvas - The number of events per canvas
+ * @returns The files and loading state
+ */
 export default function usePostImages(
     dateString: string,
     eventsPerCanvas = 19
@@ -44,27 +50,20 @@ export default function usePostImages(
 
     // Generate the files once when the events are fetched
     useEffect(() => {
-        if (
-            getAllEventsQuery.isFetched &&
-            getAllEventsQuery.data?.length &&
-            !hasMapped
-        ) {
-            generatePostImages(getAllEventsQuery.data, date).then((files) => {
-                setFiles(files)
-            })
-        } else if (
-            getAllEventsQuery.isFetched &&
-            !getAllEventsQuery.data?.length
-        ) {
-            setFiles([])
+        if (getAllEventsQuery.isFetched && !hasMapped) {
+            getAllEventsQuery?.data?.length
+                ? generatePostImages(getAllEventsQuery.data, date).then(
+                      (files) => {
+                          setFiles(files)
+                      }
+                  )
+                : setFiles([])
         }
     }, [getAllEventsQuery, hasMapped, date, generatePostImages])
 
     // Set to stop re-rendering hell
     useEffect(() => {
-        if (files.length) {
-            setHasMapped(true)
-        }
+        setHasMapped(true)
     }, [files, setHasMapped])
 
     // Re-generate the files if the date changes
