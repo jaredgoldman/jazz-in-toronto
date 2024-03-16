@@ -1,118 +1,88 @@
-import { useEffect, useState } from 'react'
-import { Input } from '../Fields'
-import { Heading, Flex, Button, Text, Box } from '@radix-ui/themes'
+import { useCallback, useState } from 'react'
+import { Heading, Flex, Text, Box, TextField, Button } from '@radix-ui/themes'
 import PostImage from './components/PostImage'
 import Loading from '~/components/Loading'
-import * as Form from '@radix-ui/react-form'
-import { Card } from '@radix-ui/themes'
-import usePostGenerator from './hooks/usePostGenerator'
+import usePostImages from './hooks/usePostImages'
+import JSZip from 'jszip'
 
-export default function PostGenerator(): JSX.Element {
-    const [srcs, setSrcs] = useState<Set<string>>(new Set())
+/**
+ * PostGenerator component
+ * @returns The PostGenerator component
+ */
+export default function PostGenerator() {
+    const [date, setDate] = useState(
+        // Grab just the time string
+        new Date().toISOString().split('T')[0] as string
+    )
 
-    const { files, control, errors, submit, isLoading } = usePostGenerator()
-    useEffect(() => {
-        const loadFont = async () => {
-            await document.fonts.load('50px poppins')
+    const { files, isLoading } = usePostImages(date)
+
+    /**
+     * Download the files as a zip
+     * @returns The zip file
+     */
+    const downloadFiles = useCallback(async () => {
+        if (files?.length) {
+            const zip = new JSZip()
+            files.forEach((file) => {
+                zip.file(file.name, file)
+            })
+            saveAs(await zip.generateAsync({ type: 'blob' }), 'post-images.zip')
         }
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        loadFont()
     }, [])
 
-    // const removeImage = useCallback((index: number) => {
-    //     setSrcs((prev) => {
-    //         const newSet = new Set(prev)
-    //         newSet.delete(Array.from(prev)[index] as string)
-    //         return newSet
-    //     })
-    // }, [])
-
-    // const onUpload = (data: File) => {
-    //     setSrcs((prev) => {
-    //         const newSet = new Set(prev)
-    //         newSet.add(URL.createObjectURL(data))
-    //         return newSet
-    //     })
-    // }
+    /**
+     * Save the file as a blob
+     * @param {Blob} blob - The blob to save
+     * @param {string} fileName - The name of the file
+     * @returns The file
+     */
+    const saveAs = useCallback((blob: Blob, fileName: string) => {
+        const link = document.createElement('a')
+        const url = URL.createObjectURL(blob)
+        link.href = url
+        link.download = fileName
+        document.body.appendChild(link)
+        link.click()
+        setTimeout(() => {
+            document.body.removeChild(link)
+            window.URL.revokeObjectURL(url)
+        }, 0)
+    }, [])
 
     return (
-        <>
-            <Flex align="center" direction="column" grow="1" mb="5">
-                <Form.Root onSubmit={submit} className="max-w-7xl">
-                    <Heading mb="3">Generate an Instagram Post</Heading>
-                    <Input
-                        label="Select a day to generate a post for"
-                        name="date"
-                        control={control}
-                        error={errors.date}
-                        type="date"
-                    />
-                    <Input
-                        name="caption"
-                        label="Caption"
-                        control={control}
-                        required="Please enter a caption"
-                        error={errors.caption}
-                    />
-                    <Flex width="100%" justify="center" mt="5">
-                        <Form.Submit asChild>
-                            <Button>Generate post</Button>
-                        </Form.Submit>
-                    </Flex>
-                </Form.Root>
-                {files?.length && !isLoading ? (
-                    <Flex
-                        mt="5"
-                        direction={{ initial: 'column', md: 'row' }}
-                        className="max-w-screen-2xl overflow-x-auto"
-                    >
-                        {files.map((file) => {
-                            return (
-                                <PostImage
-                                    key={file.name}
-                                    src={URL.createObjectURL(file)}
-                                />
-                            )
-                        })}
-                        {srcs?.size
-                            ? Array.from(srcs).map((src, i) => {
-                                  return (
-                                      <Flex key={i}>
-                                          <div className="relative">
-                                              <Button
-                                                  className="absolute left-0 top-0 z-50"
-                                                  size="1"
-                                                  // onClick={() => removeImage(i)}
-                                              >
-                                                  X
-                                              </Button>
-                                              <PostImage src={src} />
-                                          </div>
-                                      </Flex>
-                                  )
-                              })
-                            : null}
-                        <Card m="3" className="p-0">
-                            <Flex
-                                align="center"
-                                justify="center"
-                                grow="1"
-                                height="100%"
-                                px="5"
-                            >
-                                <Button className="w-full" disabled={isLoading}>
-                                    Generate post
-                                </Button>
-                            </Flex>
-                        </Card>
-                    </Flex>
-                ) : (
-                    <Box my="5">
-                        <Text>No events for this day</Text>
-                    </Box>
-                )}
-                {isLoading && <Loading />}
+        <Flex align="center" direction="column" grow="1" gap="5">
+            <Heading>Generate an Instagram Post</Heading>
+            <Flex direction="column" gap="1">
+                <Text>Select a date</Text>
+                <TextField.Input
+                    name="date"
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                />
             </Flex>
-        </>
+            {files?.length && !isLoading ? (
+                <Flex
+                    direction={{ initial: 'column', md: 'row' }}
+                    className="max-w-screen-2xl overflow-x-auto"
+                >
+                    {files.map((file) => {
+                        return (
+                            <PostImage
+                                key={file.name}
+                                src={URL.createObjectURL(file)}
+                            />
+                        )
+                    })}
+                </Flex>
+            ) : (
+                <Box my="5">
+                    <Text>No events for this day</Text>
+                </Box>
+            )}
+            {isLoading && <Loading />}
+            <Button onClick={downloadFiles}>Download Images</Button>
+        </Flex>
     )
 }

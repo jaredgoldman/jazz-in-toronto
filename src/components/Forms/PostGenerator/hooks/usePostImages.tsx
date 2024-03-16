@@ -3,60 +3,74 @@ import { api } from '~/utils/api'
 import useCanvas from './useCanvas'
 import { EventWithArtistVenue } from '~/types/data'
 
-export default function usePostImages(date: string, eventsPerCanvas = 19) {
+export default function usePostImages(
+    dateString: string,
+    eventsPerCanvas = 19
+) {
     const createCanvas = useCanvas()
+    const date = useMemo(() => new Date(dateString), [dateString])
     const [files, setFiles] = useState<File[]>([])
-    const [isMapPostImagesLoading, setIsMapPostImagesLoading] = useState(false)
-    const getAllEventsQuery = api.event.getAllByDay.useQuery({
-        date: new Date(date),
-        showUnapproved: false
-    })
-
-    const eventLength = getAllEventsQuery.data?.length || 0
-    const postImageEventsNeeded = Math.ceil(eventLength / eventsPerCanvas)
+    // XXX: extra state is needed here to prevent re-rendering hell
+    const [hasMapped, setHasMapped] = useState(false)
+    const getAllEventsQuery = api.event.getAllByDay.useQuery(
+        {
+            date,
+            showUnapproved: false
+        },
+        { refetchOnWindowFocus: false }
+    )
 
     /**
      * Map the events to the canvas and create the files
-     * @param data - The events to map
+     * @param {EventWithArtistVenue[]} data - The events to map
      * @returns The files
      */
-    const mapPostImages = useCallback(
-        async (data: EventWithArtistVenue[]) => {
-            const tempFiles = []
-            for (let i = 0; i < postImageEventsNeeded; i++) {
-                const eventsSlice = data.splice(0, eventsPerCanvas)
-                const fileData = await createCanvas(
-                    eventsSlice,
-                    i,
-                    new Date(date)
-                )
-                fileData && tempFiles.push(fileData)
+    const generatePostImages = useCallback(
+        async (data: EventWithArtistVenue[], date: Date) => {
+            const imagesNeeded = Math.ceil(data.length / eventsPerCanvas)
+            const postImageFiles = []
+            const eventsData = [...data]
+            for (let i = 0; i < imagesNeeded; i++) {
+                const start = i * eventsPerCanvas
+                const end = start + eventsPerCanvas
+                const eventsSlice = eventsData.slice(start, end)
+                const fileData = await createCanvas(eventsSlice, i, date)
+                postImageFiles.push(fileData)
             }
-            setFiles(tempFiles)
+            return postImageFiles
         },
-        [createCanvas, eventsPerCanvas, postImageEventsNeeded, date]
+        [createCanvas, getAllEventsQuery.data]
     )
 
-    // If we have all the files we need, we can stop loading
+    // Generate the files once when the events are fetched
     useEffect(() => {
-        if (files.length >= postImageEventsNeeded) {
-            setIsMapPostImagesLoading(false)
+        if (
+            getAllEventsQuery.isFetched &&
+            getAllEventsQuery.data?.length &&
+            !hasMapped
+        ) {
+            generatePostImages(getAllEventsQuery.data, date).then((files) => {
+                setFiles(files)
+            })
+        } else if (
+            getAllEventsQuery.isFetched &&
+            !getAllEventsQuery.data?.length
+        ) {
+            setFiles([])
         }
-    }, [files, postImageEventsNeeded])
+    }, [getAllEventsQuery, hasMapped, date, generatePostImages])
 
-    // If we have all the events we need, we can start creating the files
+    // Set to stop re-rendering hell
     useEffect(() => {
-        if (getAllEventsQuery.data?.length) {
-            setIsMapPostImagesLoading(true)
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            mapPostImages(getAllEventsQuery.data)
+        if (files.length) {
+            setHasMapped(true)
         }
-    }, [getAllEventsQuery.data, mapPostImages, files, date])
+    }, [files, setHasMapped])
 
-    const isLoading = useMemo(
-        () => getAllEventsQuery.isLoading || isMapPostImagesLoading,
-        [getAllEventsQuery.isLoading, isMapPostImagesLoading]
-    )
+    // Re-generate the files if the date changes
+    useEffect(() => {
+        setHasMapped(false)
+    }, [date])
 
-    return { files, isLoading }
+    return { files, isLoading: getAllEventsQuery.isLoading }
 }

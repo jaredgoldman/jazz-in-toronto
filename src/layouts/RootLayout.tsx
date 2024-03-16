@@ -39,7 +39,7 @@ export default function RootLayout({
             <Head>
                 <title>{pageTitle}</title>
             </Head>
-            <Flex direction="column" className="h-screen">
+            <Flex direction="column" className="min-h-screen">
                 {(toastState.visible || toastState.animating) && <Toast />}
                 <Header headerType={HeaderType.Public} />
                 {calloutContent && (

@@ -63,7 +63,14 @@ export default function useCanvas() {
             ctx.strokeStyle = 'black'
             ctx.strokeRect(rectX, mainRectY, rectWidth, mainRectHeight)
         },
-        [mainRectY, rectWidth, rectX, titleRectHeight, titleRectY, mainRectHeight]
+        [
+            mainRectY,
+            rectWidth,
+            rectX,
+            titleRectHeight,
+            titleRectY,
+            mainRectHeight
+        ]
     )
 
     /**
