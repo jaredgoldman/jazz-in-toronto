@@ -17,6 +17,7 @@ import {
 } from '@radix-ui/react-icons'
 import { useDropzone } from 'react-dropzone'
 import { trimFileName } from '../utils'
+import { setFormValues } from '../utils'
 
 interface Props<T extends FieldValues> {
     name: Path<T>
@@ -39,9 +40,14 @@ export default function Upload<T extends FieldValues>({
     }>()
 
     const removeFile = useCallback(() => {
-        setValue('fileData', undefined)
-        setValue('photoPath', '')
-        setValue('photoName', '')
+        setFormValues(
+            {
+                fileData: undefined,
+                photoPath: '',
+                photoName: ''
+            },
+            setValue
+        )
     }, [setValue])
 
     const handleUpload = useCallback(
@@ -49,9 +55,14 @@ export default function Upload<T extends FieldValues>({
             let file = files[0]
             if (file) {
                 file = trimFileName(file)
-                setValue('fileData', file)
-                setValue('photoPath', URL.createObjectURL(file))
-                setValue('photoName', file.name)
+                setFormValues(
+                    {
+                        fileData: file,
+                        photoPath: URL.createObjectURL(file),
+                        photoName: file.name
+                    },
+                    setValue
+                )
             }
         },
         [setValue]

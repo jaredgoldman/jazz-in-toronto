@@ -7,12 +7,10 @@ import { VenuesTable } from '~/components/Tables'
 export default function AdminVenues() {
     return (
         <AdminLayout pageTitle="Jazz In Toronto | Admin - Venues">
-            <>
-                <Heading align="center" size="9" mb="2">
-                    Venues
-                </Heading>
-                <VenuesTable />
-            </>
+            <Heading align="center" size="9" mb="2">
+                Venues
+            </Heading>
+            <VenuesTable />
         </AdminLayout>
     )
 }

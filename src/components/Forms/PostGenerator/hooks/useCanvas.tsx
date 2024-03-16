@@ -2,139 +2,217 @@ import { useCallback } from 'react'
 import getDay from 'date-fns/getDay'
 import { getDaysOfTheWeek } from '~/utils/constants'
 import { EventWithArtistVenue } from '~/types/data'
-import { getFormattedTime } from '~/utils/date'
+import { getDateEST, getFormattedTime } from '~/utils/date'
 
-// Returns and canvas element for the outer element to render
+/**
+ * Custom hook to create a canvas for rendering event posters.
+ *
+ * @returns {Function} A function that generates a canvas with event information.
+ */
 export default function useCanvas() {
+    // re-use the cnavas element
     const canvas = document.createElement('canvas')
 
-    const createPostCanvas = useCallback(
-        async (
-            events: EventWithArtistVenue[],
-            canvas: HTMLCanvasElement,
-            ctx: CanvasRenderingContext2D,
-            date: Date,
-            width = 1080,
-            height = 1080,
-            bgColor = '#DC84AC'
-        ) => {
-            if (canvas) {
-                await document.fonts.load('50px poppins')
-                canvas.width = width
-                canvas.height = height
+    // Define canvas size
+    const width = 1080
+    const height = 1080
 
-                // Set the background color to white
-                ctx.fillStyle = bgColor
-                ctx.fillRect(0, 0, width, height)
+    // Define background color
+    const bgColor = '#DC84AC'
 
-                // Global sizes
-                const rectWidth = width - width * 0.1
-                const rectX = width * 0.05
+    // Set the canvas size
+    canvas.width = width
+    canvas.height = height
 
-                // Make title rect
-                const titleRectHeight = height * 0.1
-                const titleRectY = height * 0.05
+    // Set border positions
+    const rectWidth = width - width * 0.1
+    const rectX = width * 0.05
 
-                ctx.fillStyle = 'white'
-                ctx.fillRect(rectX, titleRectY, rectWidth, titleRectHeight)
-                ctx.strokeStyle = 'black'
-                ctx.strokeRect(rectX, titleRectY, rectWidth, titleRectHeight)
+    // Set title rect positions
+    const titleRectHeight = height * 0.1
+    const titleRectY = height * 0.05
 
-                // draw main rect
-                const mainRectHeight = height * 0.7
-                const mainRectY = height * 0.2
-                ctx.fillStyle = bgColor
-                ctx.fillRect(rectX, mainRectY, rectWidth, mainRectHeight)
-                ctx.strokeStyle = 'black'
-                ctx.strokeRect(rectX, mainRectY, rectWidth, mainRectHeight)
+    // Set listings rect positions
+    const mainRectHeight = height * 0.7
+    const mainRectY = height * 0.2
 
-                // Draw the date rect
-                if (date) {
-                    // Set text properties
-                    const day = getDaysOfTheWeek('long')[getDay(date)] as string
-                    const formattedDate = new Intl.DateTimeFormat('en-US', {
-                        day: '2-digit',
-                        month: 'long'
-                    }).format(date)
+    /**
+     * Draw the background of the canvas
+     * @param {CanvasRenderingContext2D} ctx - The 2D rendering context for the canvas.
+     */
+    const drawBg = useCallback((ctx: CanvasRenderingContext2D) => {
+        ctx.fillStyle = bgColor
+        ctx.fillRect(0, 0, width, height)
+    }, [])
 
-                    const dateText = `${day}, ${formattedDate}`.toUpperCase()
-                    ctx.font = '600 60px poppins' // Font size and family
-                    ctx.fillStyle = 'black' // Text color
+    /**
+     * Draw the borders of the title and main area
+     * @param {CanvasRenderingContext2D} ctx - The 2D rendering context for the canvas.
+     */
+    const drawBorders = useCallback(
+        (ctx: CanvasRenderingContext2D) => {
+            // draw title rect
+            ctx.fillStyle = 'white'
+            ctx.fillRect(rectX, titleRectY, rectWidth, titleRectHeight)
+            ctx.strokeStyle = 'black'
+            ctx.strokeRect(rectX, titleRectY, rectWidth, titleRectHeight)
 
-                    // Calculate the width of the text
-                    // Calculate the width and height of the text
-                    const textWidth = ctx.measureText(dateText).width
-                    const textHeight =
-                        ctx.measureText('M').actualBoundingBoxAscent
-
-                    // Calculate the starting position to center the text within the rectangle
-                    const textX = rectX + (rectWidth - textWidth) / 2
-                    const textY =
-                        titleRectY + (titleRectHeight + textHeight) / 2
-
-                    // Draw the text in the center of the rectangle
-                    ctx.fillText(dateText, textX, textY)
-                }
-
-                const fontHeight = 30
-                const fontMargin = 5
-                const postFontHeight = fontHeight + fontMargin
-                ctx.font = `200 ${fontHeight}px poppins`
-
-                let currentY = mainRectY + postFontHeight + 10
-                const eventTextX = rectX + 20
-
-                // Print event dates
-                events.forEach((event) => {
-                    const { artist, startDate, venue } = event
-                    const text = `${getFormattedTime(startDate)} - ${
-                        artist.name
-                    } at ${venue.name}`
-                    ctx.fillText(text, eventTextX, currentY)
-                    currentY += postFontHeight
-                })
-
-                // draw tags and brand in bottom of frame
-                ctx.font = `800 ${fontHeight}px poppins`
-                const tagY = height - fontHeight + 5
-                const tagX = 15
-                ctx.fillText('@JAZZINTORONTO', tagX, tagY)
-
-                const siteText = 'www.jazzintoronto.com'
-                const siteTextWidth = ctx.measureText(siteText).width
-                const siteX = width - 15 - siteTextWidth
-                ctx.fillText('www.jazzintoronto.com', siteX, tagY)
-            }
+            // draw main rect
+            ctx.fillStyle = bgColor
+            ctx.fillRect(rectX, mainRectY, rectWidth, mainRectHeight)
+            ctx.strokeStyle = 'black'
+            ctx.strokeRect(rectX, mainRectY, rectWidth, mainRectHeight)
         },
-        []
+        [
+            mainRectY,
+            rectWidth,
+            rectX,
+            titleRectHeight,
+            titleRectY,
+            mainRectHeight
+        ]
     )
 
-    const getBlob = async (
-        currentIndex: number,
-        canvas: HTMLCanvasElement
-    ): Promise<File | undefined> => {
-        if (canvas) {
+    /**
+     * Draw the date of the event in the title rectangle
+     * @param {CanvasRenderingContext2D} ctx - The 2D rendering context for the canvas.
+     * @param {Date} date - The date of the event.
+     */
+    const drawPostDate = useCallback(
+        (ctx: CanvasRenderingContext2D, date: Date) => {
+            const dateEST = getDateEST(date)
+
+            // Set text properties
+            const day = getDaysOfTheWeek('long')[getDay(dateEST)] as string
+            const formattedDate = new Intl.DateTimeFormat('en-US', {
+                day: '2-digit',
+                month: 'long'
+            }).format(dateEST)
+
+            const dateText = `${day}, ${formattedDate}`.toUpperCase()
+            ctx.font = '600 60px poppins' // Font size and family
+            ctx.fillStyle = 'black' // Text color
+
+            // Calculate the width and height of the text
+            const textWidth = ctx.measureText(dateText).width
+            const textHeight = ctx.measureText('M').actualBoundingBoxAscent
+
+            // Calculate the starting position to center the text within the rectangle
+            const textX = rectX + (rectWidth - textWidth) / 2
+            const textY = titleRectY + (titleRectHeight + textHeight) / 2
+
+            // Draw the text in the center of the rectangle
+            ctx.fillText(dateText, textX, textY)
+        },
+        [rectWidth, rectX, titleRectHeight, titleRectY]
+    )
+
+    /**
+     * Draw the event details in the main rectangle
+     * @param {CanvasRenderingContext2D}
+     * @param {EventWithArtistVenue[]} events - An array of event objects with artist and venue information.
+     */
+    const drawEvents = useCallback(
+        (ctx: CanvasRenderingContext2D, events: EventWithArtistVenue[]) => {
+            const fontHeight = 30
+            const fontMargin = 5
+            const postFontHeight = fontHeight + fontMargin + 5
+            ctx.font = `400 ${fontHeight}px poppins`
+
+            let currentY = mainRectY + postFontHeight + 4
+            const eventTextX = rectX + 20
+
+            // Print event dates
+            events.forEach((event) => {
+                const { artist, startDate, venue } = event
+                const text = `${getFormattedTime(startDate)} - ${
+                    artist.name
+                } at ${venue.name}`
+                ctx.fillText(text, eventTextX, currentY)
+                currentY += postFontHeight
+            })
+        },
+        [mainRectY, rectX]
+    )
+
+    /**
+     * Draw the footer content
+     * @param {CanvasRenderingContext2D} ctx - The 2D rendering context for the canvas.
+     */
+    const drawFooterContent = useCallback((ctx: CanvasRenderingContext2D) => {
+        const fontHeight = 20
+        ctx.font = `800 ${fontHeight}px poppins`
+        const tagY = height - fontHeight + 5
+        const tagX = 15
+        ctx.fillText('@JAZZINTORONTO', tagX, tagY)
+
+        const siteText = 'www.jazzintoronto.com'
+        const siteTextWidth = ctx.measureText(siteText).width
+        const siteX = width - 15 - siteTextWidth
+        ctx.fillText('www.jazzintoronto.com', siteX, tagY)
+    }, [])
+
+    /**
+     * Creates a canvas for an event post and draws event details onto it.
+     *
+     * @param {EventWithArtistVenue[]} events - An array of event objects with artist and venue information.
+     * @param {HTMLCanvasElement} canvas - The canvas element to draw on.
+     * @param {CanvasRenderingContext2D} ctx - The 2D rendering context for the canvas.
+     * @param {Date} date - The date of the event.
+     * @param {number} [width=1080] - The width of the canvas.
+     * @param {number} [height=1080] - The height of the canvas.
+     * @param {string} [bgColor='#DC84AC'] - The background color of the canvas.
+     */
+    const drawCanvas = useCallback(
+        (
+            events: EventWithArtistVenue[],
+            ctx: CanvasRenderingContext2D,
+            date: Date
+        ) => {
+            drawBg(ctx)
+            drawBorders(ctx)
+            drawPostDate(ctx, date)
+            drawEvents(ctx, events)
+            drawFooterContent(ctx)
+        },
+        [drawBg, drawBorders, drawEvents, drawFooterContent, drawPostDate]
+    )
+
+    /**
+     * Convert canvas to file
+     * @param {number} currentIndex - The index of the canvas
+     * @param {HTMLCanvasElement} canvas - The canvas element to draw on.
+     */
+    const convertCanvasToFile = useCallback(
+        async (
+            currentIndex: number,
+            canvas: HTMLCanvasElement
+        ): Promise<File> => {
             const dataURL = canvas.toDataURL('image/png')
             const blob = await (await fetch(dataURL)).blob()
             const file = new File([blob], `jazzintoronto-${currentIndex}.png`, {
                 type: 'image/png'
             })
             return file
-        }
-    }
+        },
+        []
+    )
 
-    const createCanvas = async (
-        events: EventWithArtistVenue[],
-        index: number,
-        date: Date
-    ) => {
-        // If not events, return as imgSrc is provided from another source
-        const ctx = canvas.getContext('2d')
-        if (ctx) {
-            await createPostCanvas(events, canvas, ctx, date)
-            return await getBlob(index, canvas)
-        }
-    }
+    /**
+     * Create a canvas for an event post and draw event details onto it.
+     * @param {EventWithArtistVenue[]} events - An array of event objects with artist and venue information.
+     * @param {number} index - The index of the canvas
+     * @param {Date} date - The date of the event.
+     * @returns {Promise<File>} A promise that resolves to a file.
+     */
+    const createCanvas = useCallback(
+        async (events: EventWithArtistVenue[], index: number, date: Date) => {
+            const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+            drawCanvas(events, ctx, date)
+            return await convertCanvasToFile(index, canvas)
+        },
+        [canvas, drawCanvas, convertCanvasToFile]
+    )
 
     return createCanvas
 }

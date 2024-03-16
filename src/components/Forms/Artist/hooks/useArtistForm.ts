@@ -24,22 +24,8 @@ export default function useArtistForm(id = '') {
     const deleteartistPhotoMutation = api.artist.deletePhoto.useMutation()
     const getArtistQuery = api.artist.get.useQuery(
         { id },
-        { enabled: !!id, staleTime: Infinity, cacheTime: Infinity }
+        { enabled: Boolean(id), staleTime: Infinity, cacheTime: Infinity }
     )
-
-    const isLoading = useMemo(() => {
-        return (
-            editArtistMutation.isLoading ||
-            createArtistMutation.isLoading ||
-            getArtistQuery.isFetching ||
-            deleteartistPhotoMutation.isLoading
-        )
-    }, [
-        editArtistMutation.isLoading,
-        createArtistMutation.isLoading,
-        getArtistQuery.isFetching,
-        deleteartistPhotoMutation.isLoading
-    ])
 
     const hasSubmitted = useMemo(() => {
         return editArtistMutation.isSuccess || createArtistMutation.isSuccess
@@ -92,7 +78,7 @@ export default function useArtistForm(id = '') {
     }
 
     // Handle file uploads and form submission
-    const { startUpload } = useUploadThing({
+    const { startUpload, isUploading } = useUploadThing({
         endpoint: 'uploadImage',
         onUploadError: () => {
             toast({
@@ -102,6 +88,22 @@ export default function useArtistForm(id = '') {
             })
         }
     })
+
+    const isLoading = useMemo(() => {
+        return (
+            editArtistMutation.isLoading ||
+            createArtistMutation.isLoading ||
+            getArtistQuery.isFetching ||
+            deleteartistPhotoMutation.isLoading ||
+            isUploading
+        )
+    }, [
+        editArtistMutation.isLoading,
+        createArtistMutation.isLoading,
+        getArtistQuery.isFetching,
+        deleteartistPhotoMutation.isLoading,
+        isUploading
+    ])
 
     const onSubmit = async (values: ArtistFormValues) => {
         try {

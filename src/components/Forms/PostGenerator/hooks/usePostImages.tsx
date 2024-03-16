@@ -1,37 +1,73 @@
-import { useState, useEffect } from 'react'
-import { EventWithArtistVenue } from '~/types/data'
+import { useState, useEffect, useCallback, useMemo } from 'react'
+import { api } from '~/utils/api'
 import useCanvas from './useCanvas'
+import { EventWithArtistVenue } from '~/types/data'
 
-export default function usePostImages(
-    events: EventWithArtistVenue[] | undefined,
-    date: Date,
-    eventsPerCanvas = 19
-) {
+/**
+ * usePostImages hook
+ * @param {string} dateString - The date string formatted as MM-DD-YYYY
+ * @param {number} eventsPerCanvas - The number of events per canvas
+ * @returns The files and loading state
+ */
+export default function usePostImages(dateString: string) {
     const createCanvas = useCanvas()
+    const date = useMemo(() => new Date(dateString), [dateString])
     const [files, setFiles] = useState<File[]>([])
+    // XXX: extra state is needed here to prevent re-rendering hell
+    const [hasMapped, setHasMapped] = useState(false)
+    const getAllEventsQuery = api.event.getAllByDay.useQuery(
+        {
+            date,
+            showUnapproved: false
+        },
+        { refetchOnWindowFocus: false }
+    )
 
-    useEffect(() => {
-        const files: File[] = []
-
-        const mapPostImages = async () => {
-            const eventLength = events?.length || 0
-            const postImageEventsNeeded = Math.ceil(
-                eventLength / eventsPerCanvas
-            )
-
-            const eventsCopy = [...events!!]
-            for (let i = 0; i < postImageEventsNeeded; i++) {
-                const eventsSlice = eventsCopy.splice(0, eventsPerCanvas)
+    /**
+     * Map the events to the canvas and create the files
+     * @param {EventWithArtistVenue[]} data - The events to map
+     * @returns The files
+     */
+    const generatePostImages = useCallback(
+        async (data: EventWithArtistVenue[], date: Date) => {
+            const eventsPerCanvas = 19
+            const imagesNeeded = Math.ceil(data.length / eventsPerCanvas)
+            const postImageFiles = []
+            const eventsData = [...data]
+            for (let i = 0; i < imagesNeeded; i++) {
+                const start = i * eventsPerCanvas
+                const end = start + eventsPerCanvas
+                const eventsSlice = eventsData.slice(start, end)
                 const fileData = await createCanvas(eventsSlice, i, date)
-                fileData && files.push(fileData)
+                postImageFiles.push(fileData)
             }
-            setFiles(files)
-        }
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        events && mapPostImages()
-    }, [date, events, createCanvas, eventsPerCanvas])
+            return postImageFiles
+        },
+        [createCanvas]
+    )
 
-    return {
-        files
-    }
+    // Generate the files once when the events are fetched
+    useEffect(() => {
+        if (getAllEventsQuery.isFetched && !hasMapped) {
+            getAllEventsQuery?.data?.length
+                ? void generatePostImages(getAllEventsQuery.data, date).then(
+                      (files) => {
+                          setFiles(files)
+                      }
+                  )
+                : setFiles([])
+        }
+    }, [getAllEventsQuery, hasMapped, date, generatePostImages])
+
+    // Set to stop re-rendering hell
+    useEffect(() => {
+        setHasMapped(true)
+    }, [files, setHasMapped])
+
+    // Re-generate the files if the date changes
+    useEffect(() => {
+        setHasMapped(false)
+    }, [date])
+
+    return { files, isLoading: getAllEventsQuery.isLoading }
 }
