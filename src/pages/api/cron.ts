@@ -16,6 +16,8 @@ export default async function handler() {
         where: { approved: false }
     })
 
+    if (!unapprovedEvents && !unapprovedVenues && !unapprovedArtists) return
+
     for (const admin of admins) {
         await emailService.sendEmail(
             env.EMAIL_SERVER_USER,
