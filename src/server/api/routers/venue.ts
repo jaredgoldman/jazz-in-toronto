@@ -18,7 +18,8 @@ const venueValidation = z.object({
     website: z.string(),
     active: z.boolean().optional(),
     phoneNumber: z.string(),
-    description: z.string().optional()
+    description: z.string().optional(),
+    isApproved: z.boolean().optional()
 })
 
 export const venueRouter = createTRPCRouter({
@@ -26,7 +27,7 @@ export const venueRouter = createTRPCRouter({
         .input(venueValidation)
         .mutation(({ ctx, input }) => {
             return ctx.prisma.venue.create({
-                data: input
+                data: { ...input, approved: input.isApproved ?? false }
             })
         }),
 
