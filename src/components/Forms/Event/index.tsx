@@ -20,7 +20,7 @@ export default function EventForm() {
         artistData,
         isSubmitting,
         hasSubmitted
-    } = useEventForm(param)
+    } = useEventForm(param, isAdmin)
 
     return (
         <Flex

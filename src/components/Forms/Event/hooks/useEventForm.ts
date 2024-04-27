@@ -32,7 +32,7 @@ export const toDateTimeLocal = (date: Date): string => {
     return `${formattedDate}T${formattedTime}`
 }
 
-export default function useEventForm(id = '') {
+export default function useEventForm(id = '', isAdmin: boolean) {
     const { toast } = useToast()
 
     const getAllVenueQuery = api.venue.getAll.useQuery()
@@ -115,7 +115,8 @@ export default function useEventForm(id = '') {
                 await createEventMutation.mutateAsync({
                     ...values,
                     startDate: parseISO(values.startDate),
-                    endDate: parseISO(values.endDate)
+                    endDate: parseISO(values.endDate),
+                    isApproved: isAdmin
                 })
             }
             toast({
