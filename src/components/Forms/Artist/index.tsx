@@ -11,7 +11,7 @@ export default function ArtistForm() {
     const param = router.query.id as string
     const isAdmin = router.asPath.includes('admin')
 
-    const { submit, methods, isLoading, hasSubmitted } = useArtistForm(param)
+    const { submit, methods, isLoading, hasSubmitted } = useArtistForm(param, isAdmin)
 
     const {
         control,
