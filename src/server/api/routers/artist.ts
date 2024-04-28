@@ -12,15 +12,17 @@ const artistValidation = z.object({
     photoName: z.string().optional(),
     featured: z.boolean().optional(),
     instagramHandle: z.string().optional(),
-    website: z.string().optional()
+    website: z.string().optional(),
+    isApproved: z.boolean().optional()
 })
 
 export const artistRouter = createTRPCRouter({
     create: publicProcedure
         .input(artistValidation)
         .mutation(({ ctx, input }) => {
+            const { isApproved, ...artistData } = input
             return ctx.prisma.artist.create({
-                data: input
+                data: { ...artistData, approved: isApproved ?? false }
             })
         }),
 

@@ -21,7 +21,7 @@ export interface VenueFormValues {
     description?: string
 }
 
-export default function useVenueForm(id = '') {
+export default function useVenueForm(id = '', isAdmin: boolean) {
     const { toast } = useToast()
     const createVenueMutation = api.venue.create.useMutation()
     const editVenueMutation = api.venue.update.useMutation()
@@ -166,7 +166,8 @@ export default function useVenueForm(id = '') {
             } else {
                 await createVenueMutation.mutateAsync({
                     ...values,
-                    photoPath
+                    photoPath,
+                    isApproved: isAdmin
                 })
             }
 

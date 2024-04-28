@@ -12,7 +12,7 @@ export default function VenueForm() {
     const isAdmin = router.asPath.includes('admin')
     const param = router.query.id as string | undefined
 
-    const { submit, methods, isLoading, hasSubmitted } = useVenueForm(param)
+    const { submit, methods, isLoading, hasSubmitted } = useVenueForm(param, isAdmin)
 
     const {
         control,

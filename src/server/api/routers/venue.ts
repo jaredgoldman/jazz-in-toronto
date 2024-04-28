@@ -18,15 +18,17 @@ const venueValidation = z.object({
     website: z.string(),
     active: z.boolean().optional(),
     phoneNumber: z.string(),
-    description: z.string().optional()
+    description: z.string().optional(),
+    isApproved: z.boolean().optional()
 })
 
 export const venueRouter = createTRPCRouter({
     create: publicProcedure
         .input(venueValidation)
         .mutation(({ ctx, input }) => {
+            const { isApproved, ...venueData } = input
             return ctx.prisma.venue.create({
-                data: input
+                data: { ...venueData, approved: isApproved ?? false }
             })
         }),
 

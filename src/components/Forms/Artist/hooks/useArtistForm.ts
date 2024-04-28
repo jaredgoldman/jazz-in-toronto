@@ -17,7 +17,7 @@ export interface ArtistFormValues {
     description?: string
 }
 
-export default function useArtistForm(id = '') {
+export default function useArtistForm(id = '', isAdmin: boolean) {
     const { toast } = useToast()
     const createArtistMutation = api.artist.create.useMutation()
     const editArtistMutation = api.artist.update.useMutation()
@@ -153,7 +153,8 @@ export default function useArtistForm(id = '') {
             } else {
                 await createArtistMutation.mutateAsync({
                     ...values,
-                    photoPath
+                    photoPath,
+                    isApproved: isAdmin
                 })
             }
 
