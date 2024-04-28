@@ -26,8 +26,9 @@ export const venueRouter = createTRPCRouter({
     create: publicProcedure
         .input(venueValidation)
         .mutation(({ ctx, input }) => {
+            const { isApproved, ...venueData } = input
             return ctx.prisma.venue.create({
-                data: { ...input, approved: input.isApproved ?? false }
+                data: { ...venueData, approved: isApproved ?? false }
             })
         }),
 

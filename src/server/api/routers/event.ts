@@ -49,11 +49,11 @@ export const eventRouter = createTRPCRouter({
             })
         )
         .mutation(({ ctx, input }) => {
-            const { artistId, venueId, ...eventData } = input
+            const { artistId, venueId, isApproved, ...eventData } = input
             return ctx.prisma.event.create({
                 data: {
                     ...eventData,
-                    approved: input.isApproved ?? false,
+                    approved: isApproved ?? false,
                     artist: { connect: { id: artistId } },
                     venue: { connect: { id: venueId } }
                 }
