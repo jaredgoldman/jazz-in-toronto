@@ -129,9 +129,9 @@ export default function Listings() {
                         <EventsMap selectedDate={selectedDate} />
                     </Flex>
                 )}
-                <Flex width="100%" className="max-w-[65rem]" mb="9">
+                {/*<Flex width="100%" className="max-w-[65rem]" mb="9">
                     <RecurringGigs />
-                </Flex>
+                </Flex>*/}
             </Flex>
         </RootLayout>
     )

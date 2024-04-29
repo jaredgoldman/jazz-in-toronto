@@ -7,9 +7,19 @@ import { Flex, Text } from '@radix-ui/themes'
 import { EventWithArtistVenue } from '~/types/data'
 import { EventsMapModal } from './components'
 
+/**
+ * Props for the EventsMap component
+ * @param selectedDate - The date selected by the user
+ */
 type Props = {
     selectedDate: Date
 }
+
+/**
+ * Responsable for rendering the map with events markers and
+ * the modal with the events of the selected venue
+ * @param {Props}-
+ */
 export const EventsMap = ({ selectedDate }: Props) => {
     const { data } = api.event.getAllByDayByVenue.useQuery({
         date: startOfDay(selectedDate)
