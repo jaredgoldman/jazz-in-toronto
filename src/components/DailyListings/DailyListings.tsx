@@ -59,7 +59,7 @@ export default function DailyListings({ selectedDate }: Props) {
     )
 
     const [sorting, setSorting] = useState<SortingState>([
-        { id: 'time', desc: true }
+        { id: 'startDate', desc: true }
     ])
 
     const table = useReactTable<EventWithArtistVenue>({

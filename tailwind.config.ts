@@ -4,6 +4,7 @@ export default {
     content: ['./src/**/*.{js,ts,jsx,tsx}'],
     mode: 'jit',
     purge: ['./public/**/*.html', './src/**/*.{js,jsx,ts,tsx,vue}'],
+    darkMode: 'class',
     theme: {
         fontFamily: {
             body: 'var(--body-font)'
