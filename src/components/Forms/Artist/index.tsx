@@ -12,7 +12,7 @@ export default function ArtistForm() {
     const param = router.query.id as string
     const isAdmin = router.asPath.includes('admin')
 
-    const { submit, methods, isLoading, handleAddPhoto, handleRemovePhoto } =
+    const { submit, methods, isLoading, handleAddPhoto, handleRemovePhoto, hasSubmitted } =
         useArtistForm(param, isAdmin)
 
     const {
@@ -90,7 +90,7 @@ export default function ArtistForm() {
                                 ) : (
                                     <Button
                                         className="w-full"
-                                        disabled={isLoading}
+                                        disabled={isLoading || hasSubmitted}
                                     >
                                         Submit
                                     </Button>

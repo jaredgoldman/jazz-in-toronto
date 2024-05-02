@@ -90,7 +90,6 @@ export const artistRouter = createTRPCRouter({
         .mutation(async ({ ctx, input }) => {
             try {
                 const res = await utapi.deleteFiles(input.fileKey)
-                console.log(res)
                 if ('deletedCount' in res && !res.deletedCount) {
                     throw new Error(`File not found: ${input.fileKey}`)
                 }

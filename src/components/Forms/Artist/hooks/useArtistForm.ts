@@ -34,6 +34,11 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
         }
     )
 
+    const hasSubmitted = useMemo(
+        () => (createArtistMutation.isSuccess || editArtistMutation.isSuccess) && !isAdmin,
+        [createArtistMutation.isSuccess, editArtistMutation.isSuccess]
+    )
+
     const defaultValues: ArtistFormValues = {
         name: '',
         instagramHandle: '',
@@ -70,21 +75,12 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
      * image provider and in db
      */
     const handleDeletePhoto = useCallback(async () => {
-        console.log('deleting image')
         const photoPath = getArtistQuery.data?.photoPath
         if (id && photoPath) {
-            try {
-                await deleteArtistPhotoMutation.mutateAsync({
-                    id,
-                    fileKey: fileKeyRef.current
-                })
-            } catch {
-                toast({
-                    title: 'Error',
-                    message: 'There was an error deleting your photo.',
-                    type: 'error'
-                })
-            }
+            await deleteArtistPhotoMutation.mutateAsync({
+                id,
+                fileKey: fileKeyRef.current
+            })
         }
     }, [deleteArtistPhotoMutation, getArtistQuery.data, id])
 
@@ -92,7 +88,6 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
      * Update form values when image is removed
      */
     const handleRemovePhoto = useCallback(() => {
-        console.log('removing image')
         setFormValues(
             {
                 fileData: undefined,
@@ -256,6 +251,7 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
         submit,
         methods,
         isLoading,
+        hasSubmitted,
         handleAddPhoto,
         handleRemovePhoto
     }
