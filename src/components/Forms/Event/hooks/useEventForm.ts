@@ -62,7 +62,7 @@ export default function useEventForm(id = '', isAdmin: boolean) {
     )
 
     const hasSubmitted = useMemo(
-        () => createEventMutation.isSuccess || updateEventMutation.isSuccess,
+        () => createEventMutation.isSuccess || updateEventMutation.isSuccess && !isAdmin,
         [createEventMutation.isSuccess, updateEventMutation.isSuccess]
     )
 
