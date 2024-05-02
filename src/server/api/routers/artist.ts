@@ -4,6 +4,7 @@ import {
     publicProcedure,
     protectedProcedure
 } from '~/server/api/trpc'
+import { utapi } from 'uploadthing/server'
 
 const artistValidation = z.object({
     name: z.string(),
@@ -85,12 +86,21 @@ export const artistRouter = createTRPCRouter({
         }),
 
     deletePhoto: protectedProcedure
-        .input(z.object({ id: z.string().cuid() }))
-        .mutation(({ ctx, input }) => {
-            return ctx.prisma.artist.update({
-                where: { id: input.id },
-                data: { photoPath: null }
-            })
+        .input(z.object({ id: z.string().cuid(), fileKey: z.string() }))
+        .mutation(async ({ ctx, input }) => {
+            try {
+                const res = await utapi.deleteFiles(input.fileKey)
+                console.log(res)
+                if ('deletedCount' in res && !res.deletedCount) {
+                    throw new Error(`File not found: ${input.fileKey}`)
+                }
+                return ctx.prisma.artist.update({
+                    where: { id: input.id },
+                    data: { photoPath: null }
+                })
+            } catch (error) {
+                throw new Error(`Error deleting file: ${error}`)
+            }
         }),
 
     getFeatured: publicProcedure.query(({ ctx }) => {

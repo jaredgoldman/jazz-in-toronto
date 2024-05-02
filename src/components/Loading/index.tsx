@@ -1,7 +1,7 @@
 // Libraries
 import { useState, useEffect } from 'react'
 // Componenets
-import Image from 'next/image'
+import Spinner from '../Spinner'
 import { Flex, Text } from '@radix-ui/themes'
 
 export default function Loading() {
@@ -20,13 +20,7 @@ export default function Loading() {
 
     return (
         <Flex my="9" direction="column" justify="center" align="center">
-            <Image
-                className="animate-spin"
-                src="/images/spinner.png"
-                width={100}
-                height={100}
-                alt="loading"
-            ></Image>
+          <Spinner width={100} height={100} />
             <Text className="w-32" align="center">{`Loading${ellipsis}`}</Text>
         </Flex>
     )
