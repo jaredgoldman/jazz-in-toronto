@@ -113,6 +113,7 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
             })
         }
     })
+
     const isLoading = useMemo(
         () =>
             editVenueMutation.isLoading ||
