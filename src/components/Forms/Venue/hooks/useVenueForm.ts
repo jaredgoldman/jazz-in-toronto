@@ -84,7 +84,8 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
         if (currentValues?.photoPath && id) {
             try {
                 await deleteVenuePhotoMutation.mutateAsync({
-                    id
+                    id,
+                    fileKey: fileKeyRef.current
                 })
                 toast({
                     title: 'Success',
