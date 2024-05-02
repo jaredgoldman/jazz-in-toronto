@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useCallback } from 'react'
 import { useUploadThing } from '~/hooks/useUploadThing'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
 import { MAX_FILE_SIZE } from '~/utils/constants'
 import { useToast } from '~/hooks/useToast'
+import { setFormValues, trimFileName } from '../../utils'
 
 export interface VenueFormValues {
     name: string
@@ -102,6 +103,44 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
         }
     }
 
+    /**
+     * Update form values when image is removed
+     */
+    const handleRemovePhoto = useCallback(() => {
+        setFormValues(
+            {
+                fileData: undefined,
+                photoPath: '',
+                photoName: ''
+            },
+            methods.setValue
+        )
+    }, [methods])
+
+    /**
+     * Update form values when image is added
+     * @param {File[]} files
+     */
+    const handleAddPhoto = useCallback(
+        (files: File[]) => {
+            console.log('adding image')
+            let file = files[0]
+            if (file) {
+                file = trimFileName(file)
+                setFormValues(
+                    {
+                        fileData: file,
+                        photoPath: URL.createObjectURL(file),
+                        photoName: file.name
+                    },
+                    methods.setValue
+                )
+            }
+        },
+        [methods.setValue]
+    )
+
+
     const { startUpload, isUploading } = useUploadThing({
         endpoint: 'uploadImage',
         onUploadError: () => {
@@ -199,11 +238,11 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
     const submit = methods.handleSubmit(async (data) => await onSubmit(data))
 
     return {
-        handleDeletePhoto,
-        startUpload,
         submit,
         methods,
         isLoading,
-        hasSubmitted
+        hasSubmitted,
+        handleAddPhoto,
+        handleRemovePhoto
     }
 }

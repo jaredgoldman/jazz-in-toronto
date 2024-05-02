@@ -35,7 +35,10 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
     )
 
     const hasSubmitted = useMemo(
-        () => (createArtistMutation.isSuccess || editArtistMutation.isSuccess) && !isAdmin,
+        () =>
+            (createArtistMutation.isSuccess || editArtistMutation.isSuccess) &&
+            // Enable admins to submit multiple times
+            !isAdmin,
         [createArtistMutation.isSuccess, editArtistMutation.isSuccess]
     )
 
@@ -108,11 +111,6 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
             let file = files[0]
             if (file) {
                 file = trimFileName(file)
-                // console.log({
-                //     fileData: file,
-                //     photoPath: URL.createObjectURL(file),
-                //     photoName: file.name
-                // })
                 setFormValues(
                     {
                         fileData: file,
