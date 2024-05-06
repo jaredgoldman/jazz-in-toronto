@@ -5,20 +5,17 @@ import { Heading, Flex, Box, Button } from '@radix-ui/themes'
 import useArtistForm from './hooks/useArtistForm'
 import { useRouter } from 'next/router'
 import { FormProvider } from 'react-hook-form'
-import Spinner from '~/components/Spinner'
 
 export default function ArtistForm() {
     const router = useRouter()
     const param = router.query.id as string
     const isAdmin = router.asPath.includes('admin')
 
-    const { submit, methods, isLoading, handleAddPhoto, handleRemovePhoto, hasSubmitted } =
-        useArtistForm(param, isAdmin)
+    const { submit, methods, isLoading, hasSubmitted } = useArtistForm(param, isAdmin)
 
     const {
         control,
-        formState: { errors },
-        watch
+        formState: { errors }
     } = methods
 
     return (
@@ -57,9 +54,6 @@ export default function ArtistForm() {
                                 name="fileData"
                                 label="Upload a artist photo"
                                 control={control}
-                                onAdd={handleAddPhoto}
-                                onRemove={handleRemovePhoto}
-                                fileName={watch('photoName')}
                             />
                             <Input
                                 name="instagramHandle"
@@ -83,18 +77,12 @@ export default function ArtistForm() {
                                 />
                             )}
                             <Form.Submit asChild>
-                                {isLoading ? (
-                                    <Flex justify="center">
-                                        <Spinner />
-                                    </Flex>
-                                ) : (
-                                    <Button
-                                        className="w-full"
-                                        disabled={isLoading || hasSubmitted}
-                                    >
-                                        Submit
-                                    </Button>
-                                )}
+                                <Button
+                                    className="w-full"
+                                    disabled={isLoading || hasSubmitted}
+                                >
+                                    Submit
+                                </Button>
                             </Form.Submit>
                         </Flex>
                     </Form.Root>

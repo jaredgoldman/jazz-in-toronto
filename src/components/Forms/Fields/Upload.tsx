@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { Flex, Button, Text, Box, Separator } from '@radix-ui/themes'
 import * as Form from '@radix-ui/react-form'
 import {
@@ -5,6 +6,7 @@ import {
     Path,
     Control,
     Controller,
+    useFormContext
 } from 'react-hook-form'
 import {
     TrashIcon,
@@ -14,39 +16,64 @@ import {
     ImageIcon
 } from '@radix-ui/react-icons'
 import { useDropzone } from 'react-dropzone'
+import { trimFileName } from '../utils'
+import { setFormValues } from '../utils'
 
 interface Props<T extends FieldValues> {
     name: Path<T>
     control: Control<T>
     label?: string
+    buttonLabel?: string
     required?: boolean | string
-    onAdd: (files: File[]) => void
-    onRemove: () => void
-    fileName?: string
 }
 
-/**
- * Upload component
- * @param {string} name - The name of the input field
- * @param {Control} control - The control object from react-hook-form
- * @param {string} label - The label for the input field
- * @param {boolean} required - Whether the input field is required
- * @param {Function} onAdd - The function to call when a file is added
- * @param {Function} onRemove - The function to call when a file is removed
- * @param {string} fileName - The name of the file
- */
 export default function Upload<T extends FieldValues>({
     name,
     required,
     control,
-    label,
-    onAdd,
-    onRemove,
-    fileName
+    label
 }: Props<T>) {
+    const { setValue, watch, getValues } = useFormContext<{
+        fileData: File | undefined
+        photoPath: string
+        photoName: string
+    }>()
+
+    const removeFile = useCallback(() => {
+        setFormValues(
+            {
+                fileData: undefined,
+                photoPath: '',
+                photoName: ''
+            },
+            setValue
+        )
+    }, [setValue])
+
+    const handleUpload = useCallback(
+        (files: File[]) => {
+            let file = files[0]
+            if (file) {
+                file = trimFileName(file)
+                setFormValues(
+                    {
+                        fileData: file,
+                        photoPath: URL.createObjectURL(file),
+                        photoName: file.name
+                    },
+                    setValue
+                )
+            }
+        },
+        [setValue]
+    )
+
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop: (files) => onAdd(files)
+        onDrop: (files) => handleUpload(files)
     })
+
+    const watchedFileData = watch('fileData')
+    const watchedPhotoPath = watch('photoPath')
 
     return (
         <Controller
@@ -64,7 +91,7 @@ export default function Upload<T extends FieldValues>({
                             my="2"
                             className="h-[12.5rem] rounded-md border-2 border-gray-600"
                         >
-                            {!fileName ? (
+                            {!watchedPhotoPath && !watchedFileData ? (
                                 <Box
                                     {...getRootProps()}
                                     className="cursor-pointer"
@@ -134,14 +161,14 @@ export default function Upload<T extends FieldValues>({
                                                     height="10"
                                                 />
                                                 <Text color="orange">
-                                                    {fileName}
+                                                    {getValues('photoName')}
                                                 </Text>
                                             </Flex>
                                             <Button variant="ghost">
                                                 <TrashIcon
                                                     width="20"
                                                     height="20"
-                                                    onClick={onRemove}
+                                                    onClick={removeFile}
                                                 />
                                             </Button>
                                         </Flex>

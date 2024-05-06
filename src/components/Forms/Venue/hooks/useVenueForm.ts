@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useRef, useCallback } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useUploadThing } from '~/hooks/useUploadThing'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
 import { MAX_FILE_SIZE } from '~/utils/constants'
 import { useToast } from '~/hooks/useToast'
-import { setFormValues, trimFileName } from '../../utils'
 
 export interface VenueFormValues {
     name: string
@@ -24,26 +23,17 @@ export interface VenueFormValues {
 
 export default function useVenueForm(id = '', isAdmin: boolean) {
     const { toast } = useToast()
-    const fileKeyRef = useRef<string>('')
     const createVenueMutation = api.venue.create.useMutation()
     const editVenueMutation = api.venue.update.useMutation()
     const deleteVenuePhotoMutation = api.venue.deletePhoto.useMutation()
     const getVenueQuery = api.venue.get.useQuery(
         { id },
-        {
-            enabled: Boolean(id),
-            staleTime: Infinity,
-            cacheTime: Infinity,
-            refetchOnWindowFocus: false
-        }
+        { enabled: Boolean(id), staleTime: Infinity, cacheTime: Infinity }
     )
 
     const hasSubmitted = useMemo(
-        () =>
-            (editVenueMutation.isSuccess || createVenueMutation.isSuccess) &&
-            // Enable admins to submit multiple times
-            !isAdmin,
-        [editVenueMutation.isSuccess, createVenueMutation.isSuccess, isAdmin]
+        () => editVenueMutation.isSuccess || createVenueMutation.isSuccess,
+        [editVenueMutation.isSuccess, createVenueMutation.isSuccess]
     )
 
     const defaultValues: VenueFormValues = {
@@ -68,8 +58,7 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
 
     useEffect(() => {
         const data = getVenueQuery.data
-        if (data) {
-            fileKeyRef.current = data?.photoPath?.split('/')[4] ?? ''
+        if (getVenueQuery.data) {
             methods.reset({
                 ...data,
                 instagramHandle: data?.instagramHandle ?? '',
@@ -85,8 +74,7 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
         if (currentValues?.photoPath && id) {
             try {
                 await deleteVenuePhotoMutation.mutateAsync({
-                    id,
-                    fileKey: fileKeyRef.current
+                    id
                 })
                 toast({
                     title: 'Success',
@@ -103,44 +91,6 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
         }
     }
 
-    /**
-     * Update form values when image is removed
-     */
-    const handleRemovePhoto = useCallback(() => {
-        setFormValues(
-            {
-                fileData: undefined,
-                photoPath: '',
-                photoName: ''
-            },
-            methods.setValue
-        )
-    }, [methods])
-
-    /**
-     * Update form values when image is added
-     * @param {File[]} files
-     */
-    const handleAddPhoto = useCallback(
-        (files: File[]) => {
-            console.log('adding image')
-            let file = files[0]
-            if (file) {
-                file = trimFileName(file)
-                setFormValues(
-                    {
-                        fileData: file,
-                        photoPath: URL.createObjectURL(file),
-                        photoName: file.name
-                    },
-                    methods.setValue
-                )
-            }
-        },
-        [methods.setValue]
-    )
-
-
     const { startUpload, isUploading } = useUploadThing({
         endpoint: 'uploadImage',
         onUploadError: () => {
@@ -152,7 +102,6 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
             })
         }
     })
-
     const isLoading = useMemo(
         () =>
             editVenueMutation.isLoading ||
@@ -238,11 +187,11 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
     const submit = methods.handleSubmit(async (data) => await onSubmit(data))
 
     return {
+        handleDeletePhoto,
+        startUpload,
         submit,
         methods,
         isLoading,
-        hasSubmitted,
-        handleAddPhoto,
-        handleRemovePhoto
+        hasSubmitted
     }
 }
