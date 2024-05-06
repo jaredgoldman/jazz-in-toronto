@@ -11,6 +11,7 @@ type Props = {
     onEdit: () => void
     onDelete: () => void
     onApprove: () => void
+    onCopy?: () => void
 }
 
 export function TableActionMenu({
@@ -19,7 +20,8 @@ export function TableActionMenu({
     onToggleFeatured,
     onEdit,
     onDelete,
-    onApprove
+    onApprove,
+    onCopy
 }: Props) {
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
 
@@ -54,6 +56,14 @@ export function TableActionMenu({
                     >
                         Delete
                     </DropdownMenu.Item>
+                    {onCopy && (
+                        <DropdownMenu.Item
+                            color="blue"
+                            onClick={() => onCopy()}
+                        >
+                            Copy
+                        </DropdownMenu.Item>
+                    )}
                 </DropdownMenu.Content>
             </DropdownMenu.Root>
             <ConfirmDelete

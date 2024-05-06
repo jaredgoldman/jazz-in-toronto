@@ -221,6 +221,7 @@ export function EventsTable() {
                         onEdit={() => handleEditClick(row.original)}
                         onDelete={() => handleDelete(row.original)}
                         onApprove={() => handleApprove(row.original)}
+                        onClick={() => handleCopyClick(row.original)}
                     />
                 )
             })
