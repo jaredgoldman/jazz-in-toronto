@@ -62,8 +62,11 @@ export default function useEventForm(id = '', isAdmin: boolean) {
     )
 
     const hasSubmitted = useMemo(
-        () => createEventMutation.isSuccess || updateEventMutation.isSuccess,
-        [createEventMutation.isSuccess, updateEventMutation.isSuccess]
+        () =>
+            (createEventMutation.isSuccess || updateEventMutation.isSuccess) &&
+            // Enable admins to submit multiple times
+            !isAdmin,
+        [createEventMutation.isSuccess, updateEventMutation.isSuccess, isAdmin]
     )
 
     const defaultValues: EventFormValues = {
