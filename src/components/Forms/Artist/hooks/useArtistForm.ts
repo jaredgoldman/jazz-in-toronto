@@ -188,7 +188,6 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
                         })
                     }
 
-                    console.log('uploading image')
                     const res = await startUpload([values.fileData])
 
                     if (res) {
