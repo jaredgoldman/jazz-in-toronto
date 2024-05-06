@@ -5,7 +5,6 @@ import {
     Path,
     Control,
     Controller,
-    useFormContext
 } from 'react-hook-form'
 import {
     TrashIcon,

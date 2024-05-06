@@ -97,8 +97,8 @@ export const artistRouter = createTRPCRouter({
                     where: { id: input.id },
                     data: { photoPath: null }
                 })
-            } catch (error) {
-                throw new Error(`Error deleting file: ${error}`)
+            } catch (error: unknown) {
+                throw new Error(`Error deleting file: ${String(error)}`)
             }
         }),
 

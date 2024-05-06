@@ -43,7 +43,7 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
             (editVenueMutation.isSuccess || createVenueMutation.isSuccess) &&
             // Enable admins to submit multiple times
             !isAdmin,
-        [editVenueMutation.isSuccess, createVenueMutation.isSuccess]
+        [editVenueMutation.isSuccess, createVenueMutation.isSuccess, isAdmin]
     )
 
     const defaultValues: VenueFormValues = {

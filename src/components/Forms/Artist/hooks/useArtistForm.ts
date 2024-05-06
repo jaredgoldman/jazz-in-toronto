@@ -39,7 +39,7 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
             (createArtistMutation.isSuccess || editArtistMutation.isSuccess) &&
             // Enable admins to submit multiple times
             !isAdmin,
-        [createArtistMutation.isSuccess, editArtistMutation.isSuccess]
+        [createArtistMutation.isSuccess, editArtistMutation.isSuccess, isAdmin]
     )
 
     const defaultValues: ArtistFormValues = {
@@ -71,7 +71,7 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
                 description: data.description ?? ''
             })
         }
-    }, [getArtistQuery.data, methods.reset])
+    }, [getArtistQuery.data, methods])
 
     /**
      * Perform backend call to delete artist photo on
