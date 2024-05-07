@@ -36,7 +36,6 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
             cacheTime: Infinity,
             refetchOnWindowFocus: false,
             refetchOnMount: false,
-            refetchOnWindowFocus: false
         }
     )
 
