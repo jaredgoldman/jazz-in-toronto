@@ -175,7 +175,7 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
             }
             deletedFileKeyRef.current = ''
         },
-        [deleteVenuePhotoMutation, getVenueQuery.data, id, startUpload, toast]
+        [deleteVenuePhotoMutation, getVenueQuery.data, id]
     )
 
     /**
@@ -184,9 +184,8 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
      * @returns {Promise<string | undefined>}
      */
     const maybeUploadPhoto = useCallback(
-        async (values: VenueFormValues) => {
-            const isSamePhoto =
-                values.photoPath === getVenueQuery.data?.photoPath
+        async (values: VenueFormValues, queryPhotoPath: string) => {
+            const isSamePhoto = values.photoPath === queryPhotoPath
 
             if (values.fileData && !isSamePhoto) {
                 if (values.fileData.size > MAX_FILE_SIZE) {
@@ -217,7 +216,10 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
             await maybeDeletePhoto(values)
 
             // Upload photo if necessary
-            const photoPath = await maybeUploadPhoto(values)
+            const photoPath = await maybeUploadPhoto(
+                values,
+                getVenueQuery?.data?.photoPath ?? ''
+            )
 
             if (id) {
                 await editVenueMutation.mutateAsync({
