@@ -175,7 +175,7 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
             }
             deletedFileKeyRef.current = ''
         },
-        [deleteArtistPhotoMutation, getArtistQuery.data, id, startUpload, toast]
+        [deleteArtistPhotoMutation, getArtistQuery.data, id]
     )
 
     /**
@@ -184,9 +184,8 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
      * @returns {Promise<string | undefined>}
      */
     const maybeUploadPhoto = useCallback(
-        async (values: ArtistFormValues) => {
-            const isSamePhoto =
-                values.photoPath === getArtistQuery.data?.photoPath
+        async (values: ArtistFormValues, queryPhotoPath: string) => {
+            const isSamePhoto = values.photoPath === queryPhotoPath
 
             if (values.fileData && !isSamePhoto) {
                 if (values.fileData.size > MAX_FILE_SIZE) {
@@ -222,7 +221,10 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
                 await maybeDeletePhoto(values)
 
                 // Upload photo if necessary
-                const photoPath = await maybeUploadPhoto(values)
+                const photoPath = await maybeUploadPhoto(
+                    values,
+                    getArtistQuery.data?.photoPath ?? ''
+                )
 
                 // Do final edit or create mutation
                 if (id) {
@@ -243,7 +245,7 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
                     title: 'Success',
                     message: 'Artist successfully submitted!'
                 })
-                getArtistQuery.refetch()
+                await getArtistQuery.refetch()
             } catch (e) {
                 console.error(e)
                 toast({
