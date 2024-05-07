@@ -35,7 +35,7 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
             staleTime: Infinity,
             cacheTime: Infinity,
             refetchOnWindowFocus: false,
-            refetchOnMount: false,
+            refetchOnMount: false
         }
     )
 
@@ -66,6 +66,7 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
     const methods = useForm<VenueFormValues>({
         defaultValues
     })
+
     const { reset, setValue, handleSubmit } = methods
 
     useEffect(() => {
@@ -117,44 +118,6 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
         },
         [setValue]
     )
-
-    /**
-     * Update form values when image is removed
-     */
-    const handleRemovePhoto = useCallback(() => {
-        setFormValues(
-            {
-                fileData: undefined,
-                photoPath: '',
-                photoName: ''
-            },
-            methods.setValue
-        )
-    }, [methods])
-
-    /**
-     * Update form values when image is added
-     * @param {File[]} files
-     */
-    const handleAddPhoto = useCallback(
-        (files: File[]) => {
-            console.log('adding image')
-            let file = files[0]
-            if (file) {
-                file = trimFileName(file)
-                setFormValues(
-                    {
-                        fileData: file,
-                        photoPath: URL.createObjectURL(file),
-                        photoName: file.name
-                    },
-                    methods.setValue
-                )
-            }
-        },
-        [methods.setValue]
-    )
-
 
     const { startUpload, isUploading } = useUploadThing({
         endpoint: 'uploadImage',
@@ -290,7 +253,6 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
     const submit = handleSubmit(async (data) => await onSubmit(data))
 
     return {
-        submit,
         methods,
         submit,
         isLoading,

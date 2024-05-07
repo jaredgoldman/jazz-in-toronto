@@ -21,7 +21,6 @@ export interface ArtistFormValues {
 export default function useArtistForm(id = '', isAdmin: boolean) {
     const { toast } = useToast()
     const deletedFileKeyRef = useRef<string>('')
-    const fileKeyRef = useRef<string>('')
     const createArtistMutation = api.artist.create.useMutation()
     const editArtistMutation = api.artist.update.useMutation()
     const deleteArtistPhotoMutation = api.artist.deletePhoto.useMutation()
@@ -81,20 +80,6 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
             })
         }
     }, [getArtistQuery.data, reset])
-
-    /**
-     * Perform backend call to delete artist photo on
-     * image provider and in db
-     */
-    const handleDeletePhoto = useCallback(async () => {
-        const photoPath = getArtistQuery.data?.photoPath
-        if (id && photoPath) {
-            await deleteArtistPhotoMutation.mutateAsync({
-                id,
-                fileKey: fileKeyRef.current
-            })
-        }
-    }, [deleteArtistPhotoMutation, getArtistQuery.data, id])
 
     /**
      * Update form values when image is removed
@@ -202,8 +187,9 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
         async (values: ArtistFormValues, queryPhotoPath: string) => {
             const isSamePhoto = values.photoPath === queryPhotoPath
 
-            if (values.fileData && !isSamePhoto) {
-                if (values.fileData.size > MAX_FILE_SIZE) {
+            // Upload image if it exists
+            if (values?.fileData && !isSamePhoto) {
+                if (values?.fileData.size > MAX_FILE_SIZE) {
                     return toast({
                         title: 'Error',
                         message:
@@ -212,24 +198,7 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
                     })
                 }
 
-                // Upload image if it exists
-                if (values?.fileData) {
-                    if (values?.fileData.size > MAX_FILE_SIZE) {
-                        return toast({
-                            title: 'Error',
-                            message:
-                                'File size is too large. Please upload a file smaller than 5MB.',
-                            type: 'error'
-                        })
-                    }
-
-                    const res = await startUpload([values.fileData])
-
-                    if (res) {
-                        photoPath = res[0]?.fileUrl
-                        fileKeyRef.current = res[0]?.fileKey ?? ''
-                    }
-                }
+                const res = await startUpload([values.fileData])
 
                 if (res) {
                     deletedFileKeyRef.current = res[0]?.key ?? ''
@@ -262,27 +231,13 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
                 if (id) {
                     await editArtistMutation.mutateAsync({
                         ...values,
-                        photoPath: photoPath ?? values.photoPath,
-                        id
-                    })
-                } else {
-                    await createArtistMutation.mutateAsync({
-                        ...values,
-                        photoPath: photoPath ?? values.photoPath,
-                        isApproved: isAdmin
-                    })
-                }
-                // Do final edit or create mutation
-                if (id) {
-                    await editArtistMutation.mutateAsync({
-                        ...values,
                         id,
-                        photoPath
+                        photoPath: photoPath ?? values.photoPath
                     })
                 } else {
                     await createArtistMutation.mutateAsync({
                         ...values,
-                        photoPath,
+                        photoPath: photoPath ?? values.photoPath,
                         isApproved: isAdmin
                     })
                 }
