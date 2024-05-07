@@ -114,7 +114,6 @@ export const venueRouter = createTRPCRouter({
                         fileKey: input.fileKey
                     })
                     console.warn(`File not found: ${input.fileKey}`)
-
                 }
                 return ctx.prisma.venue.update({
                     where: { id: input.id },
