@@ -23,8 +23,8 @@ export default function VenueForm() {
 
     const {
         control,
+        watch,
         formState: { errors },
-        watch
     } = methods
 
     return (

@@ -109,7 +109,12 @@ export const venueRouter = createTRPCRouter({
             try {
                 const res = await utapi.deleteFiles(input.fileKey)
                 if ('deletedCount' in res && !res.deletedCount) {
-                    throw new Error(`File not found: ${input.fileKey}`)
+                    console.log({
+                        deletedCount: res.deletedCount,
+                        fileKey: input.fileKey
+                    })
+                    console.warn(`File not found: ${input.fileKey}`)
+
                 }
                 return ctx.prisma.venue.update({
                     where: { id: input.id },

@@ -24,7 +24,7 @@ export interface VenueFormValues {
 
 export default function useVenueForm(id = '', isAdmin: boolean) {
     const { toast } = useToast()
-    const fileKeyRef = useRef<string>('')
+    const deletedFileKeyRef = useRef<string>('')
     const createVenueMutation = api.venue.create.useMutation()
     const editVenueMutation = api.venue.update.useMutation()
     const deleteVenuePhotoMutation = api.venue.deletePhoto.useMutation()
@@ -34,7 +34,8 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
             enabled: Boolean(id),
             staleTime: Infinity,
             cacheTime: Infinity,
-            refetchOnWindowFocus: false
+            refetchOnWindowFocus: false,
+            refetchOnMount: false
         }
     )
 
@@ -65,43 +66,21 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
     const methods = useForm<VenueFormValues>({
         defaultValues
     })
+    const { reset, setValue, handleSubmit } = methods
 
     useEffect(() => {
         const data = getVenueQuery.data
         if (data) {
-            fileKeyRef.current = data?.photoPath?.split('/')[4] ?? ''
-            methods.reset({
+            deletedFileKeyRef.current = data?.photoPath?.split('/')[4] ?? ''
+            reset({
                 ...data,
                 instagramHandle: data?.instagramHandle ?? '',
                 photoPath: data?.photoPath ?? '',
-                photoName: (data?.photoName as string) ?? '',
+                photoName: data?.photoName ?? '',
                 description: data?.description ?? ''
             })
         }
-    }, [getVenueQuery.data, methods])
-
-    const handleDeletePhoto = async () => {
-        const currentValues = methods.getValues()
-        if (currentValues?.photoPath && id) {
-            try {
-                await deleteVenuePhotoMutation.mutateAsync({
-                    id,
-                    fileKey: fileKeyRef.current
-                })
-                toast({
-                    title: 'Success',
-                    message: 'Your photo was deleted successfully.'
-                })
-            } catch {
-                toast({
-                    title: 'Error',
-                    message:
-                        'There was an error deleting your photo. Please try again.',
-                    type: 'error'
-                })
-            }
-        }
-    }
+    }, [getVenueQuery.data, reset])
 
     /**
      * Update form values when image is removed
@@ -113,9 +92,9 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
                 photoPath: '',
                 photoName: ''
             },
-            methods.setValue
+            setValue
         )
-    }, [methods])
+    }, [setValue])
 
     /**
      * Update form values when image is added
@@ -123,7 +102,6 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
      */
     const handleAddPhoto = useCallback(
         (files: File[]) => {
-            console.log('adding image')
             let file = files[0]
             if (file) {
                 file = trimFileName(file)
@@ -133,13 +111,12 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
                         photoPath: URL.createObjectURL(file),
                         photoName: file.name
                     },
-                    methods.setValue
+                    setValue
                 )
             }
         },
-        [methods.setValue]
+        [setValue]
     )
-
 
     const { startUpload, isUploading } = useUploadThing({
         endpoint: 'uploadImage',
@@ -168,29 +145,50 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
             isUploading
         ]
     )
+    /**
+     * Delete photo if necessary
+     * @param {VenueFormValues} values
+     * @returns {Promise<void>}
+     */
+    const maybeDeletePhoto = useCallback(
+        async (values: VenueFormValues) => {
+            // There is a currnet photo attached to the record
+            const photoExists = Boolean(getVenueQuery.data?.photoPath)
 
-    const onSubmit = async (values: VenueFormValues) => {
-        try {
-            let photoPath = values.photoPath
+            // Photo has been changed
+            const photoChanged =
+                photoExists &&
+                values.photoPath !== getVenueQuery.data?.photoPath
 
             // Photo has been removed
             const photoRemoved =
                 !values.photoPath &&
                 !values.photoName &&
                 !values.fileData &&
-                getVenueQuery.data?.photoPath
+                photoExists
 
-            // Photo has been changed
-            const photoChanged =
-                values.photoPath !== getVenueQuery.data?.photoPath
-
-            // In either case, we need to delete the photo
-            if (photoRemoved || photoChanged) {
-                await handleDeletePhoto()
+            if ((photoRemoved || photoChanged) && photoExists) {
+                await deleteVenuePhotoMutation.mutateAsync({
+                    id,
+                    fileKey: deletedFileKeyRef.current
+                })
             }
+            deletedFileKeyRef.current = ''
+        },
+        [deleteVenuePhotoMutation, getVenueQuery.data, id, startUpload, toast]
+    )
 
-            // Upload image if it exists
-            if (values?.fileData) {
+    /**
+     * Upload photo if necessary
+     * @param {VenueFormValues}
+     * @returns {Promise<string | undefined>}
+     */
+    const maybeUploadPhoto = useCallback(
+        async (values: VenueFormValues) => {
+            const isSamePhoto =
+                values.photoPath === getVenueQuery.data?.photoPath
+
+            if (values.fileData && !isSamePhoto) {
                 if (values.fileData.size > MAX_FILE_SIZE) {
                     return toast({
                         title: 'Error',
@@ -203,21 +201,34 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
                 const res = await startUpload([values.fileData])
 
                 if (res) {
-                    photoPath = res[0]?.fileUrl
+                    deletedFileKeyRef.current = res[0]?.key ?? ''
+                    return res[0]?.url
+                } else {
+                    throw new Error('Error uploading file')
                 }
             }
+        },
+        [startUpload, toast]
+    )
 
-            // Do final edit or create mutation
+    const onSubmit = async (values: VenueFormValues) => {
+        try {
+            // Delete photo if necessary
+            await maybeDeletePhoto(values)
+
+            // Upload photo if necessary
+            const photoPath = await maybeUploadPhoto(values)
+
             if (id) {
                 await editVenueMutation.mutateAsync({
                     ...values,
                     id,
-                    photoPath
+                    photoPath: photoPath ?? values.photoPath
                 })
             } else {
                 await createVenueMutation.mutateAsync({
                     ...values,
-                    photoPath,
+                    photoPath: photoPath ?? values.photoPath,
                     isApproved: isAdmin
                 })
             }
@@ -226,6 +237,7 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
                 title: 'Success',
                 message: 'Venue successfully submitted!'
             })
+            await getVenueQuery.refetch()
         } catch (e) {
             toast({
                 title: 'Error',
@@ -235,11 +247,11 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
         }
     }
 
-    const submit = methods.handleSubmit(async (data) => await onSubmit(data))
+    const submit = handleSubmit(async (data) => await onSubmit(data))
 
     return {
-        submit,
         methods,
+        submit,
         isLoading,
         hasSubmitted,
         handleAddPhoto,

@@ -268,9 +268,7 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
      * react-hook-form submit handler
      * @param {ArtistFormValues} data
      */
-    const submit = handleSubmit(async (data) => {
-        await onSubmit(data)
-    })
+    const submit = handleSubmit(async (data) => await onSubmit(data))
 
     return {
         submit,
