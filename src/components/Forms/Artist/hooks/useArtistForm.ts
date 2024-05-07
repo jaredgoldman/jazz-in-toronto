@@ -152,25 +152,22 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
      */
     const maybeDeletePhoto = useCallback(
         async (values: ArtistFormValues) => {
-            // Photo has been changed
-            const photoChanged =
-                Boolean(getArtistQuery.data?.photoPath) &&
-                values.photoPath !== getArtistQuery.data?.photoPath
-
             // There is a currnet photo attached to the record
             const photoExists = Boolean(getArtistQuery.data?.photoPath)
 
-            console.log({
-                photoPath: values.photoPath,
-                photoName: values.photoName,
-                queryPhotoPath: getArtistQuery.data?.photoPath,
-                fileData: values.fileData,
-                photoChanged,
-                photoExists,
-                deletedFileKey: deletedFileKeyRef.current
-            })
+            // Photo has been changed
+            const photoChanged =
+                photoExists &&
+                values.photoPath !== getArtistQuery.data?.photoPath
 
-            if ((deletedFileKeyRef.current || photoChanged) && photoExists) {
+            // Photo has been removed
+            const photoRemoved =
+                !values.photoPath &&
+                !values.photoName &&
+                !values.fileData &&
+                photoExists
+
+            if ((photoRemoved || photoChanged) && photoExists) {
                 await deleteArtistPhotoMutation.mutateAsync({
                     id,
                     fileKey: deletedFileKeyRef.current
@@ -204,9 +201,6 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
                 const res = await startUpload([values.fileData])
 
                 if (res) {
-                    console.log({
-                        res: res[0]
-                    })
                     deletedFileKeyRef.current = res[0]?.key ?? ''
                     return res[0]?.url
                 } else {
@@ -249,6 +243,7 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
                     title: 'Success',
                     message: 'Artist successfully submitted!'
                 })
+                getArtistQuery.refetch()
             } catch (e) {
                 console.error(e)
                 toast({
