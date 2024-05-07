@@ -33,7 +33,6 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
             cacheTime: Infinity,
             refetchOnWindowFocus: false,
             refetchOnMount: false
-            refetchOnWindowFocus: false
         }
     )
 
