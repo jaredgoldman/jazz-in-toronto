@@ -1,11 +1,6 @@
 import { Flex, Button, Text, Box, Separator } from '@radix-ui/themes'
 import * as Form from '@radix-ui/react-form'
-import {
-    FieldValues,
-    Path,
-    Control,
-    Controller,
-} from 'react-hook-form'
+import { FieldValues, Path, Control, Controller } from 'react-hook-form'
 import {
     TrashIcon,
     UploadIcon,
@@ -137,11 +132,14 @@ export default function Upload<T extends FieldValues>({
                                                     {fileName}
                                                 </Text>
                                             </Flex>
-                                            <Button variant="ghost">
+                                            <Button
+                                                variant="ghost"
+                                                type="button"
+                                                onClick={onRemove}
+                                            >
                                                 <TrashIcon
                                                     width="20"
                                                     height="20"
-                                                    onClick={onRemove}
                                                 />
                                             </Button>
                                         </Flex>

@@ -90,7 +90,11 @@ export const artistRouter = createTRPCRouter({
         .mutation(async ({ ctx, input }) => {
             try {
                 const res = await utapi.deleteFiles(input.fileKey)
-                if ('deletedCount' in res && !res.deletedCount) {
+                if ('deletedCount' in res && res.deletedCount === 0) {
+                    console.log({
+                        deletedCount: res.deletedCount,
+                        fileKey: input.fileKey
+                    })
                     console.warn(`File not found: ${input.fileKey}`)
                 }
                 return ctx.prisma.artist.update({
