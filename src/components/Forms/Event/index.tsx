@@ -87,7 +87,10 @@ export default function EventForm() {
                                     control={control}
                                     error={errors.venueId}
                                 />
-                                <Link size="2" href="/venue">
+                                <Link
+                                    size="2"
+                                    href={isAdmin ? '/admin/venue' : '/venue'}
+                                >
                                     or submit your venue
                                 </Link>
                             </Box>
@@ -100,7 +103,10 @@ export default function EventForm() {
                                     error={errors.artistId}
                                     required="Please select an artist for your event"
                                 />
-                                <Link size="2" href="/artist">
+                                <Link
+                                    size="2"
+                                    href={isAdmin ? '/admin/artist' : '/artist'}
+                                >
                                     or add an artist
                                 </Link>
                             </Box>

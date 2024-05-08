@@ -9,7 +9,7 @@ export default function EditVenue() {
             breadcrumbs={{
                 href: '/admin/venues',
                 title: 'Venues',
-                currentPageTitle: 'Edit Venue'
+                currentPageTitle: 'Edit/Submit Venue'
             }}
         >
             <Flex justify="center" px={{ initial: '5', xs: '0' }} py="2">
