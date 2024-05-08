@@ -5,7 +5,7 @@ import { api } from '~/utils/api'
 import startOfDay from 'date-fns/startOfDay'
 import { Flex, Text } from '@radix-ui/themes'
 import { EventWithArtistVenue } from '~/types/data'
-import { EventsMapModal } from './components'
+import { EventsMapOverlay } from './components'
 
 /**
  * Props for the EventsMap component
@@ -77,7 +77,7 @@ export const EventsMap = ({ selectedDate }: Props) => {
                             />
                         ))}
                         {showModal && (
-                            <EventsMapModal
+                            <EventsMapOverlay
                                 {...modalContent}
                                 onClose={() => setShowModal(false)}
                             />

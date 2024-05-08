@@ -1,1 +1,1 @@
-export { EventsMapModal } from './EventsMapModal'
+export { EventsMapOverlay } from './EventsMapOverlay'

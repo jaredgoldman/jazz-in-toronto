@@ -9,7 +9,7 @@ type Props = {
     onClose: () => void
 }
 
-export function EventsMapModal({ venueName, events, onClose }: Props) {
+export function EventsMapOverlay({ venueName, events, onClose }: Props) {
     return (
         <Flex
             position="relative"
@@ -31,7 +31,7 @@ export function EventsMapModal({ venueName, events, onClose }: Props) {
             <Heading mb="3">{`Today @ ${venueName}`}</Heading>
             <Flex direction="column">
                 {events.map((event) => (
-                    <Flex key={event.id}>{`${event.artist.name} @ ${format(
+                    <Flex key={event.id}>{`${event.name} @ ${format(
                         event.startDate,
                         'h:mm a'
                     )}`}</Flex>

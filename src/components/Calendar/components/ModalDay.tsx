@@ -27,7 +27,7 @@ export default function ModalDay({ dailyEvents: { date, events } }: Props) {
                                 <span className="mr-6">
                                     {`${getFormattedTime(event.startDate)}`}
                                 </span>
-                                <span>{event.artist.name}</span>
+                                <span>{event.name}</span>
                             </Table.Cell>
                         </Table.Row>
                     )
