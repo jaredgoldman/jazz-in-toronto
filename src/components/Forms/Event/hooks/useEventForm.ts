@@ -5,6 +5,7 @@ import { useToast } from '~/hooks/useToast'
 import { useMemo } from 'react'
 import { EventWithArtistVenue } from '~/types/data'
 import { DateTime } from 'luxon'
+import { setFormValues } from '../../utils'
 
 export interface EventFormValues {
     name: string
@@ -86,9 +87,11 @@ export default function useEventForm(id = '', isAdmin: boolean) {
     }
 
     const {
-        handleSubmit,
-        control,
         reset,
+        watch,
+        control,
+        handleSubmit,
+        setValue,
         formState: { errors }
     } = useForm<EventFormValues>({ defaultValues })
 
@@ -115,6 +118,23 @@ export default function useEventForm(id = '', isAdmin: boolean) {
             })
         }
     }, [getEventQuery.data, reset])
+
+    const watchedVenueId = watch('venueId')
+
+    useEffect(() => {
+        if (watchedVenueId) {
+            const venue = getAllVenueQuery.data?.find(
+                (v) => v.id === watchedVenueId
+            )
+            setFormValues(
+                {
+                    website: venue?.website,
+                    instagramHandle: venue?.instagramHandle ?? ''
+                },
+                setValue
+            )
+        }
+    }, [watchedVenueId])
 
     const onSubmit = async (values: EventFormValues) => {
         const startDate = DateTime.fromISO(values.startDate)
