@@ -16,17 +16,9 @@ const getAllByDay = (date: Date, prisma: PrismaClient, approved: boolean) => {
         .toUTC()
         .toJSDate()
 
-    // Calculate one day later, also in UTC
     const lte = DateTime.fromJSDate(gte, { zone: 'UTC' })
-        // Account for gigs starting at midnight
         .plus({ days: 1 })
         .toJSDate()
-
-    console.log({
-        date,
-        gte,
-        lte
-    })
 
     return prisma.event.findMany({
         where: {

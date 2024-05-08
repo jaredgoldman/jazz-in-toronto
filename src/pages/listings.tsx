@@ -16,7 +16,10 @@ enum ListingType {
 }
 
 export default function Listings() {
-    const defaultDate = DateTime.now().startOf('day').setZone("America/New_York").toJSDate()
+    const defaultDate = DateTime.now()
+        .startOf('day')
+        .setZone('America/New_York')
+        .toJSDate()
     const [selectedDate, setSelectedDate] = useState(defaultDate)
     // Change listing type
     const [listingType, setListingType] = useState(ListingType.EVENT_MAP)
