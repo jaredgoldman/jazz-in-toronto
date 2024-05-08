@@ -13,7 +13,7 @@ import { getDateEST } from '~/utils/date'
 // Shared helpers
 const getAllByDay = (date: Date, prisma: PrismaClient, approved: boolean) => {
     const gte = getDateEST(date)
-    const lt = DateTime.fromJSDate(gte).plus({ days: 1 }).toJSDate()
+    const lt = getDateEST(DateTime.fromJSDate(gte).plus({ days: 1 }).toJSDate())
 
     return prisma.event.findMany({
         where: {
