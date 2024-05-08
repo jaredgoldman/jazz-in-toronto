@@ -9,9 +9,6 @@ export const fuzzyFilter: FilterFn<unknown> = (
     value,
     addMeta
 ) => {
-    console.log({
-        value
-    })
     if (!value) return true
     // Rank the item
     const itemRank = rankItem(row.getValue(columnId), value as string)
