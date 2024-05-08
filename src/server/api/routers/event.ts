@@ -21,6 +21,12 @@ const getAllByDay = (date: Date, prisma: PrismaClient, approved: boolean) => {
         .plus({ days: 1 })
         .toJSDate()
 
+    console.log({
+        date,
+        gte,
+        lt
+    })
+
     return prisma.event.findMany({
         where: {
             startDate: {
