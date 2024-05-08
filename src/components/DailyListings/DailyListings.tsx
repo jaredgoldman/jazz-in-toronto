@@ -36,7 +36,7 @@ export default function DailyListings({ selectedDate }: Props) {
                 cell: (info) => info.getValue(),
                 enableColumnFilter: false
             }),
-            columnHelper.accessor((row) => row.artist.name, {
+            columnHelper.accessor((row) => row.name, {
                 header: 'Artist',
                 cell: (info) => info.getValue(),
                 enableColumnFilter: false
