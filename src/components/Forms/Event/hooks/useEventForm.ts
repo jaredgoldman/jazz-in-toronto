@@ -138,6 +138,7 @@ export default function useEventForm(id = '', isAdmin: boolean) {
         }
     }, [watchedVenueId])
 
+    // Automatically sets the end date to 2 hours after the start date
     useEffect(() => {
         if (watchedStartDate) {
             const startDate = DateTime.fromISO(watchedStartDate)

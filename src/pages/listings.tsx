@@ -59,6 +59,12 @@ export default function Listings() {
         'EEEE, MMMM do, yyyy'
     )
 
+    const calendarHeadingDate = formatInTimeZone(
+        selectedDate,
+        'America/Toronto',
+        'MMMM yyyy'
+    )
+
     return (
         <RootLayout
             pageTitle="Jazz In Toronto | Event Listings"
@@ -126,11 +132,21 @@ export default function Listings() {
                             View Event Map
                         </Button>
                     </Flex>
-                    <Heading
-                        size={{ initial: '3', xs: '5' }}
-                        align={{ initial: 'center', xs: 'left' }}
-                        mb="5"
-                    >{`Events on ${headingDate} in Toronto, Ontario`}</Heading>
+                    {listingType !== ListingType.CALENDAR ? (
+                        <Heading
+                            size={{ initial: '3', xs: '5' }}
+                            align={{ initial: 'center', xs: 'left' }}
+                            mb="5"
+                        >{`Events on ${headingDate} in Toronto, Ontario`}</Heading>
+                    ) : (
+                        <Heading
+                            size={{ initial: '3', xs: '5' }}
+                            align={{ initial: 'center', xs: 'left' }}
+                            mb="5"
+                        >
+                            {`Events for ${calendarHeadingDate}`}
+                        </Heading>
+                    )}
                 </Flex>
                 {listingType === ListingType.DAILY_LISTINGS && (
                     <Flex width="100%" className="max-w-[65rem]" mb="9">
