@@ -328,7 +328,7 @@ export function EventsTable() {
                     )}
                 </>
             ) : null}
-            {getAllEventsQuery.isFetching &&
+            {getAllEventsQuery.isFetched &&
                 !table.getFilteredRowModel().rows.length && (
                     <Flex justify="center" align="center" py="7">
                         <Heading>No events found</Heading>

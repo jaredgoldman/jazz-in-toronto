@@ -278,7 +278,7 @@ export function ArtistsTable() {
                     )}
                 </Flex>
             )}
-            {getAllArtistsQuery.isFetching &&
+            {getAllArtistsQuery.isFetched &&
                 !table.getFilteredRowModel().rows.length && (
                     <Flex justify="center" align="center" py="7">
                         <Heading>No artists found</Heading>
