@@ -149,6 +149,10 @@ export function EventsTable() {
                 cell: (info) => info.getValue(),
                 header: 'Event'
             }),
+            columnHelper.accessor((row) => row.artist.name, {
+                cell: (info) => info.getValue(),
+                header: 'Artist'
+            }),
             columnHelper.accessor((row) => row.venue.name, {
                 cell: (info) => info.getValue(),
                 header: 'Venue'
