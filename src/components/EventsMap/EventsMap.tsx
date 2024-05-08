@@ -5,7 +5,6 @@ import { api } from '~/utils/api'
 import { Flex, Text } from '@radix-ui/themes'
 import { EventWithArtistVenue } from '~/types/data'
 import { EventsMapOverlay } from './components'
-import { DateTime } from 'luxon'
 
 /**
  * Props for the EventsMap component

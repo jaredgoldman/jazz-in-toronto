@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import RootLayout from '~/layouts/RootLayout'
-import RecurringGigs from '~/components/RecurringGigs'
 import DailyListings from '~/components/DailyListings/DailyListings'
 import Calendar from '~/components/Calendar'
 import { Flex, Text, Button, Heading } from '@radix-ui/themes'
@@ -21,10 +20,13 @@ export default function Listings() {
         .setZone('America/New_York')
         .toJSDate()
     const [selectedDate, setSelectedDate] = useState(defaultDate)
-    // Change listing type
     const [listingType, setListingType] = useState(ListingType.EVENT_MAP)
     const onChangeListingType = (type: ListingType) => setListingType(type)
 
+    /**
+     * Function to handle the next day button
+     * @returns void
+     */
     const handleNextDay = useCallback(
         () =>
             setSelectedDate(
@@ -35,6 +37,11 @@ export default function Listings() {
             ),
         [selectedDate]
     )
+
+    /**
+     * Function to handle the previous day button
+     * @returns void
+     */
     const handlePreviousDay = useCallback(
         () =>
             setSelectedDate(
