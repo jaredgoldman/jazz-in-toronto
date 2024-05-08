@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import RootLayout from '~/layouts/RootLayout'
 import RecurringGigs from '~/components/RecurringGigs'
 import DailyListings from '~/components/DailyListings/DailyListings'
@@ -6,8 +6,8 @@ import Calendar from '~/components/Calendar'
 import { Flex, Text, Button, Heading } from '@radix-ui/themes'
 import Link from '~/components/Link'
 import { EventsMap } from '~/components/EventsMap'
-import addDays from 'date-fns/addDays'
-import format from 'date-fns/format'
+import { formatInTimeZone } from 'date-fns-tz'
+import { DateTime } from 'luxon'
 
 enum ListingType {
     CALENDAR = 'CALENDAR',
@@ -16,10 +16,41 @@ enum ListingType {
 }
 
 export default function Listings() {
-    const [selectedDate, setSelectedDate] = useState(new Date())
+    const defaultDate = DateTime.now()
+        .startOf('day')
+        .setZone('America/New_York')
+        .toJSDate()
+    const [selectedDate, setSelectedDate] = useState(defaultDate)
     // Change listing type
     const [listingType, setListingType] = useState(ListingType.EVENT_MAP)
     const onChangeListingType = (type: ListingType) => setListingType(type)
+
+    const handleNextDay = useCallback(
+        () =>
+            setSelectedDate(
+                DateTime.fromJSDate(selectedDate)
+                    .plus({ days: 1 })
+                    .startOf('day')
+                    .toJSDate()
+            ),
+        [selectedDate]
+    )
+    const handlePreviousDay = useCallback(
+        () =>
+            setSelectedDate(
+                DateTime.fromJSDate(selectedDate)
+                    .minus({ days: 1 })
+                    .startOf('day')
+                    .toJSDate()
+            ),
+        [selectedDate]
+    )
+
+    const headingDate = formatInTimeZone(
+        selectedDate,
+        'America/Toronto',
+        'EEEE, MMMM do, yyyy'
+    )
 
     return (
         <RootLayout
@@ -54,20 +85,10 @@ export default function Listings() {
                         wrap="wrap"
                         justify={{ initial: 'center', xs: 'start' }}
                     >
-                        <Button
-                            onClick={() => {
-                                setSelectedDate(addDays(selectedDate, -1))
-                            }}
-                        >
+                        <Button onClick={handlePreviousDay}>
                             Previous Day
                         </Button>
-                        <Button
-                            onClick={() =>
-                                setSelectedDate(addDays(selectedDate, 1))
-                            }
-                        >
-                            Next Day
-                        </Button>
+                        <Button onClick={handleNextDay}>Next Day</Button>
                         <Button
                             variant="soft"
                             onClick={() =>
@@ -102,10 +123,7 @@ export default function Listings() {
                         size={{ initial: '3', xs: '5' }}
                         align={{ initial: 'center', xs: 'left' }}
                         mb="5"
-                    >{`Events on ${format(
-                        selectedDate,
-                        'EEEE, MMMM do, yyyy'
-                    )} in Toronto, Ontario`}</Heading>
+                    >{`Events on ${headingDate} in Toronto, Ontario`}</Heading>
                 </Flex>
                 {listingType === ListingType.DAILY_LISTINGS && (
                     <Flex width="100%" className="max-w-[65rem]" mb="9">

@@ -22,6 +22,7 @@ import { useRouter } from 'next/router'
 import { useToast } from '~/hooks/useToast'
 import { Button } from '@radix-ui/themes'
 import { PaginationButtonGroup } from './components/PaginationButtonGroup'
+import { formatInTimeZone } from 'date-fns-tz'
 
 const columnHelper = createColumnHelper<EventWithArtistVenue>()
 
@@ -141,7 +142,12 @@ export function EventsTable() {
     const columns = useMemo(
         () => [
             columnHelper.accessor((row) => row.startDate, {
-                cell: (info) => format(new Date(info.getValue()), 'MM/dd/yyyy'),
+                cell: (info) =>
+                    formatInTimeZone(
+                        info.getValue(),
+                        'America/New_York',
+                        'MM/dd/yyyy'
+                    ),
                 filterFn: 'date',
                 header: 'Date'
             }),
@@ -158,18 +164,24 @@ export function EventsTable() {
                 header: 'Venue'
             }),
             columnHelper.accessor((row) => row.startDate, {
-                cell: (info) => format(new Date(info.getValue()), 'h:mm a'),
+                cell: (info) =>
+                    formatInTimeZone(
+                        new Date(info.getValue()),
+                        'America/New_York',
+                        'h:mm a'
+                    ),
                 header: 'Start',
                 filterFn: 'time'
             }),
             columnHelper.accessor((row) => row.endDate, {
-                cell: (info) => format(new Date(info.getValue()), 'h:mm a'),
+                cell: (info) =>
+                    formatInTimeZone(
+                        new Date(info.getValue()),
+                        'America/New_York',
+                        'h:mm a'
+                    ),
                 header: 'End',
                 filterFn: 'time'
-            }),
-            columnHelper.accessor((row) => row.artist.name, {
-                cell: (info) => info.getValue(),
-                header: 'Artist'
             }),
             columnHelper.accessor((row) => row.venue.website, {
                 cell: (info) => info.getValue(),

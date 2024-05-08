@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
-import { parseISO } from 'date-fns'
 import { useToast } from '~/hooks/useToast'
 import { useMemo } from 'react'
 import { EventWithArtistVenue } from '~/types/data'
+import { DateTime } from 'luxon'
 
 export interface EventFormValues {
     name: string
@@ -71,8 +71,12 @@ export default function useEventForm(id = '', isAdmin: boolean) {
 
     const defaultValues: EventFormValues = {
         name: '',
-        startDate: toDateTimeLocal(new Date()),
-        endDate: toDateTimeLocal(new Date()),
+        startDate: toDateTimeLocal(
+            DateTime.now().setZone('America/New_York').toJSDate()
+        ),
+        endDate: toDateTimeLocal(
+            DateTime.now().setZone('America/New_York').toJSDate()
+        ),
         artistId: '',
         venueId: '',
         instagramHandle: '',
@@ -92,13 +96,20 @@ export default function useEventForm(id = '', isAdmin: boolean) {
         const data = getEventQuery.data
         if (data) {
             delete (data as Partial<EventWithArtistVenue>).id
+            const startDate = DateTime.fromJSDate(data.startDate)
+                .setZone('America/New_York')
+                .toJSDate()
+            const endDate = DateTime.fromJSDate(data.endDate)
+                .setZone('America/New_York')
+                .toJSDate()
+
             reset({
                 ...data,
                 instagramHandle: data.instagramHandle ?? '',
                 website: data.website ?? '',
                 description: data.description ?? '',
-                startDate: toDateTimeLocal(data.startDate),
-                endDate: toDateTimeLocal(data.endDate),
+                startDate: toDateTimeLocal(startDate),
+                endDate: toDateTimeLocal(endDate),
                 artistId: data.artistId,
                 venueId: data.venueId
             })
@@ -106,19 +117,32 @@ export default function useEventForm(id = '', isAdmin: boolean) {
     }, [getEventQuery.data, reset])
 
     const onSubmit = async (values: EventFormValues) => {
+        const startDate = DateTime.fromISO(values.startDate)
+            .setZone('America/New_York')
+            .toJSDate()
+
+        const endDate = DateTime.fromISO(values.endDate)
+            .setZone('America/New_York')
+            .toJSDate()
+
+        console.log({
+            startDate,
+            endDate
+        })
+
         try {
             if (id) {
                 await updateEventMutation.mutateAsync({
                     ...values,
                     id,
-                    startDate: parseISO(values.startDate),
-                    endDate: parseISO(values.endDate)
+                    startDate,
+                    endDate
                 })
             } else {
                 await createEventMutation.mutateAsync({
                     ...values,
-                    startDate: parseISO(values.startDate),
-                    endDate: parseISO(values.endDate),
+                    startDate,
+                    endDate,
                     isApproved: isAdmin
                 })
             }
