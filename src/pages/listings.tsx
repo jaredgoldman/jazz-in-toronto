@@ -16,16 +16,20 @@ enum ListingType {
 }
 
 export default function Listings() {
-    const defaultDate = DateTime.now().toUTC().startOf('day').toJSDate()
+    const defaultDate = DateTime.now().startOf('day').toJSDate()
     const [selectedDate, setSelectedDate] = useState(defaultDate)
     // Change listing type
     const [listingType, setListingType] = useState(ListingType.EVENT_MAP)
     const onChangeListingType = (type: ListingType) => setListingType(type)
 
+    useEffect(() => {
+        console.log('selectedDate', selectedDate)
+    }, [selectedDate])
+
     const handleNextDay = useCallback(
         () =>
             setSelectedDate(
-                DateTime.fromJSDate(selectedDate, { zone: 'UTC' })
+                DateTime.fromJSDate(selectedDate)
                     .plus({ days: 1 })
                     .startOf('day')
                     .toUTC()
