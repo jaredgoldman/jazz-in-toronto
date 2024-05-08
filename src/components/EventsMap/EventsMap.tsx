@@ -22,7 +22,7 @@ type Props = {
  */
 export const EventsMap = ({ selectedDate }: Props) => {
     const { data } = api.event.getAllByDayByVenue.useQuery({
-        date:  DateTime.fromJSDate(selectedDate).startOf('day').toJSDate()
+        date: selectedDate
     })
 
     const [showModal, setShowModal] = useState<boolean>(false)
