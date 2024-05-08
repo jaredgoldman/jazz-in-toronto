@@ -7,13 +7,15 @@ import {
 import { env } from '~/env.mjs'
 import { PrismaClient, Venue } from '@prisma/client'
 import { EventWithArtistVenue } from '~/types/data'
-import { DateTime } from 'luxon'
-import { getDateEST } from '~/utils/date'
+import { toZonedTime } from 'date-fns-tz'
 
 // Shared helpers
 const getAllByDay = (date: Date, prisma: PrismaClient, approved: boolean) => {
-    const gte = getDateEST(date)
-    const lt = getDateEST(DateTime.fromJSDate(gte).plus({ days: 1 }).toJSDate())
+    const gte = toZonedTime(date, 'America/New_York')
+    const lt = toZonedTime(
+        new Date(date).setDate(date.getDate() + 1),
+        'America/New_York'
+    )
 
     return prisma.event.findMany({
         where: {
@@ -159,13 +161,14 @@ export const eventRouter = createTRPCRouter({
         .input(
             z.object({ date: z.date(), showUnapproved: z.boolean().optional() })
         )
-        .query(async ({ ctx, input }) => {
-            return await getAllByDay(
-                input.date,
-                ctx.prisma,
-                input.showUnapproved ?? false
-            )
-        }),
+        .query(
+            async ({ ctx, input }) =>
+                await getAllByDay(
+                    input.date,
+                    ctx.prisma,
+                    input.showUnapproved ?? false
+                )
+        ),
 
     getAllByDayByVenue: publicProcedure
         .input(z.object({ date: z.date() }))

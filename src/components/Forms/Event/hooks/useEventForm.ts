@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
-import { parseISO } from 'date-fns'
 import { useToast } from '~/hooks/useToast'
 import { useMemo } from 'react'
 import { EventWithArtistVenue } from '~/types/data'
+import { toZonedTime } from 'date-fns-tz'
 
 export interface EventFormValues {
     name: string
@@ -106,19 +106,29 @@ export default function useEventForm(id = '', isAdmin: boolean) {
     }, [getEventQuery.data, reset])
 
     const onSubmit = async (values: EventFormValues) => {
+        const startDate = toZonedTime(
+            new Date(values.startDate),
+            'America/New_York'
+        )
+
+        const endDate = toZonedTime(
+            new Date(values.endDate),
+            'America/New_York'
+        )
+
         try {
             if (id) {
                 await updateEventMutation.mutateAsync({
                     ...values,
                     id,
-                    startDate: parseISO(values.startDate),
-                    endDate: parseISO(values.endDate)
+                    startDate,
+                    endDate
                 })
             } else {
                 await createEventMutation.mutateAsync({
                     ...values,
-                    startDate: parseISO(values.startDate),
-                    endDate: parseISO(values.endDate),
+                    startDate,
+                    endDate,
                     isApproved: isAdmin
                 })
             }

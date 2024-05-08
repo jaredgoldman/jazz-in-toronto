@@ -3,8 +3,7 @@ import {
     protectedProcedure,
     publicProcedure
 } from '~/server/api/trpc'
-import startOfWeek from 'date-fns/startOfWeek'
-import addWeeks from 'date-fns/addWeeks'
+import { DateTime } from 'luxon'
 
 export const dataRouter = createTRPCRouter({
     getFeatured: publicProcedure.query(async ({ ctx }) => {
@@ -31,20 +30,20 @@ export const dataRouter = createTRPCRouter({
         const upcomingEventsCount = await ctx.prisma.event.count({
             where: {
                 startDate: {
-                    gte: new Date()
+                    gte: DateTime.now().toJSDate()
                 },
                 cancelled: false
             }
         })
 
-        const thisWeekStart = startOfWeek(new Date())
+        const thisWeekStart = DateTime.now().startOf('week').toJSDate()
         const eventsThisWeekCount = await ctx.prisma.event.count({
             where: {
                 startDate: {
                     gte: thisWeekStart
                 },
                 endDate: {
-                    lt: addWeeks(thisWeekStart, 1)
+                    lt: DateTime.now().endOf('week').toJSDate()
                 }
             }
         })
