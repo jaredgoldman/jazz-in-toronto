@@ -1,3 +1,4 @@
+import { ChangeEvent } from 'react'
 import { Table, Flex, Box, TextField } from '@radix-ui/themes'
 import { Header } from '@tanstack/react-table'
 import {
@@ -32,9 +33,15 @@ export function HeaderCell<TData>({ header }: Props<TData>) {
         }
     }
 
+    const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault()
+        const newValue = e.target.value
+        console.log('New input value:', newValue) // Check if this logs correctly
+        header.column.setFilterValue(newValue)
+    }
+
     return (
         <Table.ColumnHeaderCell
-            onClick={() => header.column.toggleSorting()}
             className={`${
                 header.column.getCanSort() ? 'cursor-pointer select-none' : ''
             } min-w-[100px]`}
@@ -48,7 +55,7 @@ export function HeaderCell<TData>({ header }: Props<TData>) {
                               header.getContext()
                           )}
                     {header.column.getCanSort() && (
-                        <Box>
+                        <Box onClick={() => header.column.toggleSorting()}>
                             {sortingIcons[
                                 header.column.getIsSorted() as 'desc' | 'asc'
                             ] ?? <CaretSortIcon />}
@@ -61,12 +68,8 @@ export function HeaderCell<TData>({ header }: Props<TData>) {
                             type={getFilterInputType(
                                 header.column.columnDef.filterFn as string
                             )}
-                            value={
-                                (header.column.getFilterValue() as string) ?? ''
-                            }
-                            onChange={(e) =>
-                                header.column.setFilterValue(e.target.value)
-                            }
+                            value={String(header.column.getFilterValue() ?? '')}
+                            onChange={handleOnChange}
                             placeholder="Filter"
                         />
                     </TextField.Root>

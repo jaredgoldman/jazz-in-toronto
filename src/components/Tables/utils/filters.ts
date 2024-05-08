@@ -9,6 +9,10 @@ export const fuzzyFilter: FilterFn<unknown> = (
     value,
     addMeta
 ) => {
+    console.log({
+        value
+    })
+    if (!value) return true
     // Rank the item
     const itemRank = rankItem(row.getValue(columnId), value as string)
 
@@ -22,6 +26,7 @@ export const fuzzyFilter: FilterFn<unknown> = (
 }
 
 export const dateFilter: FilterFn<unknown> = (row, columnId, value: string) => {
+    if (!value) return true
     const rowValue = new Date(row.getValue<string>(columnId))
     const filterValue = parseISO(value)
     return isSameDay(rowValue, filterValue)
@@ -32,6 +37,7 @@ export const timeFilter: FilterFn<unknown> = (
     columnId: string,
     filterValue: string
 ) => {
+    if (!filterValue) return true
     const rowValue = new Date(row.getValue<string>(columnId))
     const filterValueDate = new Date(filterValue)
     return (
