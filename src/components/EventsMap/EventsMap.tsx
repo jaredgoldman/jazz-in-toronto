@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { APIProvider, Map, Marker } from '@vis.gl/react-google-maps'
 import { env } from '~/env.mjs'
 import { api } from '~/utils/api'
-import startOfDay from 'date-fns/startOfDay'
 import { Flex, Text } from '@radix-ui/themes'
 import { EventWithArtistVenue } from '~/types/data'
 import { EventsMapOverlay } from './components'
+import { DateTime } from 'luxon'
 
 /**
  * Props for the EventsMap component
@@ -22,7 +22,7 @@ type Props = {
  */
 export const EventsMap = ({ selectedDate }: Props) => {
     const { data } = api.event.getAllByDayByVenue.useQuery({
-        date: startOfDay(selectedDate)
+        date:  DateTime.fromJSDate(selectedDate).startOf('day').toJSDate()
     })
 
     const [showModal, setShowModal] = useState<boolean>(false)

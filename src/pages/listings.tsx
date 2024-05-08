@@ -7,7 +7,7 @@ import { Flex, Text, Button, Heading } from '@radix-ui/themes'
 import Link from '~/components/Link'
 import { EventsMap } from '~/components/EventsMap'
 import addDays from 'date-fns/addDays'
-import format from 'date-fns/format'
+import { formatInTimeZone } from 'date-fns-tz'
 
 enum ListingType {
     CALENDAR = 'CALENDAR',
@@ -102,8 +102,9 @@ export default function Listings() {
                         size={{ initial: '3', xs: '5' }}
                         align={{ initial: 'center', xs: 'left' }}
                         mb="5"
-                    >{`Events on ${format(
+                    >{`Events on ${formatInTimeZone(
                         selectedDate,
+                        'America/Toronto',
                         'EEEE, MMMM do, yyyy'
                     )} in Toronto, Ontario`}</Heading>
                 </Flex>
