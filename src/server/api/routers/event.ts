@@ -7,17 +7,13 @@ import {
 import { env } from '~/env.mjs'
 import { PrismaClient, Venue } from '@prisma/client'
 import { EventWithArtistVenue } from '~/types/data'
-import { toZonedTime } from 'date-fns-tz'
 import { DateTime } from 'luxon'
 
 // Shared helpers
-//
 const getAllByDay = (date: Date, prisma: PrismaClient, approved: boolean) => {
-    const gte = toZonedTime(date.setHours(0, 0, 0, 0), 'America/New_York')
-    const lt = toZonedTime(
-        new Date(date).setDate(date.getDate() + 1),
-        'America/New_York'
-    )
+    const gte = DateTime.fromJSDate(date).startOf('day').toJSDate()
+
+    const lt = DateTime.fromJSDate(gte).plus({ days: 1 }).toJSDate()
 
     return prisma.event.findMany({
         where: {
