@@ -32,9 +32,15 @@ export function VenuesTable() {
     const setFeaturedMutation = api.venue.setFeatured.useMutation()
     const approveVenueMutation = api.venue.approve.useMutation()
     const deleteVenueMutation = api.venue.delete.useMutation()
-    const getAllVenuesQuery = api.venue.getAll.useQuery({
-        showUnapproved: true
-    })
+    const getAllVenuesQuery = api.venue.getAll.useQuery(
+        {
+            showUnapproved: true
+        },
+        {
+            refetchOnWindowFocus: false,
+            refetchOnMount: false
+        }
+    )
 
     /*
      * Actions
@@ -134,23 +140,28 @@ export function VenuesTable() {
         () => [
             columnHelper.accessor((row) => row.name, {
                 cell: (info) => info.getValue(),
-                header: 'Name'
+                header: 'Name',
+                filterFn: 'fuzzy'
             }),
             columnHelper.accessor((row) => row.address, {
                 cell: (info) => info.getValue().split(',')[0],
-                header: 'Address'
+                header: 'Address',
+                filterFn: 'fuzzy'
             }),
             columnHelper.accessor((row) => row.city, {
                 cell: (info) => info.getValue(),
-                header: 'City'
+                header: 'City',
+                filterFn: 'fuzzy'
             }),
             columnHelper.accessor((row) => row.website, {
                 cell: (info) => info.getValue(),
-                header: 'Website'
+                header: 'Website',
+                filterFn: 'fuzzy'
             }),
             columnHelper.accessor((row) => row.instagramHandle, {
                 cell: (info) => info.getValue(),
-                header: 'Instagram'
+                header: 'Instagram',
+                filterFn: 'fuzzy'
             }),
             columnHelper.accessor((row) => row.featured, {
                 header: 'Featured',

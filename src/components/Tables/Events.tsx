@@ -13,7 +13,6 @@ import {
 } from '@tanstack/react-table'
 import { EventWithArtistVenue } from '~/types/data'
 import { Table, Flex, Badge, Heading } from '@radix-ui/themes'
-import { format } from 'date-fns'
 import { useMemo } from 'react'
 import Loading from '../Loading'
 import { HeaderCell, TableActionMenu } from './components'

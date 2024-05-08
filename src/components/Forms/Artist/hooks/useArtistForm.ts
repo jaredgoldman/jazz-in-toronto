@@ -262,8 +262,9 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
             id,
             isAdmin,
             toast,
-            getArtistQuery.data,
-            startUpload
+            getArtistQuery,
+            maybeDeletePhoto,
+            maybeUploadPhoto
         ]
     )
 
