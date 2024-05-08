@@ -11,7 +11,7 @@ import { DateTime } from 'luxon'
 
 // Shared helpers
 const getAllByDay = (date: Date, prisma: PrismaClient, approved: boolean) => {
-    const gte = DateTime.fromJSDate(date, { zone: 'UTC' })
+    const gte = DateTime.fromJSDate(date, { zone: 'America/New_York' })
         .startOf('day')
         .toUTC()
         .toJSDate()
@@ -19,7 +19,7 @@ const getAllByDay = (date: Date, prisma: PrismaClient, approved: boolean) => {
     // Calculate one day later, also in UTC
     const lte = DateTime.fromJSDate(gte, { zone: 'UTC' })
         // Account for gigs starting at midnight
-        .plus({ days: 1, hours: 4 })
+        .plus({ days: 1 })
         .toJSDate()
 
     console.log({

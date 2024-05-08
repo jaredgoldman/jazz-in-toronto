@@ -16,15 +16,11 @@ enum ListingType {
 }
 
 export default function Listings() {
-    const defaultDate = DateTime.now().startOf('day').toJSDate()
+    const defaultDate = DateTime.now().startOf('day').setZone("America/New_York").toJSDate()
     const [selectedDate, setSelectedDate] = useState(defaultDate)
     // Change listing type
     const [listingType, setListingType] = useState(ListingType.EVENT_MAP)
     const onChangeListingType = (type: ListingType) => setListingType(type)
-
-    useEffect(() => {
-        console.log('selectedDate', selectedDate)
-    }, [selectedDate])
 
     const handleNextDay = useCallback(
         () =>
@@ -32,7 +28,6 @@ export default function Listings() {
                 DateTime.fromJSDate(selectedDate)
                     .plus({ days: 1 })
                     .startOf('day')
-                    .toUTC()
                     .toJSDate()
             ),
         [selectedDate]
@@ -40,10 +35,9 @@ export default function Listings() {
     const handlePreviousDay = useCallback(
         () =>
             setSelectedDate(
-                DateTime.fromJSDate(selectedDate, { zone: 'UTC' })
+                DateTime.fromJSDate(selectedDate)
                     .minus({ days: 1 })
                     .startOf('day')
-                    .toUTC()
                     .toJSDate()
             ),
         [selectedDate]
