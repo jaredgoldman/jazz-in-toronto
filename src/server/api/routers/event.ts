@@ -11,9 +11,15 @@ import { DateTime } from 'luxon'
 
 // Shared helpers
 const getAllByDay = (date: Date, prisma: PrismaClient, approved: boolean) => {
-    const gte = DateTime.fromJSDate(date).startOf('day').toJSDate()
+    const gte = DateTime.fromJSDate(date, { zone: 'UTC' })
+        .startOf('day')
+        .toUTC()
+        .toJSDate()
 
-    const lt = DateTime.fromJSDate(gte).plus({ days: 1 }).toJSDate()
+    // Calculate one day later, also in UTC
+    const lt = DateTime.fromJSDate(gte, { zone: 'UTC' })
+        .plus({ days: 1 })
+        .toJSDate()
 
     return prisma.event.findMany({
         where: {
