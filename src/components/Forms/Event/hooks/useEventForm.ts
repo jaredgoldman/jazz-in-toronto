@@ -120,7 +120,9 @@ export default function useEventForm(id = '', isAdmin: boolean) {
     }, [getEventQuery.data, reset])
 
     const watchedVenueId = watch('venueId')
+    const watchedStartDate = watch('startDate')
 
+    // Changes the website and instagram handle when the venue changes
     useEffect(() => {
         if (watchedVenueId) {
             const venue = getAllVenueQuery.data?.find(
@@ -135,6 +137,18 @@ export default function useEventForm(id = '', isAdmin: boolean) {
             )
         }
     }, [watchedVenueId])
+
+    useEffect(() => {
+        if (watchedStartDate) {
+            const startDate = DateTime.fromISO(watchedStartDate)
+                .setZone('America/New_York')
+                .toJSDate()
+            const endDate = DateTime.fromJSDate(startDate)
+                .plus({ hours: 2 })
+                .toJSDate()
+            setValue('endDate', toDateTimeLocal(endDate))
+        }
+    }, [watchedStartDate])
 
     const onSubmit = async (values: EventFormValues) => {
         const startDate = DateTime.fromISO(values.startDate)
