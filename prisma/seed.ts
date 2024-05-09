@@ -2,13 +2,14 @@ import { Venue } from '@prisma/client'
 import { prisma } from '../src/server/db'
 import { ArtistNameGenerator } from './artistNameGenerator'
 import { env } from '~/env.mjs'
+import { Genre } from '@prisma/client'
 
 const artistNameGenerator = new ArtistNameGenerator()
 const seed = async () => {
     // create 100 artists
     const artists = Array.from({ length: 50 }).map((_, i) => ({
         name: artistNameGenerator.generateArtistName(),
-        genre: 'jazz',
+        genre: Genre.JAZZ,
         photoPath: 'https://picsum.photos/200/300',
         photoName: 'photo.jpg',
         instagramHandle: `@artist${i + 1}`,
