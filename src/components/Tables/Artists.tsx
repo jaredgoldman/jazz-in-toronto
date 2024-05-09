@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { api } from '~/utils/api'
 import { Artist } from '~/types/data'
 import { HeaderCell } from './components'
+import { genreLabels } from '~/utils/labels'
 import {
     SortingState,
     flexRender,
@@ -141,7 +142,11 @@ export function ArtistsTable() {
                 header: 'Name'
             }),
             columnHelper.accessor((row) => row.genre, {
-                cell: (info) => info.getValue(),
+                cell: (info) => {
+                    const genre = info.getValue()
+                    if (!genre) return null
+                    return genreLabels[genre]
+                },
                 header: 'Genre'
             }),
             columnHelper.accessor((row) => row.website, {

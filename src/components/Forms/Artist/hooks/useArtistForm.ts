@@ -5,10 +5,11 @@ import { useUploadThing } from '~/hooks/useUploadThing'
 import { MAX_FILE_SIZE } from '~/utils/constants'
 import { useToast } from '~/hooks/useToast'
 import { setFormValues, trimFileName } from '../../utils'
+import { Genre } from '@prisma/client'
 
 export interface ArtistFormValues {
     name: string
-    genre: string
+    genre?: Genre
     photoPath?: string
     photoName?: string
     instagramHandle?: string
@@ -46,7 +47,7 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
     const defaultValues: ArtistFormValues = {
         name: '',
         instagramHandle: '',
-        genre: '',
+        genre: undefined,
         website: '',
         photoPath: '',
         fileData: undefined,
@@ -72,7 +73,7 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
             reset({
                 ...data,
                 instagramHandle: data.instagramHandle ?? '',
-                genre: data.genre ?? '',
+                genre: data.genre ?? undefined,
                 photoPath: data.photoPath ?? '',
                 photoName: (data?.photoName as string) ?? '',
                 website: data.website ?? '',
