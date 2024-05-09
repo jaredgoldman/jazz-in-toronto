@@ -25,7 +25,7 @@ model Artist {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   name            String   @unique
-  genre           String?
+  genre           Genre?
   photoPath       String?
   photoName       String?
   instagramHandle String?
@@ -87,6 +87,22 @@ model Event {
 
   @@unique([startDate, venueId])
   @@index([featured, name])
+}
+
+enum Genre {
+  JAZZ
+  BLUES
+  FUNK
+  SOUL
+  ROCK
+  POP
+  HIPHOP
+  RNB
+  COUNTRY
+  CLASSICAL
+  ELECTRONIC
+  INDIE
+  OTHER
 }
 
 // NextAuth

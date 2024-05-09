@@ -4,11 +4,13 @@ import {
     publicProcedure,
     protectedProcedure
 } from '~/server/api/trpc'
+import { Genre } from '@prisma/client'
 import { utapi } from 'uploadthing/server'
 
+const genreEnumValues = [...Object.values(Genre)] as [Genre, ...Genre[]]
 const artistValidation = z.object({
     name: z.string(),
-    genre: z.string().optional(),
+    genre: z.enum(genreEnumValues).optional(),
     photoPath: z.string().optional(),
     photoName: z.string().optional(),
     featured: z.boolean().optional(),
@@ -22,6 +24,7 @@ export const artistRouter = createTRPCRouter({
         .input(artistValidation)
         .mutation(({ ctx, input }) => {
             const { isApproved, ...artistData } = input
+            const i = artistData.genre
             return ctx.prisma.artist.create({
                 data: { ...artistData, approved: isApproved ?? false }
             })
@@ -60,7 +63,7 @@ export const artistRouter = createTRPCRouter({
             z.object({
                 id: z.string().cuid(),
                 name: z.string().optional(),
-                genre: z.string().optional(),
+                genre: z.enum(genreEnumValues).optional(),
                 photoPath: z.string().optional(),
                 photoName: z.string().optional(),
                 featured: z.boolean().optional(),

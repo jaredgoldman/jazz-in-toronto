@@ -1,10 +1,11 @@
 import * as Form from '@radix-ui/react-form'
-import { Input } from '../Fields'
+import { Input, Select } from '../Fields'
 import Upload from '../Fields/Upload'
 import { Heading, Flex, Box, Button } from '@radix-ui/themes'
 import useArtistForm from './hooks/useArtistForm'
 import { useRouter } from 'next/router'
 import Spinner from '~/components/Spinner'
+import { genreLabels } from '~/utils/labels'
 
 export default function ArtistForm() {
     const router = useRouter()
@@ -47,11 +48,17 @@ export default function ArtistForm() {
                             control={control}
                             required="You must enter a artist name"
                         />
-                        <Input
+                        <Select
                             name="genre"
                             label="Musical genre"
                             error={errors.genre}
                             control={control}
+                            optionData={Object.entries(genreLabels).map(
+                                ([id, name]) => ({
+                                    id,
+                                    name
+                                })
+                            )}
                         />
                         <Upload
                             name="fileData"
