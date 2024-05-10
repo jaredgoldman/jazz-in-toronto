@@ -6,7 +6,7 @@ import { Flex, Text, Button, Heading } from '@radix-ui/themes'
 import Link from '~/components/Link'
 import { EventsMap } from '~/components/EventsMap'
 import { formatInTimeZone } from 'date-fns-tz'
-import { DateTime } from 'luxon'
+import { DateTime, DurationLike } from 'luxon'
 
 enum ListingType {
     CALENDAR = 'CALENDAR',
@@ -22,16 +22,20 @@ export default function Listings() {
     const [selectedDate, setSelectedDate] = useState(defaultDate)
     const [listingType, setListingType] = useState(ListingType.EVENT_MAP)
     const onChangeListingType = (type: ListingType) => setListingType(type)
+    const listingTypeDuration =
+        listingType === ListingType.CALENDAR ? { months: 1 } : { days: 1 }
+    const listingTypeDurationString =
+        listingType === ListingType.CALENDAR ? 'month' : 'day'
 
     /**
      * Function to handle the next day button
      * @returns void
      */
-    const handleNextDay = useCallback(
+    const handleNext = useCallback(
         () =>
             setSelectedDate(
                 DateTime.fromJSDate(selectedDate)
-                    .plus({ days: 1 })
+                    .plus(listingTypeDuration)
                     .startOf('day')
                     .toJSDate()
             ),
@@ -42,11 +46,11 @@ export default function Listings() {
      * Function to handle the previous day button
      * @returns void
      */
-    const handlePreviousDay = useCallback(
+    const handlePrevious = useCallback(
         () =>
             setSelectedDate(
                 DateTime.fromJSDate(selectedDate)
-                    .minus({ days: 1 })
+                    .minus(listingTypeDuration)
                     .startOf('day')
                     .toJSDate()
             ),
@@ -98,10 +102,12 @@ export default function Listings() {
                         wrap="wrap"
                         justify={{ initial: 'center', xs: 'start' }}
                     >
-                        <Button onClick={handlePreviousDay}>
-                            Previous Day
-                        </Button>
-                        <Button onClick={handleNextDay}>Next Day</Button>
+                        <Button
+                            onClick={handlePrevious}
+                        >{`Previous ${listingTypeDurationString}`}</Button>
+                        <Button
+                            onClick={handleNext}
+                        >{`Next ${listingTypeDurationString}`}</Button>
                         <Button
                             variant="soft"
                             onClick={() =>
