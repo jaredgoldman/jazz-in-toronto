@@ -31,7 +31,7 @@
         "@radix-ui/react-form": "^0.0.3",
         "@radix-ui/react-icons": "^1.0.3",
         "@radix-ui/react-separator": "^1.0.3",
-        "@radix-ui/themes": "^1.0.0",
+        "@radix-ui/themes": "^1.1.0",
         "@sparticuz/chromium-min": "^115.0.0",
         "@t3-oss/env-nextjs": "^0.3.1",
         "@tanstack/match-sorter-utils": "^8.8.4",

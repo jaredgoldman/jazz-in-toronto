@@ -56,33 +56,20 @@ export default function Calendar({ selectedDate }: Props) {
         return rows
     }
 
-    const eventRows = mapEventsToCalendarRows()
-
     return (
-        <Flex
-            direction="column"
-            justify="center"
-            width="100%"
-            className="max-w-[75rem]"
-        >
+        <Flex direction="column" justify="center" width="100%">
             {isLoading ? (
                 <Loading />
             ) : (
-                <Table.Root className="border-collapse">
+                <Table.Root>
                     <Table.Header>
                         <Table.Row>
                             {getDaysOfTheWeek('short').map((day) => (
-                                <Table.Cell
-                                    key={day}
-                                    justify="center"
-                                    width="7rem"
-                                >
-                                    {day}
-                                </Table.Cell>
+                                <Table.Cell key={day}>{day}</Table.Cell>
                             ))}
                         </Table.Row>
                     </Table.Header>
-                    <Table.Body>{eventRows}</Table.Body>
+                    <Table.Body>{mapEventsToCalendarRows()}</Table.Body>
                 </Table.Root>
             )}
         </Flex>
