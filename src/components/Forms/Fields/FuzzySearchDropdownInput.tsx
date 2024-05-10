@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import Fuse from 'fuse.js'
-import { Venue, Artist } from '~/types/data' // Assuming these types are defined somewhere in your project
+import { Venue, Artist } from '~/types/data'
 import { TextField, DropdownMenu, Text, Button, Flex } from '@radix-ui/themes'
 import {
     Controller,
@@ -9,9 +9,8 @@ import {
     Path,
     FieldError
 } from 'react-hook-form'
-import { MagnifyingGlassIcon, Cross1Icon } from '@radix-ui/react-icons'
+import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import * as Form from '@radix-ui/react-form'
-import Link from '~/components/Link'
 
 type Props<T extends FieldValues> = {
     name: Path<T>
@@ -22,6 +21,16 @@ type Props<T extends FieldValues> = {
     error?: FieldError
 }
 
+/**
+ * A dropdown input that allows fuzzy searching of items.
+ * @param {string} name The name of the field.
+ * @param {Array<Venue| Artist>} items The items to search through.
+ * @param {string} label The label for the input.
+ * @param {Control} control The form control.
+ * @param {boolean} required Whether the field is required.
+ * @param {string} error The error message.
+ * @returns The fuzzy search dropdown input.
+ */
 export default function FuzzySearchDropdownInput<T extends FieldValues>({
     name,
     items,
@@ -34,6 +43,7 @@ export default function FuzzySearchDropdownInput<T extends FieldValues>({
     const [hasSelected, setHasSelected] = useState(false)
     const [isOpen, setIsOpen] = useState(false)
     const inputRef = useRef<HTMLInputElement>(null)
+
     const fuse = new Fuse(items, {
         keys: ['name'],
         includeScore: true
@@ -45,7 +55,6 @@ export default function FuzzySearchDropdownInput<T extends FieldValues>({
     )
 
     useEffect(() => {
-        // Open the dropdown if there are results and query isn't empty
         if (results.length && query && !hasSelected) {
             setIsOpen(true)
         } else {
@@ -62,7 +71,11 @@ export default function FuzzySearchDropdownInput<T extends FieldValues>({
                 <Form.Field name={name}>
                     <Flex align="center" justify="between">
                         <Form.Label>{label}</Form.Label>
-                        <Button variant="ghost" type="button" onClick={() => setQuery('')}>
+                        <Button
+                            variant="ghost"
+                            type="button"
+                            onClick={() => setQuery('')}
+                        >
                             Clear
                         </Button>
                     </Flex>
