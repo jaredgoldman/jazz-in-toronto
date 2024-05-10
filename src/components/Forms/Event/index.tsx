@@ -6,6 +6,7 @@ import { InfoCircledIcon } from '@radix-ui/react-icons'
 import Link from '~/components/Link'
 import { useRouter } from 'next/router'
 import Loading from '~/components/Loading'
+import FuzzySearchDropdownInput from '../Fields/FuzzySearchDropdownInput'
 
 export default function EventForm() {
     const router = useRouter()
@@ -80,10 +81,10 @@ export default function EventForm() {
                                 type="datetime-local"
                             />
                             <Box>
-                                <Select
+                                <FuzzySearchDropdownInput
+                                    label="Select an venue"
+                                    items={venueData}
                                     name="venueId"
-                                    label="Select a venue"
-                                    optionData={venueData}
                                     control={control}
                                     error={errors.venueId}
                                 />
@@ -95,13 +96,12 @@ export default function EventForm() {
                                 </Link>
                             </Box>
                             <Box>
-                                <Select
-                                    name="artistId"
+                                <FuzzySearchDropdownInput
                                     label="Select an artist"
-                                    optionData={artistData}
+                                    items={artistData}
+                                    name="artistId"
                                     control={control}
                                     error={errors.artistId}
-                                    required="Please select an artist for your event"
                                 />
                                 <Link
                                     size="2"

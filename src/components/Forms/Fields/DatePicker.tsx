@@ -1,4 +1,3 @@
-// Libraries
 import {
     FieldError,
     FieldValues,
@@ -6,13 +5,10 @@ import {
     Control,
     Controller
 } from 'react-hook-form'
-// Commponents
 import ReactDatePicker, { ReactDatePickerProps } from 'react-datepicker'
 import * as Form from '@radix-ui/react-form'
 import { Flex, Text } from '@radix-ui/themes'
-// Utils
 import { useTheme } from 'next-themes'
-// Assets
 import 'react-datepicker/dist/react-datepicker.css'
 
 interface Props<T extends FieldValues> {
