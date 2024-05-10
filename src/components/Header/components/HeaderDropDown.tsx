@@ -16,17 +16,16 @@ export function HeaderDropDown({ links }: Props) {
                     Add
                 </Button>
             </DropdownMenu.Trigger>
-            <DropdownMenu.Content size="2" align="center">
-                <Flex
-                    direction="column"
-                    align="center"
-                    gap="4"
-                    className="m-0 min-w-[6.5rem] max-w-[6.5rem] rounded-none p-0"
-                >
+            <DropdownMenu.Content
+                size="2"
+                align="center"
+                className="w-dropdown"
+            >
+                <Flex direction="column" align="center" gap="4">
                     {links.map((link) => (
                         <Link href={link.href} size="3" key={link.title}>
                             {link.title}
-                       </Link>
+                        </Link>
                     ))}
                 </Flex>
             </DropdownMenu.Content>

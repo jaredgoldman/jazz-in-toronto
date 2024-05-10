@@ -25,7 +25,8 @@ export default {
                 }
             },
             width: {
-                '1/11': '9.09091%'
+                '1/11': '9.09091%',
+                dropdown: 'var(--radix-popper-anchor-width)'
             },
             backgroundImage: {
                 'hero-pattern':
