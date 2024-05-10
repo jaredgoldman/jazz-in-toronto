@@ -26,7 +26,7 @@ export function HeaderDropDown({ links }: Props) {
                     {links.map((link) => (
                         <Link href={link.href} size="3" key={link.title}>
                             {link.title}
-                        </Link>
+                       </Link>
                     ))}
                 </Flex>
             </DropdownMenu.Content>

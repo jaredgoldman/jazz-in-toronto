@@ -6,6 +6,7 @@ import { InfoCircledIcon } from '@radix-ui/react-icons'
 import Link from '~/components/Link'
 import { useRouter } from 'next/router'
 import Loading from '~/components/Loading'
+import FuzzySearchDropdownInput from '../Fields/FuzzySearchDropdownInput'
 
 export default function EventForm() {
     const router = useRouter()
@@ -95,14 +96,15 @@ export default function EventForm() {
                                 </Link>
                             </Box>
                             <Box>
-                                <Select
+                                {/*}<Select
                                     name="artistId"
                                     label="Select an artist"
                                     optionData={artistData}
                                     control={control}
                                     error={errors.artistId}
                                     required="Please select an artist for your event"
-                                />
+                                />*/}
+                                <FuzzySearchDropdownInput items={artistData} />.
                                 <Link
                                     size="2"
                                     href={isAdmin ? '/admin/artist' : '/artist'}
