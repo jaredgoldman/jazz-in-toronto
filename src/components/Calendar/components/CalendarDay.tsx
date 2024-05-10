@@ -32,7 +32,14 @@ export default function CalendarDay({ dailyEvents }: Props) {
 
     return (
         <Table.Cell justify="start">
-            <Flex direction="column" gap="1" align="start">
+            <Flex
+                direction="column"
+                gap="2"
+                align="start"
+                width="100%"
+                height="100%"
+                className="min-h-[100px] min-w-[100px]"
+            >
                 <Heading size="3">{dailyEvents.date.getDate()}</Heading>
                 <Flex direction="column" gap="2" align="start">
                     {flatDailyEvents.slice(0, 5).map((event) => (

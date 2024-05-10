@@ -57,7 +57,7 @@ export default function Calendar({ selectedDate }: Props) {
     }
 
     return (
-        <Flex direction="column" justify="center">
+        <Flex direction="column" justify="center" width="100%">
             {isLoading ? (
                 <Loading />
             ) : (
@@ -65,9 +65,7 @@ export default function Calendar({ selectedDate }: Props) {
                     <Table.Header>
                         <Table.Row>
                             {getDaysOfTheWeek('short').map((day) => (
-                                <Table.Cell key={day} width="10rem">
-                                    {day}
-                                </Table.Cell>
+                                <Table.Cell key={day}>{day}</Table.Cell>
                             ))}
                         </Table.Row>
                     </Table.Header>

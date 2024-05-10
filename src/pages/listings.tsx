@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useMemo } from 'react'
 import RootLayout from '~/layouts/RootLayout'
 import DailyListings from '~/components/DailyListings/DailyListings'
 import Calendar from '~/components/Calendar'
@@ -22,10 +22,15 @@ export default function Listings() {
     const [selectedDate, setSelectedDate] = useState(defaultDate)
     const [listingType, setListingType] = useState(ListingType.EVENT_MAP)
     const onChangeListingType = (type: ListingType) => setListingType(type)
-    const listingTypeDuration =
-        listingType === ListingType.CALENDAR ? { months: 1 } : { days: 1 }
-    const listingTypeDurationString =
-        listingType === ListingType.CALENDAR ? 'month' : 'day'
+    const listingTypeDuration = useMemo(
+        () =>
+            listingType === ListingType.CALENDAR ? { months: 1 } : { days: 1 },
+        [listingType]
+    )
+    const listingTypeDurationString = useMemo(
+        () => (listingType === ListingType.CALENDAR ? 'month' : 'day'),
+        [listingType]
+    )
 
     /**
      * Function to handle the next day button
@@ -39,7 +44,7 @@ export default function Listings() {
                     .startOf('day')
                     .toJSDate()
             ),
-        [selectedDate]
+        [selectedDate, listingTypeDuration]
     )
 
     /**
@@ -54,7 +59,7 @@ export default function Listings() {
                     .startOf('day')
                     .toJSDate()
             ),
-        [selectedDate]
+        [selectedDate, listingTypeDuration]
     )
 
     const headingDate = formatInTimeZone(
