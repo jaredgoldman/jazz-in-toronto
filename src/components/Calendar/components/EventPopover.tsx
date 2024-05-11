@@ -22,15 +22,17 @@ export default function EventPopover({ event, children }: PopoverProps) {
     const eventWebsite = normalizeUrl(
         event.artist.website ?? event.venue.website
     )
+
     return (
         <Popover.Root>
             <Popover.Trigger>{children}</Popover.Trigger>
-            <Popover.Content>
-                <Flex
-                    direction="column"
-                    className="max-w-lg md:max-w-xl"
-                    gap="3"
-                >
+            <Popover.Content
+                avoidCollisions={true}
+                size="1"
+                align="center"
+                className="max-w-sm"
+            >
+                <Flex direction="column" gap="3">
                     <Box>
                         <Heading>{event.name}</Heading>
                         <Heading size="2">{event.venue.name}</Heading>
