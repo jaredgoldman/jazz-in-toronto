@@ -94,15 +94,13 @@ export default function VenueForm() {
                             error={errors.website}
                             control={control}
                         />
-                        {isAdmin && (
-                            <Input
-                                name="description"
-                                label="Featured description"
-                                type="textarea"
-                                error={errors.description}
-                                control={control}
-                            />
-                        )}
+                        <Input
+                            name="description"
+                            label="Description"
+                            type="textarea"
+                            error={errors.description}
+                            control={control}
+                        />
                         <Form.Submit asChild>
                             <Button className="w-full" variant="solid">
                                 Submit
