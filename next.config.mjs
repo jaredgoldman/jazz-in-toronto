@@ -28,6 +28,12 @@ const config = {
             },
             {
                 protocol: 'https',
+                hostname: 'utfs.io',
+                pathname: '/f/**'
+            },
+
+            {
+                protocol: 'https',
                 hostname: 'picsum.photos'
             },
             {
