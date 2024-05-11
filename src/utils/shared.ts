@@ -7,3 +7,13 @@ export const deepEqual = (x: object, y: object): boolean => {
 export const wait = (ms: number) => {
     return new Promise((resolve) => setTimeout(resolve, ms))
 }
+
+/**
+ * Adds https to the beginning of a URL if it is missing
+ */
+export const normalizeUrl = (url: string): string => {
+    if (!url.startsWith('http')) {
+        return `https://${url}`
+    }
+    return url
+}
