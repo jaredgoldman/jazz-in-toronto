@@ -51,7 +51,7 @@ export default function ArtistForm() {
                         <Select
                             name="genre"
                             label="Musical genre"
-                            error={errors.genre}
+                            error={errors.genre ?? undefined}
                             control={control}
                             optionData={Object.entries(genreLabels).map(
                                 ([id, name]) => ({
@@ -80,15 +80,13 @@ export default function ArtistForm() {
                             error={errors.website}
                             control={control}
                         />
-                        {isAdmin && (
-                            <Input
-                                name="description"
-                                label="Featured description"
-                                type="textarea"
-                                error={errors.description}
-                                control={control}
-                            />
-                        )}
+                        <Input
+                            name="description"
+                            label="Description"
+                            type="textarea"
+                            error={errors.description}
+                            control={control}
+                        />
                         <Form.Submit asChild>
                             {isLoading ? (
                                 <Flex justify="center">
