@@ -1,5 +1,5 @@
 import * as Form from '@radix-ui/react-form'
-import { Input, Select } from '../Fields'
+import { Input } from '../Fields'
 import { Flex, Button, Heading, Box, Callout } from '@radix-ui/themes'
 import useEventForm from './hooks/useEventForm'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
@@ -124,15 +124,13 @@ export default function EventForm() {
                                 error={errors.website}
                                 control={control}
                             />
-                            {isAdmin && (
-                                <Input
-                                    name="description"
-                                    label="Featured description"
-                                    type="textarea"
-                                    error={errors.description}
-                                    control={control}
-                                />
-                            )}
+                            <Input
+                                name="description"
+                                label="Description"
+                                type="textarea"
+                                error={errors.description}
+                                control={control}
+                            />
                             <Form.Submit asChild>
                                 <Button
                                     className="w-full"
