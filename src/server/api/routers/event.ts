@@ -215,6 +215,19 @@ export const eventRouter = createTRPCRouter({
             })
         }),
 
+    getAllByArtist: publicProcedure
+        .input(z.object({ artistId: z.string().cuid() }))
+        .query(({ ctx, input }) => {
+            return ctx.prisma.event.findMany({
+                where: {
+                    artistId: input.artistId
+                },
+                include: {
+                    venue: true
+                }
+            })
+        }),
+
     update: protectedProcedure
         .input(
             z.object({
