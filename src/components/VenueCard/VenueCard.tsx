@@ -7,7 +7,7 @@ import {
     LaptopIcon
 } from '@radix-ui/react-icons'
 import { Venue } from '~/types/data'
-import { processIGHandle, stripFbUrl, simplifyURL } from './utils'
+import { processIGHandle, stripFbUrl, simplifyURL } from '~/utils'
 
 interface Props {
     venue: Venue
