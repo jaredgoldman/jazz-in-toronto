@@ -53,42 +53,46 @@ export const EventsMap = ({ selectedDate }: Props) => {
                 Click a marker to see the respective venues events
             </Text>
             <APIProvider apiKey={env.NEXT_PUBLIC_GOOGLE_API_KEY}>
-                {isLoading ? <Loading/> :<Map
-                    zoom={12}
-                    center={{
-                        lat: 43.66,
-                        lng: -79.4163
-                    }}
-                    gestureHandling={'greedy'}
-                    disableDefaultUI={true}
-                    zoomControl={true}
-                    clickableIcons={false}
-                >
-                    {data?.map(({ venue, events }) => (
-                        <Flex pl="2" key={venue.id}>
-                            <MapVenuePopover
-                                events={events}
-                                venue={venue}
-                                visible={popoverState[venue.id] ?? false}
-                                onFocusOutside={() =>
-                                    handleChangePopoverState(venue.id)
-                                }
-                            >
-                                <></>
-                            </MapVenuePopover>
-                            <Marker
-                                title={venue.name}
-                                position={{
-                                    lng: venue.longitude,
-                                    lat: venue.latitude
-                                }}
-                                onClick={() =>
-                                    handleChangePopoverState(venue.id)
-                                }
-                            />
-                        </Flex>
-                    ))}
-                </Map>}
+                {isLoading ? (
+                    <Loading />
+                ) : (
+                    <Map
+                        zoom={12}
+                        center={{
+                            lat: 43.66,
+                            lng: -79.4163
+                        }}
+                        gestureHandling={'greedy'}
+                        disableDefaultUI={true}
+                        zoomControl={true}
+                        clickableIcons={false}
+                    >
+                        {data?.map(({ venue, events }) => (
+                            <Flex pl="2" key={venue.id}>
+                                <MapVenuePopover
+                                    events={events}
+                                    venue={venue}
+                                    visible={popoverState[venue.id] ?? false}
+                                    onFocusOutside={() =>
+                                        handleChangePopoverState(venue.id)
+                                    }
+                                >
+                                    <></>
+                                </MapVenuePopover>
+                                <Marker
+                                    title={venue.name}
+                                    position={{
+                                        lng: venue.longitude,
+                                        lat: venue.latitude
+                                    }}
+                                    onClick={() =>
+                                        handleChangePopoverState(venue.id)
+                                    }
+                                />
+                            </Flex>
+                        ))}
+                    </Map>
+                )}
             </APIProvider>
         </Flex>
     )
