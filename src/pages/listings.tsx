@@ -7,7 +7,6 @@ import Link from '~/components/Link'
 import { EventsMap } from '~/components/EventsMap'
 import { formatInTimeZone } from 'date-fns-tz'
 import { DateTime } from 'luxon'
-import ReactDatePicker from 'react-datepicker'
 
 enum ListingType {
     CALENDAR = 'CALENDAR',
