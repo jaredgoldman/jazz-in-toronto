@@ -2,11 +2,12 @@ import { useCallback, useState, useMemo } from 'react'
 import RootLayout from '~/layouts/RootLayout'
 import DailyListings from '~/components/DailyListings/DailyListings'
 import Calendar from '~/components/Calendar'
-import { Flex, Text, Button, Heading } from '@radix-ui/themes'
+import { Flex, Text, Button, Heading, TextField } from '@radix-ui/themes'
 import Link from '~/components/Link'
 import { EventsMap } from '~/components/EventsMap'
 import { formatInTimeZone } from 'date-fns-tz'
 import { DateTime } from 'luxon'
+import ReactDatePicker from 'react-datepicker'
 
 enum ListingType {
     CALENDAR = 'CALENDAR',
@@ -61,6 +62,10 @@ export default function Listings() {
             ),
         [selectedDate, listingTypeDuration]
     )
+
+    const handleDatePickerChange = (date: string) => {
+        setSelectedDate(DateTime.fromISO(date).startOf('day').toJSDate())
+    }
 
     const headingDate = formatInTimeZone(
         selectedDate,
@@ -142,6 +147,20 @@ export default function Listings() {
                         >
                             View Event Map
                         </Button>
+                        <TextField.Root>
+                            <TextField.Input
+                                type="date"
+                                value={
+                                    new Date(selectedDate)
+                                        .toISOString()
+                                        .split('T')[0]
+                                }
+                                onChange={(e) =>
+                                    handleDatePickerChange(e.target.value)
+                                }
+                                placeholder="Filter"
+                            />
+                        </TextField.Root>
                     </Flex>
                     {listingType !== ListingType.CALENDAR ? (
                         <Heading
