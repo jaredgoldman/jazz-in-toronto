@@ -24,7 +24,6 @@ export const artistRouter = createTRPCRouter({
         .input(artistValidation)
         .mutation(({ ctx, input }) => {
             const { isApproved, ...artistData } = input
-            const i = artistData.genre
             return ctx.prisma.artist.create({
                 data: { ...artistData, approved: isApproved ?? false }
             })

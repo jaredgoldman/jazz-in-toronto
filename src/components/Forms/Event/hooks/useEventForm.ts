@@ -136,7 +136,7 @@ export default function useEventForm(id = '', isAdmin: boolean) {
                 setValue
             )
         }
-    }, [watchedVenueId])
+    }, [watchedVenueId, getAllVenueQuery.data, setValue])
 
     // Automatically sets the end date to 2 hours after the start date
     useEffect(() => {
@@ -149,7 +149,7 @@ export default function useEventForm(id = '', isAdmin: boolean) {
                 .toJSDate()
             setValue('endDate', toDateTimeLocal(endDate))
         }
-    }, [watchedStartDate])
+    }, [watchedStartDate, setValue])
 
     const onSubmit = async (values: EventFormValues) => {
         const startDate = DateTime.fromISO(values.startDate)

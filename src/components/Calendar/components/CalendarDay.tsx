@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import ModalDay from './ModalDay'
-import { Flex, Table, Text, Heading, Popover, Button } from '@radix-ui/themes'
+import { Flex, Table, Text, Heading, Button } from '@radix-ui/themes'
 import { DailyEventData } from '../types'
 import Dialogue from '~/components/Dialogue'
 import { DateTime } from 'luxon'

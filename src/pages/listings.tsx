@@ -6,7 +6,7 @@ import { Flex, Text, Button, Heading } from '@radix-ui/themes'
 import Link from '~/components/Link'
 import { EventsMap } from '~/components/EventsMap'
 import { formatInTimeZone } from 'date-fns-tz'
-import { DateTime, DurationLike } from 'luxon'
+import { DateTime } from 'luxon'
 
 enum ListingType {
     CALENDAR = 'CALENDAR',
