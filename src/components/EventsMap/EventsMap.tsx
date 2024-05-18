@@ -30,7 +30,7 @@ export const EventsMap = ({ selectedDate }: Props) => {
     useEffect(() => {
         // TODO: make sure we only do this when we have to
         if (data) {
-            const newState = data.reduce((acc, { venue, events }) => {
+            const newState = data.reduce((acc, { venue }) => {
                 acc[venue.id] = false
                 return acc
             }, {} as Record<string, boolean>)
@@ -63,11 +63,10 @@ export const EventsMap = ({ selectedDate }: Props) => {
                     zoomControl={true}
                 >
                     {data?.map(({ venue, events }) => (
-                        <Flex pl="2">
+                        <Flex pl="2" key={venue.id}>
                             <MapVenuePopover
                                 events={events}
                                 venue={venue}
-                                key={`popover-${venue.id}`}
                                 visible={popoverState[venue.id] ?? false}
                                 onFocusOutside={() =>
                                     handleChangePopoverState(venue.id)
@@ -77,7 +76,6 @@ export const EventsMap = ({ selectedDate }: Props) => {
                             </MapVenuePopover>
                             <Marker
                                 title={venue.name}
-                                key={`marker-${venue.id}`}
                                 position={{
                                     lng: venue.longitude,
                                     lat: venue.latitude

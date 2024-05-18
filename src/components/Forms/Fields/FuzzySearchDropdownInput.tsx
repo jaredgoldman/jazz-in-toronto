@@ -9,9 +9,8 @@ import {
     Path,
     FieldError
 } from 'react-hook-form'
-import { MagnifyingGlassIcon, Cross1Icon } from '@radix-ui/react-icons'
+import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import * as Form from '@radix-ui/react-form'
-import Link from '~/components/Link'
 
 type Props<T extends FieldValues> = {
     name: Path<T>
@@ -34,10 +33,14 @@ export default function FuzzySearchDropdownInput<T extends FieldValues>({
     const [hasSelected, setHasSelected] = useState(false)
     const [isOpen, setIsOpen] = useState(false)
     const inputRef = useRef<HTMLInputElement>(null)
-    const fuse = new Fuse(items, {
-        keys: ['name'],
-        includeScore: true
-    })
+    const fuse = useMemo(
+        () =>
+            new Fuse(items, {
+                keys: ['name'],
+                includeScore: true
+            }),
+        [items]
+    )
 
     const results = useMemo(
         () => (query ? fuse.search(query).map((result) => result.item) : []),
@@ -51,7 +54,7 @@ export default function FuzzySearchDropdownInput<T extends FieldValues>({
         } else {
             setIsOpen(false)
         }
-    }, [query, results.length])
+    }, [query, results.length, hasSelected])
 
     return (
         <Controller
@@ -62,7 +65,11 @@ export default function FuzzySearchDropdownInput<T extends FieldValues>({
                 <Form.Field name={name}>
                     <Flex align="center" justify="between">
                         <Form.Label>{label}</Form.Label>
-                        <Button variant="ghost" type="button" onClick={() => setQuery('')}>
+                        <Button
+                            variant="ghost"
+                            type="button"
+                            onClick={() => setQuery('')}
+                        >
                             Clear
                         </Button>
                     </Flex>

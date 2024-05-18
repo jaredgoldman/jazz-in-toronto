@@ -44,7 +44,7 @@ export function MapVenuePopover({
                     <Heading>{venue.name}</Heading>
                     <Box>
                         {events.map((event) => (
-                            <Flex gap="2" align="center">
+                            <Flex gap="2" align="center" key={event.id}>
                                 <Text>
                                     {formatInTimeZone(
                                         event.startDate,
