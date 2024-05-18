@@ -3,7 +3,6 @@ import Image from 'next/image'
 import { EventWithArtistVenue } from '~/types/data'
 import { formatInTimeZone } from 'date-fns-tz'
 import { normalizeUrl } from '~/utils/shared'
-import Link from '~/components/Link'
 import { useCallback } from 'react'
 import { useRouter } from 'next/router'
 

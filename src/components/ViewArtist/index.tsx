@@ -24,14 +24,14 @@ type Props = {
  */
 export default function ViewArtist({ artist, events }: Props) {
     return (
-        <Flex direction="column" gap="5" className="max-w-5xl">
+        <Flex direction="column" gap="5" className="max-w-6xl">
             <Heading size="9">{artist.name}</Heading>
             {artist.photoPath && artist.photoName ? (
                 <Image
                     src={artist.photoPath}
                     alt={artist.photoName}
-                    height={1000}
-                    width={1000}
+                    height={1500}
+                    width={1500}
                 />
             ) : null}
             {artist.genre ? (
@@ -41,12 +41,11 @@ export default function ViewArtist({ artist, events }: Props) {
                 </Flex>
             ) : null}
             {artist.description ? (
-                <Flex direction="column" className="">
-                    <Heading size="6">About</Heading>
+                <Flex direction="column" gap="3" className="max-w-5xl"> <Heading size="6">About</Heading>
                     <Text>{artist.description}</Text>
                 </Flex>
             ) : null}
-            <Flex direction="column">
+            <Flex direction="column" gap="2">
                 <Heading size="6">Contact</Heading>
                 {artist.website ? (
                     <Flex gap="2" align="center">
@@ -69,7 +68,7 @@ export default function ViewArtist({ artist, events }: Props) {
                 ) : null}
             </Flex>
             {events.length > 0 ? (
-                <Flex direction="column" gap="3">
+                <Flex direction="column" gap="4">
                     <Heading size="6">Upcoming Events</Heading>
                     <Flex direction="column" gap="4">
                         <Grid
