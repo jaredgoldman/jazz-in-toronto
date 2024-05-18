@@ -4,6 +4,7 @@ import { env } from '~/env.mjs'
 import { api } from '~/utils/api'
 import { Flex, Text } from '@radix-ui/themes'
 import { MapVenuePopover } from './components'
+import Loading from '../Loading'
 
 /**
  * Props for the EventsMap component
@@ -19,7 +20,7 @@ type Props = {
  * @param {Props}-
  */
 export const EventsMap = ({ selectedDate }: Props) => {
-    const { data } = api.event.getAllByDayByVenue.useQuery({
+    const { data, isLoading } = api.event.getAllByDayByVenue.useQuery({
         date: selectedDate
     })
 
@@ -52,7 +53,7 @@ export const EventsMap = ({ selectedDate }: Props) => {
                 Click a marker to see the respective venues events
             </Text>
             <APIProvider apiKey={env.NEXT_PUBLIC_GOOGLE_API_KEY}>
-                <Map
+                {isLoading ? <Loading/> :<Map
                     zoom={12}
                     center={{
                         lat: 43.66,
@@ -61,6 +62,7 @@ export const EventsMap = ({ selectedDate }: Props) => {
                     gestureHandling={'greedy'}
                     disableDefaultUI={true}
                     zoomControl={true}
+                    clickableIcons={false}
                 >
                     {data?.map(({ venue, events }) => (
                         <Flex pl="2" key={venue.id}>
@@ -86,7 +88,7 @@ export const EventsMap = ({ selectedDate }: Props) => {
                             />
                         </Flex>
                     ))}
-                </Map>
+                </Map>}
             </APIProvider>
         </Flex>
     )
