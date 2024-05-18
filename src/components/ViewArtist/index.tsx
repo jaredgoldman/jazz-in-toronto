@@ -24,7 +24,7 @@ type Props = {
  */
 export default function ViewArtist({ artist, events }: Props) {
     return (
-        <Flex direction="column" gap="5">
+        <Flex direction="column" gap="5" className="max-w-5xl">
             <Heading size="9">{artist.name}</Heading>
             {artist.photoPath && artist.photoName ? (
                 <Image
@@ -41,7 +41,7 @@ export default function ViewArtist({ artist, events }: Props) {
                 </Flex>
             ) : null}
             {artist.description ? (
-                <Flex direction="column">
+                <Flex direction="column" className="">
                     <Heading size="6">About</Heading>
                     <Text>{artist.description}</Text>
                 </Flex>
