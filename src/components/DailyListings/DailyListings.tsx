@@ -14,6 +14,7 @@ import { EventWithArtistVenue } from '~/types/data'
 import Loading from '../Loading'
 import { HeaderCell } from '../Tables/components'
 import { fuzzyFilter, dateFilter, timeFilter } from '../Tables/utils/filters'
+import Link from '../Link'
 
 interface Props {
     selectedDate: Date
@@ -38,7 +39,11 @@ export default function DailyListings({ selectedDate }: Props) {
             }),
             columnHelper.accessor((row) => row.name, {
                 header: 'Artist',
-                cell: (info) => info.getValue(),
+                cell: (info) => (
+                    <Link href={`/artist/${info.row.original.artist.id}`}>
+                        {info.getValue()}
+                    </Link>
+                ),
                 enableColumnFilter: false
             }),
             columnHelper.accessor(

@@ -1,17 +1,8 @@
-import { useCallback } from 'react'
 import { EventWithArtistVenue, Venue } from '~/types/data'
-import {
-    Popover,
-    Flex,
-    Box,
-    Heading,
-    Text,
-    Button,
-    Link
-} from '@radix-ui/themes'
+import { Popover, Flex, Box, Heading, Text } from '@radix-ui/themes'
 import { formatInTimeZone } from 'date-fns-tz'
 import { ArrowRightIcon } from '@radix-ui/react-icons'
-import { useRouter } from 'next/router'
+import Link from '~/components/Link'
 
 /**
  * @param events - EventWithArtistVenue[]
@@ -39,16 +30,6 @@ export function MapVenuePopover({
     visible,
     onFocusOutside
 }: Props) {
-    const router = useRouter()
-
-    const handleViewArtist = useCallback(
-        async (artistId: string) =>
-            await router.push(`/artist/${artistId}`, undefined, {
-                shallow: true
-            }),
-        [router]
-    )
-
     return (
         <Popover.Root open={visible}>
             <Popover.Trigger>
@@ -73,15 +54,9 @@ export function MapVenuePopover({
                                     )}
                                 </Text>
                                 <ArrowRightIcon />
-                                <Text
-                                    className="cursor-pointer"
-                                    onClick={() =>
-                                        handleViewArtist(event.artist.id)
-                                    }
-                                    key={event.id}
-                                >
-                                    {event.name}
-                                </Text>
+                                <Link href={`/artist/${event.artist.id}`}>
+                                    {event.artist.name}
+                                </Link>
                             </Flex>
                         ))}
                     </Box>

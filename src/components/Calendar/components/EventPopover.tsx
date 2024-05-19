@@ -1,10 +1,9 @@
-import { Popover, Flex, Text, Heading, Box, Button } from '@radix-ui/themes'
+import { Popover, Flex, Text, Heading, Box } from '@radix-ui/themes'
 import Image from 'next/image'
 import { EventWithArtistVenue } from '~/types/data'
 import { formatInTimeZone } from 'date-fns-tz'
 import { normalizeUrl } from '~/utils/shared'
-import { useCallback } from 'react'
-import { useRouter } from 'next/router'
+import Link from '~/components/Link'
 
 export type PopoverProps = {
     event: EventWithArtistVenue
@@ -22,15 +21,6 @@ export default function EventPopover({ event, children }: PopoverProps) {
     const eventDescription = event.description ?? event.artist.description
     const eventWebsite = normalizeUrl(
         event.artist.website ?? event.venue.website
-    )
-    const router = useRouter()
-
-    const handleLearnMore = useCallback(
-        async () =>
-            await router.push(`/artist/${event.artist.id}`, undefined, {
-                shallow: true
-            }),
-        [router, event.artist.id]
     )
 
     return (
@@ -74,9 +64,9 @@ export default function EventPopover({ event, children }: PopoverProps) {
                         <Text size="1">{eventDescription}</Text>
                     )}{' '}
                     {eventWebsite && (
-                        <Button variant="ghost" onClick={handleLearnMore}>
+                        <Link href={`/artist/${event.artist.id}`}>
                             Learn more
-                        </Button>
+                        </Link>
                     )}
                 </Flex>
             </Popover.Content>

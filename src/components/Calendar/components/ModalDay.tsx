@@ -1,8 +1,8 @@
-import { Table, Heading, Box, Text, Flex, Button } from '@radix-ui/themes'
-import EventPopover from './EventPopover'
+import { Table, Heading, Box, Text, Flex } from '@radix-ui/themes'
 import { DailyEventData } from '../types'
 import { EventWithArtistVenue } from '~/types/data'
 import { getFormattedTime } from '~/utils/date'
+import Link from '~/components/Link'
 
 interface Props {
     dailyEvents: DailyEventData
@@ -26,11 +26,9 @@ export default function ModalDay({ dailyEvents: { date, events } }: Props) {
                                 <span className="mr-6">
                                     {`${getFormattedTime(event.startDate)}`}
                                 </span>
-                                <EventPopover event={event}>
-                                    <Button variant="ghost">
-                                        {event.name}
-                                    </Button>
-                                </EventPopover>
+                                <Link href={`/artist/${event.artist.id}`}>
+                                    {event.name}
+                                </Link>
                             </Table.Cell>
                         </Table.Row>
                     )
@@ -40,7 +38,7 @@ export default function ModalDay({ dailyEvents: { date, events } }: Props) {
     })
 
     return (
-        <Box key={readableDate}>
+        <Flex direction="column" key={readableDate} gap="4">
             <Heading align="center">{`Events on ${readableDate}`}</Heading>
             <div className="h-[60vh] overflow-y-auto">
                 <Table.Root>
@@ -55,6 +53,6 @@ export default function ModalDay({ dailyEvents: { date, events } }: Props) {
                     </Table.Body>
                 </Table.Root>
             </div>
-        </Box>
+        </Flex>
     )
 }
