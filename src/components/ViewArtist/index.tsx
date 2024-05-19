@@ -53,7 +53,10 @@ export default function ViewArtist({ artist, events }: Props) {
                 </Flex>
             ) : null}
             <Flex direction="column" gap="2">
-                <Heading size="6">Contact</Heading>
+                {artist.website ||
+                    (artist.instagramHandle && (
+                        <Heading size="6">Contact</Heading>
+                    ))}
                 {artist.website ? (
                     <Flex gap="2" align="center">
                         <LaptopIcon width="23" height="22" />
