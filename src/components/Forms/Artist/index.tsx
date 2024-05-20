@@ -6,6 +6,7 @@ import useArtistForm from './hooks/useArtistForm'
 import { useRouter } from 'next/router'
 import Spinner from '~/components/Spinner'
 import { genreLabels } from '~/utils/labels'
+import Toggle from '../Fields/Toggle'
 
 export default function ArtistForm() {
     const router = useRouter()
@@ -87,6 +88,15 @@ export default function ArtistForm() {
                             error={errors.description}
                             control={control}
                         />
+                        {isAdmin ? (
+                            <Toggle
+                                label="Auto-approve"
+                                name="approved"
+                                control={control}
+                                error={errors.approved}
+                            />
+                        ) : null}
+
                         <Form.Submit asChild>
                             {isLoading ? (
                                 <Flex justify="center">

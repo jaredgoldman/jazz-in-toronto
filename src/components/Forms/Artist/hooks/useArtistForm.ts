@@ -17,6 +17,7 @@ export interface ArtistFormValues {
     fileData?: File
     featured: boolean
     description?: string
+    approved: boolean
 }
 
 export default function useArtistForm(id = '', isAdmin: boolean) {
@@ -52,7 +53,8 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
         photoPath: '',
         fileData: undefined,
         featured: false,
-        description: ''
+        description: '',
+        approved: isAdmin ? true : false
     }
 
     const {
@@ -238,8 +240,7 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
                 } else {
                     await createArtistMutation.mutateAsync({
                         ...values,
-                        photoPath: photoPath ?? values.photoPath,
-                        isApproved: isAdmin
+                        photoPath: photoPath ?? values.photoPath
                     })
                 }
 

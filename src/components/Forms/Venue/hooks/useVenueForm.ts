@@ -20,6 +20,7 @@ export interface VenueFormValues {
     phoneNumber: string
     featured: boolean
     description?: string
+    approved: boolean
 }
 
 export default function useVenueForm(id = '', isAdmin: boolean) {
@@ -60,7 +61,8 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
         fileData: undefined,
         phoneNumber: '',
         featured: false,
-        description: ''
+        description: '',
+        approved: isAdmin ? true : false
     }
 
     const methods = useForm<VenueFormValues>({
@@ -232,7 +234,6 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
                 await createVenueMutation.mutateAsync({
                     ...values,
                     photoPath: photoPath ?? values.photoPath,
-                    isApproved: isAdmin
                 })
             }
 

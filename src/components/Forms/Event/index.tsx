@@ -1,5 +1,5 @@
 import * as Form from '@radix-ui/react-form'
-import { Input } from '../Fields'
+import { Input, Toggle } from '../Fields'
 import { Flex, Button, Heading, Box, Callout } from '@radix-ui/themes'
 import useEventForm from './hooks/useEventForm'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
@@ -131,6 +131,14 @@ export default function EventForm() {
                                 error={errors.description}
                                 control={control}
                             />
+                            {isAdmin ? (
+                                <Toggle
+                                    label="Auto-approve"
+                                    name="approved"
+                                    control={control}
+                                    error={errors.approved}
+                                />
+                            ) : null}
                             <Form.Submit asChild>
                                 <Button
                                     className="w-full"

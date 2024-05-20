@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { api } from '~/utils/api'
 import { useToast } from '~/hooks/useToast'
 import { useMemo } from 'react'
 import { EventWithArtistVenue } from '~/types/data'
 import { DateTime } from 'luxon'
 import { setFormValues } from '../../utils'
+import { toDateTimeLocal, api } from '~/utils'
 
 export interface EventFormValues {
     name: string
@@ -17,20 +17,7 @@ export interface EventFormValues {
     description?: string
     venueId: string
     featured: boolean
-}
-
-export const toDateTimeLocal = (date: Date): string => {
-    // Pad function to ensure single digits are preceded by a 0
-    const pad = (number: number): string =>
-        number < 10 ? `0${number}` : number.toString()
-    // Format the date to YYYY-MM-DD
-    const formattedDate = `${date.getFullYear()}-${pad(
-        date.getMonth() + 1
-    )}-${pad(date.getDate())}`
-    // Format the time to HH:MM
-    const formattedTime = `${pad(date.getHours())}:${pad(date.getMinutes())}`
-    // Combine both date and time
-    return `${formattedDate}T${formattedTime}`
+    approved: boolean
 }
 
 export default function useEventForm(id = '', isAdmin: boolean) {
@@ -83,7 +70,8 @@ export default function useEventForm(id = '', isAdmin: boolean) {
         instagramHandle: '',
         website: '',
         featured: false,
-        description: ''
+        description: '',
+        approved: isAdmin ? true : false
     }
 
     const {
@@ -160,11 +148,6 @@ export default function useEventForm(id = '', isAdmin: boolean) {
             .setZone('America/New_York')
             .toJSDate()
 
-        console.log({
-            startDate,
-            endDate
-        })
-
         try {
             if (id) {
                 await updateEventMutation.mutateAsync({
@@ -177,8 +160,7 @@ export default function useEventForm(id = '', isAdmin: boolean) {
                 await createEventMutation.mutateAsync({
                     ...values,
                     startDate,
-                    endDate,
-                    isApproved: isAdmin
+                    endDate
                 })
             }
             toast({
