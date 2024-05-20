@@ -35,6 +35,11 @@ export default function usePostImages(dateString: string) {
             const postImageFiles = []
             const eventsData = [...data]
             for (let i = 0; i < imagesNeeded; i++) {
+                /**
+                 * ensure document element is available
+                 * when calling createCanvas
+                 */
+                if (!document) continue
                 const start = i * eventsPerCanvas
                 const end = start + eventsPerCanvas
                 const eventsSlice = eventsData.slice(start, end)
