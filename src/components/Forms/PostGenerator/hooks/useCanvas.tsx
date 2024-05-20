@@ -13,6 +13,10 @@ export default function useCanvas() {
     // re-use the cnavas element
     const canvas = document.createElement('canvas')
 
+    if (!document) {
+        return
+    }
+
     // Define canvas size
     const width = 1080
     const height = 1080
