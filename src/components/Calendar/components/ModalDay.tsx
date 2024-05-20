@@ -17,7 +17,11 @@ export default function ModalDay({ dailyEvents: { date, events } }: Props) {
         return (
             <>
                 <Table.Row key={venueName}>
-                    <Table.Cell className="text-lg">{venueName}</Table.Cell>
+                    <Table.Cell className="text-lg">
+                        <Link href={`/venue/${events[0]?.venueId}`}>
+                            {venueName}
+                        </Link>
+                    </Table.Cell>
                 </Table.Row>
                 {events.map((event: EventWithArtistVenue) => {
                     return (

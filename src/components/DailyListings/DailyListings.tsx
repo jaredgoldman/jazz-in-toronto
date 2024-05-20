@@ -35,7 +35,11 @@ export default function DailyListings({ selectedDate }: Props) {
         () => [
             columnHelper.accessor((row) => row.venue.name, {
                 header: 'Venue Name',
-                cell: (info) => info.getValue(),
+                cell: (info) => (
+                    <Link href={`/venue/${info.row.original.venue.id}`}>
+                        {info.getValue()}
+                    </Link>
+                ),
                 enableColumnFilter: false
             }),
             columnHelper.accessor((row) => row.name, {

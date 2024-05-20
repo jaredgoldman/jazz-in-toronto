@@ -23,7 +23,7 @@ export default function VenueCard({ venue }: Props) {
                 direction={{ initial: 'column', md: 'row' }}
                 className="max-w-6xl"
             >
-                {venue.photoPath && (
+                {venue.photoPath ? (
                     <Flex
                         position="relative"
                         className="h-96 w-full lg:max-w-[30rem]"
@@ -35,6 +35,8 @@ export default function VenueCard({ venue }: Props) {
                             src={venue.photoPath}
                         />
                     </Flex>
+                ) : (
+                    <Flex className="h-96 w-full lg:max-w-[30rem]"></Flex>
                 )}
                 <Flex gap="2" direction="column" className="lg:max-w-[50%]">
                     <Heading size="8" mb="1">

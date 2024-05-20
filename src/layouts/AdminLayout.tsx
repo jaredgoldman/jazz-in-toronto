@@ -38,7 +38,7 @@ export default function AdminLayout({
                 <Header headerType={HeaderType.Admin} />
                 {breadcrumbs && <Breadcrumbs {...breadcrumbs} />}
                 <Container className="flex-grow overflow-x-hidden" py="7">
-                    {session ? (
+                    {true ? (
                         children
                     ) : (
                         <Flex

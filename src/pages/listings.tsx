@@ -5,8 +5,8 @@ import Calendar from '~/components/Calendar'
 import { Flex, Text, Button, Heading, TextField } from '@radix-ui/themes'
 import Link from '~/components/Link'
 import { EventsMap } from '~/components/EventsMap'
-import { formatInTimeZone } from 'date-fns-tz'
 import { DateTime } from 'luxon'
+import { formatTime } from '~/utils'
 
 enum ListingType {
     CALENDAR = 'CALENDAR',
@@ -66,15 +66,13 @@ export default function Listings() {
         setSelectedDate(DateTime.fromISO(date).startOf('day').toJSDate())
     }
 
-    const headingDate = formatInTimeZone(
+    const headingDate = formatTime(
         selectedDate,
-        'America/Toronto',
         'EEEE, MMMM do, yyyy'
     )
 
-    const calendarHeadingDate = formatInTimeZone(
+    const calendarHeadingDate = formatTime(
         selectedDate,
-        'America/Toronto',
         'MMMM yyyy'
     )
 
