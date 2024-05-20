@@ -163,7 +163,14 @@ export const eventRouter = createTRPCRouter({
                 where: {
                     approved: input.showUnapproved ? undefined : true,
                     startDate: {
-                        gte: start ? start : undefined
+                        gte: start
+                            ? DateTime.fromJSDate(start, {
+                                  zone: 'America/New_York'
+                              })
+                                  .startOf('day')
+                                  .toUTC()
+                                  .toJSDate()
+                            : undefined
                     }
                 }
             })
