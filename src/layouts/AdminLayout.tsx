@@ -49,7 +49,11 @@ export default function AdminLayout({
                             <Text align="center" size="5" mb="5">
                                 Please sign in to access the admin panel.
                             </Text>
-                            <Button onClick={() => void signIn()}>
+                            <Button
+                                variant="outline"
+                                size="4"
+                                onClick={() => void signIn()}
+                            >
                                 Sign In
                             </Button>
                         </Flex>
