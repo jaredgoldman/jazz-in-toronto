@@ -12,7 +12,7 @@ import {
     getPaginationRowModel
 } from '@tanstack/react-table'
 import { EventWithArtistVenue } from '~/types/data'
-import { Table, Flex, Badge, Heading } from '@radix-ui/themes'
+import { Table, Flex, Badge, Heading, Text, Checkbox } from '@radix-ui/themes'
 import { useMemo } from 'react'
 import Loading from '../Loading'
 import { HeaderCell, TableActionMenu } from './components'
@@ -22,21 +22,29 @@ import { useToast } from '~/hooks/useToast'
 import { Button } from '@radix-ui/themes'
 import { PaginationButtonGroup } from './components/PaginationButtonGroup'
 import { formatInTimeZone } from 'date-fns-tz'
+import { DateTime } from 'luxon'
 
 const columnHelper = createColumnHelper<EventWithArtistVenue>()
 
 export function EventsTable() {
     const { toast } = useToast()
     const router = useRouter()
+    const defaultDate = DateTime.now()
+        .startOf('day')
+        .setZone('America/New_York')
+        .toJSDate()
+    const [useStart, setUseStart] = useState(true)
 
     /*
      * Queries/Mutations
      */
+
     const setFeaturedMutation = api.event.setFeatured.useMutation()
     const deleteMutation = api.event.delete.useMutation()
     const approveMutation = api.event.approve.useMutation()
     const getAllEventsQuery = api.event.getAll.useQuery({
-        showUnapproved: true
+        showUnapproved: true,
+        start: useStart ? defaultDate : undefined
     })
 
     /*
@@ -281,7 +289,15 @@ export function EventsTable() {
      */
     return (
         <Flex direction="column">
-            <Flex justify="end" align="end" mb="4">
+            <Flex justify="between" align="center" mb="4" gap="4">
+                <Flex gap="3">
+                    <Checkbox
+                        size="2"
+                        onCheckedChange={(e) => setUseStart(e as boolean)}
+                        checked={useStart}
+                    />
+                    <Text>Only fetch upcoming events</Text>
+                </Flex>
                 <Button
                     size="4"
                     variant="outline"
