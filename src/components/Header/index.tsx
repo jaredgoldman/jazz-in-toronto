@@ -45,7 +45,7 @@ export default function Header({ headerType }: Props): JSX.Element {
                             )
                         })}
                         {headerType === HeaderType.Admin && session && (
-                            <Button onClick={() => void signOut()}>
+                            <Button variant="outline" onClick={() => void signOut()}>
                                 Sign Out
                             </Button>
                         )}
