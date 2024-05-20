@@ -243,10 +243,10 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
                         photoPath: photoPath ?? values.photoPath
                     })
                 }
-
+                const toastAction = id ? 'edited' : 'submitted'
                 toast({
                     title: 'Success',
-                    message: 'Artist successfully submitted!'
+                    message: `Artist successfully ${toastAction}!`
                 })
                 await getArtistQuery.refetch()
             } catch (e) {
