@@ -160,7 +160,7 @@ export const eventRouter = createTRPCRouter({
                     venue: true
                 },
                 where: {
-                    approved: input.showUnapproved ? undefined : true,
+                    approved: input.showUnapproved ? false : true,
                     startDate: {
                         gte: start
                             ? DateTime.fromJSDate(start, {
@@ -184,7 +184,7 @@ export const eventRouter = createTRPCRouter({
                 await getAllByDay(
                     input.date,
                     ctx.prisma,
-                    input.showUnapproved ?? false
+                    input.showUnapproved ? false : true
                 )
         ),
 

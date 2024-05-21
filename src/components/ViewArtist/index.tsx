@@ -94,7 +94,7 @@ export default function ViewArtist({ artist, events }: Props) {
                                         <Text>
                                             {formatInTimeZone(
                                                 event.startDate,
-                                                'America/Toronto',
+                                                'America/New_York',
                                                 'h:mm a'
                                             )}
                                         </Text>

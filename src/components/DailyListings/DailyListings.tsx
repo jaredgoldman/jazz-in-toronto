@@ -27,7 +27,8 @@ const columnHelper = createColumnHelper<EventWithArtistVenue>()
  */
 export default function DailyListings({ selectedDate }: Props) {
     const { data, isLoading, isFetched } = api.event.getAllByDay.useQuery({
-        date: selectedDate
+        date: selectedDate,
+        showUnapproved: false
     })
 
     const columns = useMemo(
