@@ -166,18 +166,12 @@ export function EventsTable() {
                 header: 'Venue'
             }),
             columnHelper.accessor((row) => row.startDate, {
-                cell: (info) =>
-                    formatTime(
-                        new Date(info.getValue()),
-                    ),
+                cell: (info) => formatTime(new Date(info.getValue())),
                 header: 'Start',
                 filterFn: 'time'
             }),
             columnHelper.accessor((row) => row.endDate, {
-                cell: (info) =>
-                    formatTime(
-                        new Date(info.getValue()),
-                    ),
+                cell: (info) => formatTime(new Date(info.getValue())),
                 header: 'End',
                 filterFn: 'time'
             }),
