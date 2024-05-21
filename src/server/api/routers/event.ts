@@ -160,7 +160,7 @@ export const eventRouter = createTRPCRouter({
                     venue: true
                 },
                 where: {
-                    approved: input.showUnapproved ? false : true,
+                    approved: input.showUnapproved ? undefined : true,
                     startDate: {
                         gte: start
                             ? DateTime.fromJSDate(start, {
