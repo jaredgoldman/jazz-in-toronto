@@ -55,7 +55,7 @@ export function MapVenuePopover({
                                 </Text>
                                 <ArrowRightIcon />
                                 <Link href={`/artist/${event.artist.id}`}>
-                                    {event.artist.name}
+                                    {event.name}
                                 </Link>
                             </Flex>
                         ))}
