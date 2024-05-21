@@ -50,15 +50,14 @@ export const eventRouter = createTRPCRouter({
                 website: z.string().optional(),
                 artistId: z.string().cuid(),
                 venueId: z.string().cuid(),
-                isApproved: z.boolean().optional()
+                approved: z.boolean()
             })
         )
         .mutation(({ ctx, input }) => {
-            const { artistId, venueId, isApproved, ...eventData } = input
+            const { artistId, venueId, ...eventData } = input
             return ctx.prisma.event.create({
                 data: {
                     ...eventData,
-                    approved: isApproved ?? false,
                     artist: { connect: { id: artistId } },
                     venue: { connect: { id: venueId } }
                 }

@@ -92,3 +92,20 @@ export const getDateEST = (date: Date) => {
     const dateISO = new Date(date).toISOString().slice(0, 10)
     return DateTime.fromISO(dateISO).setZone('America/New_York').toJSDate()
 }
+
+/**
+ * Convert JS date to datetime local format for forms
+ */
+export const toDateTimeLocal = (date: Date): string => {
+    // Pad function to ensure single digits are preceded by a 0
+    const pad = (number: number): string =>
+        number < 10 ? `0${number}` : number.toString()
+    // Format the date to YYYY-MM-DD
+    const formattedDate = `${date.getFullYear()}-${pad(
+        date.getMonth() + 1
+    )}-${pad(date.getDate())}`
+    // Format the time to HH:MM
+    const formattedTime = `${pad(date.getHours())}:${pad(date.getMinutes())}`
+    // Combine both date and time
+    return `${formattedDate}T${formattedTime}`
+}

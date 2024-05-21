@@ -6,6 +6,7 @@ import { Heading, Flex, Box, Button } from '@radix-ui/themes'
 import useVenueForm from './hooks/useVenueForm'
 import { useRouter } from 'next/router'
 import { FormProvider } from 'react-hook-form'
+import Toggle from '../Fields/Toggle'
 
 export default function VenueForm() {
     const router = useRouter()
@@ -91,6 +92,14 @@ export default function VenueForm() {
                                 error={errors.description}
                                 control={control}
                             />
+                            {isAdmin ? (
+                                <Toggle
+                                    label="Auto-approve"
+                                    name="approved"
+                                    control={control}
+                                    error={errors.approved}
+                                />
+                            ) : null}
                             <Form.Submit asChild>
                                 <Button
                                     className="w-full"
