@@ -5,6 +5,7 @@ import { genreLabels } from '~/utils/labels'
 import { formatTime, simplifyURL } from '~/utils'
 import { LaptopIcon, InstagramLogoIcon } from '@radix-ui/react-icons'
 import Link from '../Link'
+import { DateTime } from 'luxon'
 
 /**
  * @param artist - Artist
@@ -84,24 +85,32 @@ export default function ViewArtist({ artist, events }: Props) {
                             rows={{ initial: '3', md: '1' }}
                             align="center"
                         >
-                            {events.map((event) => (
-                                <Card key={event.id}>
-                                    <Flex direction="column" gap="2">
-                                        <Heading size="5">{event.name}</Heading>
-                                        <Text>
-                                            {formatTime(
-                                                event.startDate,
-<<<<<<< HEAD
-                                                'America/New_York',
-=======
->>>>>>> 861fb60 (feat: add venue/event pages)
-                                                'h:mm a'
-                                            )}
-                                        </Text>
-                                        <Text>{event.venue.name}</Text>
-                                    </Flex>
-                                </Card>
-                            ))}
+                            {events
+                                .sort(
+                                    (a: EventWithVenue, b: EventWithVenue) =>
+                                        DateTime.fromJSDate(
+                                            a.startDate
+                                        ).toMillis() -
+                                        DateTime.fromJSDate(
+                                            b.endDate
+                                        ).toMillis()
+                                )
+                                .map((event) => (
+                                    <Card key={event.id}>
+                                        <Flex direction="column" gap="2">
+                                            <Heading size="5">
+                                                {event.name}
+                                            </Heading>
+                                            <Text>
+                                                {formatTime(
+                                                    event.startDate,
+                                                    'EEEE, MMMM do, yyyy'
+                                                )}
+                                            </Text>
+                                            <Text>{event.venue.name}</Text>
+                                        </Flex>
+                                    </Card>
+                                ))}
                         </Grid>
                     </Flex>
                 </Flex>

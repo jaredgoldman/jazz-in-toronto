@@ -30,6 +30,7 @@ export function MapVenuePopover({
     visible,
     onFocusOutside
 }: Props) {
+    console.log(events)
     return (
         <Popover.Root open={visible}>
             <Popover.Trigger>
@@ -43,7 +44,9 @@ export function MapVenuePopover({
                     className="xs: max-w-[72vw]"
                 >
                     <Link href={`/venue/${venue.id}`}>
-                        <Heading className="text-white hover:underline">{venue.name}</Heading>
+                        <Heading className="text-white hover:underline">
+                            {venue.name}
+                        </Heading>
                     </Link>
                     <Box>
                         {events.map((event) => (
