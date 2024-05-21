@@ -42,7 +42,9 @@ export function MapVenuePopover({
                     pr={{ xs: '0', sm: '2' }}
                     className="xs: max-w-[72vw]"
                 >
-                    <Heading>{venue.name}</Heading>
+                    <Link href={`/venue/${venue.id}`}>
+                        <Heading className="text-white hover:underline">{venue.name}</Heading>
+                    </Link>
                     <Box>
                         {events.map((event) => (
                             <Flex gap="2" align="center" key={event.id}>
