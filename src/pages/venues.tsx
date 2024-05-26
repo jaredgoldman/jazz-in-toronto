@@ -14,7 +14,7 @@ export default function Venues() {
             getAllVenuesQuery.data?.length
                 ? getAllVenuesQuery.data.map((venue) => {
                       return <VenueCard key={venue.id} venue={venue} />
-                  })
+                  }).sort((a, b) => a.props.venue.name.localeCompare(b.props.venue.name))
                 : [],
         [getAllVenuesQuery.data]
     )
