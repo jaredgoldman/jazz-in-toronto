@@ -19,7 +19,9 @@ export default function ModalDay({ dailyEvents: { date, events } }: Props) {
                 <Table.Row key={venueName}>
                     <Table.Cell className="text-lg">
                         <Link href={`/venue/${events[0]?.venueId}`}>
-                            {venueName}
+                            <Heading className="text-white hover:underline" size="5">
+                                {venueName}
+                            </Heading>
                         </Link>
                     </Table.Cell>
                 </Table.Row>

@@ -107,7 +107,7 @@ export default function ViewArtist({ artist, events }: Props) {
                                                     'EEEE, MMMM do, yyyy'
                                                 )}
                                             </Text>
-                                            <Text>{event.venue.name}</Text>
+                                            <Link href={`/venue/${event.venueId}`}>{event.venue.name}</Link>
                                         </Flex>
                                     </Card>
                                 ))}

@@ -35,11 +35,9 @@ export default function EventPopover({ event, children }: PopoverProps) {
                 <Flex direction="column" gap="3">
                     <Box>
                         <Heading>{event.name}</Heading>
-                        <Heading size="2">
-                            <Link href={`venue/${event.venue.id}`}>
-                                {event.venue.name}
-                            </Link>
-                        </Heading>
+                        <Link href={`venue/${event.venue.id}`}>
+                            {event.venue.name}
+                        </Link>
                     </Box>
                     <Text>
                         {formatTime(event.startDate)}
