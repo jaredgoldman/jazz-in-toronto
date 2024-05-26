@@ -262,7 +262,6 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
             createArtistMutation,
             editArtistMutation,
             id,
-            isAdmin,
             toast,
             getArtistQuery,
             maybeDeletePhoto,

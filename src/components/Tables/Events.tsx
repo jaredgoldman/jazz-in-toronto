@@ -21,8 +21,8 @@ import { useRouter } from 'next/router'
 import { useToast } from '~/hooks/useToast'
 import { Button } from '@radix-ui/themes'
 import { PaginationButtonGroup } from './components/PaginationButtonGroup'
-import { formatInTimeZone } from 'date-fns-tz'
 import { DateTime } from 'luxon'
+import { formatTime } from '~/utils'
 
 const columnHelper = createColumnHelper<EventWithArtistVenue>()
 
@@ -149,12 +149,7 @@ export function EventsTable() {
     const columns = useMemo(
         () => [
             columnHelper.accessor((row) => row.startDate, {
-                cell: (info) =>
-                    formatInTimeZone(
-                        info.getValue(),
-                        'America/New_York',
-                        'MM/dd/yyyy'
-                    ),
+                cell: (info) => formatTime(info.getValue(), 'MM/dd/yyyy'),
                 filterFn: 'date',
                 header: 'Date'
             }),
@@ -171,22 +166,12 @@ export function EventsTable() {
                 header: 'Venue'
             }),
             columnHelper.accessor((row) => row.startDate, {
-                cell: (info) =>
-                    formatInTimeZone(
-                        new Date(info.getValue()),
-                        'America/New_York',
-                        'h:mm a'
-                    ),
+                cell: (info) => formatTime(new Date(info.getValue())),
                 header: 'Start',
                 filterFn: 'time'
             }),
             columnHelper.accessor((row) => row.endDate, {
-                cell: (info) =>
-                    formatInTimeZone(
-                        new Date(info.getValue()),
-                        'America/New_York',
-                        'h:mm a'
-                    ),
+                cell: (info) => formatTime(new Date(info.getValue())),
                 header: 'End',
                 filterFn: 'time'
             }),

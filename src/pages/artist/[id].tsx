@@ -21,7 +21,7 @@ export default function ViewArtistPage() {
     )
 
     // TODO: add dynamic breadcrumbs
-    const breadCrumbs = []
+    // const breadCrumbs = []
 
     return (
         <RootLayout pageTitle="Jazz In Toronto | View Artist">

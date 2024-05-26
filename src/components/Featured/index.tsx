@@ -62,7 +62,7 @@ export default function Featured() {
                                 <FeaturedCard
                                     image={featuredItems.venue?.photoPath}
                                     heading={featuredItems.venue.name}
-                                    link={featuredItems.venue?.website}
+                                    link={`/venue/${featuredItems.venue.id}`}
                                     headingClassname={c1 as string}
                                     content={featuredItems.venue.description}
                                 />
@@ -76,7 +76,7 @@ export default function Featured() {
                                 <FeaturedCard
                                     image={featuredItems.event.artist.photoPath}
                                     heading={featuredItems.event.name}
-                                    link={featuredItems.event?.website}
+                                    link={`/event/${featuredItems.event.id}`}
                                     headingClassname={c2 as string}
                                     content={featuredItems.event.description}
                                 />
@@ -90,7 +90,7 @@ export default function Featured() {
                                 <FeaturedCard
                                     image={featuredItems.artist.photoPath}
                                     heading={featuredItems.artist.name}
-                                    link={featuredItems.artist?.website}
+                                    link={`/artist/${featuredItems.artist.id}`}
                                     headingClassname={c3 as string}
                                     content={featuredItems.artist.description}
                                 />

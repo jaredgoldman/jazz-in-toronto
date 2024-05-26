@@ -1,11 +1,11 @@
 import { Artist, EventWithVenue } from '~/types/data'
-import Image from 'next/image'
 import { Heading, Flex, Text, Card, Grid } from '@radix-ui/themes'
+import Image from 'next/image'
 import { genreLabels } from '~/utils/labels'
-import { formatInTimeZone } from 'date-fns-tz'
-import { simplifyURL } from '~/utils'
+import { formatTime, simplifyURL } from '~/utils'
 import { LaptopIcon, InstagramLogoIcon } from '@radix-ui/react-icons'
 import Link from '../Link'
+import { DateTime } from 'luxon'
 
 /**
  * @param artist - Artist
@@ -23,6 +23,7 @@ type Props = {
  * @returns JSX.Element
  */
 export default function ViewArtist({ artist, events }: Props) {
+    const hasContact = Boolean(artist.instagramHandle || artist.website)
     return (
         <Flex
             direction="column"
@@ -53,10 +54,7 @@ export default function ViewArtist({ artist, events }: Props) {
                 </Flex>
             ) : null}
             <Flex direction="column" gap="2">
-                {artist.website ||
-                    (artist.instagramHandle && (
-                        <Heading size="6">Contact</Heading>
-                    ))}
+                {hasContact && <Heading size="6">Contact</Heading>}
                 {artist.website ? (
                     <Flex gap="2" align="center">
                         <LaptopIcon width="23" height="22" />
@@ -87,21 +85,32 @@ export default function ViewArtist({ artist, events }: Props) {
                             rows={{ initial: '3', md: '1' }}
                             align="center"
                         >
-                            {events.map((event) => (
-                                <Card key={event.id}>
-                                    <Flex direction="column" gap="2">
-                                        <Heading size="5">{event.name}</Heading>
-                                        <Text>
-                                            {formatInTimeZone(
-                                                event.startDate,
-                                                'America/New_York',
-                                                'h:mm a'
-                                            )}
-                                        </Text>
-                                        <Text>{event.venue.name}</Text>
-                                    </Flex>
-                                </Card>
-                            ))}
+                            {events
+                                .sort(
+                                    (a: EventWithVenue, b: EventWithVenue) =>
+                                        DateTime.fromJSDate(
+                                            a.startDate
+                                        ).toMillis() -
+                                        DateTime.fromJSDate(
+                                            b.endDate
+                                        ).toMillis()
+                                )
+                                .map((event) => (
+                                    <Card key={event.id}>
+                                        <Flex direction="column" gap="2">
+                                            <Heading size="5">
+                                                {event.name}
+                                            </Heading>
+                                            <Text>
+                                                {formatTime(
+                                                    event.startDate,
+                                                    'EEEE, MMMM do, yyyy'
+                                                )}
+                                            </Text>
+                                            <Link href={`/venue/${event.venueId}`}>{event.venue.name}</Link>
+                                        </Flex>
+                                    </Card>
+                                ))}
                         </Grid>
                     </Flex>
                 </Flex>

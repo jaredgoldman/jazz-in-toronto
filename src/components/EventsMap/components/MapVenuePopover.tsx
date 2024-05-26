@@ -1,6 +1,6 @@
 import { EventWithArtistVenue, Venue } from '~/types/data'
 import { Popover, Flex, Box, Heading, Text } from '@radix-ui/themes'
-import { formatInTimeZone } from 'date-fns-tz'
+import { formatTime } from '~/utils'
 import { ArrowRightIcon } from '@radix-ui/react-icons'
 import Link from '~/components/Link'
 
@@ -30,6 +30,7 @@ export function MapVenuePopover({
     visible,
     onFocusOutside
 }: Props) {
+    console.log(events)
     return (
         <Popover.Root open={visible}>
             <Popover.Trigger>
@@ -42,17 +43,15 @@ export function MapVenuePopover({
                     pr={{ xs: '0', sm: '2' }}
                     className="xs: max-w-[72vw]"
                 >
-                    <Heading>{venue.name}</Heading>
+                    <Link href={`/venue/${venue.id}`}>
+                        <Heading className="text-white hover:underline">
+                            {venue.name}
+                        </Heading>
+                    </Link>
                     <Box>
                         {events.map((event) => (
                             <Flex gap="2" align="center" key={event.id}>
-                                <Text>
-                                    {formatInTimeZone(
-                                        event.startDate,
-                                        'America/Toronto',
-                                        'h:mm a'
-                                    )}
-                                </Text>
+                                <Text>{formatTime(event.startDate)}</Text>
                                 <ArrowRightIcon />
                                 <Link href={`/artist/${event.artist.id}`}>
                                     {event.name}

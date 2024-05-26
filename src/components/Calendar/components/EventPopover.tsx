@@ -1,9 +1,9 @@
 import { Popover, Flex, Text, Heading, Box } from '@radix-ui/themes'
 import Image from 'next/image'
 import { EventWithArtistVenue } from '~/types/data'
-import { formatInTimeZone } from 'date-fns-tz'
 import { normalizeUrl } from '~/utils/shared'
 import Link from '~/components/Link'
+import { formatTime } from '~/utils'
 
 export type PopoverProps = {
     event: EventWithArtistVenue
@@ -35,20 +35,14 @@ export default function EventPopover({ event, children }: PopoverProps) {
                 <Flex direction="column" gap="3">
                     <Box>
                         <Heading>{event.name}</Heading>
-                        <Heading size="2">{event.venue.name}</Heading>
+                        <Link href={`venue/${event.venue.id}`}>
+                            {event.venue.name}
+                        </Link>
                     </Box>
                     <Text>
-                        {formatInTimeZone(
-                            event.startDate,
-                            'America/Toronto',
-                            'h:mm a'
-                        )}
+                        {formatTime(event.startDate)}
                         {' - '}
-                        {formatInTimeZone(
-                            event.endDate,
-                            'America/Toronto',
-                            'h:mm a'
-                        )}
+                        {formatTime(event.endDate)}
                     </Text>
                     {eventImagePath ? (
                         <Flex position="relative" className="h-64 w-full">
