@@ -1,12 +1,11 @@
-// Components
 import { Flex, Box, Switch } from '@radix-ui/themes'
 import { ComponentBooleanIcon } from '@radix-ui/react-icons'
-// Utils
 import { useTheme } from 'next-themes'
 
 interface Props {
     className?: string
 }
+
 export default function DarkModeToggle({ className }: Props) {
     const { theme, setTheme } = useTheme()
     return (
