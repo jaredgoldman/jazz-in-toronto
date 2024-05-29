@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { Flex, Link, Heading, Text, AspectRatio } from '@radix-ui/themes'
+import { Flex, Link, Heading, Text } from '@radix-ui/themes'
 import {
     GlobeIcon,
     FrameIcon,
