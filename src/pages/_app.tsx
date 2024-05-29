@@ -10,6 +10,7 @@ import '~/styles/globals.css'
 import '@radix-ui/themes/styles.css'
 import '../styles/theme-config.css'
 import { useEffect } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 
 const poppins = Poppins({
     weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
@@ -37,6 +38,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
                         suppressHydrationWarning
                     >
                         <Component {...pageProps} />
+                        <Analytics />
                     </main>
                 </SessionProvider>
             </Theme>
