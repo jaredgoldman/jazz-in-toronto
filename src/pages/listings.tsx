@@ -66,15 +66,9 @@ export default function Listings() {
         setSelectedDate(DateTime.fromISO(date).startOf('day').toJSDate())
     }
 
-    const headingDate = formatTime(
-        selectedDate,
-        'EEEE, MMMM do, yyyy'
-    )
+    const headingDate = formatTime(selectedDate, 'EEEE, MMMM do, yyyy')
 
-    const calendarHeadingDate = formatTime(
-        selectedDate,
-        'MMMM yyyy'
-    )
+    const calendarHeadingDate = formatTime(selectedDate, 'MMMM yyyy')
 
     return (
         <RootLayout
@@ -93,7 +87,6 @@ export default function Listings() {
                 direction="column"
                 px="6"
                 py="9"
-                mb="9"
             >
                 <Flex direction="column" width="100%" className="max-w-[65rem]">
                     <Heading
@@ -197,9 +190,20 @@ export default function Listings() {
                         <EventsMap selectedDate={selectedDate} />
                     </Flex>
                 )}
-                {/*<Flex width="100%" className="max-w-[65rem]" mb="9">
-                    <RecurringGigs />
-                </Flex>*/}
+                <Flex direction="column" gap="4" className="max-w-[65rem]">
+                    <Heading>Disclaimer</Heading>
+                    <Text>
+                        Please note that all event dates and times listed on our
+                        website are subject to change without prior notice.
+                        While we strive to provide the most accurate and
+                        up-to-date information, event organizers may alter
+                        schedules at their discretion. We recommend verifying
+                        the details with the event organizers or official event
+                        websites before making any plans. Our site cannot be
+                        held responsible for any inconvenience or losses caused
+                        by changes or cancellations of events.
+                    </Text>
+                </Flex>
             </Flex>
         </RootLayout>
     )
