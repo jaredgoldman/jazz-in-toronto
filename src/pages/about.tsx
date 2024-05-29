@@ -237,12 +237,6 @@ export default function About() {
                         alt="Jazz In Toronto board"
                     />
                 </Flex>
-                <Image
-                    src="/images/jit-collage.png"
-                    height={1000}
-                    width={1000}
-                    alt="Jazz In Toronto team"
-                />
             </Flex>
         </RootLayout>
     )
