@@ -34,13 +34,16 @@ export default function ViewEvent({ event }: Props) {
             grow="1"
         >
             <Heading size="9">{event.name}</Heading>
-            <Heading size="7">
-                {formatTime(event.startDate)} - {formatTime(event.endDate)}
-            </Heading>
-            <Heading size="7">
-                <Link href={`/event/${event.venue.id}`}>
+            <Heading>
+                <Link size="8" href={`/venue/${event.venue.id}`}>
                     {event.venue.name}
                 </Link>
+            </Heading>
+            <Heading size="7">
+                {formatTime(event.startDate, 'EEEE, MMMM do, yyyy')}
+            </Heading>
+            <Heading size="7">
+                {formatTime(event.startDate)} - {formatTime(event.endDate)}
             </Heading>
             {eventPhotoPath ? (
                 <Image
