@@ -4,6 +4,7 @@ import { Button, Heading, Flex, Separator, Box } from '@radix-ui/themes'
 import { navLinks, HeaderType } from './utils'
 import { HeaderDrawer } from './components/HeaderDrawer'
 import { HeaderDropDown } from './components/HeaderDropDown'
+import DarkModeToggle from '../DarkModeToggle'
 
 export type Props = {
     headerType: HeaderType
@@ -45,7 +46,10 @@ export default function Header({ headerType }: Props): JSX.Element {
                             )
                         })}
                         {headerType === HeaderType.Admin && session && (
-                            <Button variant="outline" onClick={() => void signOut()}>
+                            <Button
+                                variant="outline"
+                                onClick={() => void signOut()}
+                            >
                                 Sign Out
                             </Button>
                         )}

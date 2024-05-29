@@ -2,20 +2,26 @@ import RootLayout from '~/layouts/RootLayout'
 import Featured from '~/components/Featured'
 import { Flex, Heading, Link, Text } from '@radix-ui/themes'
 import Image from 'next/image'
+import { useTheme } from 'next-themes'
 
 export default function Home() {
+    const { theme } = useTheme()
+    console.log({
+        theme
+    })
     return (
         <RootLayout pageTitle="Jazz In Toronto | Home">
             <Flex
                 direction="column"
                 align="center"
                 justify="center"
-                className="h-[50rem] bg-hero-pattern bg-cover bg-center bg-no-repeat"
+                className="h-[60rem] bg-gradient-overlay bg-cover bg-center bg-no-repeat dark:bg-hero-pattern-dark"
             >
                 <Heading
                     size={{ initial: '8', xs: '9' }}
                     align="center"
                     weight="bold"
+                    className="text-white"
                 >
                     We are JazzInToronto
                 </Heading>
@@ -31,7 +37,7 @@ export default function Home() {
                 <Text
                     size={{ initial: '6', xs: '7' }}
                     align="center"
-                    className="max-w-2xl"
+                    className="max-w-2xl text-white"
                 >
                     JazzInToronto is a not-for-profit organization dedicated to
                     promoting, connecting, and nourishing Toronto’s live music
@@ -39,7 +45,7 @@ export default function Home() {
                 </Text>
             </Flex>
             <Flex
-                className="h-[30rem] bg-[var(--slate-1)]"
+                className="h-[50rem] bg-[var(--slate-1)]"
                 align="center"
                 justify="center"
                 direction={{ initial: 'column', md: 'row' }}
@@ -70,7 +76,7 @@ export default function Home() {
             <Flex
                 justify="center"
                 grow="1"
-                className="bg-hero-pattern-2 bg-cover bg-center bg-no-repeat"
+                className="dark:bg-hero-pattern-2 bg-cover bg-center bg-no-repeat"
                 pb="6"
             >
                 <Featured />

@@ -29,10 +29,12 @@ export default {
                 dropdown: 'var(--radix-popper-anchor-width)'
             },
             backgroundImage: {
-                'hero-pattern':
+                'hero-pattern-dark':
                     "linear-gradient(to bottom, rgb(0, 0, 0, 0.25), var(--slate-1)), url('../../public/images/jit-no-logo.png')",
-                'hero-pattern-2':
-                    'linear-gradient(to bottom, var(--slate-1), var(--orange-2))'
+                'hero-pattern-dark-2':
+                    'linear-gradient(to bottom, var(--slate-1), var(--orange-2))',
+                'gradient-overlay':
+                    "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../../public/images/jit-no-logo.png')"
             }
         },
         animation: {
