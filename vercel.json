@@ -11,7 +11,7 @@
         },
         {
             "path": "/api/randomizeFeatured",
-            "schedule": "* * * * *"
+            "schedule": "0 0 * * *"
         }
     ]
 }
