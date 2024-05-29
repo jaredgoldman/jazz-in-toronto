@@ -12,9 +12,11 @@ export default function Venues() {
     const venueCards = useMemo(
         () =>
             getAllVenuesQuery.data?.length
-                ? getAllVenuesQuery.data.map((venue) => {
-                      return <VenueCard key={venue.id} venue={venue} />
-                  })
+                ? getAllVenuesQuery.data
+                      .sort((a, b) => a.name.localeCompare(b.name))
+                      .map((venue) => {
+                          return <VenueCard key={venue.id} venue={venue} />
+                      })
                 : [],
         [getAllVenuesQuery.data]
     )
@@ -46,7 +48,8 @@ export default function Venues() {
                     <Flex
                         direction="column"
                         gap={{ initial: '5', xs: '9' }}
-                        grow="1"
+                        align="center"
+                        width="100%"
                     >
                         {venueCards}
                     </Flex>
