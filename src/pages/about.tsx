@@ -14,14 +14,6 @@ const staffMembers = [
         title: 'Founder & Managing Director'
     },
     {
-        name: 'Mark Lemieux',
-        title: 'Communications'
-    },
-    {
-        name: 'Camille Neirynck',
-        title: 'Marketing Director'
-    },
-    {
         name: 'Jared Goldman',
         title: 'Chief Technology Officer'
     },

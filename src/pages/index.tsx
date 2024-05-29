@@ -2,13 +2,8 @@ import RootLayout from '~/layouts/RootLayout'
 import Featured from '~/components/Featured'
 import { Flex, Heading, Link, Text } from '@radix-ui/themes'
 import Image from 'next/image'
-import { useTheme } from 'next-themes'
 
 export default function Home() {
-    const { theme } = useTheme()
-    console.log({
-        theme
-    })
     return (
         <RootLayout pageTitle="Jazz In Toronto | Home">
             <Flex
@@ -55,7 +50,7 @@ export default function Home() {
                     Follow us on our socials!
                 </Heading>
                 <Flex gap="9" justify="between">
-                    <Link href="https://www.instagram.com/jazzintoronto/ ">
+                    <Link href="https://www.facebook.com/jazzintoronto/ ">
                         <Image
                             src="/images/facebook.png"
                             alt="facebook"
@@ -63,7 +58,7 @@ export default function Home() {
                             height={130}
                         />
                     </Link>
-                    <Link href="https://www.facebook.com/jazzintoronto/ ">
+                    <Link href="https://www.instagram.com/jazzintoronto/ ">
                         <Image
                             src="/images/instagram.svg"
                             alt="facebook"
