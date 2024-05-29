@@ -1,9 +1,13 @@
+import { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '~/server/db'
 
 /**
  * Randomizes the featured event, venue, and artist.
  */
-export default async function handler() {
+export default async function handler(
+    _request: NextApiRequest,
+    response: NextApiResponse
+) {
     const totalEvents = await prisma.event.count({ where: { approved: true } })
     const totalVenues = await prisma.venue.count({ where: { approved: true } })
     const totalArtists = await prisma.artist.count({
@@ -66,4 +70,6 @@ export default async function handler() {
             data: { featured: true },
             where: { id: randomArtist.id }
         }))
+
+    return response.status(200).json({ success: true })
 }

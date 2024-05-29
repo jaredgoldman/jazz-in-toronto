@@ -9,9 +9,5 @@
             "path": "/api/notifyAdminsUnapproved",
             "schedule": "0 10 * * *"
         },
-        {
-            "path": "/api/randomizeFeatured",
-            "schedule": "0 0 * * *"
-        }
     ]
 }
