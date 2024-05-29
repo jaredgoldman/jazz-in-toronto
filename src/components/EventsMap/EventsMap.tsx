@@ -41,10 +41,19 @@ export const EventsMap = ({ selectedDate }: Props) => {
     }, [data])
 
     const handleChangePopoverState = (venueId: string) => {
-        setPopoverState((prevState) => ({
-            ...prevState,
-            [venueId]: !prevState[venueId]
-        }))
+        setPopoverState((prevState) => {
+            // Create a new state object with all values set to false
+            const allFalseState = Object.keys(prevState).reduce((acc, key) => {
+                acc[key] = false
+                return acc
+            }, {} as Record<string, boolean>)
+
+            // Toggle the specific venueId
+            return {
+                ...allFalseState,
+                [venueId]: !prevState[venueId]
+            }
+        })
     }
 
     return (

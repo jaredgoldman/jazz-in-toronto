@@ -30,7 +30,6 @@ export function MapVenuePopover({
     visible,
     onFocusOutside
 }: Props) {
-    console.log(events)
     return (
         <Popover.Root open={visible}>
             <Popover.Trigger>
