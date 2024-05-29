@@ -56,6 +56,10 @@ export const navLinks = {
         {
             href: '/venues',
             title: 'Venues'
+        },
+        {
+            href: '/services',
+            title: 'Services'
         }
     ]
 }

@@ -152,13 +152,6 @@ export default function About() {
                         </Link>
                     </Badge>
                 </Flex>
-                <Heading size={{ initial: '7', xs: '8' }} mb="3">Our Services</Heading>
-                <Image
-                    src="/images/rates.png"
-                    height={1000}
-                    width={1000}
-                    alt="Jazz In Toronto team"
-                />
                 <Image
                     src="/images/jit-collage.png"
                     height={1000}
