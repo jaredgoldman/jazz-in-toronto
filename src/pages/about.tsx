@@ -180,6 +180,16 @@ export default function About() {
                         </Link>
                     </Badge>
                 </Flex>
+                <Heading align="center" size={{ initial: '7', xs: '8' }} mb="3">
+                    Our Board of Directors
+                </Heading>
+                <Image
+                    src="/images/board-of-directors.jpg"
+                    height={1000}
+                    width={1000}
+                    alt="Jazz In Toronto board"
+                />
+
                 <Image
                     src="/images/jit-collage.png"
                     height={1000}
