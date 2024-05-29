@@ -2,8 +2,12 @@ import { prisma } from '~/server/db'
 import EmailService from '~/server/api/services/emailService'
 import { getBaseUrl } from '~/utils/api'
 import { env } from '~/env.mjs'
+import { NextApiRequest, NextApiResponse } from 'next'
 
-export default async function handler() {
+export default async function handler(
+    _request: NextApiRequest,
+    response: NextApiResponse
+) {
     const emailService = new EmailService()
     const admins = await prisma.admin.findMany()
     const unapprovedEvents = await prisma.event.count({
@@ -27,4 +31,6 @@ export default async function handler() {
             ${unapprovedVenues} unapproved venues, and ${unapprovedArtists} unapproved artists. Please visit ${getBaseUrl()}/admin to approve them.`
         )
     }
+
+    return response.status(200).json({ success: true })
 }
