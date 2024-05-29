@@ -29,7 +29,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
     }, [setTheme])
 
     return (
-        <ThemeProvider attribute="class">
+        <ThemeProvider attribute="class" defaultTheme="dark">
             <Theme accentColor="orange" radius="medium" appearance="dark">
                 <SessionProvider session={session}>
                     <main

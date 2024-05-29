@@ -6,12 +6,12 @@ import { Flex, Heading, Text, Grid } from '@radix-ui/themes'
 
 const staffMembers = [
     {
-        name: 'Lina Welch',
-        title: 'Founder, Managing Director'
+        name: 'Ori Dagan',
+        title: 'Artistic Director, Listings Editor'
     },
     {
-        name: 'Ori Dagan',
-        title: 'Founder, Managing Director'
+        name: 'Lina Welch',
+        title: 'Founder & Managing Director'
     },
     {
         name: 'Mark Lemieux',
@@ -20,6 +20,34 @@ const staffMembers = [
     {
         name: 'Camille Neirynck',
         title: 'Marketing Director'
+    },
+    {
+        name: 'Jared Goldman',
+        title: 'Chief Technology Officer'
+    },
+    {
+        name: 'Zoe Ackah',
+        title: 'Development Officer'
+    },
+    {
+        name: 'Frank van Biesen',
+        title: 'Accountant'
+    },
+    {
+        name: 'Lise Watson',
+        title: 'Communications Officer'
+    },
+    {
+        name: 'Kyle Sullivan',
+        title: 'Producer of Young Artist Series'
+    },
+    {
+        name: 'Kate Lam',
+        title: 'Graphic Designer'
+    },
+    {
+        name: 'Kendra Boyle',
+        title: 'Content Creator'
     }
 ]
 
@@ -50,11 +78,7 @@ export default function About() {
                     jazz musicians to increase the discoverability and access to
                     the works of Canadian musicians.
                 </Text>
-                <Heading
-                    align="center"
-                    mb="3"
-                    size={{ initial: '7', xs: '8' }}
-                >
+                <Heading align="center" mb="3" size={{ initial: '7', xs: '8' }}>
                     Our Team
                 </Heading>
                 <Grid
@@ -91,13 +115,17 @@ export default function About() {
                     })}
                 </Grid>
                 <Image
-                    src="/images/team.jpg"
+                    src="/images/team.jfif"
                     width={800}
                     height={500}
                     alt="Jazz In Toronto team"
                 />
                 <Flex direction="column" align="center" gap="5">
-                    <Heading align="center" size={{ initial: '7', xs: '8' }} mb="3">
+                    <Heading
+                        align="center"
+                        size={{ initial: '7', xs: '8' }}
+                        mb="3"
+                    >
                         Support Us
                     </Heading>
                     <Text
@@ -152,13 +180,16 @@ export default function About() {
                         </Link>
                     </Badge>
                 </Flex>
-                <Heading size={{ initial: '7', xs: '8' }} mb="3">Our Services</Heading>
+                <Heading align="center" size={{ initial: '7', xs: '8' }} mb="3">
+                    Our Board of Directors
+                </Heading>
                 <Image
-                    src="/images/rates.png"
+                    src="/images/board-of-directors.jpg"
                     height={1000}
                     width={1000}
-                    alt="Jazz In Toronto team"
+                    alt="Jazz In Toronto board"
                 />
+
                 <Image
                     src="/images/jit-collage.png"
                     height={1000}

@@ -4,7 +4,6 @@ import { Button, Heading, Flex, Separator, Box } from '@radix-ui/themes'
 import { navLinks, HeaderType } from './utils'
 import { HeaderDrawer } from './components/HeaderDrawer'
 import { HeaderDropDown } from './components/HeaderDropDown'
-import DarkModeToggle from '../DarkModeToggle'
 
 export type Props = {
     headerType: HeaderType
