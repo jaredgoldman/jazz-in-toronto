@@ -113,7 +113,7 @@ export default function About() {
                                         }}
                                         className="font-bold"
                                     >
-                                        {member.title}
+                                        {member.name}
                                     </Heading>
                                     <Text
                                         align={{
@@ -123,7 +123,7 @@ export default function About() {
                                         size="3"
                                         weight="medium"
                                     >
-                                        {member.name}
+                                        {member.title}
                                     </Text>
                                 </Flex>
                             )
