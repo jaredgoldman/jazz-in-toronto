@@ -1,5 +1,8 @@
 import { prisma } from '~/server/db'
 
+/**
+ * Randomizes the featured event, venue, and artist.
+ */
 export default async function handler() {
     const totalEvents = await prisma.event.count({ where: { approved: true } })
     const totalVenues = await prisma.venue.count({ where: { approved: true } })
@@ -31,17 +34,33 @@ export default async function handler() {
         })
         .then((results) => results[0])
 
+    await prisma.event.updateMany({
+        where: { featured: true },
+        data: { featured: false }
+    })
+
     randomEvent &&
         (await prisma.event.update({
             data: { featured: true },
             where: { id: randomEvent.id }
         }))
 
+    await prisma.venue.updateMany({
+        where: { featured: true },
+        data: { featured: false }
+    })
+
     randomVenue &&
         (await prisma.venue.update({
             data: { featured: true },
             where: { id: randomVenue.id }
         }))
+
+    await prisma.artist.updateMany({
+        where: { featured: true },
+        data: { featured: false }
+    })
+
     randomArtist &&
         (await prisma.artist.update({
             data: { featured: true },
