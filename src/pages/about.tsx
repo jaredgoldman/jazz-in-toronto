@@ -51,6 +51,21 @@ const staffMembers = [
     }
 ]
 
+const boardMembers = [
+    'Frank van Biesen',
+    'Michael Bourgeois',
+    'Chloé Watkinson',
+    'Andrew Kaiser',
+    'Donné Roberts',
+    'Sybil Walker',
+    'Alice Sellwood',
+    'Paul Corby',
+    'Peter Sellers',
+    'Heather Bambrick',
+    'Rudy Ray',
+    'Ahmed Moneka'
+]
+
 export default function About() {
     return (
         <RootLayout pageTitle="Jazz In Toronto | About Us">
@@ -60,70 +75,79 @@ export default function About() {
                 width="100%"
                 mx="auto"
                 p={{ initial: '5', xs: '9' }}
-                gap="8"
+                gap="9"
             >
-                <Heading align="center" size={{ initial: '8', xs: '9' }} mb="3">
-                    About Us
-                </Heading>
-                <Text
-                    align={{ initial: 'center', xs: 'left' }}
-                    mx={{ initial: '4', md: '0' }}
-                    className="max-w-2xl"
-                >
-                    JazzInToronto is a platform which promotes local jazz
-                    artists in the Greater Toronto Area, connecting audiences,
-                    musicians, venues and presenters. We offer a platform which
-                    bundles all jazz-related information and showcases a
-                    complete range of artists from new talents to established
-                    jazz musicians to increase the discoverability and access to
-                    the works of Canadian musicians.
-                </Text>
-                <Heading align="center" mb="3" size={{ initial: '7', xs: '8' }}>
-                    Our Team
-                </Heading>
-                <Grid
-                    columns="2"
-                    rows="2"
-                    gapX="9"
-                    gapY="5"
-                    mx={{ initial: '3', md: '0' }}
-                >
-                    {staffMembers.map((member) => {
-                        return (
-                            <Flex direction="column" key={member.name}>
-                                <Heading
-                                    align={{
-                                        initial: 'center',
-                                        xs: 'left'
-                                    }}
-                                    className="font-bold"
-                                >
-                                    {member.title}
-                                </Heading>
-                                <Text
-                                    align={{
-                                        initial: 'center',
-                                        xs: 'left'
-                                    }}
-                                    size="3"
-                                    weight="medium"
-                                >
-                                    {member.name}
-                                </Text>
-                            </Flex>
-                        )
-                    })}
-                </Grid>
-                <Image
-                    src="/images/team.jfif"
-                    width={800}
-                    height={500}
-                    alt="Jazz In Toronto team"
-                />
+                <Flex direction="column" gap="8">
+                    <Heading
+                        align="center"
+                        size={{ initial: '8', xs: '9' }}
+                        mb="3"
+                    >
+                        About Us
+                    </Heading>
+                    <Text
+                        align={{ initial: 'center', xs: 'left' }}
+                        mx={{ initial: '4', md: '0' }}
+                        className="max-w-2xl"
+                    >
+                        JazzInToronto is a platform which promotes local jazz
+                        artists in the Greater Toronto Area, connecting
+                        audiences, musicians, venues and presenters. We offer a
+                        platform which bundles all jazz-related information and
+                        showcases a complete range of artists from new talents
+                        to established jazz musicians to increase the
+                        discoverability and access to the works of Canadian
+                        musicians.
+                    </Text>
+                </Flex>
+                <Flex direction="column" gap="8">
+                    <Heading align="center" size={{ initial: '8', xs: '9' }}>
+                        Our Team
+                    </Heading>
+                    <Grid
+                        columns="2"
+                        rows="2"
+                        gapX="9"
+                        gapY="5"
+                        mx={{ initial: '3', md: '0' }}
+                    >
+                        {staffMembers.map((member) => {
+                            return (
+                                <Flex direction="column" key={member.name}>
+                                    <Heading
+                                        align={{
+                                            initial: 'center',
+                                            xs: 'left'
+                                        }}
+                                        className="font-bold"
+                                    >
+                                        {member.title}
+                                    </Heading>
+                                    <Text
+                                        align={{
+                                            initial: 'center',
+                                            xs: 'left'
+                                        }}
+                                        size="3"
+                                        weight="medium"
+                                    >
+                                        {member.name}
+                                    </Text>
+                                </Flex>
+                            )
+                        })}
+                    </Grid>
+                    <Image
+                        src="/images/team.jfif"
+                        width={800}
+                        height={500}
+                        alt="Jazz In Toronto team"
+                    />
+                </Flex>
                 <Flex direction="column" align="center" gap="5">
                     <Heading
                         align="center"
-                        size={{ initial: '7', xs: '8' }}
+                        size={{ initial: '8', xs: '9' }}
                         mb="3"
                     >
                         Support Us
@@ -180,16 +204,39 @@ export default function About() {
                         </Link>
                     </Badge>
                 </Flex>
-                <Heading align="center" size={{ initial: '7', xs: '8' }} mb="3">
-                    Our Board of Directors
-                </Heading>
-                <Image
-                    src="/images/board-of-directors.jpg"
-                    height={1000}
-                    width={1000}
-                    alt="Jazz In Toronto board"
-                />
-
+                <Flex direction="column" gap="8">
+                    <Heading align="center" size={{ initial: '8', xs: '9' }}>
+                        Our Board of Directors
+                    </Heading>
+                    <Grid
+                        columns="2"
+                        rows="2"
+                        gap="3"
+                        mx={{ initial: '3', md: '0' }}
+                    >
+                        {boardMembers.map((member) => {
+                            return (
+                                <Flex direction="column" key={member}>
+                                    <Heading
+                                        align={{
+                                            initial: 'center',
+                                            xs: 'left'
+                                        }}
+                                        className="font-bold"
+                                    >
+                                        {member}
+                                    </Heading>
+                                </Flex>
+                            )
+                        })}
+                    </Grid>
+                    <Image
+                        src="/images/board-of-directors.jpg"
+                        height={1000}
+                        width={1000}
+                        alt="Jazz In Toronto board"
+                    />
+                </Flex>
                 <Image
                     src="/images/jit-collage.png"
                     height={1000}
