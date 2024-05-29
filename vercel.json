@@ -8,6 +8,6 @@
         {
             "path": "/api/notifyAdminsUnapproved",
             "schedule": "0 10 * * *"
-        },
+        }
     ]
 }
