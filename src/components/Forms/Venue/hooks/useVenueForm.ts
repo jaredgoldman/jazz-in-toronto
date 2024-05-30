@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useCallback } from 'react'
 import { useUploadThing } from '~/hooks/useUploadThing'
-import { useForm } from 'react-hook-form'
+import { useForm, FieldErrors } from 'react-hook-form'
 import { api } from '~/utils/api'
 import { MAX_FILE_SIZE } from '~/utils/constants'
 import { useToast } from '~/hooks/useToast'
@@ -66,7 +66,24 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
     }
 
     const methods = useForm<VenueFormValues>({
-        defaultValues
+        defaultValues,
+        resolver: async (values) => {
+            const errors: FieldErrors<VenueFormValues> = {}
+            const instagramPattern = /^@([a-zA-Z0-9_]{1,15})$/
+
+            if (
+                values.instagramHandle &&
+                !instagramPattern.test(values.instagramHandle)
+            ) {
+                errors.instagramHandle = {
+                    type: 'pattern',
+                    message:
+                        'Instagram handle must start with @ and be up to 15 characters long'
+                }
+            }
+
+            return { values, errors }
+        }
     })
 
     const { reset, setValue, handleSubmit } = methods
@@ -233,7 +250,7 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
             } else {
                 await createVenueMutation.mutateAsync({
                     ...values,
-                    photoPath: photoPath ?? values.photoPath,
+                    photoPath: photoPath ?? values.photoPath
                 })
             }
 

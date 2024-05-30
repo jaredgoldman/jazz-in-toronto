@@ -48,7 +48,6 @@ export const EventsMap = ({ selectedDate }: Props) => {
                 return acc
             }, {} as Record<string, boolean>)
 
-            // Toggle the specific venueId
             return {
                 ...allFalseState,
                 [venueId]: !prevState[venueId]
@@ -82,9 +81,6 @@ export const EventsMap = ({ selectedDate }: Props) => {
                                     events={events}
                                     venue={venue}
                                     visible={popoverState[venue.id] ?? false}
-                                    onFocusOutside={() =>
-                                        handleChangePopoverState(venue.id)
-                                    }
                                 >
                                     <></>
                                 </MapVenuePopover>

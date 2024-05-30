@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, FieldErrors } from 'react-hook-form'
 import { api } from '~/utils/api'
 import { useUploadThing } from '~/hooks/useUploadThing'
 import { MAX_FILE_SIZE } from '~/utils/constants'
@@ -65,7 +65,24 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
         watch,
         formState: { errors }
     } = useForm<ArtistFormValues>({
-        defaultValues
+        defaultValues,
+        resolver: async (values) => {
+            const errors: FieldErrors<ArtistFormValues> = {}
+            const instagramPattern = /^@([a-zA-Z0-9_]{1,15})$/
+
+            if (
+                values.instagramHandle &&
+                !instagramPattern.test(values.instagramHandle)
+            ) {
+                errors.instagramHandle = {
+                    type: 'pattern',
+                    message:
+                        'Instagram handle must start with @ and be up to 15 characters long'
+                }
+            }
+
+            return { values, errors }
+        }
     })
 
     useEffect(() => {

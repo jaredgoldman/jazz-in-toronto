@@ -16,7 +16,6 @@ type Props = {
     venue: Venue
     children: React.ReactNode
     visible: boolean
-    onFocusOutside: () => void
 }
 
 /**
@@ -28,14 +27,13 @@ export function MapVenuePopover({
     venue,
     children,
     visible,
-    onFocusOutside
 }: Props) {
     return (
         <Popover.Root open={visible}>
             <Popover.Trigger>
                 <Flex>{children}</Flex>
             </Popover.Trigger>
-            <Popover.Content size="1" onFocusOutside={onFocusOutside}>
+            <Popover.Content size="1">
                 <Flex
                     direction="column"
                     gap="2"

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, FieldErrors } from 'react-hook-form'
 import { useToast } from '~/hooks/useToast'
 import { useMemo } from 'react'
 import { EventWithArtistVenue } from '~/types/data'
@@ -81,7 +81,26 @@ export default function useEventForm(id = '', isAdmin: boolean) {
         handleSubmit,
         setValue,
         formState: { errors }
-    } = useForm<EventFormValues>({ defaultValues })
+    } = useForm<EventFormValues>({
+        defaultValues,
+        resolver: async (values) => {
+            const errors: FieldErrors<EventFormValues> = {}
+            const instagramPattern = /^@([a-zA-Z0-9_]{1,15})$/
+
+            if (
+                values.instagramHandle &&
+                !instagramPattern.test(values.instagramHandle)
+            ) {
+                errors.instagramHandle = {
+                    type: 'pattern',
+                    message:
+                        'Instagram handle must start with @ and be up to 15 characters long'
+                }
+            }
+
+            return { values, errors }
+        }
+    })
 
     useEffect(() => {
         const data = getEventQuery.data
