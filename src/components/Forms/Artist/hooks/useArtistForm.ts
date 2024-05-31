@@ -66,7 +66,7 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
         formState: { errors }
     } = useForm<ArtistFormValues>({
         defaultValues,
-        resolver: async (values) => {
+        resolver: (values) => {
             const errors: FieldErrors<ArtistFormValues> = {}
             const instagramPattern = /^@([a-zA-Z0-9_]{1,15})$/
 
