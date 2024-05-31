@@ -83,7 +83,7 @@ export default function useEventForm(id = '', isAdmin: boolean) {
         formState: { errors }
     } = useForm<EventFormValues>({
         defaultValues,
-        resolver: async (values) => {
+        resolver: (values) => {
             const errors: FieldErrors<EventFormValues> = {}
             const instagramPattern = /^@([a-zA-Z0-9_]{1,15})$/
 

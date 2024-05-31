@@ -67,7 +67,7 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
 
     const methods = useForm<VenueFormValues>({
         defaultValues,
-        resolver: async (values) => {
+        resolver: (values) => {
             const errors: FieldErrors<VenueFormValues> = {}
             const instagramPattern = /^@([a-zA-Z0-9_]{1,15})$/
 

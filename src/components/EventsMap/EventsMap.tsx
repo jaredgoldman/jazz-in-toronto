@@ -29,17 +29,19 @@ export const EventsMap = ({ selectedDate }: Props) => {
     )
 
     useEffect(() => {
-        // TODO: make sure we only do this when we have to
         if (data) {
             const newState = data.reduce((acc, { venue }) => {
                 acc[venue.id] = false
                 return acc
             }, {} as Record<string, boolean>)
-
             setPopoverState(newState)
         }
     }, [data])
 
+    /**
+     * Change each popovers visibility to false and update the selected popover
+     * @param {string} venueId
+     */
     const handleChangePopoverState = (venueId: string) => {
         setPopoverState((prevState) => {
             // Create a new state object with all values set to false
@@ -81,6 +83,9 @@ export const EventsMap = ({ selectedDate }: Props) => {
                                     events={events}
                                     venue={venue}
                                     visible={popoverState[venue.id] ?? false}
+                                    handleChangePopoverState={
+                                        handleChangePopoverState
+                                    }
                                 >
                                     <></>
                                 </MapVenuePopover>
