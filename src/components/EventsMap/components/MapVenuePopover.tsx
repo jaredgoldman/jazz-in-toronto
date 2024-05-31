@@ -1,7 +1,7 @@
 import { EventWithArtistVenue, Venue } from '~/types/data'
 import { Popover, Flex, Box, Heading, Text } from '@radix-ui/themes'
 import { formatTime } from '~/utils'
-import { ArrowRightIcon } from '@radix-ui/react-icons'
+import { ArrowRightIcon, Cross1Icon } from '@radix-ui/react-icons'
 import Link from '~/components/Link'
 
 /**
@@ -16,6 +16,7 @@ type Props = {
     venue: Venue
     children: React.ReactNode
     visible: boolean
+    handleChangePopoverState: (venueId: string) => void
 }
 
 /**
@@ -27,6 +28,7 @@ export function MapVenuePopover({
     venue,
     children,
     visible,
+    handleChangePopoverState
 }: Props) {
     return (
         <Popover.Root open={visible}>
@@ -34,17 +36,18 @@ export function MapVenuePopover({
                 <Flex>{children}</Flex>
             </Popover.Trigger>
             <Popover.Content size="1">
-                <Flex
-                    direction="column"
-                    gap="2"
-                    pr={{ xs: '0', sm: '2' }}
-                    className="xs: max-w-[72vw]"
-                >
-                    <Link href={`/venue/${venue.id}`}>
-                        <Heading className="text-white hover:underline">
-                            {venue.name}
-                        </Heading>
-                    </Link>
+                <Flex direction="column" gap="2" className="xs: max-w-[72vw]">
+                    <Flex align="center" justify="between" gap="4">
+                        <Link href={`/venue/${venue.id}`}>
+                            <Heading className="text-white hover:underline">
+                                {venue.name}
+                            </Heading>
+                        </Link>
+                        <Cross1Icon
+                            onClick={() => handleChangePopoverState(venue.id)}
+                            className="cursor-pointer"
+                        />
+                    </Flex>
                     <Box>
                         {events.map((event) => (
                             <Flex gap="2" align="center" key={event.id}>
