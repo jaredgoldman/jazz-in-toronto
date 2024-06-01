@@ -7,12 +7,16 @@ import { DateTime } from 'luxon'
 
 export default async function handler(
     _request: NextApiRequest,
+
     response: NextApiResponse
 ) {
     const emailService = new EmailService()
     const admins = await prisma.admin.findMany()
     const unapprovedEvents = await prisma.event.count({
-        where: { approved: false, startDate: { gte: DateTime.now().toJSDate() } }
+        where: {
+            approved: false,
+            startDate: { gte: DateTime.now().toJSDate() }
+        }
     })
     const unapprovedVenues = await prisma.venue.count({
         where: { approved: false }
@@ -23,13 +27,20 @@ export default async function handler(
 
     if (!unapprovedEvents && !unapprovedVenues && !unapprovedArtists) return
 
+    let messages = []
+    if (unapprovedEvents) messages.push(`${unapprovedEvents} unapproved events`)
+    if (unapprovedVenues) messages.push(`${unapprovedVenues} unapproved venues`)
+    if (unapprovedArtists)
+        messages.push(`${unapprovedArtists} unapproved artists`)
+
     for (const admin of admins) {
         await emailService.sendEmail(
             env.EMAIL_SERVER_USER,
             admin.email,
             'JazzInToronto: ACTION REQUIRED - Unapproved Items',
-            `There are ${unapprovedEvents} unapproved events,
-            ${unapprovedVenues} unapproved venues, and ${unapprovedArtists} unapproved artists. Please visit ${getBaseUrl()}/admin to approve them.`
+            `There are ${messages.join(
+                ', '
+            )}. Please visit ${getBaseUrl()}/admin to approve them.`
         )
     }
 
