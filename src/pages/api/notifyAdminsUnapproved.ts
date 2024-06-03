@@ -7,7 +7,6 @@ import { DateTime } from 'luxon'
 
 export default async function handler(
     _request: NextApiRequest,
-
     response: NextApiResponse
 ) {
     const emailService = new EmailService()
@@ -28,19 +27,24 @@ export default async function handler(
     if (!unapprovedEvents && !unapprovedVenues && !unapprovedArtists) return
 
     let messages = []
+
     if (unapprovedEvents) messages.push(`${unapprovedEvents} unapproved events`)
     if (unapprovedVenues) messages.push(`${unapprovedVenues} unapproved venues`)
     if (unapprovedArtists)
         messages.push(`${unapprovedArtists} unapproved artists`)
 
+    const lastMessage = messages[messages.length - 1]
+    messages[messages.length - 1] = `and ${lastMessage}`
+
+    const message = `There are ${messages.join(
+        ', '
+    )}. Please visit ${getBaseUrl()}admin to approve them.`.trim()
+
     for (const admin of admins) {
         await emailService.sendEmail(
             env.EMAIL_SERVER_USER,
             admin.email,
-            'JazzInToronto: ACTION REQUIRED - Unapproved Items',
-            `There are ${messages.join(
-                ', '
-            )}. Please visit ${getBaseUrl()}/admin to approve them.`
+            message
         )
     }
 
