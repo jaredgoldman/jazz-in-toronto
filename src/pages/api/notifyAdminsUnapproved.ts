@@ -26,14 +26,14 @@ export default async function handler(
 
     if (!unapprovedEvents && !unapprovedVenues && !unapprovedArtists) return
 
-    let messages = []
+    const messages = []
 
     if (unapprovedEvents) messages.push(`${unapprovedEvents} unapproved events`)
     if (unapprovedVenues) messages.push(`${unapprovedVenues} unapproved venues`)
     if (unapprovedArtists)
         messages.push(`${unapprovedArtists} unapproved artists`)
 
-    const lastMessage = messages[messages.length - 1]
+    const lastMessage = messages[messages.length - 1] as string
     messages[messages.length - 1] = `and ${lastMessage}`
 
     const message = `There are ${messages.join(
