@@ -29,7 +29,13 @@ export default function useEventForm(id = '', isAdmin: boolean) {
     const updateEventMutation = api.event.update.useMutation()
     const getEventQuery = api.event.get.useQuery(
         { id },
-        { enabled: !!id, staleTime: Infinity, cacheTime: Infinity }
+        {
+            enabled: !!id,
+            staleTime: Infinity,
+            cacheTime: Infinity,
+            refetchOnWindowFocus: false,
+            refetchOnMount: false
+        }
     )
 
     const isLoading = useMemo(
