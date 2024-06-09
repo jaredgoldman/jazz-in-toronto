@@ -44,6 +44,7 @@ export default async function handler(
         await emailService.sendEmail(
             env.EMAIL_SERVER_USER,
             admin.email,
+            "ACTION REQUIRED: Today's unapproved items",
             message
         )
     }
