@@ -9,16 +9,26 @@ import {
     getFilteredRowModel,
     ColumnFiltersState,
     createColumnHelper,
-    getPaginationRowModel
+    getPaginationRowModel,
+    RowSelectionState
 } from '@tanstack/react-table'
 import { Venue } from '~/types/data'
-import { Table, Box, Flex, Badge, Button, Heading } from '@radix-ui/themes'
+import {
+    Table,
+    Box,
+    Flex,
+    Badge,
+    Button,
+    Heading,
+    Checkbox
+} from '@radix-ui/themes'
 import { HeaderCell, TableActionMenu } from './components'
 import Loading from '../Loading'
 import { dateFilter, fuzzyFilter, timeFilter } from './utils/filters'
 import { PaginationButtonGroup } from './components/PaginationButtonGroup'
 import { useRouter } from 'next/router'
 import { useToast } from '~/hooks/useToast'
+import { ConfirmActionDialogue } from '../ConfirmActionDialogue'
 
 const columnHelper = createColumnHelper<Venue>()
 
@@ -27,10 +37,22 @@ export function VenuesTable() {
     const { toast } = useToast()
 
     /*
+     * State
+     */
+    const [alertDialogOpen, setAlertDialogueOpen] = useState(false)
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+    const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
+    const [sorting, setSorting] = useState<SortingState>([
+        { id: 'Featured', desc: true },
+        { id: 'Approved', desc: false }
+    ])
+
+    /*
      * Queries/Mutations
      */
     const setFeaturedMutation = api.venue.setFeatured.useMutation()
     const approveVenueMutation = api.venue.approve.useMutation()
+    const approveManyMutation = api.venue.approveMany.useMutation()
     const deleteVenueMutation = api.venue.delete.useMutation()
     const getAllVenuesQuery = api.venue.getAll.useQuery(
         {
@@ -61,6 +83,10 @@ export function VenuesTable() {
         [router]
     )
 
+    const handleBatchEditClick = useCallback(() => {
+        setAlertDialogueOpen(true)
+    }, [setAlertDialogueOpen])
+
     const handleApprove = useCallback(
         (venue: Venue) => {
             approveVenueMutation.mutate(
@@ -84,6 +110,28 @@ export function VenuesTable() {
         },
         [approveVenueMutation, getAllVenuesQuery, toast]
     )
+
+    const handleApproveMany = useCallback(() => {
+        const selectedIds = Object.keys(rowSelection).filter(
+            (id) => rowSelection[id]
+        )
+        approveManyMutation.mutate(selectedIds, {
+            onSuccess: () => {
+                toast({
+                    title: 'Success',
+                    message: 'Events approved'
+                })
+                void getAllVenuesQuery.refetch()
+            },
+            onError: () => {
+                toast({
+                    title: 'Error',
+                    message: 'Approving events failed',
+                    type: 'error'
+                })
+            }
+        })
+    }, [approveManyMutation, rowSelection, getAllVenuesQuery, toast])
 
     const handleToggleFeatured = useCallback(
         (venue: Venue) => {
@@ -138,6 +186,37 @@ export function VenuesTable() {
      */
     const columns = useMemo(
         () => [
+            columnHelper.display({
+                id: 'select',
+                header: ({ table }) => (
+                    <Checkbox
+                        onCheckedChange={(checked) => {
+                            const handler =
+                                table.getToggleAllPageRowsSelectedHandler()
+                            handler({ target: { checked } })
+                        }}
+                        checked={table.getIsAllPageRowsSelected()}
+                    />
+                ),
+                cell: ({ row }) => {
+                    return (
+                        <Flex justify="center">
+                            <Checkbox
+                                checked={row.getIsSelected()}
+                                onCheckedChange={(checked) => {
+                                    const handler =
+                                        row.getToggleSelectedHandler()
+                                    handler({
+                                        target: {
+                                            checked
+                                        }
+                                    })
+                                }}
+                            />
+                        </Flex>
+                    )
+                }
+            }),
             columnHelper.accessor((row) => row.name, {
                 cell: (info) => info.getValue(),
                 header: 'Name',
@@ -204,21 +283,25 @@ export function VenuesTable() {
         [handleDelete, handleEditClick, handleToggleFeatured, handleApprove]
     )
 
-    const [sorting, setSorting] = useState<SortingState>([
-        { id: 'Featured', desc: true },
-        { id: 'Approved', desc: false }
-    ])
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-
     const table = useReactTable<Venue>({
         data: getAllVenuesQuery.data ?? [],
         columns,
-        state: { sorting, columnFilters },
+        initialState: {
+            pagination: {
+                pageSize: 25,
+                pageIndex: 0
+            }
+        },
+        state: { sorting, columnFilters, rowSelection },
         filterFns: {
             fuzzy: fuzzyFilter,
             date: dateFilter,
             time: timeFilter
         },
+        enableRowSelection: true,
+        enableMultiRowSelection: true,
+        getRowId: (row) => row.id,
+        onRowSelectionChange: setRowSelection,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         onSortingChange: setSorting,
@@ -232,7 +315,7 @@ export function VenuesTable() {
      */
     return (
         <Box>
-            <Flex justify="end" mb="4">
+            <Flex justify="end" mb="4" gap="4">
                 <Button
                     variant="outline"
                     size="4"
@@ -240,8 +323,18 @@ export function VenuesTable() {
                 >
                     Add New Venue
                 </Button>
+                {Object.values(rowSelection).length ? (
+                    <Button
+                        color="amber"
+                        size="4"
+                        variant="outline"
+                        onClick={handleBatchEditClick}
+                    >
+                        Approve All
+                    </Button>
+                ) : null}
             </Flex>
-            {getAllVenuesQuery.data?.length && (
+            {getAllVenuesQuery.data?.length ? (
                 <>
                     <Table.Root variant="surface">
                         <Table.Header>
@@ -278,7 +371,7 @@ export function VenuesTable() {
                         </Flex>
                     )}
                 </>
-            )}
+            ) : null}
             {!getAllVenuesQuery.isFetching &&
                 !table.getFilteredRowModel().rows.length && (
                     <Flex justify="center" align="center" py="7">
@@ -286,6 +379,15 @@ export function VenuesTable() {
                     </Flex>
                 )}
             {getAllVenuesQuery.isLoading && <Loading />}
+            <ConfirmActionDialogue
+                open={alertDialogOpen}
+                setOpen={setAlertDialogueOpen}
+                onAction={handleApproveMany}
+                label="Batch approve?"
+                description="Are you sure you want to approve all selected venues?"
+                actionButtonLabel="Approve all"
+                level="warn"
+            />
         </Box>
     )
 }

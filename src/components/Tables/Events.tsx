@@ -9,7 +9,8 @@ import {
     getFilteredRowModel,
     ColumnFiltersState,
     createColumnHelper,
-    getPaginationRowModel
+    getPaginationRowModel,
+    RowSelectionState
 } from '@tanstack/react-table'
 import { EventWithArtistVenue } from '~/types/data'
 import { Table, Flex, Badge, Heading, Text, Checkbox } from '@radix-ui/themes'
@@ -23,6 +24,7 @@ import { Button } from '@radix-ui/themes'
 import { PaginationButtonGroup } from './components/PaginationButtonGroup'
 import { DateTime } from 'luxon'
 import { formatTime } from '~/utils'
+import { ConfirmActionDialogue } from '../ConfirmActionDialogue'
 
 const columnHelper = createColumnHelper<EventWithArtistVenue>()
 
@@ -33,15 +35,26 @@ export function EventsTable() {
         .startOf('day')
         .setZone('America/New_York')
         .toJSDate()
+
+    /*
+     * State
+     */
     const [useStart, setUseStart] = useState(true)
+    const [alertDialogOpen, setAlertDialogueOpen] = useState(false)
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+    const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
+    const [sorting, setSorting] = useState<SortingState>([
+        { id: 'Featured', desc: true },
+        { id: 'Approved', desc: false }
+    ])
 
     /*
      * Queries/Mutations
      */
-
     const setFeaturedMutation = api.event.setFeatured.useMutation()
     const deleteMutation = api.event.delete.useMutation()
     const approveMutation = api.event.approve.useMutation()
+    const approveManyMutation = api.event.approveMany.useMutation()
     const getAllEventsQuery = api.event.getAll.useQuery({
         showUnapproved: true,
         start: useStart ? defaultDate : undefined
@@ -68,6 +81,10 @@ export function EventsTable() {
         [router]
     )
 
+    const handleBatchEditClick = useCallback(() => {
+        setAlertDialogueOpen(true)
+    }, [setAlertDialogueOpen])
+
     const handleApprove = useCallback(
         (event: EventWithArtistVenue) => {
             approveMutation.mutate(
@@ -92,6 +109,28 @@ export function EventsTable() {
         },
         [approveMutation, toast, getAllEventsQuery]
     )
+
+    const handleApproveMany = useCallback(() => {
+        const selectedIds = Object.keys(rowSelection).filter(
+            (id) => rowSelection[id]
+        )
+        approveManyMutation.mutate(selectedIds, {
+            onSuccess: () => {
+                toast({
+                    title: 'Success',
+                    message: 'Events approved'
+                })
+                void getAllEventsQuery.refetch()
+            },
+            onError: () => {
+                toast({
+                    title: 'Error',
+                    message: 'Approving events failed',
+                    type: 'error'
+                })
+            }
+        })
+    }, [approveManyMutation, rowSelection, toast, getAllEventsQuery])
 
     const handleToggleFeatured = useCallback(
         (event: EventWithArtistVenue) => {
@@ -148,6 +187,37 @@ export function EventsTable() {
      */
     const columns = useMemo(
         () => [
+            columnHelper.display({
+                id: 'select',
+                header: ({ table }) => (
+                    <Checkbox
+                        onCheckedChange={(checked) => {
+                            const handler =
+                                table.getToggleAllPageRowsSelectedHandler()
+                            handler({ target: { checked } })
+                        }}
+                        checked={table.getIsAllPageRowsSelected()}
+                    />
+                ),
+                cell: ({ row }) => {
+                    return (
+                        <Flex justify="center">
+                            <Checkbox
+                                checked={row.getIsSelected()}
+                                onCheckedChange={(checked) => {
+                                    const handler =
+                                        row.getToggleSelectedHandler()
+                                    handler({
+                                        target: {
+                                            checked
+                                        }
+                                    })
+                                }}
+                            />
+                        </Flex>
+                    )
+                }
+            }),
             columnHelper.accessor((row) => row.startDate, {
                 cell: (info) => formatTime(info.getValue(), 'MM/dd/yyyy'),
                 filterFn: 'date',
@@ -236,13 +306,6 @@ export function EventsTable() {
         [handleDelete, handleEditClick, handleToggleFeatured, handleApprove]
     )
 
-    const [sorting, setSorting] = useState<SortingState>([
-        { id: 'Featured', desc: true },
-        { id: 'Approved', desc: false }
-    ])
-
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-
     const table = useReactTable<EventWithArtistVenue>({
         data: getAllEventsQuery.data ?? [],
         columns,
@@ -254,13 +317,18 @@ export function EventsTable() {
         },
         state: {
             sorting,
-            columnFilters
+            columnFilters,
+            rowSelection
         },
         filterFns: {
             fuzzy: fuzzyFilter,
             date: dateFilter,
             time: timeFilter
         },
+        enableRowSelection: true,
+        enableMultiRowSelection: true,
+        getRowId: (row) => row.id,
+        onRowSelectionChange: setRowSelection,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         onSortingChange: setSorting,
@@ -283,13 +351,25 @@ export function EventsTable() {
                     />
                     <Text>Only fetch upcoming events</Text>
                 </Flex>
-                <Button
-                    size="4"
-                    variant="outline"
-                    onClick={() => handleEditClick()}
-                >
-                    Add New Event
-                </Button>
+                <Flex gap="4">
+                    {Object.values(rowSelection).length ? (
+                        <Button
+                            color="amber"
+                            size="4"
+                            variant="outline"
+                            onClick={handleBatchEditClick}
+                        >
+                            Approve All
+                        </Button>
+                    ) : null}
+                    <Button
+                        size="4"
+                        variant="outline"
+                        onClick={() => handleEditClick()}
+                    >
+                        Add New Event
+                    </Button>
+                </Flex>
             </Flex>
             {getAllEventsQuery.data?.length ? (
                 <>
@@ -335,6 +415,15 @@ export function EventsTable() {
                     </Flex>
                 )}
             {getAllEventsQuery.isLoading && <Loading />}
+            <ConfirmActionDialogue
+                open={alertDialogOpen}
+                setOpen={setAlertDialogueOpen}
+                onAction={handleApproveMany}
+                label="Batch approve?"
+                description="Are you sure you want to approve all selected events?"
+                actionButtonLabel="Approve all"
+                level="warn"
+            />
         </Flex>
     )
 }

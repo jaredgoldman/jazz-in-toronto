@@ -36,15 +36,15 @@ export function HeaderCell<TData>({ header }: Props<TData>) {
     const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
         const newValue = e.target.value
-        console.log('New input value:', newValue) // Check if this logs correctly
         header.column.setFilterValue(newValue)
     }
 
     return (
         <Table.ColumnHeaderCell
-            className={`${
+            className={
                 header.column.getCanSort() ? 'cursor-pointer select-none' : ''
-            } min-w-[100px]`}
+            }
+            justify="center"
         >
             <Flex direction="column" gap="2">
                 <Flex align="center" gap="2" ml="2">

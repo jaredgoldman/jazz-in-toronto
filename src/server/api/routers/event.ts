@@ -342,6 +342,15 @@ export const eventRouter = createTRPCRouter({
             })
         }),
 
+    approveMany: protectedProcedure
+        .input(z.array(z.string().cuid()))
+        .mutation(async ({ ctx, input }) => {
+            return ctx.prisma.event.updateMany({
+                where: { id: { in: input } },
+                data: { approved: true }
+            })
+        }),
+
     emailUnapproved: protectedProcedure.mutation(async ({ ctx }) => {
         if (ctx.emailService) {
             const admins = await ctx.prisma.admin.findMany()

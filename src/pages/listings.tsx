@@ -1,6 +1,6 @@
 import { useCallback, useState, useMemo } from 'react'
 import RootLayout from '~/layouts/RootLayout'
-import DailyListings from '~/components/DailyListings/DailyListings'
+import DailyListings from '~/components/DailyListings/'
 import Calendar from '~/components/Calendar'
 import { Flex, Text, Button, Heading, TextField } from '@radix-ui/themes'
 import Link from '~/components/Link'
@@ -81,13 +81,7 @@ export default function Listings() {
                 </Text>
             }
         >
-            <Flex
-                width="100%"
-                align="center"
-                direction="column"
-                px="6"
-                py="9"
-            >
+            <Flex width="100%" align="center" direction="column" px="6" py="9">
                 <Flex direction="column" width="100%" className="max-w-[65rem]">
                     <Heading
                         size={{ initial: '8', xs: '9' }}

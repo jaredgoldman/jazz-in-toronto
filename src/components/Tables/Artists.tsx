@@ -12,9 +12,18 @@ import {
     getFilteredRowModel,
     ColumnFiltersState,
     getPaginationRowModel,
-    createColumnHelper
+    createColumnHelper,
+    RowSelectionState
 } from '@tanstack/react-table'
-import { Table, Box, Flex, Badge, Button, Heading } from '@radix-ui/themes'
+import {
+    Table,
+    Box,
+    Flex,
+    Badge,
+    Button,
+    Heading,
+    Checkbox
+} from '@radix-ui/themes'
 import Loading from '../Loading'
 import { fuzzyFilter, timeFilter } from './utils/filters'
 import { PaginationButtonGroup } from './components/PaginationButtonGroup'
@@ -22,6 +31,7 @@ import { useRouter } from 'next/router'
 import { TableActionMenu } from './components/TableActionMenu'
 import { useToast } from '~/hooks/useToast'
 import { dateFilter } from './utils/filters'
+import { ConfirmActionDialogue } from '../ConfirmActionDialogue'
 
 const columnHelper = createColumnHelper<Artist>()
 
@@ -30,9 +40,22 @@ export function ArtistsTable() {
     const router = useRouter()
 
     /*
+     * State
+     */
+    const [alertDialogOpen, setAlertDialogueOpen] = useState(false)
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+    const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
+    const [sorting, setSorting] = useState<SortingState>([
+        { id: 'Featured', desc: true },
+        { id: 'Approved', desc: false },
+        { id: 'Name', desc: false }
+    ])
+
+    /*
      * Queries/Mutations
      */
     const approveArtistMutation = api.artist.approve.useMutation()
+    const approveManyMutation = api.artist.approveMany.useMutation()
     const setFeaturedMutation = api.artist.setFeatured.useMutation()
     const deleteArtistMutation = api.artist.delete.useMutation()
     const getAllArtistsQuery = api.artist.getAll.useQuery({
@@ -58,6 +81,10 @@ export function ArtistsTable() {
         [router]
     )
 
+    const handleBatchEditClick = useCallback(() => {
+        setAlertDialogueOpen(true)
+    }, [setAlertDialogueOpen])
+
     const hanldeApprove = useCallback(
         (artist: Artist) => {
             approveArtistMutation.mutate(
@@ -82,6 +109,28 @@ export function ArtistsTable() {
         },
         [getAllArtistsQuery, approveArtistMutation, toast]
     )
+
+    const handleApproveMany = useCallback(() => {
+        const selectedIds = Object.keys(rowSelection).filter(
+            (id) => rowSelection[id]
+        )
+        approveManyMutation.mutate(selectedIds, {
+            onSuccess: () => {
+                toast({
+                    title: 'Success',
+                    message: 'Events approved'
+                })
+                void getAllArtistsQuery.refetch()
+            },
+            onError: () => {
+                toast({
+                    title: 'Error',
+                    message: 'Approving events failed',
+                    type: 'error'
+                })
+            }
+        })
+    }, [approveManyMutation, rowSelection, getAllArtistsQuery, toast])
 
     const handleToggleFeatured = useCallback(
         (artist: Artist) => {
@@ -137,6 +186,37 @@ export function ArtistsTable() {
      */
     const columns = useMemo(
         () => [
+            columnHelper.display({
+                id: 'select',
+                header: ({ table }) => (
+                    <Checkbox
+                        onCheckedChange={(checked) => {
+                            const handler =
+                                table.getToggleAllPageRowsSelectedHandler()
+                            handler({ target: { checked } })
+                        }}
+                        checked={table.getIsAllPageRowsSelected()}
+                    />
+                ),
+                cell: ({ row }) => {
+                    return (
+                        <Flex justify="center">
+                            <Checkbox
+                                checked={row.getIsSelected()}
+                                onCheckedChange={(checked) => {
+                                    const handler =
+                                        row.getToggleSelectedHandler()
+                                    handler({
+                                        target: {
+                                            checked
+                                        }
+                                    })
+                                }}
+                            />
+                        </Flex>
+                    )
+                }
+            }),
             columnHelper.accessor((row) => row.name, {
                 cell: (info) => info.getValue(),
                 header: 'Name'
@@ -198,14 +278,6 @@ export function ArtistsTable() {
         [handleDelete, handleEditClick, handleToggleFeatured, hanldeApprove]
     )
 
-    const [sorting, setSorting] = useState<SortingState>([
-        { id: 'Featured', desc: true },
-        { id: 'Approved', desc: false },
-        { id: 'Name', desc: false }
-    ])
-
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-
     const table = useReactTable({
         initialState: {
             pagination: {
@@ -217,13 +289,17 @@ export function ArtistsTable() {
         columns,
         state: {
             sorting,
-            columnFilters
+            columnFilters,
+            rowSelection
         },
         filterFns: {
             fuzzy: fuzzyFilter,
             date: dateFilter,
             time: timeFilter
         },
+        enableRowSelection: true,
+        enableMultiRowSelection: true,
+        onRowSelectionChange: setRowSelection,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         onSortingChange: setSorting,
@@ -237,7 +313,17 @@ export function ArtistsTable() {
      */
     return (
         <Box>
-            <Flex justify="end" mb="4">
+            <Flex justify="end" mb="4" gap="4">
+                {Object.values(rowSelection).length ? (
+                    <Button
+                        color="amber"
+                        size="4"
+                        variant="outline"
+                        onClick={handleBatchEditClick}
+                    >
+                        Approve All
+                    </Button>
+                ) : null}
                 <Button
                     variant="outline"
                     size="4"
@@ -290,6 +376,15 @@ export function ArtistsTable() {
                     </Flex>
                 )}
             {getAllArtistsQuery.isLoading && <Loading />}
+            <ConfirmActionDialogue
+                open={alertDialogOpen}
+                setOpen={setAlertDialogueOpen}
+                onAction={handleApproveMany}
+                label="Batch approve?"
+                description="Are you sure you want to approve all selected artists?"
+                actionButtonLabel="Approve all"
+                level="warn"
+            />
         </Box>
     )
 }

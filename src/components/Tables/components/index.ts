@@ -1,3 +1,2 @@
-export { HeaderCell } from './HeaderCell'
-export { ConfirmDelete } from './ConfirmDelete'
-export { TableActionMenu } from './TableActionMenu'
+export * from './HeaderCell'
+export *  from './TableActionMenu'

@@ -1,7 +1,7 @@
 import { DropdownMenu, Button, Flex } from '@radix-ui/themes'
 import Link from '~/components/Link'
 
-export type Props = {
+type Props = {
     links: { title: string; href: string }[]
 }
 
