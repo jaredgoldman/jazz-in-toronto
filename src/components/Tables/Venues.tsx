@@ -35,7 +35,18 @@ const columnHelper = createColumnHelper<Venue>()
 export function VenuesTable() {
     const router = useRouter()
     const { toast } = useToast()
+
+    /*
+     * State
+     */
     const [alertDialogOpen, setAlertDialogueOpen] = useState(false)
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+    const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
+    const [sorting, setSorting] = useState<SortingState>([
+        { id: 'Featured', desc: true },
+        { id: 'Approved', desc: false }
+    ])
+
 
     /*
      * Queries/Mutations
@@ -273,13 +284,6 @@ export function VenuesTable() {
         [handleDelete, handleEditClick, handleToggleFeatured, handleApprove]
     )
 
-    const [sorting, setSorting] = useState<SortingState>([
-        { id: 'Featured', desc: true },
-        { id: 'Approved', desc: false }
-    ])
-
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-    const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
 
     const table = useReactTable<Venue>({
         data: getAllVenuesQuery.data ?? [],

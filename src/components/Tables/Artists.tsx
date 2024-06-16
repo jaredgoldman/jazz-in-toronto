@@ -38,7 +38,18 @@ const columnHelper = createColumnHelper<Artist>()
 export function ArtistsTable() {
     const { toast } = useToast()
     const router = useRouter()
+
+    /*
+     * State
+     */
     const [alertDialogOpen, setAlertDialogueOpen] = useState(false)
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+    const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
+    const [sorting, setSorting] = useState<SortingState>([
+        { id: 'Featured', desc: true },
+        { id: 'Approved', desc: false },
+        { id: 'Name', desc: false }
+    ])
 
     /*
      * Queries/Mutations
@@ -74,7 +85,7 @@ export function ArtistsTable() {
         setAlertDialogueOpen(true)
     }, [setAlertDialogueOpen])
 
-    const handleApprove = useCallback(
+    const hanldeApprove = useCallback(
         (artist: Artist) => {
             approveArtistMutation.mutate(
                 { id: artist.id, approved: !artist.approved },
@@ -119,7 +130,7 @@ export function ArtistsTable() {
                 })
             }
         })
-    }, [approveManyMutation])
+    }, [approveManyMutation, rowSelection, getAllArtistsQuery, toast])
 
     const handleToggleFeatured = useCallback(
         (artist: Artist) => {
@@ -259,22 +270,13 @@ export function ArtistsTable() {
                         }}
                         onEdit={() => handleEditClick(row.original)}
                         onDelete={() => handleDelete(row.original)}
-                        onApprove={() => handleApprove(row.original)}
+                        onApprove={() => hanldeApprove(row.original)}
                     />
                 )
             })
         ],
-        [handleDelete, handleEditClick, handleToggleFeatured, handleApprove]
+        [handleDelete, handleEditClick, handleToggleFeatured, hanldeApprove]
     )
-
-    const [sorting, setSorting] = useState<SortingState>([
-        { id: 'Featured', desc: true },
-        { id: 'Approved', desc: false },
-        { id: 'Name', desc: false }
-    ])
-
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-    const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
 
     const table = useReactTable({
         initialState: {

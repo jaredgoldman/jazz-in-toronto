@@ -35,8 +35,18 @@ export function EventsTable() {
         .startOf('day')
         .setZone('America/New_York')
         .toJSDate()
+
+    /*
+     * State
+     */
     const [useStart, setUseStart] = useState(true)
     const [alertDialogOpen, setAlertDialogueOpen] = useState(false)
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+    const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
+    const [sorting, setSorting] = useState<SortingState>([
+        { id: 'Featured', desc: true },
+        { id: 'Approved', desc: false }
+    ])
 
     /*
      * Queries/Mutations
@@ -296,13 +306,6 @@ export function EventsTable() {
         [handleDelete, handleEditClick, handleToggleFeatured, handleApprove]
     )
 
-    const [sorting, setSorting] = useState<SortingState>([
-        { id: 'Featured', desc: true },
-        { id: 'Approved', desc: false }
-    ])
-
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-    const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
 
     const table = useReactTable<EventWithArtistVenue>({
         data: getAllEventsQuery.data ?? [],
