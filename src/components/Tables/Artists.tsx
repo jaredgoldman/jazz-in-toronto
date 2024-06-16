@@ -311,7 +311,17 @@ export function ArtistsTable() {
      */
     return (
         <Box>
-            <Flex justify="end" mb="4">
+            <Flex justify="end" mb="4" gap="4">
+                {Object.values(rowSelection).length ? (
+                    <Button
+                        color="amber"
+                        size="4"
+                        variant="outline"
+                        onClick={handleBatchEditClick}
+                    >
+                        Approve All
+                    </Button>
+                ) : null}
                 <Button
                     variant="outline"
                     size="4"

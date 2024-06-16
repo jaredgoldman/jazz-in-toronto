@@ -352,7 +352,6 @@ export function EventsTable() {
                 </Flex>
                 <Flex gap="4">
                     {Object.values(rowSelection).length ? (
-                        <>
                             <Button
                                 color="amber"
                                 size="4"
@@ -361,7 +360,6 @@ export function EventsTable() {
                             >
                                 Approve All
                             </Button>
-                        </>
                     ) : null}
                     <Button
                         size="4"
