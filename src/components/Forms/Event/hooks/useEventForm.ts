@@ -23,18 +23,25 @@ export interface EventFormValues {
 export default function useEventForm(id = '', isAdmin: boolean) {
     const { toast } = useToast()
 
-    const getAllVenueQuery = api.venue.getAll.useQuery()
-    const getAllArtistQuery = api.artist.getAll.useQuery()
+    const querySettings = {
+        staleTime: Infinity,
+        cacheTime: Infinity,
+        refetchOnWindowFocus: false,
+        refetchOnMount: false
+    }
+
+    const getAllVenueQuery = api.venue.getAll.useQuery(undefined, querySettings)
+    const getAllArtistQuery = api.artist.getAll.useQuery(
+        undefined,
+        querySettings
+    )
     const createEventMutation = api.event.create.useMutation()
     const updateEventMutation = api.event.update.useMutation()
     const getEventQuery = api.event.get.useQuery(
         { id },
         {
             enabled: !!id,
-            staleTime: Infinity,
-            cacheTime: Infinity,
-            refetchOnWindowFocus: false,
-            refetchOnMount: false
+            ...querySettings
         }
     )
 

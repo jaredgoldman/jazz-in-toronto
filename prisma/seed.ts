@@ -58,7 +58,8 @@ const generateVenues = async () => {
             crawlable: true,
             eventsPath: '/events',
             phoneNumber: '416-598-2475',
-            facebookLink: 'https://www.facebook.com/therextoronto'
+            facebookLink: 'https://www.facebook.com/therextoronto',
+            approved: true
         }
     })
     await prisma.venue.create({
@@ -75,7 +76,8 @@ const generateVenues = async () => {
             crawlable: true,
             eventsPath: '/events-9O8Cm',
             phoneNumber: '416-598-2475',
-            facebookLink: 'https://www.facebook.com/dromtaberna'
+            facebookLink: 'https://www.facebook.com/dromtaberna',
+            approved: true
         }
     })
     await prisma.venue.create({
@@ -92,7 +94,8 @@ const generateVenues = async () => {
             crawlable: true,
             eventsPath: '/performance_calendar',
             phoneNumber: '416-363-5299',
-            facebookLink: 'https://www.facebook.com/JazzBistroTO'
+            facebookLink: 'https://www.facebook.com/JazzBistroTO',
+            approved: true
         }
     })
 }

@@ -9,7 +9,8 @@ import {
     getFilteredRowModel,
     ColumnFiltersState,
     createColumnHelper,
-    getPaginationRowModel
+    getPaginationRowModel,
+    RowSelectionState,
 } from '@tanstack/react-table'
 import { EventWithArtistVenue } from '~/types/data'
 import { Table, Flex, Badge, Heading, Text, Checkbox } from '@radix-ui/themes'
@@ -148,6 +149,37 @@ export function EventsTable() {
      */
     const columns = useMemo(
         () => [
+            columnHelper.display({
+                id: 'select',
+                header: ({ table }) => (
+                    <Checkbox
+                        onCheckedChange={(checked) => {
+                            const handler =
+                                table.getToggleAllPageRowsSelectedHandler()
+                            handler({ target: { checked } })
+                        }}
+                        checked={table.getIsAllPageRowsSelected()}
+                    />
+                ),
+                cell: ({ row }) => {
+                    return (
+                        <Flex justify="center">
+                            <Checkbox
+                                checked={row.getIsSelected()}
+                                onCheckedChange={(checked) => {
+                                    const handler =
+                                        row.getToggleSelectedHandler()
+                                    handler({
+                                        target: {
+                                            checked
+                                        }
+                                    })
+                                }}
+                            />
+                        </Flex>
+                    )
+                }
+            }),
             columnHelper.accessor((row) => row.startDate, {
                 cell: (info) => formatTime(info.getValue(), 'MM/dd/yyyy'),
                 filterFn: 'date',
@@ -242,6 +274,7 @@ export function EventsTable() {
     ])
 
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+    const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
 
     const table = useReactTable<EventWithArtistVenue>({
         data: getAllEventsQuery.data ?? [],
@@ -254,13 +287,18 @@ export function EventsTable() {
         },
         state: {
             sorting,
-            columnFilters
+            columnFilters,
+            rowSelection
         },
         filterFns: {
             fuzzy: fuzzyFilter,
             date: dateFilter,
             time: timeFilter
         },
+        enableRowSelection: true,
+        enableMultiRowSelection: true,
+        getRowId: (row) => row.id,
+        onRowSelectionChange: setRowSelection,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         onSortingChange: setSorting,

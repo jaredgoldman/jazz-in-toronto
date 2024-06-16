@@ -36,7 +36,6 @@ export function HeaderCell<TData>({ header }: Props<TData>) {
     const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
         const newValue = e.target.value
-        console.log('New input value:', newValue) // Check if this logs correctly
         header.column.setFilterValue(newValue)
     }
 
