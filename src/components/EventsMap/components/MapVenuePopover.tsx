@@ -30,6 +30,9 @@ export function MapVenuePopover({
     visible,
     handleChangePopoverState
 }: Props) {
+  console.log({
+    events
+  })
     return (
         <Popover.Root open={visible}>
             <Popover.Trigger>
@@ -54,7 +57,7 @@ export function MapVenuePopover({
                                 <Text>{formatTime(event.startDate)}</Text>
                                 <ArrowRightIcon />
                                 <Link href={`/artist/${event.artist.id}`}>
-                                    {event.name}
+                                    {event.name ? event.name : event.artist.name}
                                 </Link>
                             </Flex>
                         ))}
