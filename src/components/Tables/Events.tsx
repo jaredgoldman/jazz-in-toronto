@@ -69,6 +69,10 @@ export function EventsTable() {
         [router]
     )
 
+    const handleBatchClick = useCallback(() => {
+        console.log('batch edit')
+    }, [])
+
     const handleApprove = useCallback(
         (event: EventWithArtistVenue) => {
             approveMutation.mutate(
@@ -277,10 +281,12 @@ export function EventsTable() {
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
 
     useEffect(() => {
-      if (Object.values(rowSelection).length) {
-        const selectedIds = Object.keys(rowSelection).filter((id) => rowSelection[id])
-      }
-    },[rowSelection])
+        if (Object.values(rowSelection).length) {
+            const selectedIds = Object.keys(rowSelection).filter(
+                (id) => rowSelection[id]
+            )
+        }
+    }, [rowSelection])
 
     const table = useReactTable<EventWithArtistVenue>({
         data: getAllEventsQuery.data ?? [],
@@ -327,13 +333,27 @@ export function EventsTable() {
                     />
                     <Text>Only fetch upcoming events</Text>
                 </Flex>
-                <Button
-                    size="4"
-                    variant="outline"
-                    onClick={() => handleEditClick()}
-                >
-                    Add New Event
-                </Button>
+                <Flex gap="4">
+                    {Object.values(rowSelection).length ? (
+                        <>
+                            <Button
+                                color="amber"
+                                size="4"
+                                variant="outline"
+                                onClick={handleBatchClick}
+                            >
+                                Approve All
+                            </Button>
+                        </>
+                    ) : null}
+                    <Button
+                        size="4"
+                        variant="outline"
+                        onClick={() => handleEditClick()}
+                    >
+                        Add New Event
+                    </Button>
+                </Flex>
             </Flex>
             {getAllEventsQuery.data?.length ? (
                 <>
