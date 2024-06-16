@@ -9,7 +9,8 @@ import {
     getFilteredRowModel,
     ColumnFiltersState,
     createColumnHelper,
-    getPaginationRowModel
+    getPaginationRowModel,
+    RowSelectionState
 } from '@tanstack/react-table'
 import { Venue } from '~/types/data'
 import {
