@@ -74,7 +74,7 @@ export function ArtistsTable() {
         setAlertDialogueOpen(true)
     }, [setAlertDialogueOpen])
 
-    const hanldeApprove = useCallback(
+    const handleApprove = useCallback(
         (artist: Artist) => {
             approveArtistMutation.mutate(
                 { id: artist.id, approved: !artist.approved },
@@ -259,12 +259,12 @@ export function ArtistsTable() {
                         }}
                         onEdit={() => handleEditClick(row.original)}
                         onDelete={() => handleDelete(row.original)}
-                        onApprove={() => hanldeApprove(row.original)}
+                        onApprove={() => handleApprove(row.original)}
                     />
                 )
             })
         ],
-        [handleDelete, handleEditClick, handleToggleFeatured, hanldeApprove]
+        [handleDelete, handleEditClick, handleToggleFeatured, handleApprove]
     )
 
     const [sorting, setSorting] = useState<SortingState>([
