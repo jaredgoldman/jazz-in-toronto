@@ -58,6 +58,7 @@ export function TableActionMenu({
             </DropdownMenu.Root>
             <ConfirmActionDialogue
                 onAction={onDelete}
+                label="Delete Record"
                 open={deleteDialogOpen}
                 setOpen={setDeleteDialogOpen}
                 description="You are about to delete a record. This action cannot be undone."
