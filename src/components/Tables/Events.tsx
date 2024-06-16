@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { api } from '~/utils/api'
 import {
     flexRender,
@@ -10,7 +10,7 @@ import {
     ColumnFiltersState,
     createColumnHelper,
     getPaginationRowModel,
-    RowSelectionState,
+    RowSelectionState
 } from '@tanstack/react-table'
 import { EventWithArtistVenue } from '~/types/data'
 import { Table, Flex, Badge, Heading, Text, Checkbox } from '@radix-ui/themes'
@@ -275,6 +275,12 @@ export function EventsTable() {
 
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
+
+    useEffect(() => {
+      if (Object.values(rowSelection).length) {
+        const selectedIds = Object.keys(rowSelection).filter((id) => rowSelection[id])
+      }
+    },[rowSelection])
 
     const table = useReactTable<EventWithArtistVenue>({
         data: getAllEventsQuery.data ?? [],
