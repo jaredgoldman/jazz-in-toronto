@@ -48,12 +48,13 @@ export default function FuzzySearchDropdownInput<T extends FieldValues>({
     )
 
     useEffect(() => {
+        // Open the dropdown if there are results and query isn't empty
         if (results.length && query && !hasSelected) {
             setIsOpen(true)
         } else {
             setIsOpen(false)
         }
-    }, [results.length, query, hasSelected])
+    }, [query, results.length, hasSelected])
 
     return (
         <Controller
@@ -73,8 +74,9 @@ export default function FuzzySearchDropdownInput<T extends FieldValues>({
                         </Button>
                     </Flex>
                     <DropdownMenu.Root open={isOpen} onOpenChange={setIsOpen}>
-                        <DropdownMenu.Trigger inputMode='text'>
+                        <DropdownMenu.Trigger>
                             <TextField.Root {...field}>
+                                <Form.Control asChild>
                                     <>
                                         <TextField.Input
                                             ref={inputRef}
@@ -82,22 +84,19 @@ export default function FuzzySearchDropdownInput<T extends FieldValues>({
                                             placeholder="Type to search..."
                                             value={query}
                                             onChange={(e) => {
+                                                e.stopPropagation()
+                                                e.preventDefault()
                                                 setQuery(e.target.value)
                                                 if (hasSelected) {
                                                     setHasSelected(false)
                                                 }
-                                            }}
-                                            onFocus={() => setIsOpen(true)}
-                                            onBlur={() => {
-                                                setTimeout(() => {
-                                                    setIsOpen(false)
-                                                }, 100)
                                             }}
                                         />
                                         <TextField.Slot>
                                             <MagnifyingGlassIcon />
                                         </TextField.Slot>
                                     </>
+                                </Form.Control>
                             </TextField.Root>
                         </DropdownMenu.Trigger>
                         {isOpen && (
@@ -112,15 +111,22 @@ export default function FuzzySearchDropdownInput<T extends FieldValues>({
                                 avoidCollisions={true}
                                 onFocus={(event) => {
                                     event.preventDefault()
+                                    event.stopPropagation()
                                     inputRef.current?.focus()
                                 }}
                             >
                                 {results.map((item) => (
                                     <DropdownMenu.Item
-                                        className="cursor-pointer"
+                                        onPointerLeave={(event) =>
+                                            event.preventDefault()
+                                        }
+                                        onPointerMove={(event) =>
+                                            event.preventDefault()
+                                        }
                                         key={item.id}
                                         onSelect={() => {
                                             field.onChange(item.id)
+                                            inputRef.current?.focus()
                                             setIsOpen(false)
                                             setHasSelected(true)
                                             setQuery(item.name)
