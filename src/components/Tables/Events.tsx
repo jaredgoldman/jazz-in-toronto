@@ -36,7 +36,7 @@ export function EventsTable() {
         .setZone('America/New_York')
         .toJSDate()
     const [useStart, setUseStart] = useState(true)
-    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+    const [alertDialogOpen, setAlertDialogueOpen] = useState(false)
 
     /*
      * Queries/Mutations
@@ -72,8 +72,8 @@ export function EventsTable() {
     )
 
     const handleBatchEditClick = useCallback(() => {
-        setDeleteDialogOpen(true)
-    }, [setDeleteDialogOpen])
+        setAlertDialogueOpen(true)
+    }, [setAlertDialogueOpen])
 
     const handleApprove = useCallback(
         (event: EventWithArtistVenue) => {
@@ -417,8 +417,8 @@ export function EventsTable() {
                 )}
             {getAllEventsQuery.isLoading && <Loading />}
             <ConfirmActionDialogue
-                open={deleteDialogOpen}
-                setOpen={setDeleteDialogOpen}
+                open={alertDialogOpen}
+                setOpen={setAlertDialogueOpen}
                 onAction={handleApproveMany}
                 label="Batch approve?"
                 description="Are you sure you want to approve all selected events?"

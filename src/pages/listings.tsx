@@ -81,13 +81,7 @@ export default function Listings() {
                 </Text>
             }
         >
-            <Flex
-                width="100%"
-                align="center"
-                direction="column"
-                px="6"
-                py="9"
-            >
+            <Flex width="100%" align="center" direction="column" px="6" py="9">
                 <Flex direction="column" width="100%" className="max-w-[65rem]">
                     <Heading
                         size={{ initial: '8', xs: '9' }}
