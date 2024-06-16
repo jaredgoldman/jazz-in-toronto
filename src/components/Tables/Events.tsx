@@ -24,6 +24,7 @@ import { Button } from '@radix-ui/themes'
 import { PaginationButtonGroup } from './components/PaginationButtonGroup'
 import { DateTime } from 'luxon'
 import { formatTime } from '~/utils'
+import { ConfirmActionDialogue } from '../ConfirmActionDialogue'
 
 const columnHelper = createColumnHelper<EventWithArtistVenue>()
 
@@ -35,14 +36,15 @@ export function EventsTable() {
         .setZone('America/New_York')
         .toJSDate()
     const [useStart, setUseStart] = useState(true)
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
 
     /*
      * Queries/Mutations
      */
-
     const setFeaturedMutation = api.event.setFeatured.useMutation()
     const deleteMutation = api.event.delete.useMutation()
     const approveMutation = api.event.approve.useMutation()
+    const approveManyMutation = api.event.approveMany.useMutation()
     const getAllEventsQuery = api.event.getAll.useQuery({
         showUnapproved: true,
         start: useStart ? defaultDate : undefined
@@ -69,9 +71,9 @@ export function EventsTable() {
         [router]
     )
 
-    const handleBatchClick = useCallback(() => {
-        console.log('batch edit')
-    }, [])
+    const handleBatchEditClick = useCallback(() => {
+        setDeleteDialogOpen(true)
+    }, [setDeleteDialogOpen])
 
     const handleApprove = useCallback(
         (event: EventWithArtistVenue) => {
@@ -97,6 +99,29 @@ export function EventsTable() {
         },
         [approveMutation, toast, getAllEventsQuery]
     )
+
+
+    const handleApproveMany = useCallback(() => {
+        const selectedIds = Object.keys(rowSelection).filter(
+            (id) => rowSelection[id]
+        )
+        approveManyMutation.mutate(selectedIds, {
+            onSuccess: () => {
+                toast({
+                    title: 'Success',
+                    message: 'Events approved'
+                })
+                void getAllEventsQuery.refetch()
+            },
+            onError: () => {
+                toast({
+                    title: 'Error',
+                    message: 'Approving events failed',
+                    type: 'error'
+                })
+            }
+        })
+    }, [approveManyMutation])
 
     const handleToggleFeatured = useCallback(
         (event: EventWithArtistVenue) => {
@@ -280,14 +305,6 @@ export function EventsTable() {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
 
-    useEffect(() => {
-        if (Object.values(rowSelection).length) {
-            const selectedIds = Object.keys(rowSelection).filter(
-                (id) => rowSelection[id]
-            )
-        }
-    }, [rowSelection])
-
     const table = useReactTable<EventWithArtistVenue>({
         data: getAllEventsQuery.data ?? [],
         columns,
@@ -340,7 +357,7 @@ export function EventsTable() {
                                 color="amber"
                                 size="4"
                                 variant="outline"
-                                onClick={handleBatchClick}
+                                onClick={handleBatchEditClick}
                             >
                                 Approve All
                             </Button>
@@ -399,6 +416,15 @@ export function EventsTable() {
                     </Flex>
                 )}
             {getAllEventsQuery.isLoading && <Loading />}
+            <ConfirmActionDialogue
+                open={deleteDialogOpen}
+                setOpen={setDeleteDialogOpen}
+                onAction={handleApproveMany}
+                label="Batch approve?"
+                description="Are you sure you want to approve all selected events?"
+                actionButtonLabel="Approve all"
+                level="warn"
+            />
         </Flex>
     )
 }

@@ -2,8 +2,7 @@ import { signOut, useSession } from 'next-auth/react'
 import Link from '../Link'
 import { Button, Heading, Flex, Separator, Box } from '@radix-ui/themes'
 import { navLinks, HeaderType } from './utils'
-import { HeaderDrawer } from './components/HeaderDrawer'
-import { HeaderDropDown } from './components/HeaderDropDown'
+import { HeaderDropDown, HeaderDrawer } from './components'
 
 export type Props = {
     headerType: HeaderType

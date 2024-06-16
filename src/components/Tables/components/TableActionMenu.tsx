@@ -1,8 +1,8 @@
 import { DropdownMenu } from '@radix-ui/themes'
 import { DotsVerticalIcon } from '@radix-ui/react-icons'
 import { useState } from 'react'
-import { ConfirmDelete } from './ConfirmDelete'
 import { Flex } from '@radix-ui/themes'
+import { ConfirmActionDialogue } from '~/components/ConfirmActionDialogue'
 
 type Props = {
     isFeatured: boolean
@@ -56,10 +56,13 @@ export function TableActionMenu({
                     </DropdownMenu.Item>
                 </DropdownMenu.Content>
             </DropdownMenu.Root>
-            <ConfirmDelete
-                onDelete={onDelete}
+            <ConfirmActionDialogue
+                onAction={onDelete}
                 open={deleteDialogOpen}
                 setOpen={setDeleteDialogOpen}
+                description="You are about to delete a record. This action cannot be undone."
+                level="error"
+                actionButtonLabel="Delete"
             />
         </>
     )

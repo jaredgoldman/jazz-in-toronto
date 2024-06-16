@@ -9,10 +9,7 @@ import { HeaderType } from '~/components/Header/utils'
 import { Toast } from '~/components/Toast/Toast'
 import { useAtomValue } from 'jotai'
 import { toastAtom } from '~/hooks/useToast'
-import {
-    Breadcrumbs,
-    BreadcrumbProps
-} from '~/components/Breadcrumbs/Breadcrumbs'
+import { Breadcrumbs, BreadcrumbProps } from '~/components/Breadcrumbs'
 
 interface Props {
     pageTitle: string
