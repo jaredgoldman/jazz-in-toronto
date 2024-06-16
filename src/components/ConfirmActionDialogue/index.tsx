@@ -18,19 +18,28 @@ const buttomColorMap = {
 } as const
 
 /**
- * ConfirmActtionDialogue component used for triggering an action
+ * ConfirmActionDialogue component used for triggering an action.
  *
+ * @param {boolean} open - Indicates whether the dialog is open.
+ * @param {function} setOpen - Function to set the open state of the dialog.
+ * @param {function} onAction - Function to call when the action button is clicked.
+ * @param {'info' | 'warn' | 'error'} [level='info'] - The severity level of the action.
+ * @param {string} label - The title of the dialog.
+ * @param {string} description - The description of the action to confirm.
+ * @param {string} actionButtonLabel - The label for the action button.
+ * @param {string} [cancelButtonLabel='Cancel'] - The label for the cancel button.
+ * @returns {JSX.Element} The rendered ConfirmActionDialogue component.
  */
 export const ConfirmActionDialogue = ({
     onAction,
     open,
     setOpen,
     level = 'info',
-      label,
+    label,
     description,
     cancelButtonLabel = 'Cancel',
     actionButtonLabel
-}: Props) => (
+}: Props): JSX.Element => (
     <AlertDialog.Root open={open} onOpenChange={setOpen}>
         <AlertDialog.Content style={{ maxWidth: 450 }}>
             <AlertDialog.Title>{label}</AlertDialog.Title>

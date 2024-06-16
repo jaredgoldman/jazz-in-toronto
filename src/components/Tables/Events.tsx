@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { api } from '~/utils/api'
 import {
     flexRender,
@@ -99,7 +99,6 @@ export function EventsTable() {
         },
         [approveMutation, toast, getAllEventsQuery]
     )
-
 
     const handleApproveMany = useCallback(() => {
         const selectedIds = Object.keys(rowSelection).filter(
@@ -352,14 +351,14 @@ export function EventsTable() {
                 </Flex>
                 <Flex gap="4">
                     {Object.values(rowSelection).length ? (
-                            <Button
-                                color="amber"
-                                size="4"
-                                variant="outline"
-                                onClick={handleBatchEditClick}
-                            >
-                                Approve All
-                            </Button>
+                        <Button
+                            color="amber"
+                            size="4"
+                            variant="outline"
+                            onClick={handleBatchEditClick}
+                        >
+                            Approve All
+                        </Button>
                     ) : null}
                     <Button
                         size="4"
