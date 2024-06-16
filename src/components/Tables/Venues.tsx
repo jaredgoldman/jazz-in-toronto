@@ -47,7 +47,6 @@ export function VenuesTable() {
         { id: 'Approved', desc: false }
     ])
 
-
     /*
      * Queries/Mutations
      */
@@ -132,7 +131,7 @@ export function VenuesTable() {
                 })
             }
         })
-    }, [approveManyMutation])
+    }, [approveManyMutation, rowSelection, getAllVenuesQuery, toast])
 
     const handleToggleFeatured = useCallback(
         (venue: Venue) => {
@@ -283,7 +282,6 @@ export function VenuesTable() {
         ],
         [handleDelete, handleEditClick, handleToggleFeatured, handleApprove]
     )
-
 
     const table = useReactTable<Venue>({
         data: getAllVenuesQuery.data ?? [],

@@ -130,7 +130,7 @@ export function EventsTable() {
                 })
             }
         })
-    }, [approveManyMutation])
+    }, [approveManyMutation, rowSelection, toast, getAllEventsQuery])
 
     const handleToggleFeatured = useCallback(
         (event: EventWithArtistVenue) => {
@@ -305,7 +305,6 @@ export function EventsTable() {
         ],
         [handleDelete, handleEditClick, handleToggleFeatured, handleApprove]
     )
-
 
     const table = useReactTable<EventWithArtistVenue>({
         data: getAllEventsQuery.data ?? [],
