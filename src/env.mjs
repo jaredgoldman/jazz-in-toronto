@@ -17,9 +17,7 @@ export const env = createEnv({
         NEXTAUTH_SECRET: z.string(),
         UPLOADTHING_SECRET: z.string(),
         UPLOADTHING_APP_ID: z.string(),
-        CHROME_EXECUTABLE_PATH: z.string(),
         BASE_URL: z.string().url(),
-        SHOW_UNAPPROVED_ITEMS: z.boolean().optional()
     },
 
     /**
@@ -47,9 +45,7 @@ export const env = createEnv({
         NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
         UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
         UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
-        CHROME_EXECUTABLE_PATH: process.env.CHROME_EXECUTABLE_PATH,
         BASE_URL: process.env.BASE_URL,
-        SHOW_UNAPPROVED_ITEMS: !!process.env.SHOW_UNAPPROVED_ITEMS || false
     },
     /**
      * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

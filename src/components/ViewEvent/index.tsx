@@ -40,7 +40,7 @@ export default function ViewEvent({ event }: Props) {
                 </Link>
             </Heading>
             <Heading size="7">
-                {formatTime(event.startDate, 'EEEE, MMMM do, yyyy')}
+                {formatTime(event.startDate, 'EEEE, MMMM dd, yyyy')}
             </Heading>
             <Heading size="7">
                 {formatTime(event.startDate)} - {formatTime(event.endDate)}

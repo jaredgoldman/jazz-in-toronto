@@ -66,7 +66,7 @@ export default function Listings() {
         setSelectedDate(DateTime.fromISO(date).startOf('day').toJSDate())
     }
 
-    const headingDate = formatTime(selectedDate, 'EEEE, MMMM do, yyyy')
+    const headingDate = formatTime(selectedDate, 'EEEE, MMMM dd, yyyy')
 
     const calendarHeadingDate = formatTime(selectedDate, 'MMMM yyyy')
 

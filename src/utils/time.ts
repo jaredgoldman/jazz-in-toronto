@@ -1,8 +1,8 @@
-import { formatInTimeZone } from 'date-fns-tz'
+import { DateTime } from 'luxon'
 
 /**
  * Format js Date for FE
  */
 export const formatTime = (time: Date, format = 'h:mm a') => {
-    return formatInTimeZone(time, 'America/Toronto', format)
+    return DateTime.fromJSDate(time).setZone('America/Toronto').toFormat(format)
 }
