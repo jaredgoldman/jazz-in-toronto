@@ -83,7 +83,8 @@ export const venueRouter = createTRPCRouter({
                 instagramHandle: z.string().optional(),
                 website: z.string().optional(),
                 active: z.boolean().optional(),
-                description: z.string().optional()
+                description: z.string().optional(),
+                phoneNumber: z.string().optional()
             })
         )
         .mutation(async ({ ctx, input }) => {
@@ -162,6 +163,5 @@ export const venueRouter = createTRPCRouter({
                 where: { id: { in: input } },
                 data: { approved: true }
             })
-        }),
-
+        })
 })
