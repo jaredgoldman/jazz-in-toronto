@@ -104,7 +104,7 @@ export default function ViewArtist({ artist, events }: Props) {
                                             <Text>
                                                 {formatTime(
                                                     event.startDate,
-                                                    'EEEE, MMMM do, yyyy, h:mm a'
+                                                    'EEEE, MMMM dd, yyyy, h:mm a'
                                                 )}
                                             </Text>
                                             <Link href={`/venue/${event.venueId}`}>{event.venue.name}</Link>
