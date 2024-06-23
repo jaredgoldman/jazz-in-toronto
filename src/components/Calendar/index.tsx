@@ -36,8 +36,9 @@ export default function Calendar({ selectedDate }: Props) {
         if (!monthlyEvents) return
         const monthlyEventsCopy = [...monthlyEvents]
         const rows = []
+        const weeksInMonth = Math.ceil(monthlyEventsCopy.length / 7)
         // map events to calendar rows
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < weeksInMonth; i++) {
             const rowDays = monthlyEventsCopy.splice(0, 7)
             const calendarRowDays = (
                 <Table.Row key={i}>
