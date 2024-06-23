@@ -215,11 +215,20 @@ export const eventRouter = createTRPCRouter({
     getAllByMonth: publicProcedure
         .input(z.object({ month: z.number(), year: z.number() }))
         .query(({ ctx, input }) => {
+            const startOfMonth = DateTime.fromObject(
+                { year: input.year, month: input.month + 1, day: 1 },
+                { zone: 'America/New_York' }
+            )
+                .startOf('day')
+                .toUTC()
+
+            const startOfNextMonth = startOfMonth.plus({ months: 1 }).toUTC()
+
             return ctx.prisma.event.findMany({
                 where: {
                     startDate: {
-                        gte: new Date(input.year, input.month, 1),
-                        lt: new Date(input.year, input.month + 1, 1)
+                        gte: startOfMonth.toJSDate(),
+                        lt: startOfNextMonth.toJSDate()
                     },
                     approved: true
                 },
