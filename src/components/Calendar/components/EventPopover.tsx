@@ -34,7 +34,7 @@ export default function EventPopover({ event, children }: PopoverProps) {
             >
                 <Flex direction="column" gap="3">
                     <Box>
-                        <Heading>{event.name}</Heading>
+                        <Heading>{event.name ? event.name : event.artist.name}</Heading>
                         <Link href={`venue/${event.venue.id}`}>
                             {event.venue.name}
                         </Link>
