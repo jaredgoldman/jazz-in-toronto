@@ -142,9 +142,9 @@ export const artistRouter = createTRPCRouter({
     approveMany: protectedProcedure
         .input(z.array(z.string().cuid()))
         .mutation(async ({ ctx, input }) => {
-            return ctx.prisma.event.updateMany({
+            return ctx.prisma.artist.updateMany({
                 where: { id: { in: input } },
                 data: { approved: true }
             })
-        }),
+        })
 })

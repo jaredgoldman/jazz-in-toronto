@@ -115,7 +115,8 @@ export function ArtistsTable() {
             (id) => rowSelection[id]
         )
         approveManyMutation.mutate(selectedIds, {
-            onSuccess: () => {
+            onSuccess: (data) => {
+              console.log(data)
                 toast({
                     title: 'Success',
                     message: 'Events approved'
