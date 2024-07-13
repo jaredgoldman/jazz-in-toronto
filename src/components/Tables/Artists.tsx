@@ -297,6 +297,7 @@ export function ArtistsTable() {
             date: dateFilter,
             time: timeFilter
         },
+        getRowId: (row) => row.id,
         enableRowSelection: true,
         enableMultiRowSelection: true,
         onRowSelectionChange: setRowSelection,
