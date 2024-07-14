@@ -1,4 +1,5 @@
-import { useState, useEffect, useMemo, useRef } from 'react'
+
+import { useState, useMemo, useEffect, useRef } from 'react'
 import Fuse from 'fuse.js'
 import { Venue, Artist } from '~/types/data' // Assuming these types are defined somewhere in your project
 import { TextField, DropdownMenu, Text, Button, Flex } from '@radix-ui/themes'
@@ -61,90 +62,119 @@ export default function FuzzySearchDropdownInput<T extends FieldValues>({
             control={control}
             rules={{ required }}
             name={name}
-            render={({ field }) => (
-                <Form.Field name={name}>
-                    <Flex align="center" justify="between">
-                        <Form.Label>{label}</Form.Label>
-                        <Button
-                            variant="ghost"
-                            type="button"
-                            onClick={() => setQuery('')}
-                        >
-                            Clear
-                        </Button>
-                    </Flex>
-                    <DropdownMenu.Root open={isOpen} onOpenChange={setIsOpen}>
-                        <DropdownMenu.Trigger>
-                            <TextField.Root {...field}>
-                                <Form.Control asChild>
-                                    <>
-                                        <TextField.Input
-                                            ref={inputRef}
-                                            type="text"
-                                            placeholder="Type to search..."
-                                            value={query}
-                                            onChange={(e) => {
-                                                e.stopPropagation()
-                                                e.preventDefault()
-                                                setQuery(e.target.value)
-                                                if (hasSelected) {
-                                                    setHasSelected(false)
-                                                }
-                                            }}
-                                        />
-                                        <TextField.Slot>
-                                            <MagnifyingGlassIcon />
-                                        </TextField.Slot>
-                                    </>
-                                </Form.Control>
-                            </TextField.Root>
-                        </DropdownMenu.Trigger>
-                        {isOpen && (
-                            <DropdownMenu.Content
-                                className="w-dropdown"
-                                sticky="always"
-                                size="2"
-                                onFocusOutside={(event) =>
-                                    event.preventDefault()
-                                }
-                                loop={true}
-                                avoidCollisions={true}
-                                onFocus={(event) => {
-                                    event.preventDefault()
-                                    event.stopPropagation()
-                                    inputRef.current?.focus()
-                                }}
+            render={({ field }) => {
+                useEffect(() => {
+                    // Set initial query value based on field value
+                    if (field.value && !query && !hasSelected) {
+                        const selectedItem = items.find(
+                            (x) => x.id === field.value
+                        )
+                        if (selectedItem) {
+                            setQuery(selectedItem.name)
+                            setHasSelected(true)
+                        }
+                    }
+                }, [field.value, items, query, hasSelected])
+
+                return (
+                    <Form.Field name={name}>
+                        <Flex align="center" justify="between">
+                            <Form.Label>{label}</Form.Label>
+                            <Button
+                                variant="ghost"
+                                type="button"
+                                onClick={() => setQuery('')}
                             >
-                                {results.map((item) => (
-                                    <DropdownMenu.Item
-                                        onPointerLeave={(event) =>
-                                            event.preventDefault()
-                                        }
-                                        onPointerMove={(event) =>
-                                            event.preventDefault()
-                                        }
-                                        key={item.id}
-                                        onSelect={() => {
-                                            field.onChange(item.id)
-                                            inputRef.current?.focus()
-                                            setIsOpen(false)
-                                            setHasSelected(true)
-                                            setQuery(item.name)
-                                        }}
-                                    >
-                                        {item.name}
-                                    </DropdownMenu.Item>
-                                ))}
-                            </DropdownMenu.Content>
+                                Clear
+                            </Button>
+                        </Flex>
+                        <DropdownMenu.Root open={isOpen} onOpenChange={setIsOpen}>
+                            <DropdownMenu.Trigger>
+                                <TextField.Root>
+                                    <Form.Control asChild>
+                                        <>
+                                            <TextField.Input
+                                                ref={inputRef}
+                                                type="text"
+                                                placeholder="Type to search..."
+                                                value={query}
+                                                onChange={(e) => {
+                                                    e.stopPropagation()
+                                                    e.preventDefault()
+                                                    setQuery(e.target.value)
+                                                    setHasSelected(false)
+                                                    field.onChange('')
+                                                }}
+                                                onFocus={() => {
+                                                    if (!query && field.value) {
+                                                        const selectedItem = items.find(
+                                                            (x) =>
+                                                                x.id ===
+                                                                field.value
+                                                        )
+                                                        if (selectedItem) {
+                                                            setQuery(
+                                                                selectedItem.name
+                                                            )
+                                                        }
+                                                    }
+                                                }}
+                                            />
+                                            <TextField.Slot>
+                                                <MagnifyingGlassIcon />
+                                            </TextField.Slot>
+                                        </>
+                                    </Form.Control>
+                                </TextField.Root>
+                            </DropdownMenu.Trigger>
+                            {isOpen && (
+                                <DropdownMenu.Content
+                                    className="w-dropdown"
+                                    sticky="always"
+                                    size="2"
+                                    onFocusOutside={(event) =>
+                                        event.preventDefault()
+                                    }
+                                    loop={true}
+                                    avoidCollisions={true}
+                                    onFocus={(event) => {
+                                        event.preventDefault()
+                                        event.stopPropagation()
+                                        inputRef.current?.focus()
+                                    }}
+                                >
+                                    {results.map((item) => (
+                                        <DropdownMenu.Item
+                                            onPointerLeave={(event) =>
+                                                event.preventDefault()
+                                            }
+                                            onPointerMove={(event) =>
+                                                event.preventDefault()
+                                            }
+                                            key={item.id}
+                                            onSelect={() => {
+                                                field.onChange(item.id)
+                                                inputRef.current?.focus()
+                                                setIsOpen(false)
+                                                setHasSelected(true)
+                                                setQuery(item.name)
+                                            }}
+                                        >
+                                            {item.name}
+                                        </DropdownMenu.Item>
+                                    ))}
+                                </DropdownMenu.Content>
+                            )}
+                        </DropdownMenu.Root>
+                        {error && (
+                            <Text size="2" color="red">
+                                {error.message}
+                            </Text>
                         )}
-                    </DropdownMenu.Root>
-                    {error && (
-                        <Text size="2" color="red">
-                            {error.message}
-                        </Text>
-                    )}
-                </Form.Field>
-            )}
+                    </Form.Field>
+                )
+            }}
         />
     )
 }
+

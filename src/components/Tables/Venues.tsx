@@ -29,7 +29,7 @@ import { PaginationButtonGroup } from './components/PaginationButtonGroup'
 import { useRouter } from 'next/router'
 import { useToast } from '~/hooks/useToast'
 import { ConfirmActionDialogue } from '../ConfirmActionDialogue'
-import { useLocalStorage } from '~/hooks/useLocalStorage'
+import { useLocalStorage, useDebounce } from '~/hooks'
 
 const columnHelper = createColumnHelper<Venue>()
 
@@ -57,9 +57,12 @@ export function VenuesTable() {
     const [columnFilters, setColumnFilters] =
         useState<ColumnFiltersState>(localStorage)
 
+    const debouncedColumnFilters = useDebounce(columnFilters, 500)
+
     useEffect(() => {
-        setLocalStorge(columnFilters)
-    }, [columnFilters])
+      console.log("setting storage")
+        setLocalStorge(debouncedColumnFilters)
+    }, [debouncedColumnFilters, setLocalStorge])
 
 
     /*

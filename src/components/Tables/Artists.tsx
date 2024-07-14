@@ -32,7 +32,7 @@ import { TableActionMenu } from './components/TableActionMenu'
 import { useToast } from '~/hooks/useToast'
 import { dateFilter } from './utils/filters'
 import { ConfirmActionDialogue } from '../ConfirmActionDialogue'
-import { useLocalStorage } from '~/hooks/useLocalStorage'
+import { useLocalStorage, useDebounce } from '~/hooks'
 
 const columnHelper = createColumnHelper<Artist>()
 
@@ -61,9 +61,11 @@ export function ArtistsTable() {
     const [columnFilters, setColumnFilters] =
         useState<ColumnFiltersState>(localStorage)
 
+    const debouncedColumnFilters = useDebounce(columnFilters, 300)
+
     useEffect(() => {
-        setLocalStorge(columnFilters)
-    }, [columnFilters])
+        setLocalStorge(debouncedColumnFilters)
+    }, [debouncedColumnFilters, setLocalStorge])
 
     /*
      * Queries/Mutations
