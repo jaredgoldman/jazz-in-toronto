@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState, useEffect } from 'react'
 import { api } from '~/utils/api'
 import {
     flexRender,
@@ -29,6 +29,7 @@ import { PaginationButtonGroup } from './components/PaginationButtonGroup'
 import { useRouter } from 'next/router'
 import { useToast } from '~/hooks/useToast'
 import { ConfirmActionDialogue } from '../ConfirmActionDialogue'
+import { useLocalStorage, useDebounce } from '~/hooks'
 
 const columnHelper = createColumnHelper<Venue>()
 
@@ -39,13 +40,39 @@ export function VenuesTable() {
     /*
      * State
      */
+    const [initialLoad, setInitialLoad] = useState(true)
     const [alertDialogOpen, setAlertDialogueOpen] = useState(false)
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
     const [sorting, setSorting] = useState<SortingState>([
         { id: 'Featured', desc: true },
         { id: 'Approved', desc: false }
     ])
+
+    /*
+     * Local storage access for column filter state
+     */
+    const [localStorage, setLocalStorage] = useLocalStorage<ColumnFiltersState>(
+        router.asPath,
+        []
+    )
+    const [columnFilters, setColumnFilters] =
+        useState<ColumnFiltersState>(localStorage)
+
+    const debouncedColumnFilters = useDebounce(columnFilters, 500)
+
+    useEffect(() => {
+        if (initialLoad) {
+            setInitialLoad(false)
+        } else {
+            setLocalStorage(debouncedColumnFilters)
+        }
+    }, [debouncedColumnFilters, setLocalStorage, initialLoad])
+
+    const handleClearFilters = useCallback(
+        () => setColumnFilters([]),
+        [setColumnFilters]
+    )
 
     /*
      * Queries/Mutations
@@ -54,6 +81,7 @@ export function VenuesTable() {
     const approveVenueMutation = api.venue.approve.useMutation()
     const approveManyMutation = api.venue.approveMany.useMutation()
     const deleteVenueMutation = api.venue.delete.useMutation()
+    const deleteManyMutation = api.venue.deleteMany.useMutation()
     const getAllVenuesQuery = api.venue.getAll.useQuery(
         {
             showUnapproved: true
@@ -180,6 +208,28 @@ export function VenuesTable() {
         },
         [deleteVenueMutation, getAllVenuesQuery, toast]
     )
+
+    const handleDeleteMany = useCallback(() => {
+        const selectedIds = Object.keys(rowSelection).filter(
+            (id) => rowSelection[id]
+        )
+        deleteManyMutation.mutate(selectedIds, {
+            onSuccess: () => {
+                toast({
+                    title: 'Success',
+                    message: 'Events deleted'
+                })
+                void getAllVenuesQuery.refetch()
+            },
+            onError: () => {
+                toast({
+                    title: 'Error',
+                    message: 'Deleting events failed',
+                    type: 'error'
+                })
+            }
+        })
+    }, [deleteManyMutation, rowSelection, toast, getAllVenuesQuery])
 
     /*
      * Table setup
@@ -310,12 +360,48 @@ export function VenuesTable() {
         getPaginationRowModel: getPaginationRowModel()
     })
 
+    const shouldShowBatchButtons = useMemo(
+        () => Object.values(rowSelection).length > 0,
+        [rowSelection]
+    )
+
     /*
      * Rendering
      */
     return (
         <Box>
             <Flex justify="end" mb="4" gap="4">
+                {shouldShowBatchButtons ? (
+                    <>
+                        <Button
+                            color="amber"
+                            size="3"
+                            variant="outline"
+                            onClick={handleBatchEditClick}
+                        >
+                            Approve Selected
+                        </Button>
+                        <Button
+                            color="red"
+                            size="3"
+                            variant="outline"
+                            onClick={() => setDeleteDialogOpen(true)}
+                        >
+                            Delete Selected
+                        </Button>
+                    </>
+                ) : null}
+                {Object.values(columnFilters).length ? (
+                    <Button
+                        color="amber"
+                        size="3"
+                        variant="outline"
+                        onClick={handleClearFilters}
+                    >
+                        Clear Filters
+                    </Button>
+                ) : null}
+
                 <Button
                     variant="outline"
                     size="4"
@@ -323,16 +409,6 @@ export function VenuesTable() {
                 >
                     Add New Venue
                 </Button>
-                {Object.values(rowSelection).length ? (
-                    <Button
-                        color="amber"
-                        size="4"
-                        variant="outline"
-                        onClick={handleBatchEditClick}
-                    >
-                        Approve All
-                    </Button>
-                ) : null}
             </Flex>
             {getAllVenuesQuery.data?.length ? (
                 <>
@@ -387,6 +463,15 @@ export function VenuesTable() {
                 description="Are you sure you want to approve all selected venues?"
                 actionButtonLabel="Approve all"
                 level="warn"
+            />
+            <ConfirmActionDialogue
+                open={deleteDialogOpen}
+                setOpen={setDeleteDialogOpen}
+                onAction={handleDeleteMany}
+                label="Batch delete?"
+                description="Are you sure you want to delete all selected events?"
+                actionButtonLabel="Delete all"
+                level="error"
             />
         </Box>
     )

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState, useEffect } from 'react'
 import { api } from '~/utils/api'
 import { Artist } from '~/types/data'
 import { HeaderCell } from './components'
@@ -32,6 +32,7 @@ import { TableActionMenu } from './components/TableActionMenu'
 import { useToast } from '~/hooks/useToast'
 import { dateFilter } from './utils/filters'
 import { ConfirmActionDialogue } from '../ConfirmActionDialogue'
+import { useLocalStorage, useDebounce } from '~/hooks'
 
 const columnHelper = createColumnHelper<Artist>()
 
@@ -42,8 +43,9 @@ export function ArtistsTable() {
     /*
      * State
      */
+    const [initialLoad, setInitialLoad] = useState(true)
     const [alertDialogOpen, setAlertDialogueOpen] = useState(false)
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
     const [sorting, setSorting] = useState<SortingState>([
         { id: 'Featured', desc: true },
@@ -52,12 +54,37 @@ export function ArtistsTable() {
     ])
 
     /*
+     * Local storage access for column filter state
+     */
+    const [localStorage, setLocalStorage] = useLocalStorage<ColumnFiltersState>(
+        router.asPath,
+        []
+    )
+    const [columnFilters, setColumnFilters] =
+        useState<ColumnFiltersState>(localStorage)
+
+    const debouncedColumnFilters = useDebounce(columnFilters, 300)
+
+    useEffect(() => {
+        setLocalStorage(debouncedColumnFilters)
+    }, [debouncedColumnFilters, setLocalStorage])
+
+    useEffect(() => {
+        if (initialLoad) {
+            setInitialLoad(false)
+        } else {
+            setLocalStorage(debouncedColumnFilters)
+        }
+    }, [debouncedColumnFilters, setLocalStorage, initialLoad])
+
+    /*
      * Queries/Mutations
      */
     const approveArtistMutation = api.artist.approve.useMutation()
     const approveManyMutation = api.artist.approveMany.useMutation()
     const setFeaturedMutation = api.artist.setFeatured.useMutation()
     const deleteArtistMutation = api.artist.delete.useMutation()
+    const deleteManyMutation = api.artist.deleteMany.useMutation()
     const getAllArtistsQuery = api.artist.getAll.useQuery({
         showUnapproved: true
     })
@@ -116,7 +143,7 @@ export function ArtistsTable() {
         )
         approveManyMutation.mutate(selectedIds, {
             onSuccess: (data) => {
-              console.log(data)
+                console.log(data)
                 toast({
                     title: 'Success',
                     message: 'Events approved'
@@ -181,6 +208,28 @@ export function ArtistsTable() {
         },
         [deleteArtistMutation, getAllArtistsQuery, toast]
     )
+
+    const handleDeleteMany = useCallback(() => {
+        const selectedIds = Object.keys(rowSelection).filter(
+            (id) => rowSelection[id]
+        )
+        deleteManyMutation.mutate(selectedIds, {
+            onSuccess: () => {
+                toast({
+                    title: 'Success',
+                    message: 'Events deleted'
+                })
+                void getAllArtistsQuery.refetch()
+            },
+            onError: () => {
+                toast({
+                    title: 'Error',
+                    message: 'Deleting events failed',
+                    type: 'error'
+                })
+            }
+        })
+    }, [deleteManyMutation, rowSelection, toast, getAllArtistsQuery])
 
     /*
      * Table setup
@@ -386,6 +435,15 @@ export function ArtistsTable() {
                 description="Are you sure you want to approve all selected artists?"
                 actionButtonLabel="Approve all"
                 level="warn"
+            />
+            <ConfirmActionDialogue
+                open={deleteDialogOpen}
+                setOpen={setDeleteDialogOpen}
+                onAction={handleDeleteMany}
+                label="Batch delete?"
+                description="Are you sure you want to delete all selected events?"
+                actionButtonLabel="Delete all"
+                level="error"
             />
         </Box>
     )

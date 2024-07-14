@@ -94,7 +94,7 @@ export default function VenueForm() {
                             />
                             {isAdmin ? (
                                 <Toggle
-                                    label="Auto-approve"
+                                    label="Approved"
                                     name="approved"
                                     control={control}
                                     error={errors.approved}

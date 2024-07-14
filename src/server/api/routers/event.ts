@@ -285,6 +285,14 @@ export const eventRouter = createTRPCRouter({
             })
         }),
 
+    deleteMany: protectedProcedure
+        .input(z.array(z.string().cuid()))
+        .mutation(({ ctx, input }) => {
+            return ctx.prisma.event.deleteMany({
+                where: { id: { in: input } }
+            })
+        }),
+
     post: protectedProcedure
         .input(
             z.object({
