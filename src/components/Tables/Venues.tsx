@@ -40,7 +40,9 @@ export function VenuesTable() {
     /*
      * State
      */
+    const [initialLoad, setInitialLoad] = useState(true)
     const [alertDialogOpen, setAlertDialogueOpen] = useState(false)
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
     const [sorting, setSorting] = useState<SortingState>([
         { id: 'Featured', desc: true },
@@ -50,7 +52,7 @@ export function VenuesTable() {
     /*
      * Local storage access for column filter state
      */
-    const [localStorage, setLocalStorge] = useLocalStorage<ColumnFiltersState>(
+    const [localStorage, setLocalStorage] = useLocalStorage<ColumnFiltersState>(
         router.asPath,
         []
     )
@@ -60,10 +62,17 @@ export function VenuesTable() {
     const debouncedColumnFilters = useDebounce(columnFilters, 500)
 
     useEffect(() => {
-      console.log("setting storage")
-        setLocalStorge(debouncedColumnFilters)
-    }, [debouncedColumnFilters, setLocalStorge])
+        if (initialLoad) {
+            setInitialLoad(false)
+        } else {
+            setLocalStorage(debouncedColumnFilters)
+        }
+    }, [debouncedColumnFilters, setLocalStorage, initialLoad])
 
+    const handleClearFilters = useCallback(
+        () => setColumnFilters([]),
+        [setColumnFilters]
+    )
 
     /*
      * Queries/Mutations
@@ -72,6 +81,7 @@ export function VenuesTable() {
     const approveVenueMutation = api.venue.approve.useMutation()
     const approveManyMutation = api.venue.approveMany.useMutation()
     const deleteVenueMutation = api.venue.delete.useMutation()
+    const deleteManyMutation = api.venue.deleteMany.useMutation()
     const getAllVenuesQuery = api.venue.getAll.useQuery(
         {
             showUnapproved: true
@@ -198,6 +208,28 @@ export function VenuesTable() {
         },
         [deleteVenueMutation, getAllVenuesQuery, toast]
     )
+
+    const handleDeleteMany = useCallback(() => {
+        const selectedIds = Object.keys(rowSelection).filter(
+            (id) => rowSelection[id]
+        )
+        deleteManyMutation.mutate(selectedIds, {
+            onSuccess: () => {
+                toast({
+                    title: 'Success',
+                    message: 'Events deleted'
+                })
+                void getAllVenuesQuery.refetch()
+            },
+            onError: () => {
+                toast({
+                    title: 'Error',
+                    message: 'Deleting events failed',
+                    type: 'error'
+                })
+            }
+        })
+    }, [deleteManyMutation, rowSelection, toast, getAllVenuesQuery])
 
     /*
      * Table setup
@@ -406,6 +438,16 @@ export function VenuesTable() {
                 actionButtonLabel="Approve all"
                 level="warn"
             />
+            <ConfirmActionDialogue
+                open={deleteDialogOpen}
+                setOpen={setDeleteDialogOpen}
+                onAction={handleDeleteMany}
+                label="Batch delete?"
+                description="Are you sure you want to delete all selected events?"
+                actionButtonLabel="Delete all"
+                level="error"
+            />
+
         </Box>
     )
 }

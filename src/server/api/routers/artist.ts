@@ -86,6 +86,14 @@ export const artistRouter = createTRPCRouter({
             })
         }),
 
+    deleteMany: protectedProcedure
+        .input(z.array(z.string().cuid()))
+        .mutation(({ ctx, input }) => {
+            return ctx.prisma.artist.deleteMany({
+                where: { id: { in: input } }
+            })
+        }),
+
     deletePhoto: protectedProcedure
         .input(z.object({ id: z.string().cuid(), fileKey: z.string() }))
         .mutation(async ({ ctx, input }) => {

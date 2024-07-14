@@ -43,7 +43,9 @@ export function ArtistsTable() {
     /*
      * State
      */
+    const [initialLoad, setInitialLoad] = useState(true)
     const [alertDialogOpen, setAlertDialogueOpen] = useState(false)
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
     const [sorting, setSorting] = useState<SortingState>([
         { id: 'Featured', desc: true },
@@ -54,7 +56,7 @@ export function ArtistsTable() {
     /*
      * Local storage access for column filter state
      */
-    const [localStorage, setLocalStorge] = useLocalStorage<ColumnFiltersState>(
+    const [localStorage, setLocalStorage] = useLocalStorage<ColumnFiltersState>(
         router.asPath,
         []
     )
@@ -64,8 +66,16 @@ export function ArtistsTable() {
     const debouncedColumnFilters = useDebounce(columnFilters, 300)
 
     useEffect(() => {
-        setLocalStorge(debouncedColumnFilters)
-    }, [debouncedColumnFilters, setLocalStorge])
+        setLocalStorage(debouncedColumnFilters)
+    }, [debouncedColumnFilters, setLocalStorage])
+
+    useEffect(() => {
+        if (initialLoad) {
+            setInitialLoad(false)
+        } else {
+            setLocalStorage(debouncedColumnFilters)
+        }
+    }, [debouncedColumnFilters, setLocalStorage, initialLoad])
 
     /*
      * Queries/Mutations
@@ -74,6 +84,7 @@ export function ArtistsTable() {
     const approveManyMutation = api.artist.approveMany.useMutation()
     const setFeaturedMutation = api.artist.setFeatured.useMutation()
     const deleteArtistMutation = api.artist.delete.useMutation()
+    const deleteManyMutation = api.artist.deleteMany.useMutation()
     const getAllArtistsQuery = api.artist.getAll.useQuery({
         showUnapproved: true
     })
@@ -197,6 +208,28 @@ export function ArtistsTable() {
         },
         [deleteArtistMutation, getAllArtistsQuery, toast]
     )
+
+    const handleDeleteMany = useCallback(() => {
+        const selectedIds = Object.keys(rowSelection).filter(
+            (id) => rowSelection[id]
+        )
+        deleteManyMutation.mutate(selectedIds, {
+            onSuccess: () => {
+                toast({
+                    title: 'Success',
+                    message: 'Events deleted'
+                })
+                void getAllArtistsQuery.refetch()
+            },
+            onError: () => {
+                toast({
+                    title: 'Error',
+                    message: 'Deleting events failed',
+                    type: 'error'
+                })
+            }
+        })
+    }, [deleteManyMutation, rowSelection, toast, getAllArtistsQuery])
 
     /*
      * Table setup
@@ -402,6 +435,15 @@ export function ArtistsTable() {
                 description="Are you sure you want to approve all selected artists?"
                 actionButtonLabel="Approve all"
                 level="warn"
+            />
+            <ConfirmActionDialogue
+                open={deleteDialogOpen}
+                setOpen={setDeleteDialogOpen}
+                onAction={handleDeleteMany}
+                label="Batch delete?"
+                description="Are you sure you want to delete all selected events?"
+                actionButtonLabel="Delete all"
+                level="error"
             />
         </Box>
     )

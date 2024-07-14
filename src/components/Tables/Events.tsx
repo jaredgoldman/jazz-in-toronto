@@ -10,7 +10,8 @@ import {
     ColumnFiltersState,
     createColumnHelper,
     getPaginationRowModel,
-    RowSelectionState
+    RowSelectionState,
+    TableState
 } from '@tanstack/react-table'
 import { EventWithArtistVenue } from '~/types/data'
 import { Table, Flex, Badge, Heading, Text, Checkbox } from '@radix-ui/themes'
@@ -30,7 +31,6 @@ import { useLocalStorage, useDebounce } from '~/hooks'
 const columnHelper = createColumnHelper<EventWithArtistVenue>()
 
 export function EventsTable() {
-  console.log("EVENTS TABLE RENDERING")
     const { toast } = useToast()
     const router = useRouter()
     const defaultDate = DateTime.now()
@@ -40,6 +40,7 @@ export function EventsTable() {
     /*
      * State
      */
+    const [initialLoad, setInitialLoad] = useState(true)
     const [useStart, setUseStart] = useState(true)
     const [alertDialogOpen, setAlertDialogueOpen] = useState(false)
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
@@ -58,7 +59,6 @@ export function EventsTable() {
     )
     const [columnFilters, setColumnFilters] =
         useState<ColumnFiltersState>(localStorage)
-    const [initialLoad, setInitialLoad] = useState(true)
 
     // Use the debounce hook
     const debouncedColumnFilters = useDebounce(columnFilters, 1000)
@@ -496,8 +496,8 @@ export function EventsTable() {
                 onAction={handleApproveMany}
                 label="Batch approve?"
                 description="Are you sure you want to approve all selected events?"
-                actionButtonLabel="Approve all"
-                level="warn"
+                actionButtonLabel="Approve selected"
+                level="info"
             />
             <ConfirmActionDialogue
                 open={deleteDialogOpen}
@@ -505,7 +505,7 @@ export function EventsTable() {
                 onAction={handleDeleteMany}
                 label="Batch delete?"
                 description="Are you sure you want to delete all selected events?"
-                actionButtonLabel="Delete all"
+                actionButtonLabel="Delete selected"
                 level="error"
             />
         </Flex>
