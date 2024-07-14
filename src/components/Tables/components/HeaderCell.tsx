@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react'
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { Table, Flex, Box, TextField } from '@radix-ui/themes'
 import { Header } from '@tanstack/react-table'
 import {
@@ -7,20 +7,27 @@ import {
     CaretUpIcon
 } from '@radix-ui/react-icons'
 import { flexRender } from '@tanstack/react-table'
+import { useDebounce } from '~/hooks'
 
 export type Props<TData> = {
     header: Header<TData, unknown>
 }
 
-// TODO: If the conditional logic in this component gets too complex, consider
-// creating seperate components for each filter type
+/**
+ * Header cell component
+ */
 export function HeaderCell<TData>({ header }: Props<TData>) {
-    const sortingIcons = {
-        asc: <CaretUpIcon />,
-        desc: <CaretDownIcon />
-    }
+    const [filterValue, setFilterValue] = useState<string>('')
+    const debouncedFilterValue = useDebounce(filterValue, 300)
+    const sortingIcons = useMemo(
+        () => ({
+            asc: <CaretUpIcon />,
+            desc: <CaretDownIcon />
+        }),
+        []
+    )
 
-    const getFilterInputType = (filterFn?: string) => {
+    const getFilterInputType = useCallback((filterFn?: string) => {
         switch (filterFn) {
             case 'date':
                 return 'date'
@@ -31,13 +38,20 @@ export function HeaderCell<TData>({ header }: Props<TData>) {
             default:
                 return 'text'
         }
-    }
+    }, [])
 
-    const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault()
-        const newValue = e.target.value
-        header.column.setFilterValue(newValue)
-    }
+    const handleOnChange = useCallback(
+        (e: ChangeEvent<HTMLInputElement>) => {
+            e.preventDefault()
+            setFilterValue(e.target.value)
+        },
+        [filterValue]
+    )
+
+    useEffect(() => {
+        if (!header.column.getCanFilter() || !debouncedFilterValue) return
+        header.column.setFilterValue(debouncedFilterValue)
+    }, [debouncedFilterValue])
 
     return (
         <Table.ColumnHeaderCell
@@ -68,7 +82,7 @@ export function HeaderCell<TData>({ header }: Props<TData>) {
                             type={getFilterInputType(
                                 header.column.columnDef.filterFn as string
                             )}
-                            value={String(header.column.getFilterValue() ?? '')}
+                            value={filterValue}
                             onChange={handleOnChange}
                             placeholder="Filter"
                         />

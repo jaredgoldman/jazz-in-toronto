@@ -55,12 +55,13 @@ export function EventsTable() {
         router.asPath,
         []
     )
-    const [columnFilters, setColumnFilters] =
-        useState<ColumnFiltersState>(localStorage)
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
+        localStorage
+    )
     const [initialLoad, setInitialLoad] = useState(true)
 
     // Use the debounce hook
-    const debouncedColumnFilters = useDebounce(columnFilters, 1000)
+    const debouncedColumnFilters = useDebounce(columnFilters, 500)
 
     useEffect(() => {
         if (initialLoad) {
@@ -70,7 +71,10 @@ export function EventsTable() {
         }
     }, [debouncedColumnFilters, setLocalStorage, initialLoad])
 
-    const handleClearFilters = useCallback(() => setColumnFilters([]), [setColumnFilters])
+    const handleClearFilters = useCallback(
+        () => setColumnFilters([]),
+        [setColumnFilters]
+    )
     /*
      * Queries/Mutations
      */
@@ -227,8 +231,6 @@ export function EventsTable() {
             }
         })
     }, [deleteManyMutation, rowSelection, toast, getAllEventsQuery])
-
-
 
     /*
      * Table setup
@@ -415,13 +417,23 @@ export function EventsTable() {
                             >
                                 Approve Selected
                             </Button>
-                            <Button color="red" size="3" variant="outline" onClick={() => setDeleteDialogOpen(true)}>
+                            <Button
+                                color="red"
+                                size="3"
+                                variant="outline"
+                                onClick={() => setDeleteDialogOpen(true)}
+                            >
                                 Delete Selected
                             </Button>
                         </>
                     ) : null}
                     {Object.values(columnFilters).length ? (
-                        <Button color="amber" size="3" variant="outline" onClick={handleClearFilters}>
+                        <Button
+                            color="amber"
+                            size="3"
+                            variant="outline"
+                            onClick={handleClearFilters}
+                        >
                             Clear Filters
                         </Button>
                     ) : null}
