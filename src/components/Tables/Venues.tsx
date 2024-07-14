@@ -360,12 +360,48 @@ export function VenuesTable() {
         getPaginationRowModel: getPaginationRowModel()
     })
 
+    const shouldShowBatchButtons = useMemo(
+        () => Object.values(rowSelection).length > 0,
+        [rowSelection]
+    )
+
     /*
      * Rendering
      */
     return (
         <Box>
             <Flex justify="end" mb="4" gap="4">
+                {shouldShowBatchButtons ? (
+                    <>
+                        <Button
+                            color="amber"
+                            size="3"
+                            variant="outline"
+                            onClick={handleBatchEditClick}
+                        >
+                            Approve Selected
+                        </Button>
+                        <Button
+                            color="red"
+                            size="3"
+                            variant="outline"
+                            onClick={() => setDeleteDialogOpen(true)}
+                        >
+                            Delete Selected
+                        </Button>
+                    </>
+                ) : null}
+                {Object.values(columnFilters).length ? (
+                    <Button
+                        color="amber"
+                        size="3"
+                        variant="outline"
+                        onClick={handleClearFilters}
+                    >
+                        Clear Filters
+                    </Button>
+                ) : null}
+
                 <Button
                     variant="outline"
                     size="4"
@@ -373,16 +409,6 @@ export function VenuesTable() {
                 >
                     Add New Venue
                 </Button>
-                {Object.values(rowSelection).length ? (
-                    <Button
-                        color="amber"
-                        size="4"
-                        variant="outline"
-                        onClick={handleBatchEditClick}
-                    >
-                        Approve All
-                    </Button>
-                ) : null}
             </Flex>
             {getAllVenuesQuery.data?.length ? (
                 <>
@@ -447,7 +473,6 @@ export function VenuesTable() {
                 actionButtonLabel="Delete all"
                 level="error"
             />
-
         </Box>
     )
 }

@@ -46,19 +46,19 @@ export function HeaderCell<TData>({ header }: Props<TData>) {
             e.preventDefault()
             setFilterValue(e.target.value)
         },
-        [filterValue]
+        [setFilterValue]
     )
 
     useEffect(() => {
         if (header.column.getCanFilter()) {
             setFilterValue(String(header.column.getFilterValue() ?? ''))
         }
-    }, [header.column.getFilterValue, header.column])
+    }, [header.column])
 
     useEffect(() => {
         if (!header.column.getCanFilter() || !debouncedFilterValue) return
         header.column.setFilterValue(debouncedFilterValue)
-    }, [debouncedFilterValue])
+    }, [debouncedFilterValue, header.column])
 
     return (
         <Table.ColumnHeaderCell

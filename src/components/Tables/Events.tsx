@@ -11,7 +11,6 @@ import {
     createColumnHelper,
     getPaginationRowModel,
     RowSelectionState,
-    TableState
 } from '@tanstack/react-table'
 import { EventWithArtistVenue } from '~/types/data'
 import { Table, Flex, Badge, Heading, Text, Checkbox } from '@radix-ui/themes'
