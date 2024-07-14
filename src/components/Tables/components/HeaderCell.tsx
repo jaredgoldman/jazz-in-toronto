@@ -13,12 +13,14 @@ export type Props<TData> = {
     header: Header<TData, unknown>
 }
 
-/**
- * Header cell component
- */
+// TODO: If the conditional logic in this component gets too complex, consider
+// creating seperate components for each filter type
 export function HeaderCell<TData>({ header }: Props<TData>) {
-    const [filterValue, setFilterValue] = useState<string>('')
-    const debouncedFilterValue = useDebounce(filterValue, 300)
+    // console.log("HEADER COLUMN RENDERING")
+    const [filterValue, setFilterValue] = useState<string>(
+        header.column.getFilterValue() as string
+    )
+    const debouncedFilterValue = useDebounce(filterValue, 500)
     const sortingIcons = useMemo(
         () => ({
             asc: <CaretUpIcon />,
@@ -44,9 +46,16 @@ export function HeaderCell<TData>({ header }: Props<TData>) {
         (e: ChangeEvent<HTMLInputElement>) => {
             e.preventDefault()
             setFilterValue(e.target.value)
+            // header.column.setFilterValue(e.target.value) // Set the filter value immediately
         },
         [filterValue]
     )
+
+    useEffect(() => {
+        if (header.column.getCanFilter()) {
+            setFilterValue(String(header.column.getFilterValue() ?? ''))
+        }
+    }, [header.column.getFilterValue, header.column])
 
     useEffect(() => {
         if (!header.column.getCanFilter() || !debouncedFilterValue) return

@@ -30,6 +30,7 @@ import { useLocalStorage, useDebounce } from '~/hooks'
 const columnHelper = createColumnHelper<EventWithArtistVenue>()
 
 export function EventsTable() {
+  console.log("EVENTS TABLE RENDERING")
     const { toast } = useToast()
     const router = useRouter()
     const defaultDate = DateTime.now()
@@ -55,13 +56,12 @@ export function EventsTable() {
         router.asPath,
         []
     )
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-        localStorage
-    )
+    const [columnFilters, setColumnFilters] =
+        useState<ColumnFiltersState>(localStorage)
     const [initialLoad, setInitialLoad] = useState(true)
 
     // Use the debounce hook
-    const debouncedColumnFilters = useDebounce(columnFilters, 500)
+    const debouncedColumnFilters = useDebounce(columnFilters, 1000)
 
     useEffect(() => {
         if (initialLoad) {
