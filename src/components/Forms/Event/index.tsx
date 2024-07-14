@@ -133,7 +133,7 @@ export default function EventForm() {
                             />
                             {isAdmin ? (
                                 <Toggle
-                                    label="Auto-approve"
+                                    label="Approved"
                                     name="approved"
                                     control={control}
                                     error={errors.approved}
