@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState, useEffect } from 'react'
 import { api } from '~/utils/api'
 import { Artist } from '~/types/data'
 import { HeaderCell } from './components'
@@ -32,6 +32,7 @@ import { TableActionMenu } from './components/TableActionMenu'
 import { useToast } from '~/hooks/useToast'
 import { dateFilter } from './utils/filters'
 import { ConfirmActionDialogue } from '../ConfirmActionDialogue'
+import { useLocalStorage } from '~/hooks/useLocalStorage'
 
 const columnHelper = createColumnHelper<Artist>()
 
@@ -43,13 +44,26 @@ export function ArtistsTable() {
      * State
      */
     const [alertDialogOpen, setAlertDialogueOpen] = useState(false)
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
     const [sorting, setSorting] = useState<SortingState>([
         { id: 'Featured', desc: true },
         { id: 'Approved', desc: false },
         { id: 'Name', desc: false }
     ])
+
+    /*
+     * Local storage access for column filter state
+     */
+    const [localStorage, setLocalStorge] = useLocalStorage<ColumnFiltersState>(
+        router.asPath,
+        []
+    )
+    const [columnFilters, setColumnFilters] =
+        useState<ColumnFiltersState>(localStorage)
+
+    useEffect(() => {
+        setLocalStorge(columnFilters)
+    }, [columnFilters])
 
     /*
      * Queries/Mutations
@@ -116,7 +130,7 @@ export function ArtistsTable() {
         )
         approveManyMutation.mutate(selectedIds, {
             onSuccess: (data) => {
-              console.log(data)
+                console.log(data)
                 toast({
                     title: 'Success',
                     message: 'Events approved'

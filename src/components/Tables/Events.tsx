@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { api } from '~/utils/api'
 import {
     flexRender,
@@ -25,6 +25,7 @@ import { PaginationButtonGroup } from './components/PaginationButtonGroup'
 import { DateTime } from 'luxon'
 import { formatTime } from '~/utils'
 import { ConfirmActionDialogue } from '../ConfirmActionDialogue'
+import { useLocalStorage } from '~/hooks/useLocalStorage'
 
 const columnHelper = createColumnHelper<EventWithArtistVenue>()
 
@@ -35,18 +36,30 @@ export function EventsTable() {
         .startOf('day')
         .setZone('America/New_York')
         .toJSDate()
-
     /*
      * State
      */
     const [useStart, setUseStart] = useState(true)
     const [alertDialogOpen, setAlertDialogueOpen] = useState(false)
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
     const [sorting, setSorting] = useState<SortingState>([
         { id: 'Featured', desc: true },
         { id: 'Approved', desc: false }
     ])
+
+    /*
+     * Local storage access for column filter state
+     */
+    const [localStorage, setLocalStorge] = useLocalStorage<ColumnFiltersState>(
+        router.asPath,
+        []
+    )
+    const [columnFilters, setColumnFilters] =
+        useState<ColumnFiltersState>(localStorage)
+
+    useEffect(() => {
+        setLocalStorge(columnFilters)
+    }, [columnFilters])
 
     /*
      * Queries/Mutations
