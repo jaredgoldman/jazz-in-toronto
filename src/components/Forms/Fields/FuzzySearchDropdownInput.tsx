@@ -1,4 +1,3 @@
-
 import { useState, useMemo, useEffect, useRef } from 'react'
 import Fuse from 'fuse.js'
 import { Venue, Artist } from '~/types/data' // Assuming these types are defined somewhere in your project
@@ -63,18 +62,14 @@ export default function FuzzySearchDropdownInput<T extends FieldValues>({
             rules={{ required }}
             name={name}
             render={({ field }) => {
-                useEffect(() => {
-                    // Set initial query value based on field value
-                    if (field.value && !query && !hasSelected) {
-                        const selectedItem = items.find(
-                            (x) => x.id === field.value
-                        )
-                        if (selectedItem) {
-                            setQuery(selectedItem.name)
-                            setHasSelected(true)
-                        }
+                // Set initial query value based on field value
+                if (field.value && !query && !hasSelected) {
+                    const selectedItem = items.find((x) => x.id === field.value)
+                    if (selectedItem) {
+                        setQuery(selectedItem.name)
+                        setHasSelected(true)
                     }
-                }, [field.value, items, query, hasSelected])
+                }
 
                 return (
                     <Form.Field name={name}>
@@ -88,7 +83,10 @@ export default function FuzzySearchDropdownInput<T extends FieldValues>({
                                 Clear
                             </Button>
                         </Flex>
-                        <DropdownMenu.Root open={isOpen} onOpenChange={setIsOpen}>
+                        <DropdownMenu.Root
+                            open={isOpen}
+                            onOpenChange={setIsOpen}
+                        >
                             <DropdownMenu.Trigger>
                                 <TextField.Root>
                                     <Form.Control asChild>
@@ -107,11 +105,12 @@ export default function FuzzySearchDropdownInput<T extends FieldValues>({
                                                 }}
                                                 onFocus={() => {
                                                     if (!query && field.value) {
-                                                        const selectedItem = items.find(
-                                                            (x) =>
-                                                                x.id ===
-                                                                field.value
-                                                        )
+                                                        const selectedItem =
+                                                            items.find(
+                                                                (x) =>
+                                                                    x.id ===
+                                                                    field.value
+                                                            )
                                                         if (selectedItem) {
                                                             setQuery(
                                                                 selectedItem.name
@@ -177,4 +176,3 @@ export default function FuzzySearchDropdownInput<T extends FieldValues>({
         />
     )
 }
-
