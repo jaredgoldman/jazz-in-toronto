@@ -30,6 +30,8 @@ import { useRouter } from 'next/router'
 import { useToast } from '~/hooks/useToast'
 import { ConfirmActionDialogue } from '../ConfirmActionDialogue'
 import { useLocalStorage, useDebounce } from '~/hooks'
+import Link from '../Link'
+import { simplifyURL } from '~/utils'
 
 const columnHelper = createColumnHelper<Venue>()
 
@@ -283,7 +285,10 @@ export function VenuesTable() {
                 filterFn: 'fuzzy'
             }),
             columnHelper.accessor((row) => row.website, {
-                cell: (info) => info.getValue(),
+                cell: (info) => {
+                    const content = info.getValue() ?? ""
+                    return <Link href={content}>{simplifyURL(content)}</Link>
+                },
                 header: 'Website',
                 filterFn: 'fuzzy'
             }),

@@ -1,9 +1,18 @@
 export const simplifyURL = (url: string) => {
     url = stripHttp(url)
+    url = stripEndingSlash(url)
+    url = stripWWW(url)
     if (url.endsWith('/')) {
         url = url.slice(0, -1)
     }
 
+    return url
+}
+
+export const stripWWW = (url: string) => {
+    if (url.startsWith('www.')) {
+        url = url.substring(4)
+    }
     return url
 }
 
