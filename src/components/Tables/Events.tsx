@@ -10,7 +10,7 @@ import {
     ColumnFiltersState,
     createColumnHelper,
     getPaginationRowModel,
-    RowSelectionState,
+    RowSelectionState
 } from '@tanstack/react-table'
 import { EventWithArtistVenue } from '~/types/data'
 import { Table, Flex, Badge, Heading, Text, Checkbox } from '@radix-ui/themes'
@@ -302,17 +302,16 @@ export function EventsTable() {
                 cell: (info) => info.getValue(),
                 header: 'Instagram'
             }),
-            columnHelper.accessor((row) => row.cancelled, {
-                header: 'Cancelled',
+            columnHelper.accessor((row) => row.conflict, {
+                header: 'Conflict',
                 cell: (info) =>
-                    !info.renderValue() ? (
-                        <Badge color="green">Not Cancelled</Badge>
+                    info.renderValue() ? (
+                        <Badge color="yellow">Conflict</Badge>
                     ) : (
                         <Badge variant="soft" color="gray">
-                            Cancelled
+                            No Conflict
                         </Badge>
-                    ),
-                enableColumnFilter: false
+                    )
             }),
             columnHelper.accessor((row) => row.featured, {
                 header: 'Featured',
