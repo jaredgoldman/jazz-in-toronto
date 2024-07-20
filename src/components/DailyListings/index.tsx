@@ -44,11 +44,15 @@ export default function DailyListings({ selectedDate }: Props) {
             }),
             columnHelper.accessor((row) => row.name, {
                 header: 'Artist',
-                cell: (info) => (
-                    <Link href={`/artist/${info.row.original.artist.id}`}>
-                        {info.getValue()}
-                    </Link>
-                ),
+                cell: (info) => {
+                    const content = info.getValue()
+                    const artist = info.row.original.artist
+                    return (
+                        <Link href={`/artist/${info.row.original.artist.id}`}>
+                            {content ? content : artist.name}
+                        </Link>
+                    )
+                },
                 enableColumnFilter: false
             }),
             columnHelper.accessor(
