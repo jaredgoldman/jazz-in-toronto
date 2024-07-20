@@ -474,11 +474,9 @@ export function EventsTable() {
                             ))}
                         </Table.Body>
                     </Table.Root>
-                    {table.getPageCount() > 1 && (
-                        <Flex justify="center" mt="4">
-                            <PaginationButtonGroup table={table} />
-                        </Flex>
-                    )}
+                    <Flex justify="center" mt="4">
+                        <PaginationButtonGroup table={table} />
+                    </Flex>
                 </>
             ) : null}
             {getAllEventsQuery.isFetched &&

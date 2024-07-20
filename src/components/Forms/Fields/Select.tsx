@@ -18,12 +18,13 @@ import {
     Controller,
     ControllerRenderProps
 } from 'react-hook-form'
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 
 type Props<TData extends FieldValues> = {
     label?: string | ReactNode
     name: Path<TData>
     optionData: Venue[] | Artist[] | { id: string; name: string }[]
+    value?: string
     control?: Control<TData>
     error?: FieldError
     required?: boolean | string
@@ -36,6 +37,7 @@ type BaseSelectProps<TData extends FieldValues> = {
     options: JSX.Element[]
     onChange?: (value: string) => void
     field?: ControllerRenderProps<TData, Path<TData>>
+    value?: string
 }
 
 export default function Select<T extends FieldValues>({
@@ -45,6 +47,7 @@ export default function Select<T extends FieldValues>({
     optionData,
     control,
     required = false,
+      value,
     onChange
 }: Props<T>) {
     const options = optionData.map((option) => (
@@ -57,19 +60,26 @@ export default function Select<T extends FieldValues>({
         name,
         label,
         field,
+        value,
         options,
         onChange
     }: BaseSelectProps<TData>) => {
+        const [selectedValue, setSelectedValue] = useState(value || '')
+
+        const handleValueChange = (value: string) => {
+            setSelectedValue(value)
+            if (field) {
+                field.onChange(value)
+            } else if (onChange) {
+                onChange(value)
+            }
+        }
+
         return (
             <SelectRoot
-                onValueChange={(value) => {
-                    if (field) {
-                        field.onChange(value)
-                    } else if (onChange) {
-                        onChange(value)
-                    }
-                }}
+                onValueChange={handleValueChange}
                 {...(field ? field : {})} // Conditionally apply field props if field is provided
+                value={selectedValue}
             >
                 <SelectTrigger>{`Select a ${name}`}</SelectTrigger>
                 <SelectContent>
@@ -81,7 +91,6 @@ export default function Select<T extends FieldValues>({
             </SelectRoot>
         )
     }
-
     if (!control) {
         return (
             <BaseSelect
@@ -89,6 +98,7 @@ export default function Select<T extends FieldValues>({
                 label={label}
                 options={options}
                 onChange={onChange}
+                value={value}
             />
         )
     }

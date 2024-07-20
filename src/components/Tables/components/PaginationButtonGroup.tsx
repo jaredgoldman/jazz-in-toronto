@@ -157,6 +157,7 @@ export function PaginationButtonGroup<T>({
                         id: size,
                         name: size
                     }))}
+                    value={table.getState().pagination.pageSize.toString()}
                     onChange={(value) => table.setPageSize(parseInt(value))}
                 />
             </Flex>
