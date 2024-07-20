@@ -65,3 +65,11 @@ export const processIGHandle = (handle: string | null) => {
         withoutAt
     }
 }
+
+export const prepareForURL = (str: string) => {
+  // if there is no protocol, add it
+  if (!str.startsWith('http')) {
+    str = `https://${str}`
+  }
+  return str
+}

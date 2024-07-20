@@ -7,7 +7,12 @@ import {
     LaptopIcon
 } from '@radix-ui/react-icons'
 import { Venue } from '~/types/data'
-import { processIGHandle, stripFbUrl, simplifyURL } from '~/utils'
+import {
+    processIGHandle,
+    stripFbUrl,
+    simplifyURL,
+    prepareForURL
+} from '~/utils'
 
 interface Props {
     venue: Venue
@@ -85,7 +90,7 @@ export default function VenueCard({ venue }: Props) {
                             <LaptopIcon width="23" height="22" />
                             <Link
                                 size="5"
-                                href={venue.website}
+                                href={prepareForURL(venue.website)}
                                 className="break-all"
                             >
                                 {simplifyURL(venue.website)}
