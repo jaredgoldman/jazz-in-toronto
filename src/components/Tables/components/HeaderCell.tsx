@@ -14,12 +14,14 @@ export type Props<TData> = {
 }
 
 // TODO: If the conditional logic in this component gets too complex, consider
-// creating seperate components for each filter type
+// creating separate components for each filter type
 export function HeaderCell<TData>({ header }: Props<TData>) {
     const [filterValue, setFilterValue] = useState<string>(
-        header.column.getFilterValue() as string
+        (header.column.getFilterValue() as string) ?? ''
     )
-    const debouncedFilterValue = useDebounce(filterValue, 500)
+
+    const debouncedFilterValue = useDebounce(filterValue, 300)
+
     const sortingIcons = useMemo(
         () => ({
             asc: <CaretUpIcon />,
@@ -42,10 +44,7 @@ export function HeaderCell<TData>({ header }: Props<TData>) {
     }, [])
 
     const handleOnChange = useCallback(
-        (e: ChangeEvent<HTMLInputElement>) => {
-            e.preventDefault()
-            setFilterValue(e.target.value)
-        },
+        (e: ChangeEvent<HTMLInputElement>) => setFilterValue(e.target.value),
         [setFilterValue]
     )
 
@@ -53,12 +52,12 @@ export function HeaderCell<TData>({ header }: Props<TData>) {
         if (header.column.getCanFilter()) {
             setFilterValue(String(header.column.getFilterValue() ?? ''))
         }
-    }, [header.column])
+    }, [header.column.getCanFilter(), header.column.getFilterValue()])
 
     useEffect(() => {
-        if (!header.column.getCanFilter() || !debouncedFilterValue) return
+        if (!header.column.getCanFilter()) return
         header.column.setFilterValue(debouncedFilterValue)
-    }, [debouncedFilterValue, header.column])
+    }, [debouncedFilterValue, header.column.getCanFilter()])
 
     return (
         <Table.ColumnHeaderCell
@@ -87,7 +86,7 @@ export function HeaderCell<TData>({ header }: Props<TData>) {
                     <TextField.Root>
                         <TextField.Input
                             type={getFilterInputType(
-                                header.column.columnDef.filterFn as string
+                                String(header.column.columnDef.filterFn)
                             )}
                             value={filterValue}
                             onChange={handleOnChange}

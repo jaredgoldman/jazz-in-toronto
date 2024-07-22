@@ -36,10 +36,10 @@ export function EventsTable() {
         .startOf('day')
         .setZone('America/New_York')
         .toJSDate()
+
     /*
      * State
      */
-    const [initialLoad, setInitialLoad] = useState(true)
     const [useStart, setUseStart] = useState(true)
     const [alertDialogOpen, setAlertDialogueOpen] = useState(false)
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
@@ -62,18 +62,16 @@ export function EventsTable() {
     // Use the debounce hook
     const debouncedColumnFilters = useDebounce(columnFilters, 1000)
 
-    useEffect(() => {
-        if (initialLoad) {
-            setInitialLoad(false)
-        } else {
-            setLocalStorage(debouncedColumnFilters)
-        }
-    }, [debouncedColumnFilters, setLocalStorage, initialLoad])
+    useEffect(
+        () => debouncedColumnFilters && setLocalStorage(debouncedColumnFilters),
+        [debouncedColumnFilters, setLocalStorage]
+    )
 
     const handleClearFilters = useCallback(
         () => setColumnFilters([]),
         [setColumnFilters]
     )
+
     /*
      * Queries/Mutations
      */
