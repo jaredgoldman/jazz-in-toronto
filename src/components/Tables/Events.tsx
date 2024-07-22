@@ -67,10 +67,10 @@ export function EventsTable() {
         [debouncedColumnFilters, setLocalStorage]
     )
 
-    const handleClearFilters = useCallback(
-        () => setColumnFilters([]),
-        [setColumnFilters]
-    )
+    const handleClearFilters = useCallback(() => {
+        setLocalStorage([])
+        setColumnFilters([])
+    }, [setColumnFilters])
 
     /*
      * Queries/Mutations
