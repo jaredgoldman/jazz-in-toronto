@@ -16,6 +16,7 @@ export interface EventFormValues {
     website?: string
     description?: string
     venueId: string
+    email: string
     featured: boolean
     approved: boolean
 }
@@ -82,6 +83,7 @@ export default function useEventForm(id = '', isAdmin: boolean) {
         venueId: '',
         instagramHandle: '',
         website: '',
+        email: '',
         featured: false,
         description: '',
         approved: isAdmin ? true : false
@@ -134,7 +136,8 @@ export default function useEventForm(id = '', isAdmin: boolean) {
                 startDate: toDateTimeLocal(startDate),
                 endDate: toDateTimeLocal(endDate),
                 artistId: data.artistId,
-                venueId: data.venueId
+                venueId: data.venueId,
+                email: data.email ?? ''
             })
         }
     }, [getEventQuery.data, reset])

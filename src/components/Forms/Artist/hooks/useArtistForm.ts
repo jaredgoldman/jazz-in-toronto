@@ -17,6 +17,7 @@ export interface ArtistFormValues {
     fileData?: File
     featured: boolean
     description?: string
+    email: string
     approved: boolean
 }
 
@@ -54,7 +55,8 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
         fileData: undefined,
         featured: false,
         description: '',
-        approved: isAdmin ? true : false
+        approved: isAdmin ? true : false,
+        email: ''
     }
 
     const {
@@ -96,7 +98,8 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
                 photoPath: data.photoPath ?? '',
                 photoName: (data?.photoName as string) ?? '',
                 website: data.website ?? '',
-                description: data.description ?? ''
+                description: data.description ?? '',
+                email: data.email ?? ''
             })
         }
     }, [getArtistQuery.data, reset])

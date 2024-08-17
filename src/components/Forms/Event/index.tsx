@@ -63,6 +63,7 @@ export default function EventForm() {
                                 error={errors.name}
                                 control={control}
                                 required="You must enter a name for your event"
+                                placeholder="Enter the event name"
                             />
                             <Input
                                 label="Event start date"
@@ -116,6 +117,7 @@ export default function EventForm() {
                                 type="text"
                                 error={errors.instagramHandle}
                                 control={control}
+                                placeholder="Enter your Instagram handle (e.g., @example)"
                             />
                             <Input
                                 name="website"
@@ -123,6 +125,7 @@ export default function EventForm() {
                                 type="text"
                                 error={errors.website}
                                 control={control}
+                                placeholder="Enter your website (e.g., www.example.com)"
                             />
                             <Input
                                 name="description"
@@ -130,6 +133,15 @@ export default function EventForm() {
                                 type="textarea"
                                 error={errors.description}
                                 control={control}
+                                placeholder="Enter a description of the event"
+                            />
+                            <Input
+                                name="email"
+                                label="Enter an email to be notified when your event is approved (optional)"
+                                type="email"
+                                error={errors.email}
+                                control={control}
+                                placeholder="Enter your email address"
                             />
                             {isAdmin ? (
                                 <Toggle
