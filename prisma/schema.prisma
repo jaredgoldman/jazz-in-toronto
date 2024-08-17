@@ -42,7 +42,7 @@ model Artist {
 model Venue {
   id              String   @id @default(cuid())
   createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  updatedAt       DateTime @default(now())
   name            String
   address         String
   city            String
@@ -82,13 +82,13 @@ model Event {
   website           String?
   cancelled         Boolean  @default(false)
   description       String?
-  email             String?
+  email             String? // Synced from the first schema
   conflict          Boolean  @default(false)
   approved          Boolean  @default(false)
   conflictEventId   String?
   conflictEvent     Event?   @relation(name: "ConflictEvent", fields: [conflictEventId], references: [id])
   conflictingEvents Event[]  @relation(name: "ConflictEvent")
-  scraped           Boolean  @default(false)
+  scraped           Boolean  @default(false) // Synced from the first schema
 
   @@unique([startDate, venueId])
   @@index([featured, name])

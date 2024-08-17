@@ -68,7 +68,7 @@ export default class EmailService {
 
 Best Regards,
 Jazz In Toronto team
-https://jazzintoronto.ca`
+jazzintoronto.ca`
         )
     }
 
@@ -93,7 +93,7 @@ https://jazzintoronto.ca`
 
 Best Regards,
 Jazz In Toronto team
-https://jazzintoronto.ca`
+jazzintoronto.ca`
         )
     }
 }
