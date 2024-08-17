@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useForm, FieldErrors } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { useToast } from '~/hooks/useToast'
 import { useMemo } from 'react'
 import { EventWithArtistVenue } from '~/types/data'

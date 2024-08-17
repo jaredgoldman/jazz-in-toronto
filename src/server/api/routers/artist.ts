@@ -16,6 +16,8 @@ const artistValidation = z.object({
     featured: z.boolean().optional(),
     instagramHandle: z.string().optional(),
     website: z.string().optional(),
+    description: z.string().optional(),
+    email: z.string().email(),
     approved: z.boolean()
 })
 

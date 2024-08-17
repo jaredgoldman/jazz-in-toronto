@@ -88,6 +88,7 @@ export default function EventForm() {
                                     name="venueId"
                                     control={control}
                                     error={errors.venueId}
+                                    required="You must select a venue for your event"
                                 />
                                 <Link
                                     size="2"
@@ -103,6 +104,7 @@ export default function EventForm() {
                                     name="artistId"
                                     control={control}
                                     error={errors.artistId}
+                                    required="You must select an artist for your event"
                                 />
                                 <Link
                                     size="2"

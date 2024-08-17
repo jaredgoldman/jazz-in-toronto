@@ -45,8 +45,10 @@ const eventSchema = z.object({
     featured: z.boolean().optional(),
     instagramHandle: z.string().optional(),
     website: z.string().optional(),
+    email: z.string().email().optional(),
     artistId: z.string().cuid(),
     venueId: z.string().cuid(),
+    description: z.string().optional(),
     approved: z.boolean()
 })
 

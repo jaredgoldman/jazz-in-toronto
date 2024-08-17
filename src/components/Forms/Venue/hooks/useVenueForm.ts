@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useCallback } from 'react'
 import { useUploadThing } from '~/hooks/useUploadThing'
-import { useForm, FieldErrors } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
 import { MAX_FILE_SIZE } from '~/utils/constants'
 import { useToast } from '~/hooks/useToast'
@@ -33,7 +33,7 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
     const getVenueQuery = api.venue.get.useQuery(
         { id },
         {
-            enabled: Boolean(id),
+            enabled: !!id && id.trim() !== '',
             staleTime: Infinity,
             cacheTime: Infinity,
             refetchOnWindowFocus: false,
