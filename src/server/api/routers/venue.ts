@@ -19,6 +19,7 @@ const venueValidation = z.object({
     website: z.string(),
     active: z.boolean().optional(),
     phoneNumber: z.string(),
+    email: z.string().email().optional(),
     description: z.string().optional(),
     approved: z.boolean()
 })

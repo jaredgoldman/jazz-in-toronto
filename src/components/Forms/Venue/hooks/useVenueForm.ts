@@ -68,24 +68,7 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
     }
 
     const methods = useForm<VenueFormValues>({
-        defaultValues,
-        resolver: (values) => {
-            const errors: FieldErrors<VenueFormValues> = {}
-            const instagramPattern = /^@([a-zA-Z0-9_]{1,30})$/
-
-            if (
-                values.instagramHandle &&
-                !instagramPattern.test(values.instagramHandle)
-            ) {
-                errors.instagramHandle = {
-                    type: 'pattern',
-                    message:
-                        'Instagram handle must start with @ and be up to 15 characters long'
-                }
-            }
-
-            return { values, errors }
-        }
+        defaultValues
     })
 
     const { reset, setValue, handleSubmit } = methods

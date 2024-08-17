@@ -1,8 +1,7 @@
 import * as Form from '@radix-ui/react-form'
 import { Input, Select } from '../Fields'
 import Upload from '../Fields/Upload'
-import { Heading, Flex, Box, Button, Callout } from '@radix-ui/themes'
-import { InfoCircledIcon } from '@radix-ui/react-icons'
+import { Heading, Flex, Box, Button } from '@radix-ui/themes'
 import useArtistForm from './hooks/useArtistForm'
 import { useRouter } from 'next/router'
 import Spinner from '~/components/Spinner'
@@ -77,6 +76,13 @@ export default function ArtistForm() {
                             error={errors.instagramHandle}
                             control={control}
                             placeholder="Enter your Instagram handle (e.g., @example)"
+                            rules={{
+                                pattern: {
+                                    value: /^@([a-zA-Z0-9_]{1,30})$/,
+                                    message:
+                                        'Instagram handle must start with @ and be up to 30 characters long'
+                                }
+                            }}
                         />
                         <Input
                             name="website"

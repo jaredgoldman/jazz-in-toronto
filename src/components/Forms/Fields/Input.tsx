@@ -6,7 +6,8 @@ import {
     FieldValues,
     Path,
     Control,
-    Controller
+    Controller,
+    RegisterOptions
 } from 'react-hook-form'
 
 interface Props<T extends FieldValues> {
@@ -17,6 +18,7 @@ interface Props<T extends FieldValues> {
     error?: FieldError
     required?: boolean | string
     placeholder?: string
+    rules?: RegisterOptions
 }
 
 export default function Input<T extends FieldValues>({
@@ -26,12 +28,13 @@ export default function Input<T extends FieldValues>({
     error,
     control,
     required = false,
-    placeholder = ''
+    placeholder = '',
+    rules = {} // Default to an empty object
 }: Props<T>): JSX.Element {
     return (
         <Controller
             control={control}
-            rules={{ required }}
+            rules={{ required, ...rules }} // Merge required with other rules
             name={name}
             render={({ field }) => (
                 <Form.Field name={name}>
