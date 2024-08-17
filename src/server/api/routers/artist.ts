@@ -22,10 +22,18 @@ const artistValidation = z.object({
 export const artistRouter = createTRPCRouter({
     create: publicProcedure
         .input(artistValidation)
-        .mutation(({ ctx, input }) => {
-            return ctx.prisma.artist.create({
+        .mutation(async ({ ctx, input }) => {
+            const created = await ctx.prisma.artist.create({
                 data: input
             })
+            if (created.email) {
+                await ctx.emailService.sendPendingApprovalEmail(
+                    created.email,
+                    'Artist',
+                    created
+                )
+            }
+            return created
         }),
 
     createMany: protectedProcedure

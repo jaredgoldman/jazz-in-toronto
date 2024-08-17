@@ -38,47 +38,42 @@ const getAllByDay = (date: Date, prisma: PrismaClient, approved: boolean) => {
     })
 }
 
+const eventSchema = z.object({
+    name: z.string(),
+    startDate: z.date(),
+    endDate: z.date(),
+    featured: z.boolean().optional(),
+    instagramHandle: z.string().optional(),
+    website: z.string().optional(),
+    artistId: z.string().cuid(),
+    venueId: z.string().cuid(),
+    approved: z.boolean()
+})
+
 export const eventRouter = createTRPCRouter({
     create: publicProcedure
-        .input(
-            z.object({
-                name: z.string(),
-                startDate: z.date(),
-                endDate: z.date(),
-                featured: z.boolean().optional(),
-                instagramHandle: z.string().optional(),
-                website: z.string().optional(),
-                artistId: z.string().cuid(),
-                venueId: z.string().cuid(),
-                approved: z.boolean()
-            })
-        )
-        .mutation(({ ctx, input }) => {
+        .input(eventSchema)
+        .mutation(async ({ ctx, input }) => {
             const { artistId, venueId, ...eventData } = input
-            return ctx.prisma.event.create({
+            const created = await ctx.prisma.event.create({
                 data: {
                     ...eventData,
                     artist: { connect: { id: artistId } },
                     venue: { connect: { id: venueId } }
                 }
             })
+            if (created.email) {
+                await ctx.emailService.sendPendingApprovalEmail(
+                    created.email,
+                    'Event',
+                    created
+                )
+            }
+            return created
         }),
 
     createMany: protectedProcedure
-        .input(
-            z.array(
-                z.object({
-                    name: z.string(),
-                    startDate: z.date(),
-                    endDate: z.date(),
-                    featured: z.boolean().optional(),
-                    instagramHandle: z.string().nullable().optional(),
-                    website: z.string().nullable().optional(),
-                    artistId: z.string().cuid(),
-                    venueId: z.string().cuid()
-                })
-            )
-        )
+        .input(z.array(eventSchema))
         .mutation(async ({ ctx, input }) => {
             for (const row of input) {
                 // if event already exists at that venue at that time
@@ -106,7 +101,7 @@ export const eventRouter = createTRPCRouter({
                     }
                     // if event name is different, deactive previous event and create new one
                     else {
-                        console.log(
+                        console.warn(
                             `Found duplicate event - ${
                                 row.name
                             } - ${row.startDate.toDateString()} - ${
@@ -291,24 +286,6 @@ export const eventRouter = createTRPCRouter({
             return ctx.prisma.event.deleteMany({
                 where: { id: { in: input } }
             })
-        }),
-
-    post: protectedProcedure
-        .input(
-            z.object({
-                files: z.array(
-                    z.object({ fileKey: z.string(), fileUrl: z.string() })
-                ),
-                caption: z.string()
-            })
-        )
-        .mutation(async ({ ctx, input }) => {
-            // post to instagram
-            if (ctx.postService) {
-                ctx.postService.init(input)
-                await ctx.postService.postAndDeleteImages()
-                // return res.status(200).json({ message: 'Posted to Instagram' })
-            }
         }),
 
     getFeatured: publicProcedure.query(({ ctx }) => {

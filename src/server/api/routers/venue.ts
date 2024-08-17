@@ -26,10 +26,18 @@ const venueValidation = z.object({
 export const venueRouter = createTRPCRouter({
     create: publicProcedure
         .input(venueValidation)
-        .mutation(({ ctx, input }) => {
-            return ctx.prisma.venue.create({
+        .mutation(async ({ ctx, input }) => {
+            const created = await ctx.prisma.venue.create({
                 data: input
             })
+            if (created.email) {
+                await ctx.emailService.sendPendingApprovalEmail(
+                    created.email,
+                    'Venue',
+                    created
+                )
+            }
+            return created
         }),
 
     createMany: protectedProcedure
