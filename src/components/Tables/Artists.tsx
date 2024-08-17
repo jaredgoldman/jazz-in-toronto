@@ -269,7 +269,8 @@ export function ArtistsTable() {
             }),
             columnHelper.accessor((row) => row.name, {
                 cell: (info) => info.getValue(),
-                header: 'Name'
+                header: 'Name',
+                filterFn: 'fuzzy'
             }),
             columnHelper.accessor((row) => row.genre, {
                 cell: (info) => {
@@ -277,15 +278,18 @@ export function ArtistsTable() {
                     if (!genre) return null
                     return genreLabels[genre]
                 },
-                header: 'Genre'
+                header: 'Genre',
+                filterFn: 'fuzzy'
             }),
             columnHelper.accessor((row) => row.website, {
-                cell: (info) => info.getValue(),
-                header: 'Website'
+                cell: (info) => info.getValue() ?? '--',
+                header: 'Website',
+                filterFn: 'fuzzy'
             }),
             columnHelper.accessor((row) => row.instagramHandle, {
-                cell: (info) => info.getValue(),
-                header: 'Instagram'
+                cell: (info) => info.getValue() ?? '--',
+                header: 'Instagram',
+                filterFn: 'fuzzy'
             }),
             columnHelper.accessor((row) => row.featured, {
                 header: 'Featured',
@@ -298,6 +302,11 @@ export function ArtistsTable() {
                         </Badge>
                     ),
                 enableColumnFilter: false
+            }),
+            columnHelper.accessor((row) => row?.email, {
+                cell: (info) => info.getValue() ?? '--',
+                header: 'Email',
+                filterFn: 'fuzzy'
             }),
             columnHelper.accessor((row) => row.approved, {
                 cell: (info) =>

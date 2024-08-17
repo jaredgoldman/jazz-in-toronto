@@ -270,7 +270,7 @@ export function VenuesTable() {
                 }
             }),
             columnHelper.accessor((row) => row.name, {
-                cell: (info) => info.getValue(),
+                cell: (info) => info.getValue() ?? '--',
                 header: 'Name',
                 filterFn: 'fuzzy'
             }),
@@ -280,21 +280,31 @@ export function VenuesTable() {
                 filterFn: 'fuzzy'
             }),
             columnHelper.accessor((row) => row.city, {
-                cell: (info) => info.getValue(),
+                cell: (info) => info.getValue() ?? '--',
                 header: 'City',
                 filterFn: 'fuzzy'
             }),
             columnHelper.accessor((row) => row.website, {
                 cell: (info) => {
-                    const content = info.getValue() ?? ""
+                    const content = info.getValue() ?? ''
                     return <Link href={content}>{simplifyURL(content)}</Link>
                 },
                 header: 'Website',
                 filterFn: 'fuzzy'
             }),
             columnHelper.accessor((row) => row.instagramHandle, {
-                cell: (info) => info.getValue(),
+                cell: (info) => info.getValue() ?? '--',
                 header: 'Instagram',
+                filterFn: 'fuzzy'
+            }),
+            columnHelper.accessor((row) => row.instagramHandle, {
+                cell: (info) => info.getValue() ?? '--',
+                header: 'Instagram',
+                filterFn: 'fuzzy'
+            }),
+            columnHelper.accessor((row) => row.email, {
+                cell: (info) => info.getValue() ?? '--',
+                header: 'Email',
                 filterFn: 'fuzzy'
             }),
             columnHelper.accessor((row) => row.featured, {

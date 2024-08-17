@@ -20,10 +20,10 @@ import { HeaderCell, TableActionMenu } from './components'
 import { dateFilter, fuzzyFilter, timeFilter } from './utils/filters'
 import { useRouter } from 'next/router'
 import { useToast } from '~/hooks/useToast'
-import { Button } from '@radix-ui/themes'
+import { Button, Link } from '@radix-ui/themes'
 import { PaginationButtonGroup } from './components/PaginationButtonGroup'
 import { DateTime } from 'luxon'
-import { formatTime } from '~/utils'
+import { formatTime, simplifyURL } from '~/utils'
 import { ConfirmActionDialogue } from '../ConfirmActionDialogue'
 import { useLocalStorage, useDebounce } from '~/hooks'
 
@@ -70,7 +70,7 @@ export function EventsTable() {
     const handleClearFilters = useCallback(() => {
         setLocalStorage([])
         setColumnFilters([])
-    }, [setColumnFilters])
+    }, [setColumnFilters, setLocalStorage])
 
     /*
      * Queries/Mutations
@@ -271,16 +271,19 @@ export function EventsTable() {
                 header: 'Date'
             }),
             columnHelper.accessor((row) => row.name, {
-                cell: (info) => info.getValue(),
-                header: 'Event'
+                cell: (info) => info.getValue() ?? '--',
+                header: 'Name',
+                filterFn: 'fuzzy'
             }),
             columnHelper.accessor((row) => row.artist.name, {
-                cell: (info) => info.getValue(),
-                header: 'Artist'
+                cell: (info) => info.getValue() ?? '--',
+                header: 'Artist',
+                filterFn: 'fuzzy'
             }),
             columnHelper.accessor((row) => row.venue.name, {
-                cell: (info) => info.getValue(),
-                header: 'Venue'
+                cell: (info) => info.getValue() ?? '--',
+                header: 'Venue',
+                filterFn: 'fuzzy'
             }),
             columnHelper.accessor((row) => row.startDate, {
                 cell: (info) => formatTime(new Date(info.getValue())),
@@ -293,12 +296,22 @@ export function EventsTable() {
                 filterFn: 'time'
             }),
             columnHelper.accessor((row) => row.venue.website, {
-                cell: (info) => info.getValue(),
-                header: 'Website'
+                cell: (info) => {
+                    const content = info.getValue() ?? ''
+                    return <Link href={content}>{simplifyURL(content)}</Link>
+                },
+                header: 'Website',
+                filterFn: 'fuzzy'
+            }),
+            columnHelper.accessor((row) => row.email, {
+                cell: (info) => info.getValue() ?? '--',
+                header: 'Email',
+                filterFn: 'fuzzy'
             }),
             columnHelper.accessor((row) => row.venue.instagramHandle, {
-                cell: (info) => info.getValue(),
-                header: 'Instagram'
+                cell: (info) => info.getValue() ?? '--',
+                header: 'Instagram',
+                filterFn: 'fuzzy'
             }),
             columnHelper.accessor((row) => row.conflict, {
                 header: 'Conflict',
