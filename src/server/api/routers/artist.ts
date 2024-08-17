@@ -16,16 +16,26 @@ const artistValidation = z.object({
     featured: z.boolean().optional(),
     instagramHandle: z.string().optional(),
     website: z.string().optional(),
+    description: z.string().optional(),
+    email: z.string().email(),
     approved: z.boolean()
 })
 
 export const artistRouter = createTRPCRouter({
     create: publicProcedure
         .input(artistValidation)
-        .mutation(({ ctx, input }) => {
-            return ctx.prisma.artist.create({
+        .mutation(async ({ ctx, input }) => {
+            const created = await ctx.prisma.artist.create({
                 data: input
             })
+            if (created.email) {
+                await ctx.emailService.sendPendingApprovalEmail(
+                    created.email,
+                    'Artist',
+                    created
+                )
+            }
+            return created
         }),
 
     createMany: protectedProcedure
@@ -100,7 +110,7 @@ export const artistRouter = createTRPCRouter({
             try {
                 const res = await utapi.deleteFiles(input.fileKey)
                 if ('deletedCount' in res && res.deletedCount === 0) {
-                    console.log({
+                    console.info({
                         deletedCount: res.deletedCount,
                         fileKey: input.fileKey
                     })
@@ -141,18 +151,38 @@ export const artistRouter = createTRPCRouter({
     approve: protectedProcedure
         .input(z.object({ id: z.string().cuid(), approved: z.boolean() }))
         .mutation(async ({ ctx, input }) => {
-            return ctx.prisma.artist.update({
+            const updated = await ctx.prisma.artist.update({
                 where: { id: input.id },
                 data: { approved: input.approved }
             })
+            if (updated.email) {
+                await ctx.emailService.sendApprovedEmail(
+                    updated.email,
+                    'Artist',
+                    updated
+                )
+            }
+            return updated
         }),
 
     approveMany: protectedProcedure
         .input(z.array(z.string().cuid()))
         .mutation(async ({ ctx, input }) => {
-            return ctx.prisma.artist.updateMany({
+            await ctx.prisma.artist.updateMany({
                 where: { id: { in: input } },
                 data: { approved: true }
             })
+            const updatedRecords = await ctx.prisma.artist.findMany({
+                where: { id: { in: input } }
+            })
+            for (const record of updatedRecords) {
+                if (record.email) {
+                    await ctx.emailService.sendApprovedEmail(
+                        record.email,
+                        'Artist',
+                        record
+                    )
+                }
+            }
         })
 })

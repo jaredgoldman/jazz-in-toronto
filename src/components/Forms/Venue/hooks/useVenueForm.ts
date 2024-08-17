@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useCallback } from 'react'
 import { useUploadThing } from '~/hooks/useUploadThing'
-import { useForm, FieldErrors } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { api } from '~/utils/api'
 import { MAX_FILE_SIZE } from '~/utils/constants'
 import { useToast } from '~/hooks/useToast'
@@ -19,6 +19,7 @@ export interface VenueFormValues {
     photoName?: string
     phoneNumber: string
     featured: boolean
+    email: string
     description?: string
     approved: boolean
 }
@@ -32,7 +33,7 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
     const getVenueQuery = api.venue.get.useQuery(
         { id },
         {
-            enabled: Boolean(id),
+            enabled: !!id && id.trim() !== '',
             staleTime: Infinity,
             cacheTime: Infinity,
             refetchOnWindowFocus: false,
@@ -61,29 +62,13 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
         fileData: undefined,
         phoneNumber: '',
         featured: false,
+        email: '',
         description: '',
         approved: isAdmin ? true : false
     }
 
     const methods = useForm<VenueFormValues>({
-        defaultValues,
-        resolver: (values) => {
-            const errors: FieldErrors<VenueFormValues> = {}
-            const instagramPattern = /^@([a-zA-Z0-9_]{1,30})$/
-
-            if (
-                values.instagramHandle &&
-                !instagramPattern.test(values.instagramHandle)
-            ) {
-                errors.instagramHandle = {
-                    type: 'pattern',
-                    message:
-                        'Instagram handle must start with @ and be up to 15 characters long'
-                }
-            }
-
-            return { values, errors }
-        }
+        defaultValues
     })
 
     const { reset, setValue, handleSubmit } = methods
@@ -97,6 +82,7 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
                 instagramHandle: data?.instagramHandle ?? '',
                 photoPath: data?.photoPath ?? '',
                 photoName: data?.photoName ?? '',
+                email: data?.email ?? '',
                 description: data?.description ?? ''
             })
         }

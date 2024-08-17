@@ -53,6 +53,7 @@ export default function VenueForm() {
                                 error={errors.name}
                                 control={control}
                                 required="Please enter your venues name"
+                                placeholder="Enter the venue name"
                             />
                             <PlacesAutocomplete
                                 name="address"
@@ -72,18 +73,28 @@ export default function VenueForm() {
                                 label="Enter your venues phone number"
                                 error={errors.phoneNumber}
                                 control={control}
+                                placeholder="Enter the venue phone number (e.g., 555-555-5555)"
                             />
                             <Input
                                 name="instagramHandle"
                                 label="Instagram Handle"
                                 error={errors.instagramHandle}
                                 control={control}
+                                rules={{
+                                    pattern: {
+                                        value: /^@([a-zA-Z0-9_]{1,30})$/,
+                                        message:
+                                            'Instagram handle must start with @ and be up to 30 characters long'
+                                    }
+                                }}
+                                placeholder="Enter the venue instagram handle (e.g., @example)"
                             />
                             <Input
                                 name="website"
                                 label="Venue Website"
                                 error={errors.website}
                                 control={control}
+                                placeholder="Enter the venue website (e.g., www.example.com)"
                             />
                             <Input
                                 name="description"
@@ -91,6 +102,15 @@ export default function VenueForm() {
                                 type="textarea"
                                 error={errors.description}
                                 control={control}
+                                placeholder="Enter a description of the venue"
+                            />
+                            <Input
+                                name="email"
+                                label="Enter an email to be notified when your event is approved (optional)"
+                                type="email"
+                                error={errors.email}
+                                control={control}
+                                placeholder="Enter your email address"
                             />
                             {isAdmin ? (
                                 <Toggle

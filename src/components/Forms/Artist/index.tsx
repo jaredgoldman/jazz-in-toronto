@@ -48,6 +48,7 @@ export default function ArtistForm() {
                             error={errors.name}
                             control={control}
                             required="You must enter a artist name"
+                            placeholder="Enter the artist name"
                         />
                         <Select
                             name="genre"
@@ -74,12 +75,21 @@ export default function ArtistForm() {
                             label="Instagram Handle"
                             error={errors.instagramHandle}
                             control={control}
+                            placeholder="Enter your Instagram handle (e.g., @example)"
+                            rules={{
+                                pattern: {
+                                    value: /^@([a-zA-Z0-9_]{1,30})$/,
+                                    message:
+                                        'Instagram handle must start with @ and be up to 30 characters long'
+                                }
+                            }}
                         />
                         <Input
                             name="website"
                             label="Enter your website"
                             error={errors.website}
                             control={control}
+                            placeholder="Enter your website (e.g., www.example.com)"
                         />
                         <Input
                             name="description"
@@ -87,6 +97,14 @@ export default function ArtistForm() {
                             type="textarea"
                             error={errors.description}
                             control={control}
+                            placeholder="Enter a description of the artist"
+                        />
+                        <Input
+                            name="email"
+                            label="Enter an email to be notified when your artist is approved (optional)"
+                            error={errors.email}
+                            control={control}
+                            placeholder="Enter your email address"
                         />
                         {isAdmin ? (
                             <Toggle
@@ -96,7 +114,6 @@ export default function ArtistForm() {
                                 error={errors.approved}
                             />
                         ) : null}
-
                         <Form.Submit asChild>
                             {isLoading ? (
                                 <Flex justify="center">

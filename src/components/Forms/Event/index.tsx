@@ -63,6 +63,7 @@ export default function EventForm() {
                                 error={errors.name}
                                 control={control}
                                 required="You must enter a name for your event"
+                                placeholder="Enter the event name"
                             />
                             <Input
                                 label="Event start date"
@@ -87,6 +88,7 @@ export default function EventForm() {
                                     name="venueId"
                                     control={control}
                                     error={errors.venueId}
+                                    required="You must select a venue for your event"
                                 />
                                 <Link
                                     size="2"
@@ -102,6 +104,7 @@ export default function EventForm() {
                                     name="artistId"
                                     control={control}
                                     error={errors.artistId}
+                                    required="You must select an artist for your event"
                                 />
                                 <Link
                                     size="2"
@@ -116,6 +119,14 @@ export default function EventForm() {
                                 type="text"
                                 error={errors.instagramHandle}
                                 control={control}
+                                placeholder="Enter your Instagram handle (e.g., @example)"
+                                rules={{
+                                    pattern: {
+                                        value: /^@([a-zA-Z0-9_]{1,30})$/,
+                                        message:
+                                            'Instagram handle must start with @ and be up to 30 characters long'
+                                    }
+                                }}
                             />
                             <Input
                                 name="website"
@@ -123,6 +134,7 @@ export default function EventForm() {
                                 type="text"
                                 error={errors.website}
                                 control={control}
+                                placeholder="Enter your website (e.g., www.example.com)"
                             />
                             <Input
                                 name="description"
@@ -130,6 +142,15 @@ export default function EventForm() {
                                 type="textarea"
                                 error={errors.description}
                                 control={control}
+                                placeholder="Enter a description of the event"
+                            />
+                            <Input
+                                name="email"
+                                label="Enter an email to be notified when your event is approved (optional)"
+                                type="email"
+                                error={errors.email}
+                                control={control}
+                                placeholder="Enter your email address"
                             />
                             {isAdmin ? (
                                 <Toggle

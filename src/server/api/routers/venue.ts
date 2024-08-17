@@ -19,6 +19,7 @@ const venueValidation = z.object({
     website: z.string(),
     active: z.boolean().optional(),
     phoneNumber: z.string(),
+    email: z.string().email().optional(),
     description: z.string().optional(),
     approved: z.boolean()
 })
@@ -26,10 +27,18 @@ const venueValidation = z.object({
 export const venueRouter = createTRPCRouter({
     create: publicProcedure
         .input(venueValidation)
-        .mutation(({ ctx, input }) => {
-            return ctx.prisma.venue.create({
+        .mutation(async ({ ctx, input }) => {
+            const created = await ctx.prisma.venue.create({
                 data: input
             })
+            if (created.email) {
+                await ctx.emailService.sendPendingApprovalEmail(
+                    created.email,
+                    'Venue',
+                    created
+                )
+            }
+            return created
         }),
 
     createMany: protectedProcedure
@@ -158,18 +167,38 @@ export const venueRouter = createTRPCRouter({
     approve: protectedProcedure
         .input(z.object({ id: z.string().cuid(), approved: z.boolean() }))
         .mutation(async ({ ctx, input }) => {
-            return ctx.prisma.venue.update({
+            const updated = await ctx.prisma.venue.update({
                 where: { id: input.id },
                 data: { approved: input.approved }
             })
+            if (updated.email) {
+                await ctx.emailService.sendApprovedEmail(
+                    updated.email,
+                    'Venue',
+                    updated
+                )
+            }
+            return updated
         }),
 
     approveMany: protectedProcedure
         .input(z.array(z.string().cuid()))
         .mutation(async ({ ctx, input }) => {
-            return ctx.prisma.event.updateMany({
+            await ctx.prisma.venue.updateMany({
                 where: { id: { in: input } },
                 data: { approved: true }
             })
+            const updatedRecords = await ctx.prisma.venue.findMany({
+                where: { id: { in: input } }
+            })
+            for (const record of updatedRecords) {
+                if (record.email) {
+                    await ctx.emailService.sendApprovedEmail(
+                        record.email,
+                        'Venue',
+                        record
+                    )
+                }
+            }
         })
 })

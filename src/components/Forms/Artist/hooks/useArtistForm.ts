@@ -17,6 +17,7 @@ export interface ArtistFormValues {
     fileData?: File
     featured: boolean
     description?: string
+    email: string
     approved: boolean
 }
 
@@ -54,7 +55,8 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
         fileData: undefined,
         featured: false,
         description: '',
-        approved: isAdmin ? true : false
+        approved: isAdmin ? true : false,
+        email: ''
     }
 
     const {
@@ -66,23 +68,6 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
         formState: { errors }
     } = useForm<ArtistFormValues>({
         defaultValues,
-        resolver: (values) => {
-            const errors: FieldErrors<ArtistFormValues> = {}
-            const instagramPattern = /^@([a-zA-Z0-9_]{1,30})$/
-
-            if (
-                values.instagramHandle &&
-                !instagramPattern.test(values.instagramHandle)
-            ) {
-                errors.instagramHandle = {
-                    type: 'pattern',
-                    message:
-                        'Instagram handle must start with @ and be up to 15 characters long'
-                }
-            }
-
-            return { values, errors }
-        }
     })
 
     useEffect(() => {
@@ -96,7 +81,8 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
                 photoPath: data.photoPath ?? '',
                 photoName: (data?.photoName as string) ?? '',
                 website: data.website ?? '',
-                description: data.description ?? ''
+                description: data.description ?? '',
+                email: data.email ?? ''
             })
         }
     }, [getArtistQuery.data, reset])
