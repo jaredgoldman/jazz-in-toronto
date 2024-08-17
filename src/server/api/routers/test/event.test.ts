@@ -4,6 +4,7 @@ import { appRouter } from '~/server/api/root'
 import { createInnerTRPCContext } from '~/server/api/trpc'
 import { prisma } from '~/server/db'
 import { Admin, Artist, Event, Venue } from '@prisma/client'
+import EmailService from '../../services/emailService'
 
 const testVenueData = {
     name: 'test venue',
@@ -37,12 +38,15 @@ beforeAll(async () => {
         endDate: new Date(Date.now() + 1000 * 60 * 60 * 2),
         artistId: artist.id,
         venueId: venue.id
-    }
+    } as unknown as RouterInputs['event']['create']
 })
 
 describe('Event Router', () => {
     it('should allow an unauthorized user to create an event', async () => {
-        const ctx = createInnerTRPCContext({ session: null })
+        const ctx = createInnerTRPCContext({
+            session: null,
+            emailService: new EmailService()
+        })
         const caller = appRouter.createCaller(ctx)
 
         const input: RouterInputs['event']['create'] = testEventData
@@ -64,7 +68,8 @@ describe('Event Router', () => {
                     email: admin.email
                 },
                 expires: '1'
-            }
+            },
+            emailService: new EmailService()
         })
 
         const caller = appRouter.createCaller(ctx)
@@ -98,7 +103,8 @@ describe('Event Router', () => {
                     email: admin.email
                 },
                 expires: '1'
-            }
+            },
+            emailService: new EmailService()
         })
         const caller = appRouter.createCaller(ctx)
 
@@ -118,7 +124,8 @@ describe('Event Router', () => {
                     email: admin.email
                 },
                 expires: '1'
-            }
+            },
+            emailService: new EmailService()
         })
         const caller = appRouter.createCaller(ctx)
 

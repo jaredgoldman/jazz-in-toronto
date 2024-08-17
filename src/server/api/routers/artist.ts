@@ -100,7 +100,7 @@ export const artistRouter = createTRPCRouter({
             try {
                 const res = await utapi.deleteFiles(input.fileKey)
                 if ('deletedCount' in res && res.deletedCount === 0) {
-                    console.log({
+                    console.info({
                         deletedCount: res.deletedCount,
                         fileKey: input.fileKey
                     })

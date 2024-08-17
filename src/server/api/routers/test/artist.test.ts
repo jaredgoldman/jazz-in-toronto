@@ -4,11 +4,12 @@ import { appRouter } from '~/server/api/root'
 import { createInnerTRPCContext } from '~/server/api/trpc'
 import { prisma } from '~/server/db'
 import { TRPCError } from '@trpc/server'
-import { Admin, type Artist } from '@prisma/client'
+import { Admin, Artist } from '@prisma/client'
+import EmailService from '../../services/emailService'
 
 const testartistData = {
     name: 'test artist'
-}
+} as unknown as RouterInputs['artist']['create']
 let artist: Artist
 let admin: Admin
 
@@ -27,7 +28,10 @@ beforeAll(async () => {
 describe('artist Router', () => {
     // CREATE
     it('allows a user to create an event', async () => {
-        const ctx = createInnerTRPCContext({ session: null })
+        const ctx = createInnerTRPCContext({
+            session: null,
+            emailService: new EmailService()
+        })
         const caller = appRouter.createCaller(ctx)
 
         const input: RouterInputs['artist']['create'] = testartistData
@@ -41,7 +45,10 @@ describe('artist Router', () => {
     })
     // READ
     it('allows a user to fetch a number of artists', async () => {
-        const ctx = createInnerTRPCContext({ session: null })
+        const ctx = createInnerTRPCContext({
+            session: null,
+            emailService: new EmailService()
+        })
         const caller = appRouter.createCaller(ctx)
 
         const artists = await caller.artist.getAll()
@@ -58,7 +65,8 @@ describe('artist Router', () => {
                     id: admin.id
                 },
                 expires: '1'
-            }
+            },
+            emailService: new EmailService()
         })
         const caller = appRouter.createCaller(ctx)
 
@@ -74,7 +82,10 @@ describe('artist Router', () => {
         expect(updatedartist?.name).toEqual(input.name)
     })
     it('does not allow an unauthorized user to update an event', async () => {
-        const ctx = createInnerTRPCContext({ session: null })
+        const ctx = createInnerTRPCContext({
+            session: null,
+            emailService: new EmailService()
+        })
         const caller = appRouter.createCaller(ctx)
 
         const input: RouterInputs['artist']['update'] = {
@@ -98,7 +109,8 @@ describe('artist Router', () => {
                     id: admin.id
                 },
                 expires: '1'
-            }
+            },
+            emailService: new EmailService()
         })
         const caller = appRouter.createCaller(ctx)
 
@@ -114,7 +126,10 @@ describe('artist Router', () => {
     })
 
     it('does not allow an unauthorized user to delete an event', async () => {
-        const ctx = createInnerTRPCContext({ session: null })
+        const ctx = createInnerTRPCContext({
+            session: null,
+            emailService: new EmailService()
+        })
         const caller = appRouter.createCaller(ctx)
 
         const input: RouterInputs['artist']['delete'] = {

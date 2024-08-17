@@ -1,11 +1,12 @@
 import { expect, it, describe, beforeAll, afterAll } from 'vitest'
-import { type RouterInputs } from '~/utils/api'
+import { RouterInputs } from '~/utils/api'
 import { appRouter } from '~/server/api/root'
 import { createInnerTRPCContext } from '~/server/api/trpc'
 import { AdminRole } from '~/types/enums'
 import { prisma } from '~/server/db'
-import { type Admin } from '~/types/data'
+import { Admin } from '~/types/data'
 import { TRPCError } from '@trpc/server'
+import EmailService from '../../services/emailService'
 
 const adminData = {
     email: 'testadmin@test.com',
@@ -42,7 +43,8 @@ describe('Admin Router', () => {
                     id: superAdmin.id
                 },
                 expires: '1'
-            }
+            },
+            emailService: new EmailService()
         })
         const caller = appRouter.createCaller(ctx)
 
@@ -63,7 +65,8 @@ describe('Admin Router', () => {
                     id: admin.id
                 },
                 expires: '1'
-            }
+            },
+            emailService: new EmailService()
         })
         const caller = appRouter.createCaller(ctx)
 
@@ -83,7 +86,8 @@ describe('Admin Router', () => {
 
     it('should not allow an unauthorized user to create an admin user', async () => {
         const ctx = createInnerTRPCContext({
-            session: null
+            session: null,
+            emailService: new EmailService()
         })
         const caller = appRouter.createCaller(ctx)
 
@@ -109,7 +113,8 @@ describe('Admin Router', () => {
                     id: superAdmin.id
                 },
                 expires: '1'
-            }
+            },
+            emailService: new EmailService()
         })
         const caller = appRouter.createCaller(ctx)
 
@@ -129,7 +134,8 @@ describe('Admin Router', () => {
                     id: admin.id
                 },
                 expires: '1'
-            }
+            },
+            emailService: new EmailService()
         })
         const caller = appRouter.createCaller(ctx)
 
@@ -146,7 +152,8 @@ describe('Admin Router', () => {
                     id: admin.id
                 },
                 expires: '1'
-            }
+            },
+            emailService: new EmailService()
         })
         const caller = appRouter.createCaller(ctx)
 
@@ -163,7 +170,8 @@ describe('Admin Router', () => {
 
     it('should not allow an unauthorized user to fetch admin data', async () => {
         const ctx = createInnerTRPCContext({
-            session: null
+            session: null,
+            emailService: new EmailService()
         })
         const caller = appRouter.createCaller(ctx)
 
@@ -186,7 +194,8 @@ describe('Admin Router', () => {
                     id: superAdmin.id
                 },
                 expires: '1'
-            }
+            },
+            emailService: new EmailService()
         })
         const caller = appRouter.createCaller(ctx)
 
@@ -211,7 +220,8 @@ describe('Admin Router', () => {
                     id: admin.id
                 },
                 expires: '1'
-            }
+            },
+            emailService: new EmailService()
         })
         const caller = appRouter.createCaller(ctx)
         const updateSelfInput: RouterInputs['admin']['update'] = {
@@ -288,7 +298,8 @@ describe('Admin Router', () => {
                     id: otherAdmin.id
                 },
                 expires: '1'
-            }
+            },
+            emailService: new EmailService()
         })
         const caller = appRouter.createCaller(ctx)
 
@@ -305,7 +316,8 @@ describe('Admin Router', () => {
 
     it('should not allow an unauthorized user to delete another admin user', async () => {
         const ctx = createInnerTRPCContext({
-            session: null
+            session: null,
+            emailService: new EmailService()
         })
         const caller = appRouter.createCaller(ctx)
 

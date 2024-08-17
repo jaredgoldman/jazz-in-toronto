@@ -13,7 +13,6 @@ import superjson from 'superjson'
 import { ZodError } from 'zod'
 import { getServerAuthSession } from '~/server/auth'
 import { prisma } from '~/server/db'
-import PostService from './services/postService'
 import EmailService from './services/emailService'
 
 /**
@@ -26,8 +25,7 @@ import EmailService from './services/emailService'
 
 type CreateContextOptions = {
     session: Session | null
-    postService?: PostService
-    emailService?: EmailService
+    emailService: EmailService
 }
 
 /**
@@ -44,7 +42,6 @@ export const createInnerTRPCContext = (opts: CreateContextOptions) => {
     return {
         session: opts.session,
         prisma,
-        postService: opts.postService,
         emailService: opts.emailService
     }
 }
@@ -63,7 +60,6 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 
     return createInnerTRPCContext({
         session,
-        postService: new PostService(),
         emailService: new EmailService()
     })
 }

@@ -34,7 +34,8 @@ model Artist {
   active          Boolean  @default(true)
   description     String?
   approved        Boolean  @default(false)
-
+  scraped         Boolean  @default(false)
+  email           String?
   @@index([featured, name])
 }
 
@@ -59,6 +60,7 @@ model Venue {
   crawlable       Boolean  @default(false)
   eventsPath      String?
   description     String?
+  email           String?
   approved        Boolean  @default(false)
 
   @@index([featured])
@@ -80,11 +82,13 @@ model Event {
   website           String?
   cancelled         Boolean  @default(false)
   description       String?
+  email             String?
   conflict          Boolean  @default(false)
   approved          Boolean  @default(false)
   conflictEventId   String?
   conflictEvent     Event?   @relation(name: "ConflictEvent", fields: [conflictEventId], references: [id])
   conflictingEvents Event[]  @relation(name: "ConflictEvent")
+  scraped           Boolean  @default(false)
 
   @@unique([startDate, venueId])
   @@index([featured, name])
