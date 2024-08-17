@@ -341,19 +341,39 @@ export const eventRouter = createTRPCRouter({
     approve: protectedProcedure
         .input(z.object({ id: z.string().cuid(), approved: z.boolean() }))
         .mutation(async ({ ctx, input }) => {
-            return ctx.prisma.event.update({
+            const updated = await ctx.prisma.event.update({
                 where: { id: input.id },
                 data: { approved: input.approved }
             })
+            if (updated.email) {
+                await ctx.emailService.sendApprovedEmail(
+                    updated.email,
+                    'Event',
+                    updated
+                )
+            }
+            return updated
         }),
 
     approveMany: protectedProcedure
         .input(z.array(z.string().cuid()))
         .mutation(async ({ ctx, input }) => {
-            return ctx.prisma.event.updateMany({
+            await ctx.prisma.event.updateMany({
                 where: { id: { in: input } },
                 data: { approved: true }
             })
+            const updatedRecords = await ctx.prisma.event.findMany({
+                where: { id: { in: input } }
+            })
+            for (const record of updatedRecords) {
+                if (record.email) {
+                    await ctx.emailService.sendApprovedEmail(
+                        record.email,
+                        'Event',
+                        record
+                    )
+                }
+            }
         }),
 
     emailUnapproved: protectedProcedure.mutation(async ({ ctx }) => {

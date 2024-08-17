@@ -141,18 +141,38 @@ export const artistRouter = createTRPCRouter({
     approve: protectedProcedure
         .input(z.object({ id: z.string().cuid(), approved: z.boolean() }))
         .mutation(async ({ ctx, input }) => {
-            return ctx.prisma.artist.update({
+            const updated = await ctx.prisma.artist.update({
                 where: { id: input.id },
                 data: { approved: input.approved }
             })
+            if (updated.email) {
+                await ctx.emailService.sendApprovedEmail(
+                    updated.email,
+                    'Artist',
+                    updated
+                )
+            }
+            return updated
         }),
 
     approveMany: protectedProcedure
         .input(z.array(z.string().cuid()))
         .mutation(async ({ ctx, input }) => {
-            return ctx.prisma.artist.updateMany({
+            await ctx.prisma.artist.updateMany({
                 where: { id: { in: input } },
                 data: { approved: true }
             })
+            const updatedRecords = await ctx.prisma.artist.findMany({
+                where: { id: { in: input } }
+            })
+            for (const record of updatedRecords) {
+                if (record.email) {
+                    await ctx.emailService.sendApprovedEmail(
+                        record.email,
+                        'Artist',
+                        record
+                    )
+                }
+            }
         })
 })
