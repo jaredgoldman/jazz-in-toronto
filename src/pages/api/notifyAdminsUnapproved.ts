@@ -38,7 +38,7 @@ export default async function handler(
 
     const message = `There are ${messages.join(
         ', '
-    )}. Please visit ${getBaseUrl()}admin to approve them.`.trim()
+    )}. Please visit ${getBaseUrl()}/admin to approve them.`.trim()
 
     for (const admin of admins) {
         await emailService.sendEmail(
