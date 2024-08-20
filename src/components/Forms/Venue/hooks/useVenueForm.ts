@@ -243,7 +243,7 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
             const toastAction = id ? 'edited' : 'submitted'
             toast({
                 title: 'Success',
-                message: `Venue successfully ${toastAction}!`
+                message: `Venue successfully ${toastAction}! Your submission will be reviewed by an admin before it is published`
             })
             await getVenueQuery.refetch()
         } catch (e) {

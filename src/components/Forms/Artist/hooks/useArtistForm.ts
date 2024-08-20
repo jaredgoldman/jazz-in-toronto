@@ -67,7 +67,7 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
         watch,
         formState: { errors }
     } = useForm<ArtistFormValues>({
-        defaultValues,
+        defaultValues
     })
 
     useEffect(() => {
@@ -249,7 +249,7 @@ export default function useArtistForm(id = '', isAdmin: boolean) {
                 const toastAction = id ? 'edited' : 'submitted'
                 toast({
                     title: 'Success',
-                    message: `Artist successfully ${toastAction}!`
+                    message: `Artist successfully ${toastAction}! Your submission will be reviewed by our admins before it is published.`
                 })
                 await getArtistQuery.refetch()
             } catch (e) {

@@ -184,7 +184,7 @@ export default function useEventForm(id = '', isAdmin: boolean) {
             const toastAction = id ? 'edited' : 'submitted'
             toast({
                 title: 'Success',
-                message: `Event successfully ${toastAction}!`
+                message: `Event successfully ${toastAction}! Your submission will be reviewed by our admins before it is published`
             })
         } catch (e) {
             toast({
