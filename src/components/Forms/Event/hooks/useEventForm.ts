@@ -16,7 +16,7 @@ export interface EventFormValues {
     website?: string
     description?: string
     venueId: string
-    email: string
+    email?: string
     featured: boolean
     approved: boolean
 }
@@ -83,7 +83,7 @@ export default function useEventForm(id = '', isAdmin: boolean) {
         venueId: '',
         instagramHandle: '',
         website: '',
-        email: '',
+        email: undefined,
         featured: false,
         description: '',
         approved: isAdmin ? true : false
@@ -97,7 +97,7 @@ export default function useEventForm(id = '', isAdmin: boolean) {
         setValue,
         formState: { errors }
     } = useForm<EventFormValues>({
-        defaultValues,
+        defaultValues
     })
 
     useEffect(() => {
@@ -120,7 +120,7 @@ export default function useEventForm(id = '', isAdmin: boolean) {
                 endDate: toDateTimeLocal(endDate),
                 artistId: data.artistId,
                 venueId: data.venueId,
-                email: data.email ?? ''
+                email: data.email ?? undefined
             })
         }
     }, [getEventQuery.data, reset])

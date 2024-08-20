@@ -132,7 +132,10 @@ export default function PlacesAutocomplete<T extends FieldValues>({
             name={name}
             render={({ field }) => (
                 <Form.Field ref={ref} name={name}>
-                    <Form.Label>{label}</Form.Label>
+                    <Form.Label>
+                        {label}
+                        {required && <Text color="red"> *</Text>}
+                    </Form.Label>
                     <Form.Control asChild>
                         <TextField.Input
                             value={value}

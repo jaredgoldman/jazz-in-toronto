@@ -59,6 +59,7 @@ export default function VenueForm() {
                                 name="address"
                                 label="Address"
                                 control={control}
+                                required="Please enter your venues address"
                             />
                             <Upload
                                 name="fileData"

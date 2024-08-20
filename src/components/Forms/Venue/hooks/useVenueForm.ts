@@ -19,7 +19,7 @@ export interface VenueFormValues {
     photoName?: string
     phoneNumber: string
     featured: boolean
-    email: string
+    email?: string
     description?: string
     approved: boolean
 }
@@ -62,7 +62,7 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
         fileData: undefined,
         phoneNumber: '',
         featured: false,
-        email: '',
+        email: undefined,
         description: '',
         approved: isAdmin ? true : false
     }
@@ -82,7 +82,7 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
                 instagramHandle: data?.instagramHandle ?? '',
                 photoPath: data?.photoPath ?? '',
                 photoName: data?.photoName ?? '',
-                email: data?.email ?? '',
+                email: data?.email ?? undefined,
                 description: data?.description ?? ''
             })
         }
