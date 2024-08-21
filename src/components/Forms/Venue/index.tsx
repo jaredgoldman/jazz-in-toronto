@@ -83,7 +83,7 @@ export default function VenueForm() {
                                 control={control}
                                 rules={{
                                     pattern: {
-                                        value: /^@([a-zA-Z0-9_]{1,30})$/,
+                                        value: /^@([a-zA-Z0-9._]{1,30})$/,
                                         message:
                                             'Instagram handle must start with @ and be up to 30 characters long'
                                     }
