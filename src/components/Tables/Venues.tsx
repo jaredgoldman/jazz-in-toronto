@@ -31,7 +31,7 @@ import { useToast } from '~/hooks/useToast'
 import { ConfirmActionDialogue } from '../ConfirmActionDialogue'
 import { useLocalStorage, useDebounce } from '~/hooks'
 import Link from '../Link'
-import { simplifyURL } from '~/utils'
+import { prepareForURL, simplifyURL } from '~/utils'
 
 const columnHelper = createColumnHelper<Venue>()
 
@@ -287,14 +287,45 @@ export function VenuesTable() {
             columnHelper.accessor((row) => row.website, {
                 cell: (info) => {
                     const content = info.getValue() ?? ''
-                    return <Link href={content}>{simplifyURL(content)}</Link>
+                    return (
+                        <Link href={prepareForURL(content)}>
+                            {simplifyURL(content)}
+                        </Link>
+                    )
                 },
                 header: 'Website',
                 filterFn: 'fuzzy'
             }),
-            columnHelper.accessor((row) => row.instagramHandle, {
+            columnHelper.accessor((row) => row.eventsPath, {
+                cell: (info) => {
+                    const content = info.getValue()
+                    const fullUrl = `${info.row.original.website}/${
+                        content ?? ''
+                    }`
+                    return content ? (
+                        <Link href={prepareForURL(fullUrl)}>
+                            {simplifyURL(fullUrl)}
+                        </Link>
+                    ) : (
+                        '--'
+                    )
+                },
+                header: 'Events Link',
+                filterFn: 'fuzzy'
+            }),
+            columnHelper.accessor((row) => row.crawlable, {
+                cell: (info) =>
+                    info.renderValue() ? (
+                        <Badge color="green">Enabled</Badge>
+                    ) : (
+                        <Badge color="blue">Disabled</Badge>
+                    ),
+                header: 'Scrapable',
+                enableColumnFilter: false
+            }),
+            columnHelper.accessor((row) => row.phoneNumber, {
                 cell: (info) => info.getValue() ?? '--',
-                header: 'Instagram',
+                header: 'Phone Number',
                 filterFn: 'fuzzy'
             }),
             columnHelper.accessor((row) => row.instagramHandle, {

@@ -153,12 +153,15 @@ export default function EventForm() {
                                 placeholder="Enter your email address"
                             />
                             {isAdmin ? (
-                                <Toggle
-                                    label="Approved"
-                                    name="approved"
-                                    control={control}
-                                    error={errors.approved}
-                                />
+                                <>
+                                    <Input></Input>
+                                    <Toggle
+                                        label="Approved"
+                                        name="approved"
+                                        control={control}
+                                        error={errors.approved}
+                                    />
+                                </>
                             ) : null}
                             <Form.Submit asChild>
                                 <Button

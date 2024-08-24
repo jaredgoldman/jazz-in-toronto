@@ -2,7 +2,8 @@ import PlacesAutocomplete from '../Fields/PlacesAutoComplete'
 import { Input } from '../Fields'
 import * as Form from '@radix-ui/react-form'
 import Upload from '../Fields/Upload'
-import { Heading, Flex, Box, Button } from '@radix-ui/themes'
+import { Heading, Flex, Box, Button, Callout } from '@radix-ui/themes'
+import { InfoCircledIcon } from '@radix-ui/react-icons'
 import useVenueForm from './hooks/useVenueForm'
 import { useRouter } from 'next/router'
 import { FormProvider } from 'react-hook-form'
@@ -114,12 +115,49 @@ export default function VenueForm() {
                                 placeholder="Enter your email address"
                             />
                             {isAdmin ? (
-                                <Toggle
-                                    label="Approved"
-                                    name="approved"
-                                    control={control}
-                                    error={errors.approved}
-                                />
+                                <>
+                                    <Input
+                                        name="eventsPath"
+                                        label="Enter the path for the venues calendar (optional)"
+                                        type="text"
+                                        error={errors.eventsPath}
+                                        control={control}
+                                        rules={{
+                                            pattern: {
+                                                value: /^(?!\/).*/,
+                                                message:
+                                                    'Path must not start with a /'
+                                            }
+                                        }}
+                                        placeholder="Enter the path for the venues calendar (e.g., events/calendar)"
+                                    />
+                                    <Toggle
+                                        label="Scrapable"
+                                        name="crawlable"
+                                        control={control}
+                                        error={errors.crawlable}
+                                    />
+                                    <Callout.Root>
+                                        <Callout.Icon>
+                                            <InfoCircledIcon />
+                                        </Callout.Icon>
+                                        <Callout.Text>
+                                            Adding a path and toggling this to
+                                            true will make this venue scrapable.
+                                            This will allow us to automatically
+                                            add events to your venue. Please
+                                            ensure you've entered the correct
+                                            url path. Do not include a
+                                            leadingslash or the url
+                                        </Callout.Text>
+                                    </Callout.Root>
+                                    <Toggle
+                                        label="Approved"
+                                        name="approved"
+                                        control={control}
+                                        error={errors.approved}
+                                    />
+                                </>
                             ) : null}
                             <Form.Submit asChild>
                                 <Button

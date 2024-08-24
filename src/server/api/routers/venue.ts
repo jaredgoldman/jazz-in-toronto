@@ -21,6 +21,7 @@ const venueValidation = z.object({
     phoneNumber: z.string(),
     email: z.string().email().optional(),
     description: z.string().optional(),
+    eventsPath: z.string().optional(),
     approved: z.boolean()
 })
 
@@ -29,7 +30,7 @@ export const venueRouter = createTRPCRouter({
         .input(venueValidation)
         .mutation(async ({ ctx, input }) => {
             const created = await ctx.prisma.venue.create({
-                data: input
+                data: { ...input, crawlable: input.eventsPath ? true : false }
             })
             if (created.email) {
                 await ctx.emailService.sendPendingApprovalEmail(
@@ -93,6 +94,7 @@ export const venueRouter = createTRPCRouter({
                 website: z.string().optional(),
                 active: z.boolean().optional(),
                 description: z.string().optional(),
+                eventsPath: z.string().optional(),
                 phoneNumber: z.string().optional()
             })
         )
@@ -100,7 +102,10 @@ export const venueRouter = createTRPCRouter({
             const { id, ...venueData } = input
             return ctx.prisma.venue.update({
                 where: { id },
-                data: venueData
+                data: {
+                    ...venueData,
+                    crawlable: venueData.eventsPath ? true : false
+                }
             })
         }),
 

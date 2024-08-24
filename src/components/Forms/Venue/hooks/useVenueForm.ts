@@ -21,6 +21,8 @@ export interface VenueFormValues {
     featured: boolean
     email?: string
     description?: string
+    eventsPath?: string
+    crawlable?: boolean
     approved: boolean
 }
 
@@ -63,6 +65,8 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
         phoneNumber: '',
         featured: false,
         email: undefined,
+        eventsPath: '',
+        crawlable: false,
         description: '',
         approved: isAdmin ? true : false
     }
@@ -83,7 +87,8 @@ export default function useVenueForm(id = '', isAdmin: boolean) {
                 photoPath: data?.photoPath ?? '',
                 photoName: data?.photoName ?? '',
                 email: data?.email ?? undefined,
-                description: data?.description ?? ''
+                description: data?.description ?? '',
+                eventsPath: data?.eventsPath ?? ''
             })
         }
     }, [getVenueQuery.data, reset])
